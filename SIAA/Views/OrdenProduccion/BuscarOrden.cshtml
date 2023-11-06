@@ -1,0 +1,115 @@
+﻿@model List<SIAAPI.Models.Produccion.OrdenProduccion>
+@{
+    ViewBag.Title = "BuscarOrden";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<head runat="server">
+    <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.js" type="text/javascript"></script>
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+   
+</head>
+
+@*<h3>aaa</h3>*@
+
+<h2>Detalles</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <thead>
+            <tr>
+                <th>Orden</th>
+                <th>Modelo Producción</th>
+                <th>Cliente</th>
+                <th>Articulo</th>
+                <th>Presentación</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Programada</th>
+                <th>Fecha Compromiso</th>
+                <th>Cantidad</th>
+                <th>Prioridad</th>
+                <th>Estado Orden</th>
+                <th>Estado Liberación</th>
+                <th></th>
+
+            </tr>
+        </thead>
+
+        @{try
+            {
+                var contador = 0;
+                foreach (var item in Model)
+                {
+                    SIAAPI.Models.Produccion.OrdenProduccionContext db = new SIAAPI.Models.Produccion.OrdenProduccionContext();
+                    SIAAPI.Models.Comercial.ClsDatoString modeloP = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Descripcion as Dato from  [ModelosDeProduccion] where [IDModeloProduccion]=" + item.IDModeloProduccion + "").ToList()[0];
+                    SIAAPI.Models.Comercial.ClsDatoString cliente = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Nombre as Dato from  [Clientes] where [idCliente]=" + item.IDCliente + "").ToList()[0];
+
+                    <tr>
+                        <td>@item.IDOrden</td>
+                        <td>@modeloP.Dato</td>
+                        <td>@cliente.Dato</td>
+                        <td>@item.Descripcion</td>
+                        <td>@item.Presentacion</td>
+                        <td>@item.FechaInicio</td>
+                        <td>@item.FechaProgramada</td>
+                        <td>@item.FechaCompromiso</td>
+                        <td>@item.Cantidad</td>
+                        <td>@item.Prioridad</td>
+                        <td>@item.EstadoOrden</td>
+                        <td>@item.Liberar</td>
+                        <td>
+                         
+   
+                       
+                         @Html.ActionLink("Seleccionar", "SeleccionarOrden", new { id = item.IDOrden }, new { @class = "btn btn-primary btn-xs" })
+
+                        </td>
+
+                    </tr>
+
+
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+
+            }
+            catch (Exception err)
+            {
+
+            }
+
+
+
+
+
+
+
+
+
+        }
+
+    </table>
+
+
+</div>
+<div class="row center-block">
+    @*<button type="button" name="button" class="btn btn-primary btn-xs" onclick="Guardar()">Guardar</button>*@
+    @*<input type="submit" value="Guardar" class="button" onclick="ActualizarMP(@IDMP.Dato,@contador )">
+        <input type="submit" value="Grabar" class="btn btn-success btn-xs" />*@
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default" })
+</div>
+
+
+
+
+<h3 class="text-danger">@ViewBag.mensaje</h3>

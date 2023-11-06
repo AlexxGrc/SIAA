@@ -1,0 +1,130 @@
+﻿@model SIAAPI.Models.CartaPorte.c_MaterialPeligroso
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles Material Peligroso</h3>
+
+<div>
+   
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveMatP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveMatP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaseDiv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaseDiv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PeligSec)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PeligSec)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GrupoEmb_Env)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GrupoEmb_Env)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DispEsp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DispEsp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CantLim)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CantLim)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CantExp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CantExp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Embalaje)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Embalaje)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RIG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RIG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cisternas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cisternas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Contenedores)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Contenedores)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_In)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_In)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_Fin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Fin)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDMatP }, new { @class = "btn btn-success btn-xs" }) 
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

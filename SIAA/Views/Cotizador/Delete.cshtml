@@ -1,0 +1,72 @@
+﻿@model SIAAPI.ClasesProduccion.Cotizaciones
+
+@using (Html.BeginForm("Delete", "Cotizador",
+                                              new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString, Fechainicio = ViewBag.Fechainicio, Fechafinal = ViewBag.Fechafinal }, FormMethod.Post, null))
+
+{
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Cotización</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        @*<dt>
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Ruta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ruta)
+        </dd>*@
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreArchivo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreArchivo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Usuario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Usuario)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" />
+@Html.ActionLink("Regresar a la lista", "Index", new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString, Fechainicio = ViewBag.Fechainicio, Fechafinal = ViewBag.Fechafinal }, new { @class = "btn btn-default btn-xs" })
+
+        </div>
+
+    }
+</div>
+
+
+}

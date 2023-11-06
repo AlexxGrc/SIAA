@@ -1,0 +1,265 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.VMatrizPrecioProv>
+
+@*@{
+        ViewBag.Title = "VMatrizPrecioProv";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+
+<h3>
+    <small>Establezca el proveedor, el rango de compra de materiales, el precio para ese rango y presione grabar</small>
+</h3>
+<hr />
+
+@using (Html.BeginForm("InsertarMatrizPrecioProv", "Articulos", FormMethod.Post))
+{
+    <div class="form-horizontal">
+        <input type="hidden" name="id" class="form-control" value="@ViewBag.id" />
+
+        <div class="form-group">
+            @*<label for=idprov>Proveedor:</label>*@
+            @Html.Label("Clave Proveedor", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input type="text" name="CrefP" id="CrefP" class="form-control" required="required" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @*<label for=idprov>Proveedor:</label>*@
+            @Html.Label("Proveedor", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+
+                @Html.DropDownList("IDProveedor", ViewBag.IDProveedor as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control", @id = "IDProveedor" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Rango Inferior", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input type="text" name="RangInf" id="RangInfpp" class="form-control" required="required" value="@ViewBag.rangoinferior" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Rango Superior", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input type="text" name="RanSup" id="RangSuppp" class="form-control" required="required" value="@ViewBag.rangosuperior" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Precio", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input type="text" name="precio" id="Preciopp" class="form-control" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Divisa", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @* @Html.DropDownList("IDMoneda", null, htmlAttributes: new { @class = "form-control" })*@
+                @Html.DropDownList("IDMoneda", ViewBag.IDMoneda as List<SelectListItem>, new { @class = "form-control", @id = "IDMoneda" })
+                @*@Html.ValidationMessageFor(model => model.IDMoneda, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+        <div class="form-group">
+            @*<label for=idprov>Proveedor:</label>*@
+            @Html.Label("Observacion", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input type="text" name="observacion" id="observacion" class="form-control" />
+            </div>
+        </div>
+
+    </div>
+    <center><a class="edit" onclick="Insertapp(@ViewBag.id)"><i class="btn btn-success btn-xs">Grabar</i></a></center>
+
+}
+
+@* desde aqui *@
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.cref)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Empresa)
+        </th>
+        <th>
+
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RangInf)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RangSup)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Precio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Moneda)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </th>
+        <th></th>
+    </tr>
+    @{
+        int contador = 0;
+        foreach (var item in Model)
+        {
+            <tr>
+                <td class="hidden">
+                    @Html.HiddenFor(modelItem => item.IDMatrizPrecio)
+                    @Html.HiddenFor(modelItem => item.IDProveedor)
+                    @Html.HiddenFor(modelItem => item.IDArticulo)
+                    @Html.HiddenFor(modelItem => item.IDMoneda)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.cref)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Empresa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.RangInf)*@
+                    @{
+                        string cadena1 = "RangInfpp" + contador;
+                    }
+                    <input type="text" class="form-control" id="@cadena1" name="RangInf" value="@item.RangInf">
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.RangSup)*@
+                    @{
+                        string cadena2 = "RangSuppp" + contador;
+                    }
+                    <input type="text" class="form-control" id="@cadena2" name="RangSup" value="@item.RangSup">
+                </td>
+                <td>
+                    @*@Html.DisplayFor(modelItem => item.Precio)*@
+                    @{
+                        string cadena3 = "preciopp" + contador;
+                    }
+                    <input type="text" class="form-control" id="@cadena3" name="precio" value="@item.Precio">
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Moneda)
+                </td>
+
+                <td>
+                    @{
+                        string cadena4 = "Observacionpp" + contador;
+                    }
+                    <input type="text" class="form-control" id="@cadena4" name="observacion" value="@item.Observacion">
+                    @*@Html.DisplayFor(modelItem => item.Observacion)*@
+                </td>
+
+                <td>
+
+                    <a class="edit" onclick="Actualizarpp(@item.IDMatrizPrecio, @contador)">
+                        <i class="tbl_del_btn fa fa-refresh"></i>
+                    </a>
+
+                    <a class="delete" data-id="@item.IDMatrizPrecio">
+                        <i class="tbl_del_btn fa fa-trash"></i>
+                    </a>
+
+                </td>
+            </tr>
+            contador++;
+        }
+    }
+
+</table>
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script>
+
+
+
+    function Insertapp(id) {
+        var urlinsert = '@Url.Action("InsertarMatrizPrecioProv", "Articulos")';
+
+        var idprov = document.getElementById("IDProveedor").value
+        var CrefP = document.getElementById("CrefP").value
+            var RangInf = document.getElementById("RangInfpp").value
+            //alert(RangInf);
+            var RangSup = document.getElementById("RangSuppp").value
+            var precio = document.getElementById("Preciopp").value
+            var idmoneda = document.getElementById("IDMoneda").value
+            var observacion = document.getElementById("observacion").value
+           // alert("Pase" + precio + " Moneda " + idmoneda);
+           $.post(urlinsert, { id: id, idprov: idprov,CrefP: CrefP, RangInf: RangInf, RangSup: RangSup, precio: precio, idmoneda: idmoneda, observacion:observacion }, function (response) {
+                if (response) {
+                    location.reload();
+
+                }
+            }).fail(function (response) {
+               alert("verifica tus datos "+ response.error)
+            });
+        }
+
+    function Actualizarpp(id, numero) {
+        var urledit = '@Url.Action("EdititemMatrizPrecioProv", "Articulos")';
+        var RangInf = document.getElementById("RangInfpp" + numero).value
+
+        var RangSup = document.getElementById("RangSuppp" + numero).value
+
+        var precio = document.getElementById("preciopp" + numero).value
+        var observacion = document.getElementById("Observacionpp" + numero).value
+
+
+        //var idmoneda = document.getElementById("IDMoneda").value
+        $.post(urledit, { id: id, RangInf: RangInf, RangSup: RangSup, precio: precio, observacion: observacion}, function (response) {
+            if (response) {
+                location.reload();
+                row.change;
+            }
+        }).fail(function (response) {
+            // display error message?
+        });
+    }
+</script>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+
+    $('.delete').click(function () {
+        var url = '@Url.Action("DeleteitemMatrizPrecioProv", "Articulos")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>
+
+@*<script>
+
+
+
+        function Actualizar(id, numero) {
+            var urledit = '@Url.Action("EdititemMatrizPrecioProv", "Articulos")';
+            var RangInf = document.getElementById("RangInf" + numero).value
+            var RangSup = document.getElementById("RangSup" + numero).value
+            var precio = document.getElementById("precio" + numero).value
+            //var idmoneda = document.getElementById("IDMoneda").value
+            $.post(urledit, { id: id, RangInf: RangInf, RangSup: RangSup, precio: precio}, function (response) {
+                    if (response) {
+                        location.reload();
+                        row.change;
+                    }
+                }).fail(function (response) {
+                    // display error message?
+                });
+            }
+
+
+    </script>*@

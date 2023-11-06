@@ -1,0 +1,336 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model IEnumerable<SIAAPI.Models.Comercial.AtributodeFamilia>
+
+@{
+    ViewBag.Title = "Presentacion";
+}
+
+
+<h3>Agregar Presentación</h3>
+<h4 class="text-primary">@ViewBag.Cref</h4>
+<h4>@ViewBag.Descripcion</h4>
+
+
+
+<div class="table-responsive">
+
+    <table class="table">
+        <tr>
+
+            <th>Atributo</th>
+            <th></th>
+        </tr>
+        @{
+            using (Html.BeginForm("addPresentacionp", "Cotizador", FormMethod.Post))
+            //  using (Html.BeginForm())
+
+
+            {
+                var contador = 0;
+
+                <input type="hidden" name="idarticulo" id="idarticulo" class="form-control" value="@ViewBag.IDArticulo" />
+
+
+                foreach (var item in Model)
+                {
+                    string cadenarequerido = "Requerido" + contador;
+
+                    <input type="hidden" name="@cadenarequerido" id="@cadenarequerido" class="form-control" value="@item.Requerido" />
+
+                    <tr>
+                        <td>
+                            @if (item.Requerido)
+                            {
+
+                                <p class="text-danger">@item.Titulo *</p>
+
+                            }
+                            else
+                            {
+                                <p class="text-primary">@item.Titulo</p>
+
+                            }
+                        </td>
+                        <td>
+
+                            @if (item.Tipo.Equals("NUMERO"))
+                            {
+                                string cadenatitulo = "Titulo" + contador;
+
+
+                                string cadenades = "des" + contador;
+                                if (item.Requerido)
+                                {
+                                    <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                    switch (item.Descripcion.ToUpper().TrimEnd())
+                                    {
+                                        case "ETIQUETAXR":
+                                            { <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.ETIQUETAXR" placeholder="@item.Ayuda" required />
+
+                                                break;
+                                            }
+                                        case "ANCHO":
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.ancho" placeholder="@item.Ayuda" required />
+                                                break;
+                                            }
+                                        case "LARGO":
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.largo" placeholder="@item.Ayuda" required />
+                                                break;
+                                            }
+                                        case "AL PASO":
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.alpaso" placeholder="@item.Ayuda" required />
+                                                break;
+                                            }
+                                        case "TINTAS":
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.notintas" placeholder="@item.Ayuda" required />
+                                                break;
+                                            }
+
+
+                                        default:
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" placeholder="@item.Ayuda" required />
+                                                break;
+                                            }
+
+                                    }
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                    switch (item.Descripcion.ToUpper().TrimEnd())
+                                    {
+                                        case "ETIQUETAXR":
+                                            { <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.ETIQUETAXR" placeholder="@item.Ayuda" />
+
+                                                break;
+                                            }
+                                        case "ANCHO":
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.ancho" placeholder="@item.Ayuda" />
+                                                break;
+                                            }
+                                        case "LARGO":
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.largo" placeholder="@item.Ayuda" />
+                                                break;
+                                                @*<input type="number" name="@c*@
+                                            }
+                                        case "AL PASO":
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.alpaso" placeholder="@item.Ayuda" />
+                                                break;
+                                            }
+                                        case "TINTAS":
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" value="@ViewBag.notintas" placeholder="@item.Ayuda" />
+                                                break;
+                                            }
+
+                                        default:
+                                            {
+                                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" placeholder="@item.Ayuda" />
+                                                break;
+                                            }
+
+                                    }
+                                }
+
+                            }
+                            @if (item.Tipo.Equals("CADENA"))
+                            {
+                                string cadenatitulo = "Titulo" + contador;
+
+
+                                string cadenades = "des" + contador;
+                                if (item.Requerido)
+                                {
+                                    <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                    <input type="text" name="@cadenades" id="@cadenades" class="form-control" placeholder="@item.Ayuda" required />
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                    <input type="text" name="@cadenades" id="@cadenades" class="form-control" placeholder="@item.Ayuda" />
+                                }
+
+                            }
+                            @if (item.Tipo.Equals("COLOR"))
+                            {
+                                string cadenatitulo = "Titulo" + contador;
+
+
+                                string cadenades = "des" + contador;
+                                if (item.Requerido)
+                                {
+                                    <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                    <input type="color" name="@cadenades" id="@cadenades" />
+                                }
+                                else
+                                {
+                                    <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                    <input type="color" name="@cadenades" id="@cadenades" />
+                                }
+
+                            }
+                            @if (item.Tipo.Equals("LISTA"))
+                            {
+
+                                SIAAPI.Models.Comercial.AtributodeFamiliaContext db = new SIAAPI.Models.Comercial.AtributodeFamiliaContext();
+
+                                SIAAPI.Models.Comercial.ClsDatoString cadena = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Valores as Dato from AtributodeFamilia where IDAtributo='" + item.IDAtributo + "'").ToList()[0];
+
+                                string[] numeros = cadena.Dato.Split(',');
+                                List<SelectListItem> atributos = new List<SelectListItem>();
+
+                                if (!item.Requerido)
+                                {
+                                    atributos.Add(new SelectListItem { Text = "", Value = "" });
+                                }
+
+                                foreach (string numero in numeros)
+                                {
+                                    SelectListItem nuevo = new SelectListItem();
+                                    nuevo.Text = numero;
+                                    nuevo.Value = numero;
+                                    //if (numero==ViewBag.Embobinado)
+                                    //{
+                                    //    nuevo.Selected = true;
+                                    //}
+                                    if (numero == ViewBag.Acabado)
+                                    {
+                                        nuevo.Selected = true;
+                                    }
+                                    if (numero == ViewBag.Pleca)
+                                    {
+                                        nuevo.Selected = true;
+                                    }
+                                    //if (numero == ViewBag)
+                                    //{
+                                    //    nuevo.Selected = true;
+                                    //}
+
+                                    atributos.Add(new SelectListItem { Text = numero, Value = numero });
+
+
+                                }
+
+                                ViewBag.IDAtributo = atributos;
+
+                                string cadenatituloa = "Titulo" + contador;
+
+                                string cadenaatributo = "des" + contador;
+
+                                <input type="hidden" name="@cadenatituloa" id="@cadenatituloa" class="form-control" value="@item.Descripcion:" />
+
+                                @Html.DropDownList(item.Descripcion, ViewBag.IDAtributo as List<SelectListItem>, new { @class = "form-control", id = cadenaatributo, name = cadenaatributo })
+
+                            }
+                            @if (item.Tipo.Equals("checkbox"))
+                            {
+                                string cadenatitulo = "Titulo" + contador;
+
+
+                                string cadenades = "des" + contador;
+
+                                <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                <input type="checkbox" name="@cadenades" id="@cadenades" class="form-control" value="false" />
+
+
+                            }
+                        </td>
+                        <td>
+                            <p>@item.Ayuda</p>
+                        </td>
+
+                    </tr>
+
+                    contador = contador + 1;
+                }
+
+
+                <input type="hidden" name="contador" id="contador" class="form-control" value="@contador" />
+
+
+            }
+        }
+    </table>
+    <input name="Presentacion" id="Presentacion" type="hidden" />
+    <button type="button" class="btn btn-success btn-xs" onclick="Actualizar()">Generar</button>
+
+</div>
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script>
+
+    function Actualizar() {
+
+                                var texto = "";
+        var j;
+        
+                                for (j = 0; j < document.getElementById("contador").value; j++) {
+                                    //alert(j);     
+                                    //alert(document.getElementById("des" + [j]).type)
+                                    //alert(document.getElementById("des" + [j]).value)
+                                    if (document.getElementById("Requerido" + [j]).value && document.getElementById("des" + [j]).type != "checkbox")
+                                    {
+                                     
+
+                                        if (document.getElementById("des" + [j]).value == "")
+                                        {
+                                            alert(document.getElementById("Titulo" + [j]).value + " ES OBLIGATORIO");
+                                            return;
+                                        }
+                                    }
+                                    if (document.getElementById("des" + [j]).value == "") {
+
+                                    }
+                                    else {
+
+                                        if (document.getElementById("des" + [j]).type == "checkbox") {
+                                            if (document.getElementById("Requerido" + [j]).value) {
+                                                texto += document.getElementById("Titulo" + [j]).value + document.getElementById("des" + [j]).checked + ",";
+                                                }
+                    else
+                                                {
+                                                    if ( document.getElementById("des" + [j]).checked==true)
+                        {
+                                    texto += document.getElementById("Titulo" + [j]).value + document.getElementById("des" + [j]).checked + ",";
+                                    }
+                                }
+
+                            }
+                                        else {
+
+                                texto += document.getElementById("Titulo" + [j]).value + document.getElementById("des" + [j]).value + ",";
+                            }
+
+            }
+        }
+
+
+
+        $('#Presentacion').val(texto);
+                            if ($('#Presentacion').val() == "")
+        { alert("No has constestado nada o tus respuestas no generan una presentacion apropiada") }
+        else
+                            {
+
+                                var url = "/Cotizador/addPresentacionp?idarticulo=_idarticulo_&Presentacion=_Presentacion_&IDCotizacion=_IDCotizacion_&IDCliente=_IDCliente_";
+                                url = url.replace('_idarticulo_', document.getElementById("idarticulo").value);
+                                url = url.replace('_Presentacion_', $('#Presentacion').val());
+                                url = url.replace('_IDCotizacion_', @ViewBag.IDCotizacion);
+                                url = url.replace('_IDCliente_', @ViewBag.IDCliente);
+
+                                window.location.href = url;
+                            }
+        }
+
+
+</script>

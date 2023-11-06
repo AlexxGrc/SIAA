@@ -1,0 +1,57 @@
+﻿@model SIAAPI.Models.Comercial.ContactosClie
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Contacto de Cliente: @Html.DisplayFor(model => model.Clientes.Nombre)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+     
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            <a href="mailto:#">@Html.DisplayFor(model => model.Email)</a>   
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Puesto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Puesto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacion)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        @*<div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Regresar a la lista", "VerContactos", new { id = Model.IDCliente })
+        </div>*@
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+          @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

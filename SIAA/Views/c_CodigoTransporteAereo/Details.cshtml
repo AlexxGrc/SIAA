@@ -1,0 +1,66 @@
+﻿@model SIAAPI.Models.CartaPorte.c_CodigoTransporteAereo
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles Transporte Aéreo</h3>
+
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Clave)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clave)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nacionalidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nacionalidad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Aerolinea)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aerolinea)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Designador)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Designador)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FIvigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FIvigencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FFvigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FFvigencia)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDTransAereo }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

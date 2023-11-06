@@ -1,0 +1,36 @@
+﻿@model IEnumerable< SIAAPI.Models.miempresa.DoctoSGCAdd>
+
+@{
+    ViewBag.Title = "SubirArchivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Subir el archivo complementario</h3>
+ <h4>Formatos admitidos: .pdf, .txt, .prn, .xml, .jpg, .gif, .png</h4>    
+<hr />
+<br />
+
+@using (Html.BeginForm("SubirArchivo", "MiEmpresa", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="id" value="@ViewBag.id">
+    <div class="form-horizontal">
+        <h4>Indica el archivo a subir</h4>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="file" name="file">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" value="Grabar" class="btn btn-success btn-xs">SubirArchivo</button> @Html.ActionLink("Regresar a la lista", "Procedimientos", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+    </div>
+
+}

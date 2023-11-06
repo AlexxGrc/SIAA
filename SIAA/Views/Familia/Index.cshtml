@@ -1,0 +1,159 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Comercial.VFamilia>*@
+
+
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.VFamilia>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Lista de Familias de Atributos</h3>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+                        @Html.ActionLink("Crea una nueva familia", "Create", null, new { @class = "btn btn-warning btn-xs" })|
+                        Elementos por página: @Html.DropDownList("pageSize")  |
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                        @*<a class="btn btn-info btn-xs" href="@Url.Action("Reporte")">Descargar Catálogo</a>*@
+                        <a class="btn btn-info btn-xs" href="@Url.Action("ListaFamAtrib")">Descargar PDF</a>
+                        <a class="btn btn-info btn-xs" href="@Url.Action("GenerarExcelFamAtrib")">Descargar Excel</a>
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @Html.ActionLink("Código de la Familia", "Index", new { sortOrder = ViewBag.ClaveSortParm, currentFilter = ViewBag.CurrentFilter })
+                @*  @Html.DisplayNameFor(model => model.CCodFam)*@
+            </th>
+            <th>
+                @Html.ActionLink("Descripción", "Index", new { sortOrder = ViewBag.DescripcionSortParm, currentFilter = ViewBag.CurrentFilter })
+                @* @Html.DisplayNameFor(model => model.Descripcion)*@
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.ClaveSat)*@
+                @Html.Label("Código SAT")
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.ProductoSat)*@
+                @Html.Label("Producto SAT")
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.ClaveSat)*@
+                @Html.Label("Código STCC")
+            </th>
+            <th>
+                @* @Html.DisplayNameFor(model => model.ProductoSat)*@
+                @Html.Label("Producto STCC")
+            </th>
+         
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CCodFam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClaveSat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductoSat)
+                </td>
+                @if (item.ClaveSTCC == "")
+                {
+                    <td>
+                        <p class="text-danger">@Html.DisplayFor(modelItem => item.ClaveSTCC)</p>
+                    </td>
+                    <td>
+                        <p class="text-danger">@Html.DisplayFor(modelItem => item.ProductoSTCC)</p>
+
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClaveSTCC)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductoSTCC)
+                    </td>
+                }
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IDFamilia }, new { @class = "btn btn-success btn-xs" })
+
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IDFamilia }, new { @class = "btn btn-default btn-xs" })
+                    @Html.ActionLink("Atributos", "EditAtributo", new { id = item.IDFamilia, SearchString= ViewBag.SearchString }, new { @class = "btn btn-info btn-xs" })
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
+
+                        {
+                                            @Html.ActionLink("Niveles de Ganancia", "NivelesGanancia", new { id = item.IDFamilia }, new { @class = "btn btn-warning btn-xs" })
+                        }
+
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") )
+
+                        {
+                            @Html.ActionLink("Hoja de Especificacion", "EditAtributoHE", new { id = item.IDFamilia }, new { @class = "btn btn-info btn-xs" })
+                        }
+
+                    @*@Html.ActionLink("Eliminar", "Delete", new { id=item.IDFamilia }, new { @class = "btn btn-danger btn-xs" })*@
+                </td>
+            </tr>
+        }
+
+    </table>
+    </div>
+    @*Paginación*@
+    @using (Html.BeginForm("Index", "Familia", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+        <div class="pager">
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+            @Model.Count de @Model.TotalItemCount elementos
+
+            @Html.PagedListPager(Model, page => Url.Action("Index", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize
+   }))
+
+
+        </div>
+    }
+    @*Paginación*@

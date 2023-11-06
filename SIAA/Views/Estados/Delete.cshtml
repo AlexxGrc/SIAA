@@ -1,0 +1,47 @@
+﻿@model SIAAPI.Models.Administracion.VEstado
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Eliminar</h3>
+
+<h3>Estas seguro de eliminar el registro?</h3>
+<div>
+   
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Pais)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pais)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.c_Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Estado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" />
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

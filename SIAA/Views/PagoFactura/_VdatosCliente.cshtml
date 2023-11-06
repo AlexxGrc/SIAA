@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SIAAPI.Models.Cfdi.VDatosCliente>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RFC)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClaveRegimenFiscal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RegimenFiscal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CP)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RFC)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClaveRegimenFiscal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RegimenFiscal)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CP)
+        </td>
+        @*<td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.IDCliente }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.IDCliente }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.IDCliente })
+        </td>*@
+    </tr>
+}
+
+</table>

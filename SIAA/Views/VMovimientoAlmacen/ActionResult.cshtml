@@ -1,0 +1,90 @@
+﻿@model IEnumerable<SIAAPI.Models.Inventarios.Clslotemp>
+
+@{
+    ViewBag.Title = "ActionResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ActionResult</h2>
+
+<table class="table">
+    <tr>
+        
+       
+       
+        <th>
+            @Html.DisplayNameFor(model => model.Largo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoteInterno)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoCinta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrdenCompra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MetrosCuadrados)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Metrosutilizados)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MetrosDisponibles)
+      
+        <th>
+            @Html.DisplayNameFor(model => model.IDRecepcion)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+       
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.Largo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lote)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoteInterno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fecha)
+        </td>
+        <th>
+            @Html.DisplayFor(modelItem => modelItem.NoCinta)
+        </th>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrdenCompra)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MetrosCuadrados)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Metrosutilizados)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MetrosDisponibles)
+        </td>
+      
+       
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.IDRecepcion)
+        </td>
+       
+    </tr>
+}
+
+</table>

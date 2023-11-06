@@ -1,0 +1,100 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.Bitacora>
+
+@{
+    ViewBag.Title = "verBitacora";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>verBitacora</h2>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Articulo.Cref)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.c_ClaveUnidad.ClaveUnidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EstadoOrden.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrdenProduccion.ModeloProduccion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Proceso.NombreProceso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Trabajador.RFC)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaInicio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaFin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DiferenciaHoras)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Imagen)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Articulo.Cref)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.c_ClaveUnidad.ClaveUnidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EstadoOrden.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrdenProduccion.ModeloProduccion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Proceso.NombreProceso)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Trabajador.RFC)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaInicio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaFin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DiferenciaHoras)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Imagen)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cantidad)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.IDBitacora }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.IDBitacora }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.IDBitacora })
+        </td>
+    </tr>
+}
+
+</table>

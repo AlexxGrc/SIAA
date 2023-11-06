@@ -1,0 +1,109 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.VOrdenProduccion>
+
+<h2>Ordenes de producción asociadas al proceso: </h2>
+<h3>@((ViewBag.datosProceso as ICollection<SIAAPI.Models.Produccion.Proceso>).First().NombreProceso)</h3>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ModeloProduccion)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Presentacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Indicaciones)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaCompromiso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaInicio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaProgramada)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IDPedido)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Prioridad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td class=" hidden>
+            @Html.DisplayFor(modelItem => item.IDOrden)
+            @Html.DisplayFor(modelItem => item.IDModeloProduccion)
+            @Html.DisplayFor(modelItem => item.IDCliente)
+            @Html.DisplayFor(modelItem => item.IDArticulo)
+            @Html.DisplayFor(modelItem => item.IDCaracteristica)
+            @Html.DisplayFor(modelItem => item.FechaRealdeInicio)
+            @Html.DisplayFor(modelItem => item.FechaRealdeTerminacion)
+            @Html.DisplayFor(modelItem => item.IDEstadoOrden)
+            @Html.DisplayFor(modelItem => item.IDProceso)
+            @Html.DisplayFor(modelItem => item.NombreProceso)
+
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ModeloProduccion)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Presentacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Indicaciones)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaCompromiso)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaInicio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaProgramada)
+        <td>
+            @Html.DisplayFor(modelItem => item.Cantidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDPedido)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Prioridad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+
+        <td>
+            @*@Html.ActionLink("Editar", "Edit", new { id=item.IDOrden }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.IDOrden }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.IDOrden })*@
+        </td>
+    </tr>
+}
+
+</table>
+@Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })

@@ -1,0 +1,45 @@
+﻿<!-- Split button -->
+<div class="btn-group">
+    <button type="button" class="btn btn-light">Catalogo</button>
+    <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span class="caret"></span>
+        <span class="sr-only">Toggle Dropdown</span>
+    </button>
+    @*<div class="dropdown-menu">*@
+
+        <div class="btn-group-vertical" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                CFDI
+            </button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <ul >
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_Banco")">Banco</a></li>
+
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_FormaPago")">Forma de Pago</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_Impuesto")">Impuesto</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_MetodoPago")">Metodo de Pago</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_Moneda")">Moneda</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_RegimenFiscal")">Regimen Fiscal</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_ClaveProductoServicio")">Producto o Servicio</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_TipoComprobante")">Tipo de Comprobante</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_TipoContrato")">Tipo Contrato</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_TipoJornada")">Tipo Jornada</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_TipoRelacion")">Tipo de Relación</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_UsoCFDI")">Uso CFDI</a></li>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","c_ClaveUnidad")">Unidad</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="btn-group" role="group">
+            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Comercial
+            </button>
+            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <ul>
+                    <li><a class="dropdown-item" href="@Url.Action("Index","Empresa")">Empresa</a></li>
+                </ul>
+
+            </div>
+        </div>
+   @*</div>*@
+</div>

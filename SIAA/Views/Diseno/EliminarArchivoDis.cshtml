@@ -1,0 +1,49 @@
+﻿@model IEnumerable<SIAAPI.Models.Diseno.DisenoAdd>
+
+@{
+    ViewBag.Title = "EliminarArchivoDis";
+    var @iddis= ViewBag.id;
+   Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Eliminar archivo complementario del Diseño @iddis </h3>
+<hr />
+<br />
+
+    @Html.AntiForgeryToken()
+
+@*Tabla de datos*@
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+               @Html.DisplayNameFor(model => model.nombreArchivo)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td hidden>
+                    @Html.HiddenFor(model => item.ID)
+                    @Html.HiddenFor(model => item.IDDiseno)
+                    @Html.HiddenFor(model => item.RutaArchivo)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.nombreArchivo)
+                </td>
+                <td>
+
+                    @Html.ActionLink("Eliminar", "EliminarArchivo", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+    <div class="form-actions no-color">
+
+        @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+    </div>
+

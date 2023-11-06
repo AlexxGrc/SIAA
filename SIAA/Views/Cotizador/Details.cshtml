@@ -1,0 +1,63 @@
+﻿@model SIAAPI.ClasesProduccion.Cotizaciones
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Details", "Cotizador",
+                                           new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString, Fechainicio = ViewBag.Fechainicio, Fechafinal = ViewBag.Fechafinal }, FormMethod.Post, null))
+{
+
+<div>
+    <h3>Detalle de Cotización</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Ruta)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Ruta)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreArchivo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NombreArchivo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Usuario)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Usuario)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ID }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index", new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString, Fechainicio = ViewBag.Fechainicio, Fechafinal = ViewBag.Fechafinal }, new { @class = "btn btn-default btn-xs" })</p>
+
+
+}

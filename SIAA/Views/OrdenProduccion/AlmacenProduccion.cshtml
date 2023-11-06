@@ -1,0 +1,124 @@
+﻿
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.ValeProducto>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "AlmacenProduccion";
+            Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<h3>Lista de Inventario Almacén de Producción</h3>
+<hr />
+
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+                        @Html.ActionLink("Crea un nuevo registro", "ValeProducto", new { id = ViewBag.idorden}, new { @class = "btn btn-warning navbar-btn btn-xs" })
+                        Elementos por página: @Html.DropDownList("pageSize")  |
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span>
+                        
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+           
+            <th>@Html.Label("Orden de Producción")</th>
+            <th>@Html.Label("Fecha")</th>
+            <th> @Html.Label("FechaDevolucion")</th>
+            <th> @Html.Label("Artículo")</th>
+            <th> @Html.Label("Característica")</th>
+            <th> @Html.Label("Proceso")</th>
+            <th> @Html.Label("Cantidad")</th>
+            <th> @Html.Label("Unidad")</th>
+            <th> @Html.Label("UserID")</th>
+            <th> @Html.Label("Trabajador")</th>
+            <th> @Html.Label("Almacen")</th>
+            <th> @Html.Label("Devuelto")</th>
+            <th></th>
+
+
+        </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td> @Html.DisplayFor(modelItem => item.IDOrden) </td>
+                        <td>@Html.DisplayFor(modelItem => item.Fecha)</td>
+                        <td>@Html.DisplayFor(modelItem => item.FechaDevolucion)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Articulo.Descripcion)</td>
+                        <td>
+                            @{
+                                try
+                                {
+                                    SIAAPI.ViewModels.Articulo.VCaracteristica caracteristica = new SIAAPI.ViewModels.Articulo.VCaracteristicaContext().VCaracteristica.Find(item.IDCaracteristica);
+                                    @caracteristica.Presentacion
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+
+                            }
+                        @*@Html.DisplayFor(modelItem => item.IDCaracteristica)*@
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.Proceso.NombreProceso)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Cantidad)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Unidad.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.User.Username)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Trabajador.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Almacen.Descripcion)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Devuelto)</td>
+                        <td>
+                            @if (item.Devuelto == 0)
+                            {
+                                @Html.ActionLink("Devolver Producto", "DevolverProducto", new { id = item.IDValeProducto }, new { @class = "btn btn-danger btn-xs" })
+                            }
+                       
+                        </td>
+                    </tr>
+        }
+
+    </table>
+
+    </div>
+
+
+
+    @*Paginación*@
+    @using (Html.BeginForm("AlmacenProduccion", "OrdenProduccion", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+        <div class="pager">
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+            @Model.Count de @Model.TotalItemCount elementos
+
+            @Html.PagedListPager(Model, page => Url.Action("AlmacenProduccion", new
+   {
+       page,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize
+   }))
+
+
+        </div>
+    }
+    @*Paginación*@

@@ -1,0 +1,190 @@
+﻿@model List<SIAAPI.Models.Produccion.VArticulosProduccion>
+
+@{
+    ViewBag.Title = "ExplosionMateriales";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<h4>Verificación de Materiales</h4>
+
+@using (Html.BeginForm("EditCheckin", "OrdenProduccion", FormMethod.Post))
+{
+    <input type="hidden" name="idorden" id="idorden" value="@ViewBag.id" />
+    <div class="table-responsive" id="actualiza">
+        <table class="table table-striped" width="50">
+            <thead>
+                <tr>
+
+                    <th>Artículo</th>
+                    <th>Tipo de Artículo</th>
+                    <th>Característica</th>
+                    <th>Proceso</th>
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+
+                    <th>Indicaciones</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @{
+                int j = 0;
+                foreach (var i in Model)
+                {
+
+                    //SIAAPI.Models.Comercial.ClsDatoString Presentacion = new SIAAPI.Models.Produccion.OrdenProduccionContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select presentacion as Dato from OrdenProduccion where idorden='" + i.IDOrden + "'").ToList().FirstOrDefault();
+                    //double cyrel = 0;
+                    //try
+                    //{
+                    //    FormulaSiaapi.Formulas FORMULA = new FormulaSiaapi.Formulas();
+                    //    FORMULA.cadenadepresentacion = Presentacion.Dato;
+
+
+                    //    try
+                    //    {
+                    //        cyrel = FORMULA.getvalor("CYREL", Presentacion.Dato);
+
+                    //    }
+                    //    catch
+                    //    {
+
+                    //    }
+                    //}
+                    //catch (Exception err)
+                    //{
+
+                    //}
+                        <tr>
+                            @Html.TextBoxFor(a => a[j].IDArtProd, new { @class = "form-control", @Value = i.IDArtProd, @type = "hidden" })
+
+                            @*<td>@Html.DisplayFor(modelItem => i.Planeacion)</td>
+        <td>@Html.DisplayFor(modelItem => i.Version)</td>*@
+
+                            <td>@Html.DisplayFor(modelItem => i.Articulo) </td>
+                            <td>@Html.DisplayFor(modelItem => i.TipoArticulo)</td>
+                            <td>@Html.DisplayFor(modelItem => i.Caracteristica)</td>
+                            <td>@Html.DisplayFor(modelItem => i.Proceso)</td>
+                            <td>@Html.DisplayFor(modelItem => i.Cantidad)</td>
+                            <td>@Html.DisplayFor(modelItem => i.Unidad)</td>
+
+                            <td>@Html.DisplayFor(modelItem => i.Indicaciones)</td>
+                            @{ try
+                                {
+                                    SIAAPI.Models.Comercial.Caracteristica cara = new SIAAPI.Models.Comercial.CarritoContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select*from Caracteristica where id=" + i.IDCaracteristica).FirstOrDefault();
+
+                                    SIAAPI.Models.Comercial.Articulo aRT = new SIAAPI.Models.Comercial.CarritoContext().Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>("select*from Articulo where idarticulo=" + cara.Articulo_IDArticulo).FirstOrDefault();
+                                    if (aRT.IDTipoArticulo != 6)
+                                    {
+                                        if (cara.obsoleto)
+                                        {
+                                            <td>@Html.Label("Presentación Obsoleta")</td>
+
+                                        }
+                                        else if (aRT.obsoleto)
+                                        {
+                                            <td>@Html.Label("Artículo Obsoleto")</td>
+
+                                        }
+                                        else
+                                        {
+                                            <td>@Html.CheckBoxFor(a => a[j].Existe)</td>
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <td>@Html.CheckBoxFor(a => a[j].Existe)</td>
+
+                                    }
+
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+
+                            }
+
+                        </tr>
+                    @*if ((Model.Count()-1) == j)
+                        {
+                            if (cyrel > 0)
+                            {
+                                <tr>
+                                    <td>CYREL </td>
+                                    <td></td>
+                                    <td>@cyrel</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@Html.CheckBoxFor(a => a[j].Existe)</td>
+                                </tr>
+
+                            }
+
+                        }*@
+
+                    j++;
+                }
+                SIAAPI.Models.Produccion.OrdenProduccion orden = new SIAAPI.Models.Produccion.OrdenProduccionContext().OrdenesProduccion.Find(ViewBag.id);
+
+
+                <tr>
+                    <td>
+                        @Html.Label("LLEVA ARRASTRE")
+
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    <td>
+
+
+                        @* <input type="checkbox" id="Arrastre" name="Arrastre" value="@ViewBag.LlevaArrastre">*@
+                        @{
+                            if (orden.Arrastre)
+                            {
+                                <div class="checkbox">
+                                    @Html.EditorFor(model => orden.Arrastre)
+                                    @*  @Html.ValidationMessageFor(model => model.Activo, "", new { @class = "text-danger" })*@
+                                </div>
+                            }
+                            else
+                            {
+                                <input type="checkbox" id="Arrastre" name="Arrastre" value="@orden.Arrastre">
+
+                            }
+                        }
+
+
+                    </td>
+
+                </tr>
+            }
+        </table>
+    </div>
+
+
+    <input class="btn btn-success" type="submit" value="Aceptar" />
+
+
+}
+@*<script>
+    function habilitar(value) {
+        if (value == true) {
+            // habilitamos
+            document.getElementById("entregarnum").disabled = false;
+        } else if (value == false) {
+            // deshabilitamos
+            document.getElementById("entregarnum").disabled = true;
+        }
+    }
+</script>*@

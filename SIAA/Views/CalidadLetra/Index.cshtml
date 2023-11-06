@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SIAAPI.Models.Calidad.CalidadLetra>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" })|
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LI_Lote_mill)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LS_Lote_mill)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NGI1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NGI2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NGI3)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.LI_Lote_mill)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.LS_Lote_mill)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NGI1)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NGI2)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NGI3)
+    </td>
+    <td>
+        @Html.ActionLink("Editar", "Edit", new { id = item.IDLetra }, new { @class = "btn btn-success btn-xs" })
+        @Html.ActionLink("Detalles", "Details", new { id = item.IDLetra }, new { @class = "btn btn-default btn-xs" })
+        @Html.ActionLink("Eliminar", "Delete", new { id = item.IDLetra }, new { @class = "btn btn-danger btn-xs" })
+    </td>
+</tr>
+}
+
+</table>

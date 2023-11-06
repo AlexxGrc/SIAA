@@ -1,0 +1,175 @@
+﻿@model SIAAPI.Models.Comercial.Caracteristica
+
+@{
+    ViewBag.Title = "BuscaEtiqueta";
+    Layout = "~/Views/Shared/_LayoutPlaneacionE.cshtml";
+    var idcaracteristica = ViewBag.PresentacionList as List<SelectListItem>;
+    var idarticulo = ViewBag.IDArticulo as List<SelectListItem>;
+}
+
+<h2>BuscaEtiqueta</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Caracteristica</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <table>
+            <td class="col-lg-3">
+                Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                <br /><input id="clave" name="clave" onkeyup="actualizacomboArticulo(event)" />
+            </td>
+            <td class="col-lg-9">
+                <div class="form-group">
+                    @Html.Label("Artículo Componente", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+
+                        @*@Html.DropDownListFor(model => model.IDArticulo, ViewBag.IDCaracteristica as List<SelectListItem>, new { @class = "form-control" })*@
+                        @Html.DropDownListFor(model => model.Articulo_IDArticulo, idarticulo, new
+                   {
+                       @class = "form-control",
+                       @name = "IDArticuloComp",
+                       @id = "IDArticuloComp",
+                       data_cascade_combo = "#IDCaracteristica",
+                       data_cascade_combo_source = Url.Action("getJsonCaracteristicaArticulo", "Articulos"),
+                       data_cascade_combo_param_name = "id"
+
+                   })
+                    </div>
+                </div>
+            </td>
+
+        </table>
+        <div class="form-group">
+            @Html.Label("Presentación", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+
+                @Html.DropDownListFor(model => model.ID, idcaracteristica, new { @class = "form-control", id = "IDCaracteristica" })
+
+            </div>
+        </div>
+
+        @*<div class="form-group">
+            @Html.LabelFor(model => model.Cotizacion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cotizacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cotizacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.version, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.version, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.version, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Presentacion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Presentacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Presentacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.obsoleto, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.obsoleto)
+                    @Html.ValidationMessageFor(model => model.obsoleto, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.jsonPresentacion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.jsonPresentacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.jsonPresentacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Existencia, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Existencia, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Existencia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PorLlegar, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.PorLlegar, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PorLlegar, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Apartado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Apartado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Apartado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Disponibilidad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Disponibilidad, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Disponibilidad, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Siguiente" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+
+<script defer src="~/Scripts/cascade.combo.js"></script>
+<script>
+    function actualizacomboArticulo(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clave";
+            var selectcontrol = "#IDArticuloComp";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getarticulosblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un articulo";
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+</script>

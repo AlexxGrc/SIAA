@@ -1,0 +1,155 @@
+﻿@model IEnumerable<SIAAPI.Models.PlaneacionProduccion.RangoPlaneacionCosto>
+@{
+    ViewBag.Title = "Agrega";
+    Layout = "~/Views/Shared/_LayoutPlaneacionE.cshtml";
+}
+
+<h3>Rango de Cantidades de Hoja de Espeficación: @ViewBag.id Versión: @ViewBag.version</h3>
+<hr />
+
+
+    <div class="form-horizontal">
+        <input type="hidden" name="idhe" id="idhe" class="form-control" value="@ViewBag.id" />
+       
+        <input type="hidden" name="version" id="version" class="form-control" value="@ViewBag.version" />
+
+        @*<h4>Hoja de Especificación: @ViewBag.id</h4>
+        <h4>Versión: @ViewBag.version</h4>*@
+
+        <div class="form-group">
+            @Html.Label("Rango Inferior", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                <input type="text" name="ranginf" id="ranginf" class="form-control" required="required" value="@ViewBag.rangoinferior" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Rango Superior", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                <input type="text" name="rangsup" id="rangsup" class="form-control" required="required" value="@ViewBag.rangosuperior"/>
+            </div>
+        </div>
+
+     
+        </div>
+
+
+
+       <center> <a onclick="Inserta()"><i class="btn btn-success btn-xs">Grabar</i></a></center>
+
+<br />
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+             
+                <th>
+                    @Html.DisplayNameFor(model => model.RangoInf)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RangoSup)
+                </th>
+             
+                <th></th>
+            </tr>
+            @{
+                var contador = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                      
+                        <td>
+                            @{string cadenaa = "RangoI" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadenaa" name="RangoI" value="@item.RangoInf">
+                        </td>
+                        <td>
+                            @{string cadena = "RangoS" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadena" name="RangoS" value="@item.RangoSup">
+                        </td>
+                      
+
+                        <td>
+
+                            <a class="edit" onclick="Actualizar(@item.IDRP,@contador)">
+                                <i class="tbl_del_btn fa fa-refresh"></i></a>
+
+                            <a class="delete" data-id="@item.IDRP">
+                                <i class="tbl_del_btn fa fa-trash"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                                    contador++;
+                                }
+            }
+
+        </table>
+    </div>
+
+
+
+
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script>
+
+                var url = '@Url.Action("Deleteitem", "RangoCosto")';
+                $('.delete').click(function () {
+                    var row = $(this).closest('tr');
+                    $.post(url, { id: $(this).data('id') }, function (response) {
+                        if (response) {
+                            location.reload();
+                            row.remove();
+
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                });
+    </script>
+
+    <script>
+
+                var urledit = '@Url.Action("Edititem", "RangoCosto")';
+
+                function Actualizar(id, numero) {
+                    var rangi= document.getElementById("RangoI" + numero).value
+                    var rangs = document.getElementById("RangoS" + numero).value
+
+                    $.post(urledit, { id: id, rangi: rangi, rangs: rangs}, function (response) {
+                        if (response) {
+                            location.reload();
+                            row.change;
+
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                }
+
+
+    </script>
+
+    <script>
+
+                var urlinsert = '@Url.Action("Insertar", "RangoCosto")';
+
+                function Inserta() {
+                    var rangi = document.getElementById("ranginf").value
+                    var rangs = document.getElementById("rangsup").value
+                    var idhe = document.getElementById("idhe").value
+                    var version = document.getElementById("version").value
+
+                    $.post(urlinsert, {rangi: rangi, rangs: rangs,idhe: idhe, version: version}, function (response) {
+                        if (response) {
+                            location.reload();
+                            row.change;
+
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                }
+
+
+    </script>

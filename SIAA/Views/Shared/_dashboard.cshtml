@@ -1,0 +1,675 @@
+﻿@using Microsoft.AspNet.Identity
+<div >
+    @if (Request.IsAuthenticated)
+            {
+                string ColorPedido = "#ffc107";
+                string ColorLetrapedido = "#424242";
+
+                string ColorRequiciones = "#338e3c";
+                string ColorLetrarequiciones = "white";
+
+                string ColorCompras = "#C62828";
+                string ColorLetraCompras = "white";
+
+                string ColorProduccion = "#0277bd";
+                string ColorLetraProduccion= "white";
+
+                string ColorRemision = "#283593";
+                string ColorLetraRemision = "white";
+
+
+
+                if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Compras"))
+
+                {
+            <section class="content">
+                <h3>Requisiciones</h3>
+                <div class="container-fluid">
+                    <!-- Info boxes -->
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorRequiciones"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrarequiciones"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Requisiciones Ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div style="font-weight:100">  @ViewBag.RequicionesTotal90</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorRequiciones"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrarequiciones"></i></span>
+
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Requisiciones  inactivas Ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div>  @ViewBag.Requicionesinactivas</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorRequiciones"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrarequiciones"></i></span>
+
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Requisiciones Activas de los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @ViewBag.RequicionesActivas</h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorRequiciones"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrarequiciones"></i></span>
+
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Requisiciones Finalizadas de los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @ViewBag.RequicionesFinalizadas</h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+            </section>
+        }
+        <section class="content">
+            <h3>Compras</h3>
+            <div class="container-fluid">
+                <!-- Info boxes -->
+                <div class="row">
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorCompras"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraCompras"></i></span>
+
+                            <div class="info-box-content">
+                                <div class="table-responsive">
+                                    <div> <h6 style="font-weight: bold">Compras Ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                    <div style="font-weight:100">  @ViewBag.comprasTotal90</div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorCompras"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraCompras"></i></span>
+
+                            <div class="info-box-content">
+                                <div class="table-responsive">
+                                    <div> <h6 style="font-weight: bold">Compras  inactivas Ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                    <div>  @ViewBag.comprasinactivas</div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorCompras"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraCompras"></i></span>
+
+                            <div class="info-box-content">
+                                <div class="table-responsive">
+                                    <div> <h6 style="font-weight: bold">Compras Activas de los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                    <div> <h5 style="font-size:medium"> @ViewBag.comprasActivas</h5></div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorCompras"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraCompras"></i></span>
+
+                            <div class="info-box-content">
+                                <div class="table-responsive">
+                                    <div> <h6 style="font-weight: bold">Compras Finalizadas de los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                    <div> <h5 style="font-size:medium"> @ViewBag.comprasFinalizadas</h5></div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+
+        </section>
+
+
+        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Fecturacion"))
+
+        {
+            <section class="content">
+                <h3>Pedidos</h3>
+                <div class="container-fluid">
+                    <!-- Info boxes -->
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorPedido"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrapedido"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Pedidos Ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div style="font-weight:100">  @ViewBag.PedidosTotal90</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorPedido"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrapedido"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Pedidos inactivos Ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div>  @ViewBag.Pedidosinactivos</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorPedido"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrapedido"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Pedidos Activos de los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @ViewBag.PedidosActivos</h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorPedido"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrapedido"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Pedidos Finalizadas de los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @ViewBag.PedidosFinalizados</h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorPedido"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrapedido"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">BackOrder de Pedidos</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @String.Format("{0:C}", @ViewBag.PedidosBackOrder) </h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorPedido"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrapedido"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Pedidos de este mes</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium">@ViewBag.PedidosConteoMes </h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorPedido"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetrapedido"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Monto de pedidos en el mes</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @String.Format("{0:C}", @ViewBag.PedidosMontoMes) </h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+            </section>
+        }
+        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Fecturacion") || @Roles.IsUserInRole("Almacenista"))
+
+        {
+            <section class="content">
+                <h3>Remisiones</h3>
+                <div class="container-fluid">
+                    <!-- Info boxes -->
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorRemision"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraRemision"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Remisiones Ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div style="font-weight:100">  @ViewBag.RemisionesTotal90</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorRemision"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraRemision"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Remisiones inactivas Ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div>  @ViewBag.RemisionesInactivas</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorRemision"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraRemision"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Remisiones Activas de los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @ViewBag.RemisionesActivas</h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorRemision"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraRemision"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Remisiones Finalizadas de los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @ViewBag.RemisionesFinalizadas</h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+            </section>
+        }
+        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Fecturacion"))
+
+        {
+            <section class="content">
+                <h3>Prefacturas</h3>
+                <div class="container-fluid">
+                    <!-- Info boxes -->
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: #FF8F00"><i class="fa fa-list-alt fa-2x"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Prefacturas sin timbrar</h6> </div>
+
+
+
+
+
+                                        <div style="font-weight:100">  @ViewBag.PrefacturasSinTimbrar</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+
+
+                        <!-- /.col -->
+                    </div>
+                </div>
+            </section>
+        }
+        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("MesaControl"))
+        {
+            <section class="content">
+                <h3>Produccion</h3>
+                <div class="container-fluid">
+                    <!-- Info boxes -->
+                    <div class="row">
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorProduccion"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraProduccion"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Ordenes en los ultimos 90 Dias</h6> </div>
+
+
+
+
+
+                                        <div style="font-weight:100">  @ViewBag.OrdenesTotal90</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorProduccion"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraProduccion"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Ordenes en Conflicto 90 dias</h6> </div>
+
+
+
+
+
+                                        <div>  @ViewBag.OrdenesEnconflicto</div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorProduccion"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraProduccion"></i></span>
+
+                                <div class="info-box-content">
+                                    <div class="table-responsive">
+                                        <div> <h6 style="font-weight: bold">Ordenes Listas</h6> </div>
+
+
+
+
+
+                                        <div> <h5 style="font-size:medium"> @ViewBag.OrdenesListas</h5></div>
+
+
+                                    </div>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorProduccion"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraProduccion"></i></span>
+
+                                <div class="info-box-content">
+                                    <div> <h6 style="font-weight: bold">Ordenes Programadas</h6> </div>
+
+
+
+
+
+                                    <div> <h5 style="font-size:medium"> @ViewBag.OrdenesProgramadas</h5></div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorProduccion"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraProduccion"></i></span>
+
+                            <div class="info-box-content">
+                                <div class="table-responsive">
+                                    <div> <h6 style="font-weight: bold">Ordenes Iniciadas</h6> </div>
+
+
+
+
+
+                                    <div> <h5 style="font-size:medium"> @ViewBag.OrdenesIniciadas </h5></div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1" style="background-color: @ColorProduccion"><i class="fa fa-list-alt fa-2x" style="color:@ColorLetraProduccion"></i></span>
+
+                            <div class="info-box-content">
+                                <div class="table-responsive">
+                                    <div> <h6 style="font-weight: bold">ordenes Finalizadas</h6> </div>
+
+
+
+
+
+                                    <div> <h5 style="font-size:medium">@ViewBag.OrdenesFinalizadas </h5></div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1" style="background-color: red"><i class="fa fa-list-alt fa-2x" style="color:white"></i></span>
+
+                            <div class="info-box-content">
+                                <div class="table-responsive">
+                                    <div> <h6 style="font-weight: bold">Ordenes Canceladas</h6> </div>
+
+
+
+
+
+                                    <div> <h5 style="font-size:medium"> @ViewBag.OrdenesCanceladas</h5></div>
+
+
+                                </div>
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+
+                    <!-- /.col -->
+                </div>
+
+            </section>
+        }
+    }
+   
+</div>

@@ -1,0 +1,183 @@
+﻿@model SIAAPI.Models.Produccion.ValeProducto
+
+@{
+    ViewBag.Title = "ValeProducto";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<h2>Vale de Producto</h2>
+@using (Html.BeginForm("ValeProducto", "OrdenProduccion", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Orden de Producción", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.IDOrden, new { htmlAttributes = new { @class = "form-control", @Value=ViewBag.idorden, disabled = "disabled" } })
+                @Html.ValidationMessageFor(model => model.IDOrden, "", new { @class = "text-danger" })
+                <input type="hidden" name="IDOrden" value="@ViewBag.idorden">
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Fecha, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.horafecha } })
+                @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDArticulo, "Artículo", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDArticulo", null, "--Selecciona un Artículo--", htmlAttributes: new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.IDArticulo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDCaracteristica, "Característica", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDCaracteristica", new SelectList(string.Empty, "Value", "Text"), "--Selecciona Característica--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDCaracteristica, "", new { @class = "text-danger" })
+            </div>
+        </div>
+   
+       
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+               @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control"} })
+                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+
+            @Html.Label("Unidad", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <h5><p id="unidad"></p></h5>
+                <input type="hidden" name="IDClaveUnidad" id="IDClaveUnidad"/>
+            </div>
+
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDTrabajador, "Trabajador", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDTrabajador", null, htmlAttributes: new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.IDTrabajador, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDProceso, "Proceso", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDProceso", null, htmlAttributes: new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.IDProceso, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDAlmacen, "Almacén", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDAlmacen", null, htmlAttributes: new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.IDAlmacen, "", new { @class = "text-danger" })
+            </div>
+        </div>
+       
+
+        <div class="form-group">
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" />| @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+
+
+        </div>
+    </div>
+   
+}
+
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDArticulo").change(function () {
+            $("#IDCaracteristica").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getcaracteristica")',
+                dataType: 'json',
+                data: { id: $("#IDArticulo").val()},
+                success: function (metodos) {
+                $.each(metodos, function (i, metodo) {
+                    $("#IDCaracteristica").append('<option value="' + metodo.Value + '">' +
+                 metodo.Text + '</option>');
+                });
+                },
+                error: function (ex) {
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDArticulo").change(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getunidad")',
+                dataType: 'json',
+                data: { id: $("#IDArticulo").val()},
+                success: function (valor) {
+                    document.querySelector('#unidad').innerText = valor;
+                
+                },
+                error: function (ex) {
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDArticulo").change(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getidunidad")',
+                dataType: 'json',
+                data: { id: $("#IDArticulo").val()},
+                success: function (valor) {
+                    $("#IDClaveUnidad").val(valor)
+
+                },
+                error: function (ex) {
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+
+
+

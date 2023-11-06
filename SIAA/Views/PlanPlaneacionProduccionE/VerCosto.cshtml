@@ -1,0 +1,175 @@
+﻿
+@model IEnumerable<SIAAPI.Models.PlaneacionProduccion.VRangoPlaneacionCosto>
+
+@{
+    ViewBag.Title = "IndexHE";
+    Layout = "~/Views/Shared/_LayoutPlaneacionE.cshtml";
+}
+<h3>Costo Planeado de @ViewBag.Articulo por Tipo de Artículo y Rangos</h3>
+@{
+    <table>
+        @{
+            string[] atributos = @ViewBag.Presentacion.Split(',');
+            <tr>
+                @foreach (var atri in atributos)
+                {
+                    string[] valor = atri.Split((char)58);
+                    string Atri = valor[0];
+                    string Val = valor[1];
+                    <td style="background-color:darkblue; font-size:small" class="col-md-1">
+                        <label style="color:white;">@Atri</label>
+                    </td>
+                }
+            </tr>
+                        <tr>
+                            @foreach (var atri in atributos)
+                            {
+                                string[] valor = atri.Split((char)58);
+                                try
+                                {
+                                    string Val = valor[1];
+                                    <td class="col-md-1" style=" font-size:small">
+                                        <label>@Val</label>
+                                    </td>
+                                }
+                                catch (Exception err)
+                                {
+                                    <td class="col-md-1">
+                                        <label> </label>
+                                    </td>
+                                }
+
+
+                            }
+                        </tr>
+        }
+    </table>
+}
+
+
+<hr />
+<h4 class="text-primary" align="left">Moneda de Planeación: @ViewBag.Moneda</h4>
+
+
+            @{  int numero = 1;
+                foreach (var itemrango in ViewBag.Rangocosto)
+                {
+
+                      <div style="display: inline-block;width: 300px;height:300px;">
+                          @{
+                            var color = "panel panel-primary";
+
+                            if (numero == 1)
+                            {
+                                color = "panel panel-primary";
+                            }
+                            if (numero == 2)
+                            {
+                                color = "panel panel-green";
+                            }
+                            if (numero == 3)
+                            {
+                                color = "panel panel-yellow";
+                            }
+
+                            if (numero == 4)
+                            {
+                                color = "panel panel-red";
+                                numero = 0;
+
+                            }
+                            numero = numero + 1;
+                          }
+                          <div class="@color" style="width:300px;height:80px;background:red">
+
+                              <div class="panel-heading">
+                                  <div class="row">
+                                      <div class="col-xs-2">
+                                          <i class="fa fa-list-alt fa-4x"></i>
+                                      </div>
+                                      <div class="col-xs-10 text-right">
+                                          <div class="huge">
+                                              <h4>Rango  </h4>
+                                          </div>
+                                          <div>@itemrango.RangoInf - @itemrango.RangoSup</div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        <div class="panel-footer">
+
+                                <div class="table-responsive">
+                                    <table class="table table-responsive">
+                                        <tr>
+                                            <th><h3>Rubros</h3></th>
+
+                                        </tr>
+                                       @foreach (var item in Model)
+                                       {
+                                            
+                                           if ((item.RangoInf == itemrango.RangoInf) && (item.RangoSup == itemrango.RangoSup))
+                                           { <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Costo)
+                                                </td>
+                                            </tr>
+                                           }
+                                       }
+                                    </table>
+                              </div>  @*div table*@
+
+
+                           <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                           <div class="clearfix"></div>
+                       </div> @*div panel footer*@
+
+                     </div>
+
+                              } // fin del for de rangos
+                                // fin del razor     
+              } 
+
+   
+
+
+
+
+
+    <h3>Costo Total de Planeación por Rangos</h3>
+    <hr />
+
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+                <th class="col-lg-1">
+                    Rango Inferior
+                </th>
+                <th class="col-lg-1">
+                    Rango Superior
+                </th>
+                <th class="col-lg-1">
+                   Costo Unitario
+                </th>
+            </tr>
+            @foreach (var itemresumen in ViewBag.sumatoria)
+            {
+
+                <tr>
+                    <td class="col-lg-1">
+                        @itemresumen.RangoInf
+                    </td>
+                    <td class="col-lg-1">
+                        @itemresumen.RangoSup
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.Costo)
+                    </td>
+
+
+                </tr>
+            }
+        </table>
+    </div>

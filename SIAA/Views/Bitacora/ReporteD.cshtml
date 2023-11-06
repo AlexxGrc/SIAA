@@ -1,0 +1,53 @@
+﻿@model SIAAPI.Models.Produccion.ReporteDesperfecto
+
+@{
+    ViewBag.Title = "ReporteD";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Reporte de Incidencia</h3>
+
+@using (Html.BeginForm("ReporteD", "Bitacora", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaInicioParo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.FechaInicioParo, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.horafecha } })
+                @Html.ValidationMessageFor(model => model.FechaInicioParo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDArticulo, "Máquina", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDArticulo", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDArticulo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Falla, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Falla, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Falla, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <input type="hidden" name="inserta" id="inserta" value="1" />
+
+        <div class="form-group">
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Reportes", new { id = ViewBag.id }, new { @class = "btn btn-default btn-xs" })
+            </div>
+
+
+        </div>
+    </div>
+
+}

@@ -1,0 +1,51 @@
+﻿@model SIAAPI.ClasesProduccion.ClsCotizador
+
+@{ 
+  
+
+    
+       
+        <h2>Rango de Cantidades</h2>
+        <p></p>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th><div>Rango 1</div></th>
+                    <th><div>Rango 2</div></th>
+                    <th><div>Rango 3</div></th>
+                    <th><div>Rango 4</div></th>
+                </tr>
+              
+            
+                    <tr>
+                        <td>
+                            <div class="form-group">
+
+                               <input type="number" name="Rango1" id="Rango1" step="any" value="@Model.Rango1" />
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <input type="number" name="Rango2" id="Rango2" step="any"  value="@Model.Rango2"  />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <input type="number" name="Rango3" id="Rango3" step="any"  value="@Model.Rango3" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <input type="number" name="Rango4" id="Rango4" step="any"   value="@Model.Rango4"/>
+                            </div>
+                        </td>
+                    </tr>
+                                   
+
+        </table>
+}
+   

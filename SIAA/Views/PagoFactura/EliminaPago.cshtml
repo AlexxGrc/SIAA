@@ -1,0 +1,61 @@
+﻿<h3>Eliminación del Pago</h3>
+<hr />
+@if (@ViewBag.detallesP != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Datos del pago
+                    </th>
+                <tr>
+                    <th>Fecha del Pago</th>
+                    <th>Cliente</th>
+                    <th>Monto</th>
+                    <th>Divisa</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.detallesP)
+                {
+                <tr>
+                    <td>@item.FechaPago</td>
+                    <td>@item.Nombre </td>
+                    <td>@item.Monto</td>
+                    <td>@item.ClaveDivisa </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+@model EliminaPagoEfe
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <br />
+        <h3>¿Está seguro de ELIMINAR este registro?</h3>
+        <p class="alert-danger">
+            Esta operación borrará este registro de la tabla de Pagos
+            <hr />
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.IDPagoFactura)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" />
+                    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+                </div>
+            </div>
+    </div>
+
+}
+
+
+
+

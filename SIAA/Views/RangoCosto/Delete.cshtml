@@ -1,0 +1,53 @@
+﻿@model SIAAPI.Models.PlaneacionProduccion.RangoPlaneacionCosto
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Estas seguro de borra el rango?</h3>
+<div>
+    
+    <hr />
+    <dl class="dl-horizontal">
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RangoInf)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RangoInf)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RangoSup)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RangoSup)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cantidad)
+        </dd>
+
+      
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Volver a la lista", "Index", new { id= Model.IDHE })
+        </div>
+    }
+</div>

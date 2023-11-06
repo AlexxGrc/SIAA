@@ -1,0 +1,58 @@
+﻿
+@model SIAAPI.ViewModels.Comercial.EFecha
+
+@{
+    ViewBag.Title = "EntreFechasNC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h3>Listado de Notas de Crédito</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        <h4>Establecer el rango de fechas para la generación del reporte: </h4>
+        <br /><br />
+
+        <div class="form-group">
+
+            @{
+                string fecha = DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year;
+                DateTime fecha2 = DateTime.Now;
+            }
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.fechaini, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.fechaini, new { htmlAttributes = new { type = "date", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.fechaini, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.fechafin, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.fechafin, new { htmlAttributes = new { type = "date", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.fechafin, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @*<input type="submit" name="Enviar" value="Generar reporte" class="btn btn-info btn-xs" />|*@
+                    <input type="submit" name="Enviar" value="Generar excel" class="btn btn-info btn-xs" />|
+                    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+                </div>
+            </div>
+
+        </div>
+    </div>
+                }
+
+ 

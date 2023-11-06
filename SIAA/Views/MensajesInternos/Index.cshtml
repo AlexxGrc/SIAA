@@ -1,0 +1,88 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.MensajesInternos>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Mensajes para ti</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mensaje)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Documento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.No_Documento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Rol)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (SIAAPI.Models.Comercial.MensajesInternos item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fecha)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mensaje)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Documento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.No_Documento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Rol)
+        </td>
+        <!--<td>-->
+            @*@Html.DisplayFor(modelItem => item.Estado)*@
+        <!--</td>-->
+        <td>
+
+            <center><a href="#" class="edit" onclick="DarPorLeido(@item.Id_Mensaje)"><span class="fa fa-check-circle" style="font-size:16px;color:greenyellow"></span></a></center>
+
+
+        </td>
+    </tr>
+}
+
+</table>
+<script>
+    function DarPorLeido(id) {
+        var urledit = '@Url.Action("DarPorLeido", "MensajesInternos")';
+        
+
+        $.post(urledit, { id: id }, function (response) {
+                    if (response) {
+                        location.reload();
+                        swal("La factura ha sido cancelada!", "", "success")
+
+                    }
+                }).fail(function (response) {
+                    swal("La factura no pudo ser cancelada!", "", "error")
+
+                })
+            }
+         
+    
+
+     
+
+
+
+
+</script>

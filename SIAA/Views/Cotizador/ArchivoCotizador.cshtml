@@ -1,0 +1,45 @@
+﻿@model SIAAPI.ClasesProduccion.Cotizaciones
+
+@{
+    ViewBag.Title = "ArchivoCotizador";
+}
+
+
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" value="@Model.thermo" name="thermo" id="thermo" />
+    <input type="hidden" value="@Model.suajenuevo" name="suajenuevo" id="suajenuevo" />
+    
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Escribe el nombre de la cotizacion </h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.Fecha, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.HiddenFor(model => model.Usuario, htmlAttributes: new { @class = "control-label col-md-2" })
+
+        @Html.HiddenFor(model => model.Ruta, htmlAttributes: new { @class = "control-label col-md-2" })
+
+        @Html.HiddenFor(model => model.NombreArchivo, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar Archivo" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("ir a la lista", "Index")
+</div>

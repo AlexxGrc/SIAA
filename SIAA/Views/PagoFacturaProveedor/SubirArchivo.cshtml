@@ -1,0 +1,48 @@
+﻿@model SIAAPI.Models.Cfdi.PagoFacturaProv
+
+@{
+    ViewBag.Title = "Subir Archivo PDF";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Subir el archivo del pago correspondiente a la factura del proveedor de tipo .pdf</h3>
+<hr />
+<br />
+
+@using (Html.BeginForm("SubirArchivo", "PagoFacturaProveedor",new { id = ViewBag.ID }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>indica el archivo a subir</h4>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                    <input type="file" name="file" class="btn-warning">
+                    <button type="submit">Cargar Archivo PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        @if (ViewBag.Error != null)
+        {
+        <h2 class="text-danger">@ViewBag.Error</h2>
+        }
+        @if (ViewBag.Correcto != null)
+        {
+        <h2 class="text-success">@ViewBag.Correcto</h2>
+        }
+        
+       
+
+    </div>
+
+    <p>
+        @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDArticulo }) |*@
+
+        @Html.ActionLink("Regresar a la lista", "Index", new { page = @ViewBag.pagina, searchString = @ViewBag.searchString}, new { @class = "btn btn-default btn-xs" })
+
+    </p>
+}
+

@@ -1,0 +1,240 @@
+﻿@*PagoElectronico partial view*@
+@model IEnumerable<SIAAPI.Models.Cfdi.VPagoFactura>
+@if (Model != null)
+{
+    @*contenido*@
+
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <thead>
+                <tr>
+                    <th>
+                        ID
+                    </th>
+                    <th>Folio Factura</th>
+                    <th>
+                        Fecha Pago
+                    </th>
+
+                    <th>
+                        Cliente
+                    </th>
+
+                    @*<th>
+                            Descripción
+                        </th>*@
+
+                    <th>
+                        Clave Divisa
+                    </th>
+
+                    <th>
+                        TC
+                    </th>
+                    @*<th>
+                            No. Operación
+                        </th>*@
+                    <th>
+                        Monto
+                    </th>
+
+                    @*<th>
+                            Banco Emisor
+                        </th>
+
+                        <th>
+                            Banco Receptor
+                        </th>*@
+                    @*<th>
+                            Tipo Cadena Pago
+                        </th>*@
+                    <th>Observación</th>
+
+                    <th>Estado</th>
+
+                </tr>
+
+                @foreach (var item in Model)
+                {
+            <tr>
+                <td style="display:none;">
+                    @item.IDCliente
+                    @item.RFC
+                    @item.ClaveFormaPago
+                    @*@item.RFCBancoEmisor
+            @item.RFCBancoReceptor*@
+                </td>
+                @*@Html.HiddenFor(modelItem => @Model.IDCliente)
+        @Html.HiddenFor(modelItem => item.RFC)
+        @Html.HiddenFor(modelItem => item.ClaveFormaPago)
+        @Html.HiddenFor(modelItem => item.ClaveDivisa)
+        @Html.HiddenFor(modelItem => item.RFCBancoEmisor)
+        @Html.HiddenFor(modelItem => item.RFCBancoReceptor)*@
+
+                <td>
+                    @item.IDPagoFactura
+                </td>
+                <td>@item.folio</td>
+                <td>
+                    @item.FechaPago.ToShortDateString()
+                </td>
+
+                <td>
+                    @item.Nombre
+                </td>
+                @*<td>
+            @item.Descripcion
+        </td>*@
+                <td>
+                    @item.ClaveDivisa
+                </td>
+                <td>
+                    @item.TC
+                </td>
+                @*<td>
+            @item.NoOperacion
+        </td>*@
+                <td>
+                    @item.Monto
+                </td>
+
+                @*<td>
+            @item.NombreBancoEmisor
+        </td>
+        <td>
+            @item.NombreBancoReceptor
+        </td>*@
+                @*<td>
+            @item.TipoCadenaPago
+        </td>*@
+                <td>
+                    @item.Observacion
+                </td>
+                <td>
+                    @item.StatusPago
+                </td>
+
+                <td>
+                    @if (string.IsNullOrEmpty(item.RutaXML) && (item.TipoCadenaPago == "SPEI"))
+                    {
+                        @Html.ActionLink("Pago SPEI", "SPEI", new { id = item.IDPagoFactura }, new { @class = "btn btn-default btn-xs" })
+                    }
+                </td>
+                @if (item.Estado.Equals(false))
+                {
+                    <td>
+                        @Html.ActionLink("Documentos Relacionados", "DocumentoR", new { idpf = item.IDPagoFactura, idc = item.IDCliente, nombrec = item.Nombre, monto = item.Monto }, new { @class = "btn btn-info btn-xs" })
+                        @Html.ActionLink("Factoraje", "FactorajeR", new { idpf = item.IDPagoFactura, idc = item.IDCliente, nombrec = item.Nombre, monto = item.Monto }, new { @class = "btn btn-warning btn-xs" })
+                        @Html.ActionLink("Detalles", "Details", new { id = item.IDPagoFactura }, new { @class = "btn btn-default btn-xs" })
+                        @Html.ActionLink("Eliminar Registro", "EliminaPago", new { id = item.IDPagoFactura }, new { @class = "btn btn-danger btn-xs" })
+
+                    </td>
+                }
+                else
+                {
+            <td>
+             
+                @Html.ActionLink("Detalles", "Details", new { id = item.IDPagoFactura }, new { @class = "btn btn-default btn-xs" })
+            </td>
+                    if (item.StatusPago == "A")
+                    {
+                        <td>
+                            <center><a href="#" class="edit" onclick="CancelarP(@item.IDPagoFactura)"><span class="fa fa-ban" style="font-size:16px;color:red"></span></a></center>
+
+                            @* @Html.ActionLink("Cancelar CFDI 4.0", "CancelaPago", new { id = item.IDPagoFactura }, new { @class = "btn btn-danger btn-xs" })*@
+
+
+
+                        </td>
+                 
+                    }
+                  
+                        try
+                        {
+
+                            SIAAPI.Models.Cfdi.EstadoFacturasPagosSat estadocfdi = new SIAAPI.Models.Cfdi.EstadoFactSATContext().Database.SqlQuery<SIAAPI.Models.Cfdi.EstadoFacturasPagosSat>("select*from EstadoFacturasPagosSat where idfactura=" + item.IDPagoFactura).FirstOrDefault();
+
+                            if (estadocfdi == null)
+                            {
+                            
+                            <td>
+    @Html.ActionLink("Cancelar CFDI 4.0", "CancelaPago", new { id = item.IDPagoFactura }, new { @class = "btn btn-danger btn-xs" })
+
+</td>
+                                }
+
+                        }
+                        catch (Exception err)
+                        {
+
+                        }
+                  
+                    if (String.IsNullOrEmpty(item.RutaXML))
+                    {
+                        <td>
+
+                            @Html.ActionLink("Timbrar", "TimbrarPago", new { id = item.IDPagoFactura }, new { @class = "btn btn-info btn-xs" })
+
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.ActionLink("XML", "Descargarxml", new { id = item.IDPagoFactura }, new { @class = "btn btn-warning btn-xs" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("PDF", "DescargarPDF", new { id = item.IDPagoFactura }, new { @class = "btn btn-primary btn-xs" })
+                        </td>
+                        <td>
+                            @Html.ActionLink("Enviar por correo", "EnviarPdf", new { id = item.ID }, new { @class = "btn btn-success btn-xs", @target = "_blank" })
+                        </td>
+                    }
+                }
+            </tr>
+                }
+            </thead>
+        </table>
+    </div>
+}
+@*fin de contenido*@
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script>
+    function CancelarP(id) {
+        var urledit = '@Url.Action("cancelarFacturaPago", "PagoFactura")';
+        swal({
+            title: "¿Estas seguro de cancelar?",
+            text: "Esta opcion cancela el Pago!",
+            type: "Warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Si, Cancelalo!",
+            cancelButtonText: "No, dejalo!",
+            closeOnConfirm: true
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+
+                $.post(urledit, { id: id }, function (response) {
+                    if (response) {
+                        location.reload();
+                        swal("El Pago ha sido cancelado!", "", "success")
+
+                    }
+                }).fail(function (response) {
+                    swal("El Pago no pudo ser cancelado!", "", "error")
+
+                })
+            }
+            else {
+                swal("Abortado", "Tu Pago esta a salvo", "error");
+            }
+        }
+
+      );
+
+
+
+    }
+
+</script>

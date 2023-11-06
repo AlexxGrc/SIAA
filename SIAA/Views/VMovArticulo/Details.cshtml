@@ -1,0 +1,118 @@
+﻿@model SIAAPI.Models.Inventarios.VMovArticulo
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Detalles</title>
+</head>
+<body>
+    <div>
+        <h3>Movimiento de artículos</h3>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Fecha)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Hora)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Hora)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Accion)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Accion)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Documento)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Documento)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NoDocumento)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NoDocumento)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.observacion)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.observacion)
+            </dd>
+
+        </dl>
+    </div>
+@if (ViewBag.movimiento != null)
+{
+    <div class="table table-responsive-sm ">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col"> Operación  </th>
+                    <th scope="col"> ID Almacen  </th>
+                    <th scope="col"> Almacen </th>
+                    <th scope="col"> Código  </th>
+                    <th scope="col"> Descripción  </th>
+                    <th scope="col"> Presentación </th>
+                    <th scope="col"> Lote  </th>
+                    <th scope="col"> Cantidad  </th>
+                    <th scope="col"> Acumulado  </th>
+                    
+            </thead>
+
+            @foreach (SIAAPI.Models.Inventarios.VMovArticulo item in ViewBag.movimiento)
+            {
+                <tbody>
+                    <tr>
+                        <td> @item.TipoOperacion </td>
+                        <td> @item.IDAlmacen </td>
+                        <td> @item.Almacen </td>
+                        <td> @item.Cref </td>
+                        <td> @item.Descripcion </td>
+                        <td> @item.Presentacion </td>
+                        <td> @item.Descripcion </td>
+                        <td> @item.Lote </td>
+                        <td> @item.Cantidad </td>
+                        <td> @item.Acumulado </td>
+
+                    </tr>
+                </tbody>
+
+            }
+
+        </table>
+
+    </div>
+}
+    <br /><br />
+    <div>
+        @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+﻿
+@*PagoElectronico partial view*@
+@model IEnumerable<SIAAPI.Models.Cfdi.VPagoFacturaProvT>
+@if (Model != null)
+{
+    @*contenido*@
+
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        IDPagoFactura
+                    </th>
+                    <th>
+                        FechaPago
+                    </th>
+                    <th>
+                        Serie
+                    </th>
+                    <th>
+                        Folio
+                    </th>
+
+                    <th>
+                        Proveedor
+                    </th>
+
+                    <th>
+                        Clave Forma Pago
+                    </th>
+
+                    <th>
+                        Clave Divisa
+                    </th>
+                    <th>
+                        NoOperacion
+                    </th>
+                    <th>
+                        Monto
+                    </th>
+
+                    <th>
+                        NombreBancoEmisor
+                    </th>
+
+                    <th>
+                        NombreBancoReceptor
+                    </th>
+                    <th>
+                        TipoCadenaPago
+                    </th>
+                    <th>Observacion</th>
+
+                    <th>Estado</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="display:none;">
+                            @item.IDProveedor
+                            @item.Empresa
+                            @item.RFC
+                            @item.RFCBancoEmisor
+                            @item.RFCBancoReceptor
+                        </td>
+                       <td>
+                            @item.IDPagoFacturaProv
+                        </td>
+                        <td>
+                            @item.FechaPago
+                        </td>
+                        <td>
+                            @item.SerieP
+                        </td>
+                        <td>
+                            @item.FolioP
+                        </td>
+
+                        <td>
+                            @item.Empresa
+                        </td>
+                        <td>
+                            @item.ClaveFormaPago
+                        </td>
+                        <td>
+                            @item.ClaveDivisa
+                        </td>
+                        <td>
+                            @item.NoOperacion
+                        </td>
+                        <td>
+                            @item.Monto
+                        </td>
+
+                        <td>
+                            @item.NombreBancoEmisor
+                        </td>
+                        <td>
+                            @item.NombreBancoReceptor
+                        </td>
+                        <td>
+                            @item.TipoCadenaPago
+                        </td>
+                        <td>
+                            @item.Observacion
+                        </td>
+                        <td>
+                            @item.Estado
+                        </td>
+
+                        <td>
+                            @if (string.IsNullOrEmpty(item.RutaXML) && (item.TipoCadenaPago == "SPEI"))
+                            {
+                                @Html.ActionLink("Pago SPEI", "SPEI", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+                            }
+                        </td>
+                        @if (item.Estado.Equals(false))
+                        {
+                            <td>
+                                @Html.ActionLink("Documentos Relacionados", "DocumentoR", new { idpf = item.IDPagoFacturaProv, idc = item.IDProveedor, nombrec = item.Empresa, monto = item.Monto }, new { @class = "btn btn-default btn-xs" })
+                                @Html.ActionLink("Detalles", "Details", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @Html.ActionLink("Detalles", "Details", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+                            </td>
+                            if (item.Estado == "A")
+                            {
+                                <td>
+                                    @Html.ActionLink("Cancelar", "CancelaPago", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-danger btn-xs" })
+                                </td>
+                            }
+                            if (String.IsNullOrEmpty(item.RutaXML))
+                            {
+                                <td>
+
+                                    @Html.ActionLink("Timbrar", "TimbrarPago", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @Html.ActionLink("XML", "Descargarxml", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+                                </td>
+                                        <td>
+                                            @Html.ActionLink("PDF", "DescargarPDF", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+                                        </td>
+                            }
+                        }
+                    </tr>
+                }
+            </thead>
+        </table>
+    </div>
+}
+    @*fin de contenido*@

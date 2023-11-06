@@ -1,0 +1,69 @@
+﻿@model IEnumerable<SIAAPI.Models.Cfdi.VPagosProv>
+
+@{
+    ViewBag.Title = "VPagosProv";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles del Pago</h2>
+<h4> Proveedor: @ViewBag.Nombre</h4>
+
+<h4> No. Factura: @ViewBag.NoFactura</h4>
+
+<h4> Total: @ViewBag.Total</h4>
+
+
+
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NoParcialidad)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaPago)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FolioP)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ImportePagado)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ImporteSaldoInsoluto)
+                    </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.Estado)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoParcialidad)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaPago)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FolioP)
+                        </td>
+                        <td>
+                            @String.Format("{0:C}", item.ImportePagado)
+                            
+                        </td>
+                        <td>
+                            @String.Format("{0:C}", item.ImporteSaldoInsoluto)
+                           
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Estado)
+                        </td>
+
+                    </tr>
+                }
+
+            </table>
+            @Html.ActionLink("Volver a la lista", "IndexP", null, new { @class = "btn btn-default btn-xs" })

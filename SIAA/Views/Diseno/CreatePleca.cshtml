@@ -1,0 +1,138 @@
+﻿@model SIAAPI.Models.Diseno.SolicitudDiseno
+
+@{
+    ViewBag.Title = "CreatePleca";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Agregar Solicitud de Diseño Pleca</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumeroRevision, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumeroRevision, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NumeroRevision, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDCotizacion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IDCotizacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.IDCotizacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Fecha, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*<input type="datetime" name="Fecha" class="form-control" value="@Model.Fecha.ToShortDateString()" required />*@
+                @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @required = "required", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.FechaCompromiso, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FechaCompromiso, new { htmlAttributes = new {@type="date",  @required = "required", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FechaCompromiso, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cliente, "Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("IDCliente", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Cliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDVendedor, "Vendedor", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("IDVendedor", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDVendedor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @* @Html.LabelFor(model => model.TipodeSolicitud, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.TipodeSolicitud, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TipodeSolicitud, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.TipoEtiqueta, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.TipoEtiqueta, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.TipoEtiqueta, ViewBag.lista as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+
+                @Html.ValidationMessageFor(model => model.TipoEtiqueta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EstadodeSolicitud, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EstadodeSolicitud, new { htmlAttributes = new { @class = "form-control" } })
+
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.consumomensual, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.consumomensual, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
+
+
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.MontoAnticipo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.MontoAnticipo, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
+
+            </div>
+        </div>
+
+        @*@{*@
+        @*SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+            string cadenaestadoD = "select TipodeDiseno as dato from [SolicitudDiseno] where idcotizacion=" + ViewBag.cotizacion+ "";
+            SIAAPI.Models.Comercial.ClsDatoString TipodeDiseno = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenaestadoD).ToList().FirstOrDefault();*@
+        @*}*@
+
+        @*@if (TipodeDiseno.Dato != ("Nuevo Suaje"))
+            {*@
+        <div class="form-group">
+            @Html.Label("Si tu etiqueta es de repetición, introduce el número de cirel", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumerodeCirel, new { htmlAttributes = new { @type = "number", @class = "form-control" } })
+
+
+            </div>
+        </div>
+        @*}*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observaciones, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Observaciones, 5, 150, new { htmlAttributes = new { @class = "form-control" } })
+
+                @*<textarea value="@Model.Observaciones"></textarea>*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Agregar" class="btn btn-success btn-xs" /> |    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+}
+
+

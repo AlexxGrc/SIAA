@@ -1,0 +1,62 @@
+﻿@model SIAAPI.Models.Cfdi.EncfacturaProv
+
+@{
+    ViewBag.Title = "FechaRevision";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h3>Fecha Revisión</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ID)
+        <h4>Factura de proveedor @Model.Numero @Model.Nombre_Proveedor</h4>
+        <br />
+        <h5 class="text-info">Fecha de Revision Actual</h5><h5 class="text-capitalize">@Model.FechaRevision.ToShortDateString()</h5>
+        <h5 class="text-info">Fecha de Vencimiento        </h5><h5 class="text-capitalize"> @Model.FechaVencimiento.ToShortDateString()</h5>
+        <br />
+        <div class="form-group">
+
+            @{
+                string fecha = DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year;
+                DateTime fecha2 = DateTime.Now;
+            }
+
+
+            <div class="form-group">
+                @Html.Label("Fecha Revision", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-3">
+                    @Html.EditorFor(model => model.FechaRevision, new { htmlAttributes = new { type = "date", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FechaRevision, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Guardar" class="btn btn-info btn-xs" />
+                     | @Html.ActionLink("Regresar a la lista", "Index", null , new { @class = "btn btn-default btn-xs" })
+                     | @Html.ActionLink("Borrar factura", "Borrafactura", new { id = Model.ID }, new { @class = "btn btn-default btn-xs" })
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+    <h4 class="text-danger">@ViewBag.Mensaje</h4>
+}
+
+
+
+
+

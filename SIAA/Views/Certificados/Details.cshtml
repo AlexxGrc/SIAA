@@ -1,0 +1,67 @@
+﻿@model SIAAPI.Models.Cfdi.Certificados
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Certificados</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PassCertificado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PassCertificado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombredelcertificado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombredelcertificado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombredelkey)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombredelkey)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsuarioMultifacturas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsuarioMultifacturas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PassMultifacturas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PassMultifacturas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaVigenciaCertificado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaVigenciaCertificado)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDCertificado }) |
+    @Html.ActionLink("Volver a la lista", "Index")
+</p>

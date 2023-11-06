@@ -1,0 +1,35 @@
+﻿@model SIAAPI.Models.Comercial.c_PeriodicidadPago
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Periodicidad de Pago</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClavePeriocidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClavePeriocidad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+    }
+</div>

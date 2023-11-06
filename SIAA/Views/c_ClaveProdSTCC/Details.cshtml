@@ -1,0 +1,48 @@
+﻿@model SIAAPI.Models.CartaPorte.c_ClaveProdSTCC
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles Clave Producto STCC</h3>
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Clave)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clave)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FIVigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FIVigencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FFVigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FFVigencia)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDClaveSTCC}, new { @class = "btn btn-success btn-xs" }) @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

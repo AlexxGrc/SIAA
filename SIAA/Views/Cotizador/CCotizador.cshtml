@@ -1,0 +1,144 @@
+﻿@*Paginación*@
+
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+
+
+
+@{
+    ViewBag.Title = "CCotizador";
+}
+
+<link href="~/Content/vendor/bootstrap/css/ProfileCard.css" rel="stylesheet" />
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="form-group">
+            @{
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>  <h3>Cotizar</h3> </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SIAAPI_CotizacionRapida_C.pdf" })' target="_blank">
+                                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+
+<div class="table table-condensed">
+    <table class="table table-striped" " style="width:75%" align="center">
+        <tr>
+
+            <th align="center">
+                <div class="login-card">
+                    <div class="profile-img"></div>
+
+                    <h2>
+                        Suaje Nuevo
+                    </h2>
+                    <div class="description">
+
+                        Elige esta opcion para cotizar una etiqueta cuyo suaje no existe en el catalogo de suajes, en ellas podras hacer una solicitud de diseño de suaje.
+                    </div>
+
+                    @Html.ActionLink("Suaje Nuevo", "SuajeNuevo", "Cotizador", null, new { @class = "btn btn-warning" })
+
+
+                </div>
+
+
+
+
+            </th>
+            <th align="center">
+                <div class="login-card">
+                    <div class="profile-img"></div>
+
+                    <h2>
+                        Suaje Existente
+                    </h2>
+                    <div class="description">
+
+                        Elige esta opcion para cotizar una etiqueta cuyo suaje existe en el catalogo de suajes, en ellas podras hacer una solicitud de diseño.
+                    </div>
+
+                    @Html.ActionLink("Suaje Existente", "SuajeExistente", "Cotizador", null, new { @class = "btn btn-warning" })
+
+
+                </div>
+
+            </th>
+            <th align="center">
+                <div class="login-card">
+                    <div class="profile-img"></div>
+
+                    <h2>
+                        Thermoencogible
+                    </h2>
+                    <div class="description">
+
+                        Elige esta opcion para cotizar una etiqueta thermoencogible.
+                    </div>
+
+                    @Html.ActionLink("Termoencogible", "Termoencogible", "Cotizador", null, new { @class = "btn btn-info" })
+
+
+                </div>
+
+
+
+            </th>
+        </tr>
+        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("MesaControl"))
+
+        {
+            <tr>
+                <td>
+                    <div class="login-card">
+                        <div class="profile-img"></div>
+
+                        <h2>
+                            Parametros
+                        </h2>
+                        <div class="description">
+
+                            Elige esta opcion para configurar algunos aspectos de la cotizacion
+                        </div>
+
+                        @Html.ActionLink("Parametros", "EditarConfiguracionCotiza", "ConfigWEB", null, new { @class = "btn btn-warning" })
+
+
+                    </div>
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+
+<br>
+

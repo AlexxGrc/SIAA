@@ -1,0 +1,82 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.LiberaOrden>
+
+@{
+    ViewBag.Title = "AjusteLiberacion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Liberar Orden de Producción</h2>
+@using (Html.BeginForm("AjusteLiberacion", "OrdenProduccion", new { page = ViewBag.page }, FormMethod.Post))
+{
+
+
+    @Html.AntiForgeryToken()
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.IDOrden)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TipoLiberacion)
+        </th>
+        <th>
+            @Html.Label("Observación")
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <input type="hidden" value="@item.IDLibera" id="Libera" name="Libera" />
+        <input type="hidden" value="@item.IDOrden" id="Orden" name="Orden" />
+        <input type="hidden" value="@item.IDAlmacen" id="Almacen" name="Almacen" />
+        <tr>
+            <td class="hidden ">
+                @Html.DisplayFor(modelItem => item.IDOrden)
+                @Html.DisplayFor(modelItem => item.IDLibera)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDOrden)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lote)
+            </td>
+            <td>
+                <input type="hidden" step="any" class="form-control" id="Cantidad" name="Cantidad" value="@item.Cantidad">
+                <input type="number" step="any" class="form-control" id="CantidadLiberada"  name="CantidadLiberada" value="0">
+
+
+            </td>
+            <td>
+                @Html.DropDownList("TipoO", null, htmlAttributes: new { @class = "form-control", id = "TipoL", name = "TipoL" })
+
+            </td>
+            <td>
+
+                <input type="text" class="form-control" name="Observacion" id="Observacion" />
+
+            </td>
+
+        </tr>
+    }
+
+</table>
+    <div>
+        <input type="submit" value="Guardar" class="btn btn-success btn-xs" />
+
+    </div>
+}
+
+
+
+
+

@@ -1,0 +1,387 @@
+﻿@model SIAAPI.Models.Comercial.Articulo
+
+@{
+    ViewBag.Title = "Crear Articulo";
+}
+
+<h2>Etiqueta </h2>
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" value="@ViewBag.Cotizacion" name="idcotizacion" id="idcotizacion" />
+
+    <div class="form-horizontal">
+        <h4 class="text-danger">@ViewBag.errorpersonalizado</h4>
+        <hr />
+       @Html.HiddenFor(model => model.IDArticulo, new { name="articulo", id="articulo"})
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Clave de Producto</span>
+                    <div class="col-md-10">
+                        @Html.DisplayFor(model => model.Cref)
+                      
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Descripcion del Articulo</span>
+                    <div class="col-md-10">
+                       @Html.DisplayFor(model => model.Descripcion)
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div>
+
+            @if (ViewBag.Caracteristica != null)
+            {
+
+
+                SIAAPI.Models.Comercial.Caracteristica caraarti = (SIAAPI.Models.Comercial.Caracteristica)ViewBag.Caracteristica;
+
+                <tach2>Presentacion Número @caraarti.IDPresentacion</tach2>
+                <table>
+                    @try
+                    {
+
+                        string[] atributoss = caraarti.Presentacion.Split(',');
+                        <tr>
+                            @foreach (var atri in atributoss)
+                            {
+                                string[] valor = atri.Split((char)58);
+                                string Atri = valor[0];
+                                string Val = valor[1];
+                                <td style="background-color:burlywood" class="col-md-1">
+                                    <label style="color:white;">@Atri</label>
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            @foreach (var atri in atributoss)
+                            {
+                                string[] valor = atri.Split((char)58);
+                                string Atri = valor[0];
+                                string Val = valor[1];
+                                <td class="col-md-1">
+                                    <label>@Val</label>
+                                </td>
+                            }
+                        </tr>
+
+
+                    }
+                    catch (Exception err)
+                    {
+                    }
+
+                </table>
+
+
+
+            }
+
+        </div>
+        <br />
+        <div>
+            @{ 
+                List<SIAAPI.Models.Comercial.MatrizCosto> costos = new SIAAPI.Models.Comercial.ArticuloContext().MatrizCostos.Where(S => S.IDArticulo == Model.IDArticulo).ToList();
+                if (costos.Count == 0)
+                {
+                    <br />
+                    <div>El articulo actualmente no tiene  costo asignado, quieres asignarle la matriz de costo</div>
+                    <div><a class="btn btn-success btn-lg" href='javascript:;' onclick="sustituirCostos();" role="button"> Grabar Costos &raquo;
+                    </a></div>
+                }
+
+                List<SIAAPI.Models.Comercial.MatrizCosto> precios = new SIAAPI.Models.Comercial.ArticuloContext().MatrizCostos.Where(S => S.IDArticulo == Model.IDArticulo).ToList();
+                if (precios.Count == 0)
+                {
+                    <br />
+                    <div>El articulo actualmente no tiene precios asignado, quieres asignarle la matriz de precio generica</div>
+                    <div>
+                        <a class="btn btn-success btn-lg" href='javascript:;' onclick="sustituirPrecios();" role="button">
+                            Grabar Matriz de precios &raquo;
+                        </a>
+                    </div>
+                }
+
+
+
+                if (costos.Count > 0)
+                {
+                    <br/>
+                    <div>El articulo actualmente ya tiene costo asignado, quieres sustituir la matriz de costo</div>
+                    <div>
+                        <a class="btn btn-danger btn-lg" href='javascript:;' onclick="sustituirCostos();" role="button">
+                            sustituir Costos &raquo;
+                        </a>
+                    </div>
+                }
+
+                if (precios.Count > 0)
+                {
+                    <br />
+                    <div>El articulo actualmente ya tiene precios asignados, quieres sustituir la matriz de precio generica</div>
+                    <div>
+                        <a class="btn btn-danger btn-lg" href='javascript:;' onclick="sustituirPrecios();" role="button">
+                            Sustituir precios &raquo;
+                        </a>
+                    </div>
+                }
+
+
+            }
+        </div>
+
+        <div>
+            
+            <div class="form-horizontal">Selecciona un cliente si deseas asignar una Matriz Precio Cliente a partir de esta cotizacion</div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon2">Cliente</span>
+                        <div class="col-md-8">
+                            <select name="IDCliente" id="IDCliente">
+                                @{ foreach (SelectListItem itemcliente in ViewBag.Clientes)
+                                    {
+
+                                        <option value="@itemcliente.Value">@itemcliente.Text</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+           
+
+           
+            @try
+            {
+                //if ((ViewBag.EnqueEstoy == 2) && ( Model.Numerodetintas> 0))
+                //ViewBag.Cantidad1{
+                <h1> Precios </h1>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Cantidades</th>
+                            <th><div>@ViewBag.Cantidad1 Millares</div></th>
+                            <th><div>@ViewBag.Cantidad2 Millares</div></th>
+                            <th><div>@ViewBag.Cantidad3 Millares</div></th>
+                            <th><div>@ViewBag.Cantidad4 Millares</div></th>
+                        </tr>
+
+
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    Precios
+                                </div>
+
+                            </td>
+                            <td>
+                                <div class="form-group">
+
+                                    <label for="precioconvenido1" class="text-info" style="font-size:large">@ViewBag.precioconvenidos.precio1.ToString("C") </label>
+                                </div>
+
+                            </td>
+                            <td>
+                                <div class="form-group">
+
+                                    <label for="precioconvenido2"  class="text-info" style="font-size:large">@ViewBag.precioconvenidos.precio2.ToString("C")   </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+
+                                    <label for="precioconvenido3" class="text-info" style="font-size:large">@ViewBag.precioconvenidos.precio3.ToString("C")   </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+
+                                    <label for="precioconvenido4" class="text-info" style="font-size:large">@ViewBag.precioconvenidos.precio4.ToString("C")   </label>
+                                </div>
+                            </td>
+                        </tr>
+
+
+
+
+                </table>
+
+                <div>
+                    <a class="btn btn-warning btn-lg" href='javascript:;' onclick="sustituirMatrizPrecioCliente();" role="button">
+                        Sustituir precios Cliente &raquo;
+                    </a>
+                </div>
+                //}
+            }
+            catch (Exception err2)
+            {
+                string mensajederror2 = err2.Message;
+            }
+
+          
+
+            <input id="IDCotizacion" name="IDCotizacion" type="number" hidden value="@ViewBag.IDCotizacion" />
+            @if (Session["IDCaracteristica"] == null)
+            {
+                <br />
+                <br />
+            <div class="form-group">
+                
+                    <input type="submit" value="Crear Nueva Presentacion" class="btn btn-success" />
+                
+            </div>
+           }
+        </div>
+    <div><h4> LLegaste al Final, con esto has logrado asignar esta cotizacion a la presentacio y con ello puedes ya hacer ordenes de producción</h4></div>   
+
+            if (Session["IDCaracteristicica"] != null)
+            {
+                @Html.ActionLink("Regresar a la tienda","GetPresentaciones", "TiendaGeneral",   new { id=Model.IDArticulo }, new { @class="btn btn-sucess"})
+                   
+            }
+      
+
+
+   }
+
+    <script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+    <script>
+
+
+
+        function sustituirPrecios() {
+            var urledit = '@Url.Action("Sustituirprecios", "Cotizador")';
+            swal({
+                title: "¿Estas seguro de sustituir?",
+                text: "Esta opcion altera los precios!",
+                type: "Warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Si, Sustituido!",
+                cancelButtonText: "No, sin efecto!",
+                closeOnConfirm: true
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+
+                    $.post(urledit, function (response) {
+                        if (response) {
+                            location.reload();
+                            swal("tus precios han sido sustituidos!", "", "success")
+
+                        }
+                    }).fail(function (response) {
+                        swal("Algo paso, Los precios han quedado igual!", "", "error")
+
+                    })
+                }
+                else {
+                    swal("Abortado", "No se realizo cambio alguno", "error");
+                }
+            }
+
+          );
+
+
+
+        }
+
+
+
+
+        function sustituirCostos() {
+            var urledit = '@Url.Action("Sustituircostos", "Cotizador")';
+            var idcoti = $('#idcotizacion').val();
+            var articulo = $('#articulo').val();
+            swal({
+                title: "¿Estas seguro de sustituir?" + idcoti,
+                text: "Esta opcion altera los costos!",
+                type: "Warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Si, Sustituyelos!",
+                cancelButtonText: "No, sin efecto!",
+                closeOnConfirm: true
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+
+                    $.post(urledit, { idcoti: idcoti, articulo: articulo }, function (response) {
+                        if (response) {
+                            location.reload();
+                            swal("tus costos han sido sustituidos!", "", "success")
+
+                        }
+                    }).fail(function (response) {
+                        swal("Algo paso, Los costos han quedado igual!", "", "error")
+
+                    })
+                }
+                else {
+                    swal("Abortado", "No se realizo cambio alguno", "error");
+                }
+            }
+
+          );
+
+
+
+        }
+
+
+        function sustituirMatrizPrecioCliente() {
+            var urledit = '@Url.Action("SustituirMatrizPrecioCliente", "Cotizador")';
+            var id = $('#IDCliente').val();
+
+            swal({
+                title: "¿Estas seguro de sustituir?",
+                text: "Esta opcion crea o altera los precios del cliente!",
+                type: "Warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Si, crea o  Sustituye!",
+                cancelButtonText: "No, sin efecto!",
+                closeOnConfirm: true
+            }).then(function (isConfirm) {
+                if (isConfirm) {
+
+                    $.post(urledit, { IDCliente: id }, function (response) {
+                        if (response) {
+                            location.reload();
+                            swal("tu Matriz Precio Cliente (MPC) han sido sustituidos!", "", "success")
+
+                        }
+                    }).fail(function (response) {
+                        swal("Algo paso, Los precios han quedado igual!", "", "error")
+
+                    })
+                }
+                else {
+                    swal("Abortado", "No se realizo cambio alguno", "error");
+                }
+            }
+
+          );
+
+
+
+        }
+
+
+    </script>

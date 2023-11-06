@@ -1,0 +1,192 @@
+﻿@model SIAAPI.Models.Comercial.EncDevolucionR
+
+@{
+    ViewBag.Title = "DetailsDevolucionR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles Devolución de Venta</h3>
+
+<div>
+    <hr />
+    @*<dl class="dl-horizontal">*@
+        <div class="row">
+            <div class="columna col-md-4 col-sm-1">
+                <dl>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IDCliente)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Clientes.Nombre)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Fecha)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Fecha)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IDVendedor)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Vendedor.Nombre)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Observacion)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Observacion)
+                    </dd>
+
+                </dl>
+            </div>
+
+
+            <div class="columna col-md-4 col-sm-1">
+                <dl>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IDUsoCFDI)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.c_UsoCFDI.Descripcion)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IDFormapago)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.c_FormaPago.ClaveFormaPago)|@Html.DisplayFor(model => model.c_FormaPago.Descripcion)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IDMetodoPago)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.c_MetodoPago.ClaveMetodoPago)|@Html.DisplayFor(model => model.c_MetodoPago.Descripcion)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IDMoneda)
+                    </dt>
+
+                    <dd>
+
+                        @Html.DisplayFor(model => model.c_Moneda.ClaveMoneda)|@Html.DisplayFor(model => model.c_Moneda.Descripcion)
+
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.TipoCambio)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.TipoCambio)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.IDCondicionesPago)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.CondicionesPago.ClaveCondicionesPago)|@Html.DisplayFor(model => model.CondicionesPago.Descripcion)
+                    </dd>
+
+                </dl>
+            </div>
+        </div>
+            
+
+      
+</div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              
+                <th>Remisión</th>
+                <th>Artículo</th>
+                <th>Presentación</th>
+                <th>Nota</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Importe</th>
+                <th>IVA</th>
+                <th>Total</th>
+
+            </tr>
+        </thead>
+
+        @foreach (var item in ViewBag.req)
+        {
+           
+            <tr>
+                <td> @item.IDRemision </td>
+                <td> @item.Articulo </td>
+                <td>@item.Presentacion</td>
+                <td>@item.Nota</td>
+                <td>@item.Cantidad</td>
+                <td>@string.Format("{0:C}", @item.Costo)</td>
+                <td>@string.Format("{0:C}", @item.Importe)</td>
+                <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped" >
+        <tr>
+            <th class="col-lg-1">
+                Moneda Origen
+            </th>
+            <th class="col-lg-1">
+                Subtotal
+            </th>
+            <th class="col-lg-1">
+                IVA
+            </th>
+            <th class="col-lg-1">
+                Total
+            </th>
+            <th class="col-lg-1">
+                Total en Pesos Mexicanos
+            </th>
+        </tr>
+        @foreach (var itemresumen in ViewBag.sumatoria)
+        {
+
+            <tr>
+                <td class="col-lg-1">
+                    @itemresumen.MonedaOrigen
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Subtotal)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.IVA)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Total)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.TotalenPesos)
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+
+<h5 align="right">Elaboró: @Html.DisplayFor(model => model.User.Username)</h5> 
+<p>
+    @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>
+

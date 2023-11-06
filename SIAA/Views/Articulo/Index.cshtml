@@ -1,0 +1,904 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Comercial.Articulo>*@
+
+
+
+
+@*<script src="~/Scripts/libs/angularjs_1.5.3/angular-animate.min.js"></script>
+    <script src="~/Scripts/libs/angularjs_1.5.3/angular-touch.min.js"></script>
+
+*@
+
+<script src="~/Scripts/libs/angularjs_1.5.3/angular.min.js"></script>
+<script src="~/Scripts/libs/angularjs_1.5.3/angular-route.min.js"></script>
+<script src="~/Scripts/libs/angularjs_1.5.3/angular-sanitize.min.js"></script>
+<script src="~/Scripts/libs/angularjs_1.5.3/ui-bootstrap-tpls-2.5.0.min.js"></script>
+
+<!-- Angular.APP -->
+    <script src="~/Scripts/js/App.unify.min.js"></script>
+    
+
+<script src="~/Scripts/js/fontawesome-all.min.js"></script>
+
+<link href="~/Scripts/libs/Alertify_1.11.1/css/alertify.min.css" rel="stylesheet" />
+<script src="~/Scripts/libs/Alertify_1.11.1/alertify.min.js"></script>
+<link href="~/Scripts/libs/Alertify_1.11.1/css/themes/default.min.css" rel="stylesheet" />
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+<script src="~/Scripts/libs/angularjs_1.5.3/directives000/SchemaGen/tv4.js"></script>
+<script src="~/Scripts/libs/angularjs_1.5.3/directives000/SchemaGen/ObjectPath.js"></script>
+<script src="~/Scripts/libs/angularjs_1.5.3/directives000/SchemaGen/schema-form.js"></script>
+<script src="~/Scripts/libs/angularjs_1.5.3/directives000/SchemaGen/bootstrap-decorator.js"></script>
+
+
+<div ng-app="App">
+    <div ng-controller="ListarArticulosCtrl as lA" ng-init="lA.init();">
+
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" ng-click="lA.isCollapsed = !vm.isCollapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#"><i class="fas fa-filter"></i></a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" uib-collapse="vm.isCollapsed" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        @*<li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>*@
+                        @*<li><a href="#">Link</a></li>*@
+
+
+                        <li class="dropdown" uib-dropdown>
+                            <!--
+                            <select class="form-control" ng-model="lA.filtro.cmbTArticulo" ng-change="lA.filtrar()">
+                                <option ng-repeat="lT in lA.listTipoArticulos" @*ng-value="option.Description"*@>{{lT.Descripcion}}</option>
+                            </select>
+                                -->
+
+                            <select class="form-control"
+                                    ng-model="lA.selectTArticulo"
+                                    ng-options="listA.Descripcion for listA in lA.listTipoArticulos track by listA.IDTipoArticulo"
+                                    ng-change="lA.filtro.cmbTArticulo = lA.selectTArticulo.IDTipoArticulo; lA.filtrar()">
+                                <option value="" selected>-- TODOS --</option>
+
+                            </select>
+
+                            @*<select class="form-control"
+                                ng-model="vm.selectIDFamilia"
+                                ng-options="listF.Descripcion for listF in vm.data.cmb.listFamilia track by listF.IDFamilia"
+                                ng-change="vm.data.articuloSelect.IDFamilia = vm.selectIDFamilia.IDFamilia"></select>*@
+
+
+
+                        </li>
+                        <li class="dropdown" uib-dropdown>
+
+                            <select class="form-control"
+                                    ng-model="lA.selectTFamilia"
+                                    ng-options="listF.Descripcion for listF in lA.listFamilia track by listF.IDFamilia"
+                                    ng-change="lA.filtro.cmbTFamilia = lA.selectTFamilia.IDFamilia; lA.filtrar()">
+                                <option value="" selected>-- TODOS --</option>
+                            </select>
+                        </li>
+                    </ul>
+
+
+
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input ng-model="lA.filtro.texto" type="text" class="form-control" placeholder="Buscar Producto">
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><button ng-click="lA.crearArticulo();" type="button" class="btn btn-primary">Agregar Articulo</button></li>
+
+                        @*<li class="dropdown" uib-dropdown>
+                                <a href="#" class="dropdown-toggle" uib-dropdown-toggle data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            </li>*@
+
+                        @*<ul class="dropdown-menu" uib-dropdown-menu>
+                                    <li ng-repeat=" lF in lA.listFamilia">
+                                        <a href="#">{{lF.Descripcion}}</a>
+                                    </li>
+                                </ul>
+                            </li>*@
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+
+        <div ng-show="lA.showLoading" class="text-center">
+            <br /><br />
+            <img src="~/imagenes/icons/loading45.gif" />
+            <br /><br /><br /><br /><br /><br />
+        </div>
+        <div class="row" ng-show="!lA.showLoading" ng-cloak>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>IMG</th>
+                        <th>Clave</th>
+                        @*<th>Codigo de la Familia</th>*@
+                        <th>Descripcion del producto</th>
+                        <th>Precio Unit.</th>
+                        <th>Moneda</th>
+                        <th>Unidad de Medida</th>
+                        <th>Familia</th>
+                        <th>Tipo de Articulo</th>
+                        <th>Es kit</th>
+                        <th><a ng-click="lA.infoAcciones();" class="" style="cursor:pointer">Acciones</a></th>
+                    </tr>
+                </thead>
+                <tr ng-repeat=" item in lA.data.slice(((lA.currentPage-1)*lA.itemsPerPage), ((lA.currentPage)*lA.itemsPerPage))">
+                    <td><img src="~/imagenes/Upload/{{ item.nameFoto }}" alt="" width="50" height="50"></td>
+                    <td>{{ item.Cref }} </td>
+                    <td>{{ item.Descripcion }} </td>
+                    <td>{{ item.Precio }} </td>
+                    <td>{{ item.Moneda }} </td>
+                    <td>{{ item.Unidad }} </td>
+                    <td>{{ item.Familia }} </td>
+                    <td>{{ item.Tipo }} </td>
+                    <td><input type="checkbox" ng-model="item.esKit" /></td>
+                    <td>
+                        <select class="form-control" ng-model="ddselect[$index]" ng-change="lA.accionesList($index, ddselect, item)">
+                            <option value=""></option>
+                            <option value="E">Editar</option>
+                            <option value="P">Presentaciones</option>
+                            <option value="MP">Matriz Precio</option>
+                            <option value="MC">Matriz Costo</option>
+                        </select>
+                    </td>
+                </tr>
+                <tbody></tbody>
+            </table>
+
+
+
+            <div class="pag_1 col-sm-12">
+                <ul uib-pagination total-items="lA.totalItems" ng-model="lA.currentPage" max-size="lA.maxSize" class="pagination-md" boundary-links="true" rotate="false" num-pages="lA.numPages" items-per-page="lA.itemsPerPage"></ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/ng-template" id="templ_addProducto.html">
+        <div class="modal-header">
+            <h4>Agregar nuevo Articulo<br /><small></small></h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Clave de Producto</span>
+                        <input ng-model="vm.data.articuloSelect.Cref" type="text" class="form-control" placeholder="0 " aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col-xs-8">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Descripcion del Articulo</span>
+                        <input ng-model="vm.data.articuloSelect.Descripcion" type="text" class="form-control" placeholder="Escriba una Descripcion para el Producto" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Mínimo Venta</span>
+                        <input ng-model="vm.data.articuloSelect.MinimoVenta" type = "number" step = "0.01"  class="form-control" placeholder="0 " aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Mínimo Compra</span>
+                        <input ng-model="vm.data.articuloSelect.MinimoCompra" type = "number" step = "0.01"  class="form-control" placeholder="0 " aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-7">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Familia</span>
+                        <select class="form-control"
+                                ng-model="vm.selectIDFamilia"
+                                ng-options="listF.Descripcion for listF in vm.data.cmb.listFamilia track by listF.IDFamilia"
+                                ng-change="vm.data.articuloSelect.IDFamilia = vm.selectIDFamilia.IDFamilia"></select>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Tipo</span>
+                        <select class="form-control"
+                                ng-model="vm.selectTipoArticulo"
+                                ng-options="listTA.Descripcion for listTA in vm.data.cmb.listTipoArticulos track by listTA.IDTipoArticulo"
+                                ng-change="vm.data.articuloSelect.IDTipoArticulo = vm.selectTipoArticulo.IDTipoArticulo"></select>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Precio Unico de Venta</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.Preciounico" />
+                        </span>
+
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Moneda</span>
+                        <select class="form-control"
+                                ng-model="vm.selectMoneda"
+                                ng-options="listM.ClaveMoneda for listM in vm.data.cmb.listMonedas track by listM.IDMoneda"
+                                ng-change="vm.data.articuloSelect.IDMoneda = vm.selectMoneda.IDMoneda"></select>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">U. Medida</span>
+                        <select class="form-control"
+                                ng-model="vm.selectUMedida"
+                                ng-options="listUM.Nombre for listUM in vm.data.cmb.listClaveUnidad track by listUM.IDClaveUnidad"
+                                ng-change="vm.data.articuloSelect.IDClaveUnidad = vm.selectUMedida.IDClaveUnidad"></select>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Controla inventario</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.CtrlStock" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">Manejo de mas de una caracteristica</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.ManejoCar" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Devoluciones Previas</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.ExistenDev" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">Codigo de Barras</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.bCodigodebarra" />
+                        </span>
+                        <input ng-show="vm.data.articuloSelect.bCodigodebarra" ng-model="vm.data.articuloSelect.Codigodebarras" type="text" class="form-control" placeholder="Escriba o Escannee el Codigo de Barras Correspondiente" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">AQL</span>
+                        <select class="form-control"
+                                ng-model="vm.selectAQL"
+                                ng-options="listAQL.Descripcion for listAQL in vm.data.cmb.listAQLCalidad track by listAQL.IDAQL"
+                                ng-change="vm.data.articuloSelect.IDAQL = vm.selectAQL.IDAQL"></select>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">Inspeccion</span>
+                        <select class="form-control"
+                                ng-model="vm.selectInspeccion"
+                                ng-options="listUM.Descripcion for listUM in vm.data.cmb.listInspenccion track by listUM.IDInspeccion"
+                                ng-change="vm.data.articuloSelect.IDInspeccion = vm.selectInspeccion.IDInspeccion"></select>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Muestreo</span>
+                        <select class="form-control"
+                                ng-model="vm.selectMuestreo"
+                                ng-options="listMU.Descripcion for listMU in vm.data.cmb.listMuestreo track by listMU.IDMuestreo"
+                                ng-change="vm.data.articuloSelect.IDMuestreo = vm.selectMuestreo.IDMuestreo"></select>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">Es kit</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.esKit" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Genera Orden de produccion</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.GeneraOrden" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">Obsoleto</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.obsoleto" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <input type="file" name="IMG_Producto" class="btn btn-primary" id="imgProducto" ng-model="vm.data.articuloSelect.nameFoto" />
+                    {{vm.data.articuloSelect.nameFoto}}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+
+            <div class="row center-block">
+                <button class="btn btn-primary" ng-click="vm.agregar();">Agregar Articulo</button>
+                <button class="btn btn-default" ng-click="$close()">Cancelar</button>
+
+            </div>
+
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="templ_editarProducto.html">
+        <div class="modal-header">
+            <h4>Editar Registro<br /><small>{{ vm.data.articuloSelect.IDArticulo + " | "+ vm.data.articuloSelect.Descripcion }}</small></h4>
+           
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Clave de Producto</span>
+                        <input ng-model="vm.data.articuloSelect.Cref" type="text" class="form-control" placeholder="Campo por Default " aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col-xs-8">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Descripcion del Articulo</span>
+                        <input ng-model="vm.data.articuloSelect.Descripcion" type="text" class="form-control" placeholder="Escriba una Descripcion para el Producto" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-7">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Familia</span>
+                        <select class="form-control"
+                                ng-model="vm.selectIDFamilia"
+                                ng-options="listF.Descripcion for listF in vm.data.cmb.listFamilia track by listF.IDFamilia"
+                                ng-init="vm.selectIDFamilia.IDFamilia = vm.data.articuloSelect.IDFamilia"
+                                ng-change="vm.data.articuloSelect.IDFamilia = vm.selectIDFamilia.IDFamilia"></select>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Tipo</span>
+                        <select class="form-control"
+                                ng-model="vm.selectTipoArticulo"
+                                ng-options="listTA.Descripcion for listTA in vm.data.cmb.listTipoArticulos track by listTA.IDTipoArticulo"
+                                ng-init="vm.selectTipoArticulo.IDTipoArticulo = vm.data.articuloSelect.IDTipoArticulo"
+                                ng-change="vm.data.articuloSelect.IDTipoArticulo = vm.selectTipoArticulo.IDTipoArticulo"></select>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-6">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Mínimo Venta</span>
+                        <input ng-model="vm.data.articuloSelect.MinimoVenta" type="number" step="0.01" class="form-control" placeholder="0 " aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Mínimo Compra</span>
+                        <input ng-model="vm.data.articuloSelect.MinimoCompra" type="number" step="0.01" class="form-control" placeholder="0 " aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Precio Unico de Venta</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.Preciounico" />
+                        </span>
+
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Moneda</span>
+                        <select class="form-control"
+                                ng-model="vm.selectMoneda"
+                                ng-options="listM.ClaveMoneda for listM in vm.data.cmb.listMonedas track by listM.IDMoneda"
+                                ng-init="vm.selectMoneda.IDMoneda = vm.data.articuloSelect.IDMoneda"
+                                ng-change="vm.data.articuloSelect.IDMoneda = vm.selectMoneda.IDMoneda"></select>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">U. Medida</span>
+                        <select class="form-control"
+                                ng-model="vm.selectUMedida"
+                                ng-options="listUM.Nombre for listUM in vm.data.cmb.listClaveUnidad track by listUM.IDClaveUnidad"
+                                ng-init="vm.selectUMedida.IDClaveUnidad = vm.data.articuloSelect.IDClaveUnidad"
+                                ng-change="vm.data.articuloSelect.IDClaveUnidad = vm.selectUMedida.IDClaveUnidad"></select>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">Controla inventario</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.CtrlStock" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">Manejo de mas de una caracteristica</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.ManejoCar" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Devoluciones Previas</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.ExistenDev" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon">Codigo de Barras</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.bCodigodebarra" />
+                        </span>
+                        <input ng-show="vm.data.articuloSelect.bCodigodebarra" ng-model="vm.data.articuloSelect.Codigodebarras" type="text" class="form-control" placeholder="Escriba o Escannee el Codigo de Barras Correspondiente" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">AQL</span>
+                        <select class="form-control"
+                                ng-model="vm.selectAQL"
+                                ng-options="listAQL.Descripcion for listAQL in vm.data.cmb.listAQLCalidad track by listAQL.IDAQL"
+                                ng-init="vm.selectAQL.IDAQL = vm.data.articuloSelect.IDAQL"
+                                ng-change="vm.data.articuloSelect.IDAQL = vm.selectAQL.IDAQL"></select>
+                    </div>
+                </div>
+                <div class="col-xs-5">
+                    <div class="input-group">
+                        <span class="input-group-addon">Inspeccion</span>
+                        <select class="form-control"
+                                ng-model="vm.selectInspeccion"
+                                ng-options="listUM.Descripcion for listUM in vm.data.cmb.listInspenccion track by listUM.IDInspeccion"
+                                ng-init="vm.selectInspeccion.IDInspeccion = vm.data.articuloSelect.IDInspeccion"
+                                ng-change="vm.data.articuloSelect.IDInspeccion = vm.selectInspeccion.IDInspeccion"></select>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Muestreo</span>
+                        <select class="form-control"
+                                ng-model="vm.selectMuestreo"
+                                ng-options="listMU.Descripcion for listMU in vm.data.cmb.listMuestreo track by listMU.IDMuestreo"
+                                ng-init="vm.selectMuestreo.IDMuestreo = vm.data.articuloSelect.IDMuestreo"
+                                ng-change="vm.data.articuloSelect.IDMuestreo = vm.selectMuestreo.IDMuestreo"></select>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">Es kit</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.esKit" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Genera Orden de produccion</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.GeneraOrden" />
+                        </span>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">Obsoleto</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" ng-model="vm.data.articuloSelect.obsoleto" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+            @*<br />
+            <div class="row">
+                <div class="col-xs-5">
+                    <input class="btn btn-primary" type="file" name="file" uploader-model="vm.data.articuloSelect.pathFoto" />
+                </div>
+                <div class="col-xs-3">
+                    <button ng-click="vm.uploadIMG()" class="btn bg-danger">Actualizar Imagen</button>
+                </div>
+            </div>*@
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <input type="file" name="IMG_Producto" class="btn btn-primary" id="imgProducto" ng-model="vm.data.articuloSelect.nameFoto" />
+                    {{vm.data.articuloSelect.nameFoto}}
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+
+            <div class="row center-block">
+
+                <button class="btn btn-primary" ng-click="vm.actualizar();">Actualizar</button>
+                <button class="btn btn-default" ng-click="$close()">Cancelar</button>
+
+            </div>
+
+        </div>
+    </script>
+
+
+    <script type="text/ng-template" id="templ_listPresentaciones.html">
+
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>Listado de Presentaciones de Articulo<br /><small> {{ "Nombre del Articulo " }} </small></h4>
+                </div>
+            </div>
+           
+        </div>
+
+        <div class="modal-body">
+            <div class="table" style="overflow: auto;">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            @*<th>ID</th>*@
+                            @*<th>Articulo_IDARticulo</th>*@
+                            <th>ID</th>
+                            <th>Cotizacion</th>
+                            <th>Version</th>
+                            <th>Presentacion</th>
+                            <th>obsoleto</th>
+                            <th>Presentacion</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tr ng-repeat=" item in vm.data.lPrecentacion">
+                        @*<td> {{ item.ID }} </td>*@
+                        @*<td> {{ item.Articulo_IDARticulo }} </td>*@
+                        <td> {{ item.IDPresentacion }} </td>
+                        <td> {{ item.Cotizacion }} </td>
+                        <td> {{ item.version }} </td>
+                        <td> {{ item.Presentacion }} </td>
+                        <td> {{ item.obsoleto }} </td>
+                        <td><button ng-click="vm.AddEditPresentacion(item);" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>
+                        <td><button ng-click="vm.deletePresentacion($index, item);" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></td>
+                    </tr>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row center-block">
+                <button ng-click="vm.AddEditPresentacion(null)" class="btn btn-success btn-xl"><i class="far fa-plus-square" style="font-size:16px;"></i> Agregar </button>
+                <button class="btn btn-default" ng-click="$close()">Cerrar</button>
+            </div>
+        </div>
+
+    </script>
+
+
+    <script type="text/ng-template" id="templ_PresentacionProducto.html">
+        <div class="modal-header">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4>Presentación de Producto<br /><small>{{ vm.texto }} Presentación</small></h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body" style="height:400px; overflow:auto;">
+            <form sf-schema="vm.schema" sf-form="vm.myform" sf-model="vm.model">
+                <!-- Aqui se Genera el Contenido HTML Obtenido de los Json -->
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <div class="row center-block">
+                <button class="btn btn-primary" ng-click="vm.addUpdateModel()">Guardar/Actualizar</button>
+                @*<button class="btn btn-primary" ng-click="vm.addUpdateModel()">Actualizar</button>*@
+                <button class="btn btn-default" ng-click="$close()">Cerrar</button>
+            </div>
+        </div>
+
+    </script>
+
+
+
+
+
+
+
+    <script type="text/ng-template" id="templ_listaMatrizPrecio.html">
+        <div class="modal-header">
+            <h4>Matriz de Precio <br /><small>ID PRODUCTO DB: {{ vm.data.IDA}}</small></h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID Matriz</th>
+                            <th>Rango Inferior</th>
+                            <th>Rango Superior</th>
+                            <th>Precio</th>
+                            <th>Actualizar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat=" item in vm.data.MatrizPrecios">
+                            @*<td><input ng-model="item.idMatrizCosto" type="text" class="form-group" style="border:none" /></td>*@
+                            <td>{{item.idMatrizPrecio}}</td>
+                            <td><input ng-model="item.RangInf" type="text" class="form-group" style="border:none" /></td>
+                            <td><input ng-model="item.RangSup" type="text" class="form-group" style="border:none" /></td>
+                            <td><input ng-model="item.Precio" type="text" class="form-group" style="border:none" /></td>
+                            <td><button ng-click="vm.AddUpdateRow(item);" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>
+                            <td><button ng-click="vm.deleteRow($index, item);" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="row center-block">
+                @*<button class="btn btn-primary" ng-click="vm.actualizar();">Actualizar</button>*@
+                <button ng-click="vm.AddModal()" class="btn btn-success btn-xl"><i class="far fa-plus-square" style="font-size:16px;"></i> Agregar </button>
+                <button class="btn btn-default" ng-click="$close()">Cerrar</button>
+            </div>
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="templ_AddRowMatrizPrecio.html">
+        <div class="modal-header">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <h4>Matriz de Precio<br /><small>Agregar Registro</small></h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">ID Articulo</span>
+                        <span class="input-group-addon" id="basic-addon1">{{vm.nRow.IDArticulo}}</span>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Rango Inferior</span>
+                        <input ng-model="vm.nRow.RangInf" type="text" class="form-control" placeholder="Escriba el Rango Inferior" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Rango Superior</span>
+                        <input ng-model="vm.nRow.RangSup" type="text" class="form-control" placeholder="Escriba Costo" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Precio</span>
+                        <input ng-model="vm.nRow.Precio" type="text" class="form-control" placeholder="Escriba una Descripcion para el Producto" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row center-block">
+                <button class="btn btn-primary" ng-click="vm.AddUpdateRow()">Guardar</button>
+                <button class="btn btn-default" ng-click="$close()">Cerrar</button>
+            </div>
+        </div>
+
+    </script>
+
+
+
+
+
+    <script type="text/ng-template" id="templ_listaMatrizCosto.html">
+        <div class="modal-header">
+            <h4>Matriz de Costos <br /><small>ID PRODUCTO DB: {{ vm.data.IDA}}</small></h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID Matriz</th>
+                            <th>Rango Inferior</th>
+                            <th>Rango Superior</th>
+                            <th>Precio</th>
+                            <th>Actualizar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in vm.data.MatrizCostos">
+                            @*<td><input ng-model="item.idMatrizCosto" type="text" class="form-group" style="border:none" /></td>*@
+                            <td>{{item.idMatrizCosto}}</td>
+                            <td><input ng-model="item.RangInf" type="text" class="form-group" style="border:none" /></td>
+                            <td><input ng-model="item.RangSup" type="text" class="form-group" style="border:none" /></td>
+                            <td><input ng-model="item.Precio" type="text" class="form-group" style="border:none" /></td>
+                            <td><button ng-click="vm.AddUpdateRow(item);" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>
+                            <td><button ng-click="vm.deleteRow($index, item);" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="row center-block">
+                @*<button class="btn btn-primary" ng-click="vm.actualizar();">Actualizar</button>*@
+                <button ng-click="vm.AddModal()" class="btn btn-success btn-xl"><i class="far fa-plus-square" style="font-size:16px;"></i> Agregar </button>
+                <button class="btn btn-default" ng-click="$close()">Cerrar</button>
+            </div>
+        </div>
+
+    </script>
+
+    <script type="text/ng-template" id="templ_AddRowMatrizCosto.html">
+        <div class="modal-header">
+            <div class="row text-center">
+                <div class="col-xs-12">
+                    <h4>Matriz de Costos<br /><small>Agregar Registro</small></h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">ID Articulo</span>
+                        <span class="input-group-addon" id="basic-addon1">{{vm.nRow.IDArticulo}}</span>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Rango Inferior</span>
+                        <input ng-model="vm.nRow.RangInf" type="text" class="form-control" placeholder="Escriba el Rango Inferior" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Rango Superior</span>
+                        <input ng-model="vm.nRow.RangSup" type="text" class="form-control" placeholder="Escriba Costo" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Precio</span>
+                        <input ng-model="vm.nRow.Precio" type="text" class="form-control" placeholder="Escriba una Descripcion para el Producto" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="row center-block">
+                <button class="btn btn-primary" ng-click="vm.AddUpdateRow()">Guardar</button>
+                <button class="btn btn-default" ng-click="$close()">Cerrar</button>
+            </div>
+        </div>
+
+    </script>
+
+
+
+    <script type="text/ng-template" id="templ_menu.html">
+        <div class="modal-header">
+            <h4>Articulo <br /><small>ID PRODCUTO DB: {{ vm.data.IDA}}</small></h4>
+        </div>
+        <ul class="nav nav-pills">
+            <li role="presentation" class="active"><a href="#">Generales</a></li>
+            <li role="presentation"><a href="#">Imagen</a></li>
+            <li role="presentation"><a href="#">Presentaciones</a></li>
+            <li role="presentation"><a href="#">Matriz de precios</a></li>
+            <li role="presentation"><a href="#">Matriz de Costos</a></li>
+            <li role="presentation"><a href="#">Documentos</a></li>
+            <li role="presentation"><a href="#">Clientes</a></li>
+            <li role="presentation"><a href="#">Proveedores</a></li>
+            <li role="presentation"><a href="#">Existencias</a></li>
+            
+        </ul>
+    </script>
+
+
+
+
+
+</div>

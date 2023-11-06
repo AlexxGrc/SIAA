@@ -1,0 +1,375 @@
+﻿@model SIAAPI.Models.CartaPorte.Origen
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idpais = ViewBag.ListPais as List<SelectListItem>;
+    var idestado = ViewBag.ListEstado as List<SelectListItem>;
+    var idmunicipio = ViewBag.ListMunicipio as List<SelectListItem>;
+    var idlocalidad = ViewBag.ListLocalidad as List<SelectListItem>;
+    var idcolonia = ViewBag.IDColonia as List<SelectListItem>;
+}
+
+<h3>Editar Domicilio Origen</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>DomicilioOrigen</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.IDOrigen)
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @*@Html.LabelFor(model => model.IDEmpresa, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.IDEmpresa, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.ValidationMessageFor(model => model.IDEmpresa, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.RFCRemitente, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RFCRemitente, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.RFCRemitente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.NombreRemitente, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NombreRemitente, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NombreRemitente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Calle, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Calle, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Calle, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumExt, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumExt, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NumExt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumInt, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.NumInt, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.NumInt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDPais, "País", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDPais, idpais, new
+           {
+               @class = "form-control",
+               data_cascade_combo = "#IDEstado",
+               data_cascade_combo_source = Url.Action("getJsonEstadoPorPais", "DomicilioOrigen"),
+               data_cascade_combo_param_name = "id"
+           })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDEstado, "Estado", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDEstado, idestado, new
+           {
+               @class = "form-control",
+               @onchange = "actualizacomboLocalidadE()",
+               data_cascade_combo = "#IDMunicipio",
+               data_cascade_combo_source = Url.Action("getJsonMunicipioPorEstado", "DomicilioOrigen"),
+               data_cascade_combo_param_name = "id"
+           })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDMunicipio, "Municipio", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDMunicipio, idmunicipio, new
+           {
+               @class = "form-control",
+               id = "IDMunicipio"
+           })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDLocalidad, "Localidad", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDLocalidad, idlocalidad, new { @class = "form-control", @name = "IDLocalidad", @id = "IDLocalidad" })
+
+                @Html.ValidationMessageFor(model => model.IDLocalidad, "", new { @class = "text-danger" })
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.CP, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CP, new { htmlAttributes = new { @class = "form-control", @onchange = "actualizacombo()" } })
+                @Html.ValidationMessageFor(model => model.CP, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDColonia, "Colonia", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDColonia, idcolonia, new { @class = "form-control", @name = "IDColonia", @id = "IDColonia" })
+
+
+                @Html.ValidationMessageFor(model => model.IDColonia, "", new { @class = "text-danger" })
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Referencia, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Referencia, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Referencia, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="col col-md-6 col-sm-1">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Activo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Activo)
+                    @Html.ValidationMessageFor(model => model.Activo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" />
+                @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+}
+
+    <h3>Detalle Domicilio Origen</h3>
+    <table class="table">
+
+        @{ 
+            SIAAPI.Models.Administracion.Paises pais = new SIAAPI.Models.Administracion.PaisesContext().Paises.Find(Model.IDPais);
+            SIAAPI.Models.Administracion.Estados estado = new SIAAPI.Models.Administracion.EstadosContext().Estados.Find(Model.IDEstado);
+            SIAAPI.Models.CartaPorte.c_Municipio municipio = new SIAAPI.Models.CartaPorte.c_MunicipioContext().municipio.Find(Model.IDMunicipio);
+            SIAAPI.Models.CartaPorte.c_Localidad localidad = new SIAAPI.Models.CartaPorte.c_LocalidadContext().Localidad.Find(Model.IDLocalidad);
+            SIAAPI.Models.CartaPorte.c_Colonia colonia = new SIAAPI.Models.CartaPorte.c_ColoniaContext().colonias.Find(Model.IDColonia);
+        }
+
+        <tr>
+            <th>
+                Empresa
+            </th>
+            <th>
+                RFC
+            </th>
+            <th>
+                Nombre Remitente
+            </th>
+            <th>
+                Calle
+            </th>
+            <th>
+                Num. Exterior
+            </th>
+            <th>
+                Num. Interior
+            </th>
+            <th>
+                Pais
+            </th>
+            <th>
+                Estado
+            </th>
+            <th>
+                Municipio
+            </th>
+            <th>
+                Localidad
+            </th>
+            <th>
+                Código Postal
+            </th>
+            <th>
+                Colonia
+            </th>
+            <th>
+                Referencia 
+            </th>
+            <th>
+                Activo
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @Model.IDEmpresa
+            </td>
+            <td>
+                @Model.RFCRemitente
+            </td>
+            <td>
+                @Model.NombreRemitente
+            </td>
+            <td>
+                @Model.Calle
+            </td>
+            <td>
+                @Model.NumExt
+            </td>
+            <td>
+                @Model.NumInt
+            </td>
+            <td>
+                @pais.c_Pais | @pais.Pais
+            </td>
+            <td>
+                @estado.c_Estado | @estado.Estado
+            </td>
+            <td>
+                @municipio.C_Municipio | @municipio.Descripcion
+            </td>
+            <td>
+                @localidad.C_Localidad | @localidad.Descripcion
+            </td>
+            <td>
+                @colonia.C_CodigoPostal
+            </td>
+            <td>
+                @colonia.C_Colonia | @colonia.NomAsentamiento
+            </td>
+            <td>
+                @Model.Referencia
+            </td>
+            <td>
+                @Html.EditorFor(model => model.Activo)
+            </td>
+            
+        </tr>
+    </table>
+
+
+    <script type="text/javascript">
+
+    function actualizacomboE() {
+
+
+    var control = "#CP";
+    var selectcontrol = "#IDColonia";
+        $(selectcontrol).empty();
+
+        $.ajax({
+              type: 'GET',
+                url: '@Url.Action("getColonias")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (colonias) {
+
+                    for (i = 0; i < colonias.length; i++)
+                    {
+                        var Value = colonias[i].Value;
+
+                        var Text = colonias[i].Text;
+                        var select = "Selecciona una colonia";
+                          $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                       $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+
+
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+
+
+    }
+
+      function actualizacomboLocalidadE() {
+
+
+    var control = "#IDEstado";
+    var selectcontrol = "#IDLocalidad";
+        $(selectcontrol).empty();
+
+        $.ajax({
+              type: 'GET',
+                url: '@Url.Action("getLocalidades")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (localidades) {
+
+                    for (i = 0; i < localidades.length; i++)
+                    {
+                        var Value = localidades[i].Value;
+
+                        var Text = localidades[i].Text;
+                        var select = "Selecciona una localidad";
+                          $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                       $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+
+
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+
+
+    }
+
+
+    </script>

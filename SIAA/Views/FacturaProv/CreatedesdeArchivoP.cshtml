@@ -1,0 +1,92 @@
+﻿@model SIAAPI.Models.Cfdi.Encfacturas
+
+@{
+    ViewBag.Title = "Registrar factura desde archivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (@ViewBag.Proveedor != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <h3>
+                        Facturas del Proveedor
+                    </h3>
+                <tr>
+                    <th>RFC</th>
+                    <th>Proveedor</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.Proveedor)
+            {
+                <tr>
+                    <td>@item.RFC</td>
+                    <td>@item.Empresa </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+<h3>Carga una factura</h3>
+<hr />
+
+@using (Html.BeginForm("CreatedesdeArchivoP", "FacturaProv", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="col-md-offset-2 col-md-10">
+        <h4>Registrar factura desde archivo</h4>
+    </div>
+    <input id="IDOrdenC" name="IDOrdenC" value="@ViewBag.IDOrdenC" type="hidden"/>
+    <div class="col-md-offset-2 col-md-10">
+
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="">Indica el archivo .xml</label>
+                <input type="file" id="Imag1" name="Imag1" class="form-control" />
+            </div>
+
+        </div>
+    </div>
+
+
+    <br />
+    <div>
+        <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+    </div>
+
+    <input type="hidden" name="id" id="id" value="@ViewBag.id">
+       <div class="col-md-offset-2 col-md-10">
+
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="">Indica el archivo .pdf</label>
+                <input type="file" name="file" class="form-control" />
+            </div>
+            @*<input name="remitonumero" id="remitonumero" type="text" required class="form-control">*@
+        </div>
+        <br />
+        <div>
+            <h2 class="text-danger">@ViewBag.Mensajeerror1</h2>
+        </div>
+
+        
+        <br />
+        <div class="col-md-offset-2 col-md-15">
+            <button type="submit" value="Grabar" class="btn btn-success btn-xs">Cargar Archivos</button> | @Html.ActionLink("Regresar a la lista", "IndexP","FacturaProv", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+
+    </div>
+
+
+   
+
+}
+
+
+

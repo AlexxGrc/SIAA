@@ -1,0 +1,151 @@
+﻿@model SIAAPI.Models.Inventarios.MovInterPresentacion
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var inventarioalmacenes = ViewBag.InventarioList as List<SelectListItem>;
+
+    var almacenes = ViewBag.datosAlmacenS as List<SelectListItem>;
+    var almacenes2 = ViewBag.datosAlmacenE as List<SelectListItem>;
+    var caracteristicas = ViewBag.Caracacteristicas as List<SelectListItem>;
+    var caracteristicas2 = ViewBag.Caracacteristicas2 as List<SelectListItem>;
+
+}
+<script defer src="~/Scripts/cascade.combo.js"></script>
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Movimiento de presentaciones entre Almacenes</title>
+</head>
+<body>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <h3>Movimiento de presentaciones entre Almacenes</h3>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.FechaMovimiento, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.FechaMovimiento, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FechaMovimiento, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDAlmacenS, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.IDAlmacenS, almacenes, new
+               {
+                   @class = "form-control",
+                   data_cascade_combo = "#almaceniventario",
+                   data_cascade_combo_source = Url.Action("getJsonProductoAlmacen", "MovInterAlmacen"),
+                   data_cascade_combo_param_name = "id"
+               })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDArticulo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+
+                    @*@Html.DropDownListFor(model => model.IDArticulo, ViewBag.IDCaracteristica as List<SelectListItem>, new { @class = "form-control" })*@
+                    @Html.DropDownListFor(model => model.IDArticulo, inventarioalmacenes, new
+               {
+                   @class = "form-control",
+                   data_cascade_combo = "#IDCaracteristica",
+                   data_cascade_combo_source = Url.Action("getJsonCaracteristicaArticuloAlmacen1", "MovInterAlmacen"),
+                   data_cascade_combo_param_name = "id",
+
+                   @id = "almaceniventario"
+
+               })
+
+                    <input type="hidden" value="@Model.IDArticulo" id="IDArticulo" name="IDArticulo" />
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDCaracteristica, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+
+                    @Html.DropDownListFor(model => model.IDCaracteristica, caracteristicas, new { @class = "form-control", id = "IDCaracteristica" })
+
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Lote, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Lote, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Lote, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDAlmacenE, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.IDAlmacenE, almacenes, new
+               {
+
+                   @class = "form-control",
+                   data_cascade_combo = "#IDCaracteristica2",
+                   data_cascade_combo_source = Url.Action("getJsonCaracteristicaArticuloAlmacen2", "MovInterAlmacen"),
+                   data_cascade_combo_param_name = "id"
+               })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDCaracteristica2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+
+                    @*@Html.DropDownListFor(model => model.IDArticulo, ViewBag.IDCaracteristica as List<SelectListItem>, new { @class = "form-control" })*@
+                    @Html.DropDownListFor(model => model.IDCaracteristica2, caracteristicas2, new
+               {
+                   @class = "form-control",
+
+                        @id = "IDCaracteristica2"
+
+               })
+
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Observacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Observacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-8">
+                    <input type="submit" value="Grabar" class="btn btn-success btn-xs" />
+                    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+                </div>
+            </div>
+        </div>
+    }
+</body>
+</html>

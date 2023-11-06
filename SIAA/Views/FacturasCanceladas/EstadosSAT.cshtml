@@ -1,0 +1,75 @@
+﻿@model IEnumerable<SIAAPI.Models.Cfdi.EncFacturaCan>
+
+@{
+    ViewBag.Title = "EncFacturaCan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Consulta del Estado de la Factura Ante el SAT</h2>
+<h4> Serie: @ViewBag.Serie   Numero: @ViewBag.Numero</h4>
+
+<h4> Cliente: @ViewBag.Nombre</h4>
+
+<h4> UUID: @ViewBag.UUID</h4>
+
+<h4> Total: @ViewBag.Total</h4>
+
+@Html.ActionLink("Consulta SAT", "ConsultaEstadoFactura", "FacturaAll", new { IDFactura = ViewBag.IDFactura }, new { @class = "btn btn-warning btn-xs" })
+
+@{
+
+    if (ViewBag.Estado == "C")
+    {
+        @Html.ActionLink("XML ACUSE CANCELACION", "XMLAcuse", "FacturaAll", new { IDFactura = ViewBag.IDFactura }, new { @class = "btn btn-warning btn-xs" })
+        @Html.ActionLink("ACUSE CANCELACION", "DescargarPDFAcuse", "FacturaAll", new { id = ViewBag.IDFactura }, new { @class = "btn btn-warning btn-xs" })
+
+    }
+}
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Estado Factura en SIAAPI")
+        </th>
+        <th>
+            @Html.Label("Fecha de Consulta")
+        </th>
+
+        <th>
+            @Html.Label("Estado CFDI en SAT")
+        </th>
+
+        <th>
+            @Html.Label("Usuario que Consulto")
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstadoFactura)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaConsulta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstadoCFDI)
+            </td>
+
+
+            <td>
+                @{
+                    SIAAPI.Models.Login.User user = new SIAAPI.Models.Login.UserContext().Database.SqlQuery<SIAAPI.Models.Login.User>("select*from dbo.[User] where userid=" + item.IDUsuarioConsulta).ToList().FirstOrDefault();
+                }
+                @Html.DisplayFor(modelItem => user.Username)
+            </td>
+
+        </tr>
+    }
+
+</table>
+@Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })

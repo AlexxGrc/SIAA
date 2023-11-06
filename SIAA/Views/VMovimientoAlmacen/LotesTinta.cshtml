@@ -1,0 +1,116 @@
+﻿@model IEnumerable<SIAAPI.Models.Inventarios.Clslotetinta>
+
+@{
+    ViewBag.Title = "LotesTinta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lotes</h2>
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Cref)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fecha)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.factura)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrdenCompra)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.IDRecepcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.consecutivo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cantidad)
+        </th>
+
+
+        <th>
+            ELiminar
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Cref)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.factura)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrdenCompra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDRecepcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.consecutivo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cantidad)
+            </td>
+  
+         
+            <td>
+                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Almacenista"))
+                {
+                    <form action="DeleteLoteTinta" method="post">
+                        <input name="id" id="id" value="@item.id" type="hidden" />
+
+                        <input name="Observacion" id="Observacion" type="text" />
+
+                        <button type="submit" class="btn btn-danger"><i class="tbl_del_btn fa fa-trash"></i></button>
+                    </form>
+                }
+            </td>
+        </tr>
+
+    }
+
+</table>
+
+
+<script>
+    function EliminarPres(id) {
+        var url = '@Url.Action("DeleteLoteTinta", "VMovimientoAlmacen")';
+        async: true;
+
+        var obse = "Observacion" + id;
+        var observacion = $(obse).val();
+        alert(observacion);
+        var row = $(this).closest('tr');
+        $.post(url, { id: id, motivo: observacion }, function (response) {
+            if (response) {
+
+                location.reload();
+                row.remove();
+            }
+        }).fail(function (response) {
+            // display error message?
+        });
+    }
+</script>

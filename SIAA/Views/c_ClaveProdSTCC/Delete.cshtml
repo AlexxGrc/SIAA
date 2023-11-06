@@ -1,0 +1,55 @@
+﻿@model SIAAPI.Models.CartaPorte.c_ClaveProdSTCC
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Eliminar Producto/Servicio STCC</h3>
+
+<h4>¿Está seguro de eliminar esta registro?</h4>
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Clave)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clave)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FIVigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FIVigencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FFVigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FFVigencia)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+<div class="form-actions no-color">
+    <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" />  @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</div>
+    }
+</div>

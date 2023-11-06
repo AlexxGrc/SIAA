@@ -1,0 +1,324 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Comercial.EncRequisiones>*@
+
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+@using PagedList.Mvc;
+
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.VCotizaciones>
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Lista de Cotizaciones</h3>
+<hr />
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <div>
+                        <p>
+                            Elementos por página: @Html.DropDownList("pageSize")
+                            Divisa: @Html.DropDownList("Divisa")
+                            Status: @Html.DropDownList("Status")
+                            Cliente:@Html.TextBox("Cliente", ViewBag.Cliente as string, new { @placeholder = " Introduce el cliente" })
+                            no Cotización: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " No. de cotización" })
+                        </p>
+                        <p>
+                            Oficina: @Html.DropDownList("Oficina")
+                            Vendedor: @Html.DropDownList("Vendedor")
+
+                            Fecha inicio: @Html.TextBox("Fechainicio", ViewBag.Fechainicio as string, new { type = "date" })
+                            Fecha final:  @Html.TextBox("Fechafinal", ViewBag.Fechafinal as string, new { type = "date" })
+                            <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                            <a class="btn btn-info btn-xs" href="@Url.Action("EntreFechasCot")">Excel</a>
+                        </p>
+                    </div>
+
+
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+
+                @Html.ActionLink("Cotización", "Index", new { sortOrder = ViewBag.RequisicionSortParm, currentFilter = ViewBag.CurrentFilter })
+
+            </th>
+            <th>
+                @Html.Label("Fecha")
+            </th>
+            <th>
+                @Html.Label("Fecha requerida")
+            </th>
+            <th>
+
+                @Html.ActionLink("Cliente", "Index", new { sortOrder = ViewBag.ClienteSortParm, currentFilter = ViewBag.CurrentFilter })
+
+            </th>
+            @*<th>
+                    @Html.Label("Almacén")
+                </th>*@
+            <th>
+                @Html.Label("Forma de Pago")
+            </th>
+
+            <th>
+                @Html.Label("Método de Pago")
+            </th>
+
+            <th>
+                @Html.Label("Condiciones de Pago")
+            </th>
+            <th>
+                @Html.Label("Divisa")
+            </th>
+            <th>
+                @Html.Label("Tipo de Cambio")
+            </th>
+
+            <th>
+                @Html.Label("Subtotal")
+            </th>
+            <th>
+                @Html.Label("IVA")
+            </th>
+            <th>
+                @Html.Label("Total")
+            </th>
+
+
+            <th></th>
+        </tr>
+
+
+        @foreach (var item in Model)
+        {
+
+            if (item.Status.Equals("Cancelado"))
+            {
+                <tr class="danger">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IDCotizacion)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaRequiere)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cliente)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Almacen.Descripcion)
+                        </td>*@
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FormaPago)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MetodoPago)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CondicionesPago)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClaveMoneda)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoCambio)
+                    </td>
+
+                    <td align="right">
+                        @String.Format("{0:C}", item.Subtotal)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.IVA)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.Total)
+                    </td>
+
+
+
+                    <td>
+                        @Html.ActionLink("Detalles", "Details", new { id = item.IDCotizacion }, new { @class = "btn btn-default btn-xs" })
+
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    @if (item.Status.Equals("Activo"))
+                    {
+                        <td class="success">
+                            @Html.DisplayFor(modelItem => item.IDCotizacion)
+                        </td>
+                    }
+                    else if (item.Status.Equals("Inactivo"))
+                    {
+                        <td class="danger">
+                            @Html.DisplayFor(modelItem => item.IDCotizacion)
+                        </td>
+                    }
+                    else if (item.Status.Equals("Finalizado"))
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IDCotizacion)
+                        </td>
+                    }
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaRequiere)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cliente)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Almacen.Descripcion)
+                        </td>*@
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FormaPago)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MetodoPago)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CondicionesPago)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClaveMoneda)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoCambio)
+                    </td>
+
+                    <td align="right">
+                        @String.Format("{0:C}", item.Subtotal)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.IVA)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.Total)
+                    </td>
+
+
+
+                    <td>
+                        @Html.ActionLink("Detalles", "Details", new { id = item.IDCotizacion }, new { @class = "btn btn-default btn-xs" })
+                        @if (item.Status.Equals("Activo"))
+                        {
+                            @Html.ActionLink("Cancelar", "Cancelar", new { id = item.IDCotizacion }, new { @class = "btn btn-danger btn-xs" })
+                        }
+
+                        @Html.ActionLink("PDF", "PdfCotizacion", new { id = item.IDCotizacion }, new { @class = "btn btn-primary btn-xs" })
+
+                        @if (@Roles.IsUserInRole("Administrador") && item.Status.Equals("Activo"))
+                        {
+                            @Html.ActionLink("Realizar Pedido", "Cambio", new { id = item.IDCotizacion }, new { @class = "btn btn-success btn-xs" })
+                        }
+                    </td>
+                </tr>
+            }
+
+        }
+        <div class="table-responsive">
+            <table class="table table-striped" width="50">
+                <tr>
+                    <th class="col-lg-1">
+                        Moneda Origen
+                    </th>
+                    <th class="col-lg-1">
+                        Subtotal
+                    </th>
+                    <th class="col-lg-1">
+                        IVA
+                    </th>
+                    <th class="col-lg-1">
+                        Total
+                    </th>
+                    <th class="col-lg-1">
+                        Total en Pesos Mexicanos
+                    </th>
+                </tr>
+                @foreach (var itemresumen in ViewBag.sumatoria)
+                {
+
+                    <tr>
+                        <td class="col-lg-1">
+                            @itemresumen.MonedaOrigen
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.Subtotal)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.IVA)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.Total)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.TotalenPesos)
+                        </td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+</div>
+<br />
+@*Paginación*@
+@using (Html.BeginForm("Index", "EncCotizacion", FormMethod.Get, new { id = "pageSizeForm" }))
+{
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize,
+       Divisa = ViewBag.Divisaseleccionada,
+       Status = ViewBag.StatusSeleccionado,
+       Oficina = ViewBag.OficinaSeleccionada,
+       Vendedor = ViewBag.VendedorSeleccionado
+   }))
+
+    </div>
+}
+@*Paginación*@

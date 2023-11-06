@@ -1,0 +1,112 @@
+﻿@*PagoElectronico partial view*@
+@model IEnumerable<SIAAPI.Models.Cfdi.VPagoFacturaEfeProv>
+@if (Model != null)
+{
+    @*contenido*@
+
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>IDPagoFactura</th>
+                    <th>Fecha de operación</th>
+                    <th>Serie</th>
+                    <th>Folio</th>
+                    <th>Nombre del proveedor</th>
+                    <th>Forma de Pago</th>
+                    <th>Clave Divisa</th>
+                    <th>Tipo de cambio</th>
+                    <th>Monto Total del Pago</th>
+                    <th>Observación</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+
+            @foreach (var i in Model)
+            {
+                <tr id="OP02" style="display:none" align="center">
+                    <td>@i.IDProveedor</td>
+                    <td>@i.RFC</td>
+                    <td>@i.Descripcion</td>
+                    <td>@i.Divisa</td>
+
+                </tr>
+                        <tr>
+
+
+                            <td>@i.IDPagoFacturaprov</td>
+                            <td>@i.FechaPago </td>
+                            <td>@i.SerieP </td>
+                            <td>@i.FolioP </td>
+                            <td>@i.Empresa</td>
+                            <td>@i.ClaveFormaPago</td>
+                            <td>@i.ClaveDivisa</td>
+                            <td>@i.Monto</td>
+                            <td>@i.Observacion </td>
+                            <td> @i.Estado </td>
+                            <td>
+                                @if (i.Estado.Equals(false))
+                                {
+                                <td>
+
+
+                                    @using (Html.BeginForm("DocumentoR", "PagoFactura", FormMethod.Post))
+                                    {
+                                        <input type="hidden" name="idpf" value="@i.IDPagoFacturaprov" />
+                                            <input type="hidden" name="idc" value="@i.IDProveedor" />
+                                            <input type="hidden" name="nombrec" value="@i.Empresa" />
+                                            <input type="hidden" name="monto" value="@i.Monto" />
+                                            <button type="submit" class="btn btn-primary btn-xs">Documentos relacionados</button>
+
+                                    }
+                                    @Html.ActionLink("Detalles", "DetailsEfe", new { id = i.IDPagoFacturaprov }, new { @class = "btn btn-default btn-xs" })
+
+
+                                </td>
+                                }
+                                else
+                                {
+                                    <td>
+
+                                        @Html.ActionLink("Detalles", "DetailsEfe", new { id = i.IDPagoFacturaprov }, new { @class = "btn btn-default btn-xs" })
+
+                                    </td>
+                                    if (i.Estado.Equals("A"))
+                                    {
+                                        <td>
+
+                                            @Html.ActionLink("Cancelar", "CancelaPago", new { id = i.IDPagoFacturaprov }, new { @class = "btn btn-danger btn-xs" })
+
+                                        </td>
+                                    }
+
+                                    if (String.IsNullOrEmpty(i.RutaXML))
+                                    {
+                                        <td>
+
+                                            @Html.ActionLink("Timbrar", "TimbrarPago", new { id = i.IDPagoFacturaprov }, new { @class = "btn btn-default btn-xs" })
+
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+
+                                            @Html.ActionLink("XML", "Descargarxml", new { id = i.IDPagoFacturaprov }, new { @class = "btn btn-default btn-xs" })
+
+                                        </td>
+                                            <td>
+
+                                                @Html.ActionLink("PDF", "DescargarPDF", new { id = i.IDPagoFacturaprov }, new { @class = "btn btn-default btn-xs" })
+
+                                            </td>
+                                    }
+                                }
+
+                            </tr>
+            }
+
+        </table>
+    </div>
+            @*fin de contenido*@
+}

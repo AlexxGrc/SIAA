@@ -1,0 +1,71 @@
+﻿@model IEnumerable<SIAAPI.Models.Inventarios.Clslotetinta>
+
+
+
+<h2>tintas</h2>
+
+<table class="table">
+    <tr>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.factura)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cantidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.consecutivo)
+       
+        <th>
+            @Html.DisplayNameFor(model => model.ccodalm)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IDRecepcion)
+        </th>
+      
+        <th>
+            @Html.DisplayNameFor(model => model.lote)
+        </th>
+       
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.factura)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cantidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.consecutivo)
+        </td>
+        
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.ccodalm)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDRecepcion)
+        </td>
+     
+        <td>
+            @Html.DisplayFor(modelItem => item.lote)
+        </td>
+    
+        <td>
+           
+            @Html.ActionLink("Eliminar", "Eliminartinta", new { ID = item.id, IDDetRecepcion =  item.iddetrecepcion })
+        </td>
+    </tr>
+}
+
+</table>

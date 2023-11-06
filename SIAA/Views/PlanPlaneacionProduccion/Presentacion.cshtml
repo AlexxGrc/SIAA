@@ -1,0 +1,124 @@
+﻿@*@model List<SIAAPI.Models.Comercial.AtributodeFamilia>*@
+@model IEnumerable<SIAAPI.Models.Comercial.AtributodeFamilia>
+@{
+    ViewBag.Title = "Presentacion";
+}
+
+<h3>Agregar Presentación</h3>
+
+
+
+
+<div class="table-responsive">
+
+    <table class="table">
+        <tr>
+
+            <th>Atributo</th>
+            <th></th>
+        </tr>
+        @{
+            //using (Html.BeginForm("CrearPresentacion", "PlanPlaneacionProduccion", FormMethod.Post))
+            using (Html.BeginForm())
+            {
+                var contador = 0;
+                var cont = 0;
+                foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Titulo)
+                        </td>
+                        <td>
+
+                            @if (item.Tipo.Equals("NUMERO") || item.Tipo.Equals("CADENA"))
+                            {
+                                string cadenatitulo = "Titulo" + contador;
+                                
+
+                                    <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+
+                                    string cadenades = "des" + contador;
+                                    
+                                        <input type="text" name="@cadenades" id="@cadenades" class="form-control" required="required" placeholder="@item.Descripcion"/>
+                                contador++;
+                            }
+                            else if (item.Tipo.Equals("LISTA"))
+                            {
+
+                                SIAAPI.Models.Comercial.AtributodeFamiliaContext db = new SIAAPI.Models.Comercial.AtributodeFamiliaContext();
+
+                                SIAAPI.Models.Comercial.ClsDatoString cadena = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Valores as Dato from AtributodeFamilia where IDAtributo='" + item.IDAtributo + "'").ToList()[0];
+
+                                string[] numeros = cadena.Dato.Split(',');
+                                List<SelectListItem> atributos = new List<SelectListItem>();
+                                foreach (string numero in numeros)
+                                {
+                                    atributos.Add(new SelectListItem { Text = numero, Value = numero });
+                                }
+
+                                ViewBag.IDAtributo = atributos;
+
+                                string cadenatituloa = "TituloAtributo" + cont;
+
+                                                <input type="hidden" name="@cadenatituloa" id="@cadenatituloa" class="form-control" value="@item.Descripcion:" />
+
+
+                                                string cadenaatributo = "IDAtributo" + cont;
+                                                
+                                                    @Html.DropDownList("IDAtributo", ViewBag.IDAtributo as List<SelectListItem>, new { @class = "form-control", @id = @cadenaatributo })
+                                cont++;
+                            }
+                        </td>
+
+
+                    </tr>
+
+
+                }
+
+
+                <input type="hidden" name="contador" id="contador" class="form-control" value="@contador" />
+                <input type="hidden" name="cont" id="cont" class="form-control" value="@cont" />
+
+            }
+        }
+    </table>
+    <button type="button" class="btn btn-success btn-xs" onclick="Actualizar()">Generar</button>
+</div>
+<script>
+
+    function Actualizar() {
+        //var titulo = document.getElementById("Titulo").value
+        //var descripcion = document.getElementById("Descripcion").value
+        var texto = "";
+        var j;
+        for (j = 0; j < document.getElementById("contador").value; j++) {
+            texto += document.getElementById("Titulo"+[j]).value + document.getElementById("des"+[j]).value+",";
+
+        }
+
+        var text = "";
+        var i;
+        for (i = 0; i < document.getElementById("cont").value; i++) {
+          text += document.getElementById("TituloAtributo"+[i]).value + document.getElementById("IDAtributo"+[i]).value+",";
+          
+        }
+        
+        //var tituloatributo = document.getElementById("TituoloAtributo").value
+        //var idatributo=document.getElementById("IDAtributo").value
+        //alert(titulo);
+        //alert(tituloatributo);
+        //alert(idatributo);
+        //alert(descripcion);
+
+        $('#Presentacion').val(text + texto);
+        $('#myModal').modal('hide');
+        }
+
+
+</script>
+
+
+

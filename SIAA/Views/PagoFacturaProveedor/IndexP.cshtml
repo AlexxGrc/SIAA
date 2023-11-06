@@ -1,0 +1,369 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Cfdi.PagoFacturaProv>*@
+<globalization uiCulture="auto" culture="auto" />
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Cfdi.VPagoFacturaProvT>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@if (@ViewBag.Proveedor != null)
+{
+    int contapro = 0;
+
+
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <h3>
+                        Pago de Facturas del Proveedor
+                    </h3>
+                <tr>
+                    <th>RFC</th>
+                    <th>Proveedor</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.Proveedor)
+            {
+                <tr>
+                    <td>
+                        @item.RFC
+
+                    </td>
+                    <td>
+
+                        @item.Empresa
+
+                    </td>
+                </tr>
+                contapro++;
+            }
+            @if (contapro == 0)
+            {
+                <div class="alert alert-danger"><h6>TU ACCESO NO HA SIDO RELACIONADO CON UN CONTACTO DE PROVEEDOR, FAVOR DE LLAMAR AL ÁREA DE COMPRAS</h6></div>
+                string dejar = "no";
+                ViewBag.dejar = dejar;
+            }
+        </table>
+    </div>
+
+
+}
+<hr />
+
+
+        @*Busqueda*@
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        @using (Html.BeginForm())
+                        {
+                            <div>
+                            @*<p>
+                                @if (ViewBag.dejar != "no")
+                                {@Html.ActionLink("Cargar Archivo XML", "CargarPagosP", null, new { @class = "btn btn-info navbar-btn btn-xs" })
+                            }
+
+                            </p>*@
+                        </div>
+                            <div>
+
+                                <row>
+                                    Folio Pago: @Html.TextBox("FolioP")
+                                </row>
+                               
+                                @*<row>
+                                    Estado: @Html.DropDownList("Estado", "Todas")
+                                </row>*@
+                               
+                                    
+                                    <row>
+                                        Fecha: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "AAAA-MM-DD" })
+                                    </row>
+                                    <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+                            </div>
+                        }
+
+                    </div>
+                </form>
+            </div>
+        </nav>
+        <br>
+        @*Busqueda*@
+
+        <div class="table-responsive">
+            <table class="table table-striped" width="50">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.ActionLink("SerieP", "IndexP", new { sortOrder = ViewBag.FolioSortParm, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        <th>
+                            @Html.ActionLink("FolioP", "IndexP", new { sortOrder = ViewBag.FolioSortParm, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.FechaPago)*@
+                            @Html.ActionLink("FechaPago", "IndexP", new { sortOrder = ViewBag.FechaSortParm, currentFilter = ViewBag.CurrentFilter })
+                        </th>
+                        @*<th>
+                @Html.DisplayNameFor(model => model.Empresa)
+                @Html.ActionLink("Empresa", "IndexP", new { sortOrder = ViewBag.EmpresaSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>*@
+
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.ClaveFormaPago)*@
+                            Forma Pago
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.ClaveMoneda)*@
+                            Clave Moneda
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.NoOperacion)*@
+                            No Operación
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.Monto)*@
+                            Monto
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.RFCBancoEmpresa)*@
+                            RFC Banco Empresa
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.CuentaEmpresa)*@
+                            Cuenta Empresa
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.RFCBancoProv)*@
+                            RFC Banco Proveedor
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.CuentaProv)*@
+                            Cuenta Proveedor
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.IDTipoCadenaPago)*@
+                            Tipo Cadena Pago
+                        </th>
+
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.Estado)*@
+                            Estado
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.UUID)*@
+                            UUID
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.RutaXML)*@
+                            Ruta XML
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.RutaPDF)*@
+                            Ruta PDF
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td style="display:none;">
+                                @Html.HiddenFor(modelItem => item.IDProveedor)
+                                @Html.HiddenFor(modelItem => item.Observacion)
+                                @Html.DisplayFor(modelItem => item.IDTipoCadenaPago)
+                                @Html.DisplayFor(modelItem => item.ClaveFormaPago)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SerieP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FolioP)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaPago)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ClaveDivisa)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NoOperacion)
+                            </td>
+
+                            <td align="right">
+                                @String.Format("{0:C}", item.Monto)
+
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RFCBancoEmisor)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CuentaEmisor)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.RFCBancoReceptor)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CuentaReceptor)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoCadenaPago)
+                            </td>
+
+                            <th>
+                                @char.Parse(@Html.DisplayFor(modelItem => item.Estado).ToString())
+
+                            </th>
+
+                            <td>
+                                @if (string.IsNullOrEmpty(item.RutaXML) && (item.TipoCadenaPago == "SPEI"))
+                                {
+                                    @Html.ActionLink("Pago SPEI", "PagoFacturaSPEIProv", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+                                }
+                            </td>
+                            @if (item.Estado.Equals(false))
+                            {
+                                <td>
+                                    @Html.ActionLink("Documentos Relacionados", "DocumentoRelacionadoProv", new { idpf = item.IDPagoFacturaProv, idp = item.IDProveedor, nombrep = item.Empresa, monto = item.Monto }, new { @class = "btn btn-info btn-xs" })
+                                    @Html.ActionLink("Detalles", "DetailsP", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar Registro", "EliminaPagoProv", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-danger btn-xs" })
+
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @Html.ActionLink("Detalles", "DetailsP", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+                                </td>
+
+                                if (String.IsNullOrEmpty(item.RutaXML))
+                                {
+
+                                }
+                                else
+                                {
+                                    <td>
+                                        @Html.ActionLink("XML", "Descargarxml", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-warning btn-xs" })
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("PDF", "DescargarPDF", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-primary btn-xs" })
+                                    </td>
+
+                                }
+                            }
+                            <td>
+                                @Html.ActionLink("Documentos", "SubirArchivoPagPProv", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+
+                            </td>
+                        </tr>
+                        <tr>
+                            @{
+                                SIAAPI.Models.Cfdi.PagoProvAddContext db = new SIAAPI.Models.Cfdi.PagoProvAddContext();
+                                SIAAPI.Models.Comercial.ClsDatoEntero contard = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDPagoFacturaProv) as dato from [dbo].[PagoProvAdd] where IDPagoFacturaProv =" + item.IDPagoFacturaProv).ToList().FirstOrDefault();
+                                if (contard.Dato != 0)
+                                {
+                                    List<SIAAPI.Models.Cfdi.PagoProvAdd> doctos = db.Database.SqlQuery<SIAAPI.Models.Cfdi.PagoProvAdd>("select * from [dbo].[PagoProvAdd] where IDPagoFacturaProv = " + item.IDPagoFacturaProv + "").ToList();
+                                    ViewBag.doctos = doctos;
+                                    foreach (SIAAPI.Models.Cfdi.PagoProvAdd b in ViewBag.doctos)
+                                    {
+                                        <td></td>
+                                        <td></td>
+                                        <td style="font-size:x-small">
+                                            @Html.ActionLink(b.nombreArchivo, "DescargarPDFPagPProv", new { id = b.ID }, new { @class = "btn btn-primary btn-xs" })
+                                        </td>
+                                    }
+                                }
+                            }
+                        </tr>
+                    }
+                </thead>
+
+            </table>
+        </div>
+
+<br />
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th class="col-lg-1">
+                Moneda Origen
+            </th>
+            
+            <th class="col-lg-1">
+                Total
+            </th>
+           
+        </tr>
+        @foreach (var itemresumen in ViewBag.sumatoria)
+            {
+
+            <tr>
+                <td class="col-lg-1">
+                    @itemresumen.Moneda
+                </td>
+               
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Total)
+                </td>
+                
+
+            </tr>
+        }
+    </table>
+</div>
+
+@*Paginación*@
+@using (Html.BeginForm("IndexP", "PagoFacturaProveedor", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("IndexP", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize,
+       Estado = ViewBag.Estadoseleccionado
+   }))
+
+
+    </div>
+}
+@*Paginación*@
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+<script>
+
+        $(function(){
+            $("#Estado").on("change", function() {
+             @ViewBag.Estadoseleccionado=  $('[id$=Estado] option:selected').text();
+
+            });
+        });
+</script>
+

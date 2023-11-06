@@ -1,0 +1,101 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.OrdenProduccion>
+
+@{
+    ViewBag.Title = "ListaOrdenesListas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lista Ordenes para sutir materiales </h2>
+<br />
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+
+
+                        Num. Orden: @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce num. orden" })
+
+                        <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span>
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br />
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDOrden)
+        </th>
+        <th>
+            Cliente
+        </th>
+        <th>
+            Articulo a Fabricar
+        </th>
+
+        <th>
+            Cantidad
+        </th>
+        <th>
+            Pedido
+        </th>
+
+        <th>
+            Prioridad
+        </th>
+        <th>
+            Estado de la orden
+        </th>
+
+    </tr>
+
+    @foreach (SIAAPI.Models.Produccion.OrdenProduccion item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDOrden)
+            </td>
+            @{
+                SIAAPI.Models.Comercial.Clientes cliente = new SIAAPI.Models.Comercial.ClientesContext().Clientes.Find(item.IDCliente);
+                SIAAPI.Models.Comercial.Articulo ARTICULO = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+                SIAAPI.Models.Comercial.Caracteristica car = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where id=" + item.IDCaracteristica).ToList().FirstOrDefault();
+
+
+            }
+            <td>
+                @cliente.Nombre
+            </td>
+            <td>
+                <div>@ARTICULO.Cref @ARTICULO.Descripcion</div>
+                <div>Numero de presentacion @car.IDPresentacion</div>
+                <div>@car.Presentacion</div>
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDPedido)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Prioridad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstadoOrden)
+            </td>
+
+            <td>
+                @Html.ActionLink("Surtir Material", "AsignaraOrden", new { IDOrden = item.IDOrden }, new { @class = "btn btn-success" })
+
+            </td>
+        </tr>
+                }
+
+</table>

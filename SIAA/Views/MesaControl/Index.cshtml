@@ -1,0 +1,460 @@
+﻿
+
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.VOrdenProduccionPedido>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Listado de Ordenes de Produccion para Mesa de Control</h2>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+
+
+                    <table>
+                        <tr>
+                            <td class="col-lg-3">
+                                Elementos por página: @Html.DropDownList("pageSize")
+
+                            </td>
+
+                            <td class="col-lg-3">
+                                Estado: @Html.DropDownList("Estados", "Todos")
+                            </td>
+                            <td class="col-lg-3">Orden: @Html.TextBox("id")</td>
+                            <td class="col-lg-3">Buscar: @Html.TextBox("searchString")</td>
+                        </tr>
+
+                    </table>
+
+                    <div class="col-xs-3">
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+
+                    </div>
+
+
+
+                }
+
+            </div>
+
+        </form>
+    </div>
+</nav>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Info boxes -->
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fa fa-list-ul"></i></span>
+
+                    <div class="info-box-content">
+                        <div>
+                            <div> <h6 style="font-weight: bold">Ordenes de Produccion En Conflicto</h6> </div>
+
+
+
+
+
+                            <div><h4 style="font-weight:bold"> @ViewBag.EnConflicto</h4></div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+           
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1" style="background-color: #ffc107"><i class="fa fa-list-alt"></i></span>
+
+                    <div class="info-box-content">
+                        <div class="table-responsive">
+                            <div> <h6 style="font-weight: bold">Ordenes de Produccion En Revision</h6> </div>
+
+
+
+
+
+                            <div> <h4 style="font-weight:bold">@ViewBag.EnRevision</h4></div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1" style="background-color: #ffc107"><i class="fa fa-list-alt"></i></span>
+
+                    <div class="info-box-content">
+                        <div >
+                            <div> <h6 style="font-weight: bold">Ordenes de Produccion Listas</h6> </div>
+
+
+
+
+
+                            <div><h4 style="font-weight:bold"> @ViewBag.Listas</h4></div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1" style="background-color: #ffc107"><i class="fa fa-list-ul"></i></span>
+
+                    <div class="info-box-content">
+                        <div class="table-responsive">
+                            <div> <h6 style="font-weight: bold">Total de Ordenes</h6> </div>
+
+
+
+
+
+                            <div><h4 style="font-weight:bold"> @ViewBag.Conteo</h4></div>
+
+
+                        </div>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+</section>
+
+
+
+<table class="table">
+    <tr>
+        <th><div> Num </div></th>
+
+        <th>
+            Articulo
+        </th>
+        <th>
+            Pedido
+        </th>
+
+
+        <th>
+            Fecha
+        </th>
+
+
+        <th>
+            Materia Prima
+        </th>
+
+        <th>
+            Cantidad
+        </th>
+
+
+
+        <th>
+            Cotizacion
+        </th>
+        <th>
+            Acciones
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <div><h3>@Html.DisplayFor(modelItem => item.IDOrden)</h3></div>
+                <div>@Html.ActionLink(" ", "PDF", "OrdenProduccion", new { id = item.IDOrden }, new { @class = "fa fa-file-pdf fa-2x", title = "Ver orden de produccion en pdf", style = "color:red", target = "_blank" })</div>
+                <div>
+             
+                    
+                    @{ String Color = "#673AB7";
+                        String ColorLetra = "#FFFF";
+                        if (item.EstadoOrden == "En Revision")
+                        {
+                            item.EstadoOrden = "Revisada";
+                            Color = "#673AB7";
+                            ColorLetra = "yellow";
+                        }
+
+                        if (item.EstadoOrden == "En Conflicto")
+                        {
+                            Color = "#673AB7";
+                            ColorLetra = "white";
+
+                        }
+
+                        if (item.EstadoOrden == "Lista")
+                        {
+                            Color = "#ffc107";
+                            ColorLetra = "black";
+                        }
+
+                    }
+                    <h6 style="background-color:@Color; color:@ColorLetra">
+                    
+                        @Html.DisplayFor(modelItem => item.EstadoOrden)
+                    
+                    </h6>
+
+                </div>
+            </td>
+
+
+            <td width="200px">
+                <div><h3>@Html.DisplayFor(modelItem => item.Clave)</h3></div>
+                <div><h6>@Html.DisplayFor(modelItem => item.Descripcion)</h6> </div>
+                <div>
+
+
+                    <table>
+                        @{
+                            string[] atributos = item.Presentacion.ToString().Split(',');
+                            <tr>
+                                @foreach (var atri in atributos)
+                                {
+                                    string[] valor = atri.Split((char)58);
+                                    try
+                                    {
+                                        string Atri = valor[0];
+                                        string Val = valor[1];
+                                        <td style="background-color:#777; font-size:x-small; " class="col-md-1">
+                                            <label style="color:white;">@Atri</label>
+                                        </td>
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        <td class="col-md-1">
+                                            <label> </label>
+                                        </td>
+                                    }
+
+                                }
+                            </tr>
+                            <tr>
+                                @foreach (var atri in atributos)
+                                {
+                                    string[] valor = atri.Split((char)58);
+                                    try
+                                    {
+                                        string Val = valor[1];
+                                        <td class="col-md-1" style=" font-size:xx-small">
+                                            <label>@Val</label>
+                                        </td>
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        <td class="col-md-1">
+                                            <label> </label>
+                                        </td>
+                                    }
+
+
+                                }
+                            </tr>
+                        }
+                    </table>
+
+                    <div>Cliente:  @Html.DisplayFor(modelItem => item.Cliente)</div>
+
+                </div>
+            </td>
+
+
+            <td>
+                <div> @Html.DisplayFor(modelItem => item.IDPedido)</div>
+                <div> @Html.ActionLink("Ver", "Details", "Encpedido", new { id = item.IDPedido, page = 1, searchString = "" }, new { @class = "fa fa-icon-file-text-alt fa-2x", title = "Ver Pedido", style = "Color:#673AB7", target = "_blank" })</div>
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaCreacion)
+            </td>
+            <td width="100px">
+
+
+                <table style=" border:10px solid; border-color:white">
+
+                    @{
+                        string cadenaxx = "select AP.IDArtProd as IDArtProd, AP.Existe,A.IDArticulo as IDArticulo,A.Cref as Articulo,TA.Descripcion as TipoArticulo,C.Presentacion as Caracteristica, C.ID as IDCaracteristica, P.NombreProceso as Proceso,AP.IDOrden,AP.Cantidad,CU.Nombre as Unidad,AP.Indicaciones,AP.CostoPlaneado,AP.CostoReal from ArticuloProduccion as AP inner join Articulo as A on A.IDArticulo = AP.IDArticulo inner join TipoArticulo as TA on A.IDTipoArticulo = TA.IDTipoArticulo inner join Caracteristica as C on C.ID = AP.IDCaracteristica inner join Proceso as P on P.IDProceso = AP.IDProceso inner join c_ClaveUnidad as CU on CU.IDClaveUnidad = AP.IDClaveUnidad where AP.IDOrden = " + item.IDOrden + " and(TA.Descripcion = 'Insumo' or TA.Descripcion = 'Tintas' or TA.Descripcion = 'Cintas' or TA.Descripcion = 'Herramienta'  or TA.Descripcion = 'Maquina')";
+                        List<SIAAPI.Models.Produccion.VArticulosProduccion> articulosproduccion = new SIAAPI.Models.Produccion.ArticulosProduccionContext().Database.SqlQuery<SIAAPI.Models.Produccion.VArticulosProduccion>(cadenaxx).ToList();
+
+                        foreach (SIAAPI.Models.Produccion.VArticulosProduccion VAorden in articulosproduccion)
+                        {
+                            if (VAorden.TipoArticulo == "Cintas")
+                            {
+                                SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(VAorden.IDArticulo);
+
+                                <tr>
+
+
+                                    <td>
+
+                                        @if (VAorden.Existe.Equals(true))
+                                        {
+
+                                            <a><span class="fa fa-check-circle fa-2x" style="font-size:16px;color:green"></span></a>
+                                        }
+                                        else
+                                        {
+                                            <a><span class="fa fa-times-circle fa-2x" style="font-size:16px;color:red"></span></a>
+
+                                        }
+
+                                    </td>
+                                    <td style="word-wrap: break-word;min-width: 125px;max-width:150px ; ">
+
+                                        @{
+
+                                            decimal cantidad = VAorden.Cantidad;
+                                            string caracteristica = VAorden.Caracteristica;
+                                            FormulaSiaapi.Formulas form = new FormulaSiaapi.Formulas();
+                                            decimal valorancho = decimal.Parse(form.getvalor("ANCHO", caracteristica).ToString());
+                                            if (valorancho == 0)
+                                            {
+                                                valorancho = decimal.Parse(form.getvalor("ANCHO DE LA CINTA", caracteristica).ToString());
+                                            }
+                                            int largomts = 0;
+                                            try
+                                            {
+                                                largomts = int.Parse(Math.Truncate(cantidad / (valorancho / 1000)).ToString());
+
+                                            }
+                                            catch (Exception err)
+                                            {
+
+                                            }
+                                            <div>
+                                                <a href="#" role="button" style="font-size:14px" class="btn btn-secondary popover-test" title="@VAorden.Caracteristica" data-toggle="popover" data-placement="right"> @articulo.Cref @largomts Mts </a>
+                                            </div>
+
+
+
+                                            if (item.EstadoOrden == "Conflicto" || item.EstadoOrden == "En Revision")
+                                            {
+                                                <div>@Html.ActionLink("Ver Material Asignado", "AsignarMaterial", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd, idorden = item.IDOrden }, new { @class = "btn btn-success btn-xs" })</div>
+
+
+                                            }
+
+
+                                        }
+
+
+
+                                    </td>
+
+                                </tr>
+
+                            }
+
+
+                        }
+
+
+                    }
+
+
+                </table>
+
+            </td>
+
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+
+            <td>
+                <div> @Html.DisplayFor(modelItem => item.Cotizacion)</div>
+                <div> @Html.ActionLink("Ver", "CotizadorRapido1", "Diseno", new { id = item.Cotizacion }, new { @class = "fa fa-icon-file-text-alt fa-2x", title = "Ver Pedido", style = "Color:#ff0080", target = "_blank" })</div>
+            </td>
+
+            <td>
+                @if (item.EstadoOrden == "Conflicto")
+                {
+                    @Html.ActionLink(" ", "EnRevision", new { IDOrden = item.IDOrden, page = ViewBag.page, PageSize = ViewBag.psize }, new { @class = "fa fa-pencil fa-2x", title = "Revisado", style = "Color:#ff0080" })
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+
+
+@*Paginación*@
+@using (Html.BeginForm("Index", "MesaControl", FormMethod.Get, new { id = "pageSizeForm" }))
+{
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+
+       Estado = ViewBag.Estadoseleccionado,
+
+       pageSize = ViewBag.psize
+   }))
+
+
+    </div>
+}
+
+
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script>
+
+
+        $(function(){
+            $("#Estado").on("change", function() {
+             @ViewBag.Estadoseleccionado=  $('[id$=Estados] option:selected').text();
+
+            });
+        });
+
+
+
+        $(function(){
+            $("#pageSize").on("change", function() {
+             @ViewBag.pzise=  $('[id$=pageSize] option:selected').text();
+
+            });
+        });
+
+
+
+
+
+
+</script>

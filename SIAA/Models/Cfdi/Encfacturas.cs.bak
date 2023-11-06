@@ -1,0 +1,413 @@
+﻿using SIAAPI.Models.Administracion;
+using SIAAPI.Models.Comercial;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
+
+namespace SIAAPI.Models.Cfdi
+{
+    [Table("EncFacturas")]
+    public class Encfacturas
+    {
+
+        [Key]
+        public int ID { get; set; }
+
+        public System.DateTime Fecha { get; set; }
+
+        public string Serie { get; set; }
+
+        public int Numero { get; set; }
+
+        public string Nombre_cliente { get; set; }
+
+        public decimal Subtotal { get; set; }
+
+        public decimal IVA { get; set; }
+
+        public decimal Total { get; set; }
+
+        [Required(ErrorMessage = "La factura requiere un UUID")]
+        public string UUID { get; set; }
+
+        public string RutaXML { get; set; }
+
+        public bool pagada { get; set; }
+        public decimal TC { get; set; }
+        public string Moneda { get; set; }
+        public int IDMoneda { get; set; }
+        public virtual c_Moneda c_Moneda { get; set; }
+
+        public string Estado { get; set; }
+
+        public string IDMetododepago { get; set; }
+
+        public bool ConPagos { get; set; }
+
+        public int IDCliente { get; set; }
+
+        public bool Anticipo { get; set; }
+
+        public bool NotaCredito { get;  set; }
+
+        public int IDTipoComprobante { get; set; }
+        public DateTime FechaRevision { get; set; }
+        public DateTime FechaVencimiento { get; set; }
+        public decimal Descuento { get; set; }
+
+        public virtual ICollection<c_TipoCuota> c_TipoCuota { get; set; }
+
+
+    }
+
+    [Table("Folio")]
+
+    public class Folio
+    {
+
+        [Key]
+        public int IDFolio { get; set; }
+
+        [DisplayName("Folio")]
+        [Required(ErrorMessage = "El folio es obligatorio")]
+
+        public int Numero { get; set; }
+
+        [DisplayName("Serie")]
+        [Required(ErrorMessage = "La serie es obligatoria")]
+        [StringLength(2)]
+        public string Serie { get; set; }
+
+        public int IDTipoComprobante { get; set; }
+        public virtual c_TipoComprobante c_TipoComprobante { get; set; }
+
+
+
+    }
+
+    public class FolioContext : DbContext
+    {
+        public FolioContext() : base("name=DefaultConnection")
+        {
+            Database.SetInitializer<FolioContext>(null);
+        }
+        public DbSet<Folio> Folios { get; set; }
+        public DbSet<c_TipoComprobante> c_TipoComprobantes { get; set; }
+
+
+
+    }
+    [Table("FolioVentas")]
+
+    public class FolioVentas
+    {
+
+        [Key]
+        public int IDFolioVentas { get; set; }
+
+        [DisplayName("Folio")]
+        [Required(ErrorMessage = "El folio es obligatorio")]
+
+        public int Numero { get; set; }
+
+        [DisplayName("Serie")]
+        [Required(ErrorMessage = "La serie es obligatoria")]
+        [StringLength(2)]
+        public string Serie { get; set; }
+
+        public int IDTipoComprobante { get; set; }
+        public virtual c_TipoComprobante c_TipoComprobante { get; set; }
+
+
+
+    }
+
+    public class FolioVentasContext : DbContext
+    {
+        public FolioVentasContext() : base("name=DefaultConnection")
+        {
+            Database.SetInitializer<FolioVentasContext>(null);
+        }
+        public DbSet<FolioVentas> FoliosV { get; set; }
+        public DbSet<c_TipoComprobante> c_TipoComprobantes { get; set; }
+
+
+
+    }
+    public class EncfacturaContext : DbContext
+    {
+        public EncfacturaContext() : base("name=DefaultConnection")
+        {
+
+        }
+        public DbSet<Encfacturas> encfacturas { get; set; }
+        public DbSet<Folio> Folios { get; set; }
+
+        public DbSet<Empresa> Empresa { get; set; }
+
+        public DbSet<c_TipoRelacion> relaciones { get; set; }
+        public DbSet<c_TipoComprobante> tipocomprobantes { get; set; }
+
+        public DbSet<c_FormaPago> FormaPagos { get; set; }
+
+        public DbSet<c_MetodoPago> metodopagos { get; set; }
+
+        public DbSet<c_UsoCFDI> c_UsoCFDIs { get; set; }
+
+        public System.Data.Entity.DbSet<SIAAPI.Models.Administracion.c_Moneda> c_Moneda { get; set; }
+    }
+
+    public class FoliosRepository
+    {
+        public IEnumerable<SelectListItem> GetFolios()
+        {
+            using (var context = new FolioContext())
+            {
+                List<SelectListItem> lista = context.Folios.AsNoTracking()
+                    .OrderBy(n => n.Serie)
+                        .Select(n =>
+                        new SelectListItem
+                        {
+                            Value = n.IDFolio.ToString(),
+                            Text = n.c_TipoComprobante.ClaveTipoComprobante.ToString() + " | " + n.Serie
+                        }).ToList();
+                var countrytip = new SelectListItem()
+                {
+                    Value = null,
+                    Text = "--- Selecciona la serie en donde se va facturar ---"
+                };
+                lista.Insert(0, countrytip);
+                return new SelectList(lista, "Value", "Text");
+            }
+        }
+    }
+
+
+
+
+    /* Vista pago */
+
+    public class VPagos
+    {
+        [Key]
+
+        public int NoParcialidad { get; set; }
+        public System.DateTime? FechaPago { get; set; }
+
+        public decimal ImporteSaldoInsoluto { get; set; }
+        public decimal ImportePagado { get; set; }
+
+        public string StatusDocto { get; set; }
+    }
+
+
+    public class VEncPagos
+    {
+
+        [Key]
+        public int ID { get; set; }
+        public string Nombre_cliente { get; set; }
+        public int NoFactura { get; set; }
+        public decimal Total { get; set; }
+    }
+
+
+    public class FolioPrefactura
+    {
+        [Key]
+        public int IDFolioVentas { get; set; }
+
+        [DisplayName("Folio")]
+        [Required(ErrorMessage = "El folio es obligatorio")]
+
+        public int Numero { get; set; }
+
+        [DisplayName("Serie")]
+        [Required(ErrorMessage = "La serie es obligatoria")]
+        [StringLength(2)]
+        public string Serie { get; set; }
+
+        public int IDTipoComprobante { get; set; }
+        public virtual c_TipoComprobante c_TipoComprobante { get; set; }
+
+        public int IDMoneda { get; set; }
+
+
+        public int IDPedido { get; set; }
+
+       public int IDTipoRelacion { get; set; }
+
+        public int IDUsoCFDI { get; set; }
+        public int IDCondicionesPago { get; set; }
+        public int IDMetodoPago { get; set; }
+        public int IDFormapago { get; set; }
+        public string Observacion { get; set; }
+
+    }
+
+    public class CarritoPrefactura
+        {
+       
+        [Key]
+          public int IDCarritoPrefactura { get; set; }
+          public int IDPedido { get; set; }
+     
+          public int IDArticulo { get; set; }
+          public decimal   Cantidad{ get; set; }
+          public decimal  Costo{ get; set; }
+          public decimal   CantidadPedida{ get; set; }
+          public decimal  Descuento{ get; set; }
+          public decimal Importe{ get; set; }
+          public bool IVA{ get; set; }
+          public decimal ImporteIva{ get; set; }
+          public decimal ImporteTotal{ get; set; }
+          public string Nota{ get; set; }
+          public bool Ordenado { get; set; }
+          public int Caracteristica_ID{ get; set; }
+          public decimal Suministro{ get; set; }
+          public string Status{ get; set; }
+          public string Presentacion{ get; set; }
+          public string jsonPresentacion{ get; set; }
+          public int UserID{ get; set; }
+          public int IDDetExterna{ get; set; }
+          public string Lote{ get; set; }
+}
+
+    public class EncfacturasSaldos
+    {
+
+        [Key]
+        public int ID { get; set; }
+
+        public System.DateTime Fecha { get; set; }
+
+        public string Serie { get; set; }
+
+        public int Numero { get; set; }
+
+        public string Nombre_cliente { get; set; }
+
+        public decimal Subtotal { get; set; }
+
+        public decimal IVA { get; set; }
+
+        public decimal Total { get; set; }
+
+        [Required(ErrorMessage = "La factura requiere un UUID")]
+        public string UUID { get; set; }
+
+        public string RutaXML { get; set; }
+
+        public bool pagada { get; set; }
+        public decimal TC { get; set; }
+        public string Moneda { get; set; }
+        public int IDMoneda { get; set; }
+        public virtual c_Moneda c_Moneda { get; set; }
+
+        public string Estado { get; set; }
+
+        public string IDMetododepago { get; set; }
+
+        public bool ConPagos { get; set; }
+
+        public int IDCliente { get; set; }
+
+        public bool Anticipo { get; set; }
+
+        public bool NotaCredito { get; set; }
+
+        public int IDTipoComprobante { get; set; }
+        public DateTime? FechaRevision { get; set; }
+        public DateTime FechaVencimiento { get; set; }
+        public decimal Descuento { get; set; }
+        public decimal? ImportePagado { get; set; }
+        public decimal? ImporteSaldoInsoluto { get; set; }
+        public string Telefono { get; set; }
+        public string Prefactura { get; set; }
+
+    }
+    public class EncfacturasSaldosContext : DbContext
+    {
+        public EncfacturasSaldosContext() : base("name=DefaultConnection")
+        {
+
+        }
+        public DbSet<EncfacturasSaldos> EncfacturasSaldos { get; set; }
+    }
+
+
+    public class EncFacturaOfVen
+    {
+
+        [Key]
+        public int ID { get; set; }
+        public string NoExpediente { get; set; }
+
+        public System.DateTime Fecha { get; set; }
+
+        public string Serie { get; set; }
+
+        public int Numero { get; set; }
+
+        public string Nombre_cliente { get; set; }
+
+        public decimal Subtotal { get; set; }
+
+        public decimal IVA { get; set; }
+
+        public decimal Total { get; set; }
+
+        [Required(ErrorMessage = "La factura requiere un UUID")]
+        public string UUID { get; set; }
+
+        public string RutaXML { get; set; }
+
+        public bool pagada { get; set; }
+        public decimal TC { get; set; }
+        public string Moneda { get; set; }
+        public int IDMoneda { get; set; }
+        public virtual c_Moneda c_Moneda { get; set; }
+
+        public string Estado { get; set; }
+
+        public string IDMetododepago { get; set; }
+
+        public bool ConPagos { get; set; }
+
+        public int IDCliente { get; set; }
+
+        public bool Anticipo { get; set; }
+
+        public bool NotaCredito { get; set; }
+
+        public int IDTipoComprobante { get; set; }
+        public DateTime? FechaRevision { get; set; }
+        public DateTime FechaVencimiento { get; set; }
+        public decimal Descuento { get; set; }
+        public decimal? ImportePagado { get; set; }
+        public decimal? ImporteSaldoInsoluto { get; set; }
+        public string Telefono { get; set; }
+        public int IDOficina { get; set; }
+        public string Oficina { get; set; }
+        public int IDVendedor { get; set; }
+        public string Vendedor { get; set; }
+        public string EstadoCliente { get; set; }
+
+        public string TipoCliente { get; set; }
+        public Decimal Comision { get; set; }
+        public DateTime FechaCreacion { get; set; }
+    }
+    public class EncFacturaOfVenContext : DbContext
+    {
+        public EncFacturaOfVenContext() : base("name=DefaultConnection")
+        {
+
+        }
+        public DbSet<EncFacturaOfVen> EncFacturaOfVen { get; set; }
+    }
+}

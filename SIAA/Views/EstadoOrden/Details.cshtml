@@ -1,0 +1,45 @@
+﻿@model SIAAPI.Models.Produccion.EstadoOrden
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Detalles</h2>
+
+<div>
+    <h3>Estado de la Orden</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+       
+       @if (Model.Tipo == "G")
+            {
+        <dd>
+            Estado General de la Orden
+        </dd>
+       }
+       else
+       {
+        <td>
+            Estado del Proceso
+        </td>
+
+       }
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDEstadoOrden }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

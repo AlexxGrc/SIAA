@@ -1,0 +1,229 @@
+﻿@model SIAAPI.Models.Comercial.Vendedor
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="form-group">
+            @{
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>  <h3>Detalle de Vendedor: @Model.Nombre</h3> </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SIAAPI_Vendedores_C.pdf" })' target="_blank">
+                                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</nav>
+<br>
+<div class="table-responsive">
+    <div class="card-body ">
+        <div class="columna col-md-4 col-sm-1 bg-light">
+
+            <dl class="dl-horizontal">
+                <dt>
+                    <img src="@Url.Action("RenderImage", new { id=Model.IDVendedor })" class="img-responsive" width="140" height="180" />
+                </dt>
+            </dl>
+            <dl class="dl-horizontal">
+                <dt class="justify-content-md-center">
+
+                    @Html.DisplayNameFor(model => model.RFC)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RFC)
+                </dd>
+
+                @*<dt>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>*@
+
+            </dl>
+        </div>
+    </div>
+</div>
+       
+<div class="table-responsive">
+
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+
+                @if (Model.IDTipoCuota == 2)
+                {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CuotaVendedor) mensual
+                    </dt>
+
+                }
+                else
+                {
+                    <dt>
+                        @Html.DisplayNameFor(model => model.CuotaVendedor) fija
+                    </dt>
+                }
+
+                @if (Model.IDTipoCuota == 2)
+                {
+                    @*@Html.Label("Consultar las cuotas en Editar")<br>*@
+                    @Html.ActionLink("Consultar cuotas mensuales", "CargarCuotaMensual", new { id = Model.IDVendedor }, new { @class = "btn btn-success btn-xs" })
+
+                }
+                else
+                {
+                    <dd>
+                        @Html.DisplayFor(model => model.CuotaVendedor) <br>
+                        @Html.DisplayNameFor(model => model.IDMoneda): @Html.DisplayFor(model => model.c_Moneda.Descripcion)
+                    </dd>
+
+                }
+                <dt>
+                    @Html.DisplayNameFor(model => model.EsquemaComision)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.EsquemaComision)<br>
+                    @Html.DisplayNameFor(model => model.Comision):@Html.DisplayFor(model => model.Comision)%
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDPeriocidadPago)
+                </dt>
+
+
+
+
+
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_PeriodicidadPago.Descripcion)
+                </dd>
+
+            </dl>
+        </div>
+        <div class="columna col-md-7 col-sm-1">
+
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.AutorizadoACotizar)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AutorizadoACotizar)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Activo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Activo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Porcentajecomision)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Porcentajecomision)
+                </dd>
+            </dl>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDTipoVendedor)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TipoVendedor.DescripcionVendedor)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDTipoContrato)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_TipoContrato.Descripcion)
+                </dd>
+
+
+            </dl>
+
+        </div>
+        <div class="columna col-md-7 col-sm-1">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDOficina)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Oficina.NombreOficina)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Mail)
+                </dt>
+
+                <dd>
+                    <a href="mailto:#"> @Html.DisplayFor(model => model.Mail)</a>
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Telefono)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Telefono)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Notas)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Notas)
+                </dd>
+
+            </dl>
+        </div>
+    </div>
+
+    <div >
+
+        <p>
+            @Html.ActionLink("Editar", "Edit", new { id = Model.IDVendedor }, new { @class = "btn btn-success btn-xs" }) |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </p>
+    </div>
+
+
+</div>
+

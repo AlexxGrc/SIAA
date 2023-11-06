@@ -1,0 +1,142 @@
+﻿@model IEnumerable<SIAAPI.Models.Comisiones.CierreComisiones>
+@{
+    ViewBag.Title = "ListaCierreComisiones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cierre de Comisiones del mes: @ViewBag.mes @ViewBag.periodo</h2>
+
+
+@using (Html.BeginForm("ListaCierreComisiones", "Comisiones", FormMethod.Get))
+{
+    @Html.DropDownList("IDMes", null, htmlAttributes: new { })
+    @Html.DropDownList("ANIO", null, htmlAttributes: new { })
+
+   @*<input type="submit" value="Aplicar" class="btn btn-success btn-xs" />*@
+    <input type="submit" name="Enviar" value="Aplicar" class="btn btn-success btn-xs" />
+    <input type="submit" name="Enviar" value="Reporte" class="btn btn-info btn-xs" />
+    <input type="submit" name="Enviar" value="Excel" class="btn btn-info btn-xs" />
+}
+
+
+<div class="table-responsive">
+
+    <table class="table table-striped">
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaFac)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaPed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IDVendedor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Serie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoFactura)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subtotal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rentabilidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Penalizaciones)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comision)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pagada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Costo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MonedaFactura)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MonedaCosto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MontoRentabilidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MontoComision)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoPedido)
+            </th>
+
+            <th></th>
+            @{
+               
+                foreach (SIAAPI.Models.Comisiones.CierreComisiones item in Model)
+                {
+                  
+                <tr>
+                    <td></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaFac)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaPed)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vendedor.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Serie)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoFactura)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subtotal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rentabilidad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Penalizaciones)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comision)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pagada)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Costo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonedaFactura)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MonedaCosto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MontoRentabilidad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MontoComision)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NoPedido)
+                    </td>
+                    <td>
+                        <a class="deleteCM" data-id="@item.IDComisionVendedor">
+                            <i class="tbl_del_btn fa fa-trash"></i>
+                        </a>
+                    </td>
+                    <td></td>
+                </tr>
+                }
+            }
+        </table>
+    </div>

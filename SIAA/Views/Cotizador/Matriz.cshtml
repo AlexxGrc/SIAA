@@ -1,0 +1,51 @@
+﻿
+
+
+@model SIAAPI.ClasesProduccion.MatrizPrecioCotiza
+
+@if (Model != null)
+{
+    <h1> Precios sugerido en USD</h1>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Precios /Cantidades</th>
+                <th><div>@ViewBag.Cantidad1 Millares</div></th>
+                <th><div>@ViewBag.Cantidad2 Millares</div></th>
+                <th><div>@ViewBag.Cantidad3 Millares</div></th>
+                <th><div>@ViewBag.Cantidad4 Millares</div></th>
+            </tr>
+            <tr>
+                <td>Precio 1</td>
+                <td>@Model.Fila1.Celda1.Valor.ToString("C")</td>
+                <td>@Model.Fila2.Celda1.Valor.ToString("C")</td>
+                <td>@Model.Fila3.Celda1.Valor.ToString("C")</td>
+                <td>@Model.Fila4.Celda1.Valor.ToString("C")</td>
+            </tr>
+            <tr>
+                <td>Precio 2</td>
+                <td>@Model.Fila1.Celda2.Valor.ToString("C")</td>
+                <td>@Model.Fila2.Celda2.Valor.ToString("C")</td>
+                <td>@Model.Fila3.Celda2.Valor.ToString("C")</td>
+                <td>@Model.Fila4.Celda2.Valor.ToString("C")</td>
+            </tr>
+            <tr>
+                <td>Precio 3</td>
+                <td>@Model.Fila1.Celda3.Valor.ToString("C")</td>
+                <td>@Model.Fila2.Celda3.Valor.ToString("C")</td>
+                <td>@Model.Fila3.Celda3.Valor.ToString("C")</td>
+                <td>@Model.Fila4.Celda3.Valor.ToString("C")</td>
+            </tr>
+            <tr>
+                <td>Distribuidor</td>
+                <td>@Model.Fila1.Celda4.Valor.ToString("C")</td>
+                <td>@Model.Fila2.Celda4.Valor.ToString("C")</td>
+                <td>@Model.Fila3.Celda4.Valor.ToString("C")</td>
+                <td>@Model.Fila4.Celda4.Valor.ToString("C")</td>
+            </tr>
+
+</table>
+
+
+
+            }

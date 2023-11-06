@@ -1,0 +1,74 @@
+﻿@model SIAAPI.Models.Cfdi.Encfacturas
+
+@{
+    ViewBag.Title = "EnviarCorreo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Enviar Facturas a correo:</h3>
+
+
+@using (Html.BeginForm("DescargaMasivaXML", "FacturaAll", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="hidden" value="@ViewBag.Numero" id="Numero" name="Numero" />
+    <input type="hidden" value="@ViewBag.SerieFac" id="SerieFac" name="SerieFac" />
+    <input type="hidden" value="@ViewBag.ClieFac" id="ClieFac" name="ClieFac" />
+    <input type="hidden" value="@ViewBag.sortOrder" id="sortOrder" name="sortOrder" />
+    <input type="hidden" value="@ViewBag.currentFilter" id="currentFilter" name="currentFilter" />
+    <input type="hidden" value="@ViewBag.Fechainicio" id="Fechainicio" name="Fechainicio" />
+    <input type="hidden" value="@ViewBag.Fechafinal" id="Fechafinal" name="Fechafinal" />
+    <input type="hidden" value="@ViewBag.FacPag" id="FacPag" name="FacPag" />
+    <input type="hidden" value="@ViewBag.estado" id="Estado" name="Estado" />
+
+    @Html.AntiForgeryToken()
+    @*<input value="@ViewBag.Ruta" id="Ruta" name="Ruta" />*@
+    <div class="form-horizontal">
+        @*<h4>Registrar factura desde archivo</h4>*@
+        <div class="form-group">
+            <h2>Ingresa correo: </h2>
+            <div class="col-md-10">
+                <input type="text" id="Correo" name="Correo" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" id="filtro" name="filtro" value="Grabar" class="btn btn-success btn-xs" onclick="DescMasiva()" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+    </div>
+}
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+<script>
+    function DescMasiva(id) {
+        var Numero = $("input[id$=Numero]").val();
+
+        var SerieFac = $('[id$=SerieFac] option:selected').text();
+        var ClieFac = $('[id$=ClieFac] option:selected').text();
+        var sortOrder = $("input[id$=sortOrder]").val();
+        var currentFilter = $("input[id$=currentFilter]").val();
+        var Fechainicio = $("input[id$=Fechainicio]").val();
+        var Fechafinal = $("input[id$=Fechafinal]").val();
+        var FacPag = $('[id$=FacPag] option:selected').text();
+        var Estado = $('[id$=Estado] option:selected').text();
+
+        var cont = "?FacPag=" + FacPag + "&SerieFac=" + SerieFac + " &ClieFac=" + ClieFac + " &Estado=" + Estado + " &Numero=" + Numero + " &Fechainicio=" + Fechainicio + " &Fechafinal=" + Fechafinal;
+        var urlagre = '@Url.Action("DescargaMasivaXML", "FacturaAll")';
+        $.get(urlagre, { cont}, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+</script>

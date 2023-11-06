@@ -1,0 +1,64 @@
+﻿@model IEnumerable<SIAAPI.Models.Calidad.NormaCalidad>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" }) 
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Norma)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Folio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoRevision)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ColumnaAceptacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Norma)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Folio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoRevision)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ColumnaAceptacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fecha)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.IDNorma }, new { @class = "btn btn-success btn-xs" })
+            @Html.ActionLink("Detalles", "Details", new { id = item.IDNorma }, new { @class = "btn btn-default btn-xs" })
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.IDNorma }, new { @class = "btn btn-warning btn-xs" })
+        </td>
+    </tr>
+}
+
+</table>

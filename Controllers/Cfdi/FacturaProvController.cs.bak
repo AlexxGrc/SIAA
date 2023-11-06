@@ -1,0 +1,1432 @@
+﻿using PagedList;
+using SIAAPI.Models.Administracion;
+using SIAAPI.Models.Cfdi;
+using SIAAPI.Models.Comercial;
+using SIAAPI.Reportes;
+using SIAAPI.ViewModels.Cfdi;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SIAAPI.Controllers.Cfdi
+{
+[Authorize(Roles = "Almacenista,Administrador,Compras,Sistemas,Facturacion, Proveedor,Contabilidad")]
+    public class FacturaProvController : Controller
+    {
+        // GET: FacturaProv
+        // GET: FacturaComplemento
+
+        EncfacturaProvContext db = new EncfacturaProvContext();
+        VEncFacturaProvSaldoContext dbv = new VEncFacturaProvSaldoContext();
+        public ActionResult Index(string Numero, string ClieFac, string sortOrder, string currentFilter, int? page, int? PageSize, string searchString, string FacPag, string ticket,string Estado = "A")
+        {
+
+
+            if (Session["Proveedor"] != null)
+            {
+                RedirectToAction("Indexp");
+            }
+
+            //Buscar Facturas: Pagadas o no pagadas
+            var FacPagLst = new List<SelectListItem>();
+
+
+            var EstadoLst = new List<SelectListItem>();
+            //FacPagLst.Add(new SelectListItem { Text = "Todos", Value = "na", Selected = true });
+
+            EstadoLst.Add(new SelectListItem { Text = "Cancelada", Value = "C" });
+            EstadoLst.Add(new SelectListItem { Text = "Activas", Value = "A" });
+
+            ViewData["Estado"] = EstadoLst;
+            ViewBag.Estado = new SelectList(EstadoLst, "Value", "Text");
+
+            //Facturas Pagadas
+            FacPagLst.Add(new SelectListItem { Text = "Pagada", Value = "SI" });
+            FacPagLst.Add(new SelectListItem { Text = "NoPagada", Value = "NO" });
+
+            ViewData["FacPag"] = FacPagLst;
+            ViewBag.FacPag = new SelectList(FacPagLst, "Value", "Text");
+
+
+            ViewBag.sumatoria = "";
+
+            //Buscar Cliente
+            var ClieLst = new List<string>();
+            var ClieQry = from d in db.EncfacturaProveedores
+                          orderby d.Nombre_Proveedor
+                          select d.Nombre_Proveedor;
+            ClieLst.AddRange(ClieQry.Distinct());
+            ViewBag.ClieFac = new SelectList(ClieLst);
+
+
+            string ConsultaSql = "select * from VEncFacturaProvSaldo ";
+            string ConsultaSqlResumen = "select Moneda as MonedaOrigen, (SUM(Subtotal)) as Subtotal, (SUM(IVA)) as IVA, (SUM(Total)) as Total, (SUM(Total * TC)) as TotalenPesos from VEncFacturaProvSaldo ";
+            string ConsultaAgrupado = "group by Moneda order by Moneda ";
+            string Filtro = string.Empty;
+            string Orden = " order by fecha desc , Nombre_Proveedor  ";
+
+            if (!String.IsNullOrEmpty(ticket))
+            {
+                if (Filtro == string.Empty)
+                {
+                    Filtro = " where ID=" + ticket + "";
+                }
+                else
+                {
+                    Filtro += " and  ID=" + ticket + "";
+                }
+
+            }
+
+            //Buscar por numero
+            if (!String.IsNullOrEmpty(Numero))
+            {
+                if (Filtro == string.Empty)
+                {
+                    Filtro = " where Numero='" + Numero + "'";
+                }
+                else
+                {
+                    Filtro += " and  Numero='" + Numero + "'";
+                }
+
+            }
+
+            ///tabla filtro: Nombre Cliente
+            if (!String.IsNullOrEmpty(ClieFac))
+            {
+
+                if (Filtro == string.Empty)
+                {
+                    Filtro = "where Nombre_Proveedor='" + ClieFac + "'";
+                }
+                else
+                {
+                    Filtro += "and  Nombre_Proveedor='" + ClieFac + "'";
+                }
+
+            }
+
+            ///tabla filtro: Factura pagada/no pagada && Serie, Nombre Cliente
+            if (FacPag != "Todas")
+            {
+                if (FacPag == "SI")
+                {
+                    if (Filtro == string.Empty)
+                    {
+                        Filtro = "where pagada='1' ";
+                    }
+                    else
+                    {
+                        Filtro += "and  pagada='1' ";
+                    }
+                }
+                if (FacPag == "NO")
+                {
+                    if (Filtro == string.Empty)
+                    {
+                        Filtro = "where pagada='0' ";
+                    }
+                    else
+                    {
+                        Filtro += "and  pagada='0' ";
+                    }
+                }
+            }
+
+
+            if (Estado != "Todos")
+            {
+                if (Estado == "C")
+                {
+                    if (Filtro == string.Empty)
+                    {
+                        Filtro = "where Estado='C'";
+                    }
+                    else
+                    {
+                        Filtro += "and  Estado='C'";
+                    }
+                }
+                if (Estado == "A")
+                {
+                    if (Filtro == string.Empty)
+                    {
+                        Filtro = "where  Estado='A'";
+                    }
+                    else
+                    {
+                        Filtro += "and Estado='A'";
+                    }
+                }
+            }
+
+
+
+            if (!String.IsNullOrEmpty(searchString)) //pusieron una fecha
+            {
+                if (Filtro == string.Empty)
+                {
+                    Filtro = "where  Fecha BETWEEN '" + searchString + "' and '" + searchString + " 23:59:59.999' ";
+                }
+                else
+                {
+                    Filtro += " and Fecha BETWEEN '" + searchString + "' and '" + searchString + " 23:59:59.999'";
+                }
+            }
+
+
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.IDSortParm = "ID";
+            ViewBag.NumeroSortParm = String.IsNullOrEmpty(sortOrder) ? "Numero" : "";
+            ViewBag.FechaSortParm = sortOrder == "Fecha" ? "Fecha" : "";
+            ViewBag.ClienteSortParm = String.IsNullOrEmpty(sortOrder) ? "Nombre_Proveedor" : "";
+
+
+            // Not sure here
+            if (searchString == null)
+            {
+                searchString = currentFilter;
+            }
+
+            // Pass filtering string to view in order to maintain filtering when paging
+            ViewBag.SearchString = searchString;
+
+            //Paginación
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+
+            //Ordenacion
+
+            switch (sortOrder)
+            {
+
+                case "ID":
+                    Orden = " order by ID desc ";
+                    break;
+                case "Numero":
+                    Orden = " order by numero desc ";
+                    break;
+                case "Fecha":
+                    Orden = " order by fecha desc ";
+                    break;
+                case "Nombre_Cliente":
+                    Orden = " order by  Nombre_Proveedor ";
+                    break;
+                default:
+                    Orden = " order by fecha desc ,  Nombre_Proveedor  ";
+                    break;
+            }
+
+            //var elementos = from s in db.encfacturas
+            //select s;
+            string cadenaSQl = ConsultaSql + " " + Filtro + " " + Orden;
+
+            var elementos = dbv.Database.SqlQuery<VEncFacturaProvSaldo>(cadenaSQl).ToList();
+
+
+
+            ViewBag.sumatoria = "";
+            try
+            {
+
+                var SumaLst = new List<string>();
+                var SumaQry = ConsultaSqlResumen + " " + Filtro + " " + ConsultaAgrupado;
+                List<ResumenFac> data = db.Database.SqlQuery<ResumenFac>(SumaQry).ToList();
+                ViewBag.sumatoria = data;
+
+            }
+            catch (Exception err)
+            {
+
+            }
+
+            //Paginación
+            // DROPDOWNLIST FOR UPDATING PAGE SIZE
+            int count = dbv.VEncFacturaProvSaldo.OrderBy(e => e.ID).Count();// Total number of elements
+
+            // Populate DropDownList
+            ViewBag.PageSize = new List<SelectListItem>()
+            {
+                new SelectListItem { Text = "10", Value = "10" },
+                new SelectListItem { Text = "25", Value = "25" , Selected = true},
+                new SelectListItem { Text = "50", Value = "50" },
+                new SelectListItem { Text = "100", Value = "100" },
+                new SelectListItem { Text = "Todos", Value = count.ToString() }
+             };
+
+            int pageNumber = (page ?? 1);
+            int pageSize = (PageSize ?? 25);
+            ViewBag.psize = pageSize;
+
+            return View(elementos.ToPagedList(pageNumber, pageSize));
+            //Paginación
+        }
+
+
+        public ActionResult Create()
+        {
+            EncfacturaProvContext db = new EncfacturaProvContext();
+            ProveedorContext dbp = new ProveedorContext();
+            c_FormaPagoContext dbf = new c_FormaPagoContext();
+            c_MonedaContext dbm = new c_MonedaContext();
+            c_MetodoPagoContext dbmp = new c_MetodoPagoContext();
+
+            string fecha = DateTime.Now.ToString("yyyyMMdd");
+            ViewBag.fecha = fecha;
+            ClsDatoEntero idpais = dbp.Database.SqlQuery<ClsDatoEntero>(" select IDPais as Dato from dbo.Paises where Codigo = 'MEX'").ToList().FirstOrDefault();
+
+
+            var prov = dbp.Proveedores.OrderBy(m => m.Empresa).ToList();
+            List<SelectListItem> liProv = new List<SelectListItem>();
+            List<Proveedor> liprov2 = dbp.Database.SqlQuery<Proveedor>("select * from Proveedores where IDPais != " + idpais.Dato + " order by Empresa").ToList();
+            liProv.Add(new SelectListItem { Text = "--Selecciona un Proveedor--", Value = "0" });
+
+            foreach (var m in liprov2)
+            {
+                liProv.Add(new SelectListItem { Text = m.Empresa, Value = m.IDProveedor.ToString() });
+            }
+            ViewBag.idproveedor = liProv;
+
+            ViewBag.idmoneda = new SelectList(dbm.c_Monedas, "IDMoneda", "ClaveMoneda");
+            ViewBag.metododepago = new SelectList(dbmp.c_MetodoPagos, "IDMetodoPago", "Descripcion");
+            ViewBag.formadepago = new SelectList(dbf.c_FormaPagos, "IDFormaPago", "Descripcion");
+
+            //ViewBag.idtipoiva = new SelectList(dbf.c_FormaPagos, "ClaveTipo", "Descripcion");
+
+            //var EstadoLst = new List<SelectListItem>();
+            //EstadoLst.Add(new SelectListItem { Text = "Activa", Value = "A" });
+            //EstadoLst.Add(new SelectListItem { Text = "Cancelada", Value = "C" });
+            //ViewBag.Estado = new SelectList(EstadoLst, "Value", "Text");
+
+            return View();
+        }
+
+
+        // POST: Factura/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(FormCollection coleccion)
+        {
+            EncfacturaProv elemento = new EncfacturaProv();
+            elemento.IDProveedor = int.Parse(coleccion.Get("IDproveedor"));
+            elemento.Serie = coleccion.Get("Serie");
+            elemento.Numero = coleccion.Get("Numero");
+
+            ClsDatoString nombreproveedor = db.Database.SqlQuery<ClsDatoString>("select empresa as Dato from Proveedores where IDProveedor = " + elemento.IDProveedor + "").ToList().FirstOrDefault();
+            elemento.Nombre_Proveedor = nombreproveedor.Dato;
+            elemento.Subtotal = decimal.Parse(coleccion.Get("Subtotal"));
+            elemento.IVA = decimal.Parse(coleccion.Get("IVA"));
+            elemento.Total = decimal.Parse(coleccion.Get("Total"));
+            elemento.UUID = "No Aplica";
+            elemento.RutaXML = "";
+            //elemento.RutaXML = coleccion.Get("fileIMG");
+            elemento.Fecha = DateTime.Parse(coleccion.Get("Fecha"));
+
+            elemento.TC = decimal.Parse(coleccion.Get("TC"));
+            elemento.IDMoneda = int.Parse(coleccion.Get("IDMoneda"));
+            ClsDatoString clavemoneda = db.Database.SqlQuery<ClsDatoString>("select ClaveMoneda as Dato from c_Moneda where IDMoneda= " + elemento.IDMoneda + " ").ToList().FirstOrDefault();
+            elemento.Moneda = clavemoneda.Dato;
+            int mp = int.Parse(coleccion.Get("Metododepago"));
+            ClsDatoString metodopago = db.Database.SqlQuery<ClsDatoString>("select  ClaveMetodoPago as Dato from c_MetodoPago where IDMetodopago= " + mp + " ").ToList().FirstOrDefault();
+            elemento.Metododepago = metodopago.Dato;
+            elemento.Estado = "A";
+            elemento.pagada = false;
+            int fp = int.Parse(coleccion.Get("Formadepago"));
+            ClsDatoString formapago = db.Database.SqlQuery<ClsDatoString>("select ClaveFormaPago as Dato from c_FormaPago where IDFormaPago= " + fp + " ").ToList().FirstOrDefault();
+            elemento.Formadepago = formapago.Dato;
+            elemento.ConPagos = false;
+            elemento.FechaVencimiento = elemento.Fecha;
+            elemento.FechaRevision = elemento.Fecha;
+
+
+            try
+            {
+
+
+                var db = new EncfacturaProvContext();
+                db.EncfacturaProveedores.Add(elemento);
+                db.SaveChanges();
+
+                //ClsDatoEntero idfactura = db.Database.SqlQuery<ClsDatoEntero>("select max(id) as Dato from dbo.EncFacturaProv where IDProveedor =" + elemento.IDProveedor + " ").ToList().FirstOrDefault();
+
+                //SaldoFacturaProvContext sfp = new SaldoFacturaProvContext();
+                //string comandoSql = "insert into [dbo].[SaldoFacturaProv](IDFacturaProv, IDProveedor, Serie, Numero, Total, ImporteSaldoAnterior, importepagado,  ImporteSaldoInsoluto, empresa)";
+                //comandoSql += " values(" + idfactura.Dato + ", " + elemento.IDProveedor + ",  '" + elemento.Serie + "', '" + elemento.Numero + "',  " + elemento.Total + ", '" + elemento.Total + "',  0,  " + elemento.Total + ", '" + elemento.Nombre_Proveedor + "')";
+                //sfp.Database.ExecuteSqlCommand(comandoSql);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception err)
+            {
+                string error = err.Message;
+
+                EncfacturaProvContext db = new EncfacturaProvContext();
+                ProveedorContext dbp = new ProveedorContext();
+                c_FormaPagoContext dbf = new c_FormaPagoContext();
+                c_MonedaContext dbm = new c_MonedaContext();
+                c_MetodoPagoContext dbmp = new c_MetodoPagoContext();
+
+                string fecha = DateTime.Now.ToString("yyyyMMdd");
+                ViewBag.fecha = fecha;
+                ClsDatoEntero idpais = dbp.Database.SqlQuery<ClsDatoEntero>(" select IDPais as Dato from dbo.Paises where Codigo = 'MEX'").ToList().FirstOrDefault();
+
+
+                var prov = dbp.Proveedores.OrderBy(m => m.Empresa).ToList();
+                List<SelectListItem> liProv = new List<SelectListItem>();
+                List<Proveedor> liprov2 = dbp.Database.SqlQuery<Proveedor>("select * from Proveedores where IDPais != " + idpais.Dato + " order by Empresa").ToList();
+                liProv.Add(new SelectListItem { Text = "--Selecciona un Proveedor--", Value = "0" });
+
+                foreach (var m in liprov2)
+                {
+                    liProv.Add(new SelectListItem { Text = m.Empresa, Value = m.IDProveedor.ToString() });
+                }
+                ViewBag.idproveedor = liProv;
+
+                ViewBag.idmoneda = new SelectList(dbm.c_Monedas, "IDMoneda", "ClaveMoneda");
+                ViewBag.metododepago = new SelectList(dbmp.c_MetodoPagos, "IDMetodoPago", "Descripcion");
+                ViewBag.formadepago = new SelectList(dbf.c_FormaPagos, "IDFormaPago", "Descripcion");
+                return View();
+
+            }
+        }
+
+
+   
+
+
+    public ActionResult CreatedesdeArchivo()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult CreatedesdeArchivo(FormCollection collection)
+        {
+            EncfacturaProv elemento = new EncfacturaProv();
+
+            try
+            {
+                /*Aqui voy intentar guardar la imagen que me pase la vista*/
+                try
+                {
+                    HttpPostedFileBase archivo = Request.Files["filexml"];
+                    //archivo.SaveAs(Path.Combine(directory, Path.GetFileName(archivo.FileName)));
+                    // Generador.CreaPDF(Path.Combine(@".\facturas", Path.GetFileName(archivo.FileName)));
+                    StreamReader reader = new StreamReader(archivo.InputStream);
+                    String contenidoxml = reader.ReadToEnd();
+
+
+                    Generador.CreaPDF temp = new Generador.CreaPDF(contenidoxml);
+
+                    elemento.Fecha = System.DateTime.Parse(temp._templatePDF.fechaEmisionCFDI);
+
+
+                    elemento.Serie = temp._templatePDF.serie;
+
+                    try
+                    {
+                        elemento.Numero = temp._templatePDF.folio;
+                    }
+                    catch (Exception err)
+                    {
+                        string mensaje = err.Message;
+                        elemento.Numero = "0";
+                    }
+                    elemento.Nombre_Proveedor = temp._templatePDF.emisor.Nombre;
+
+                    // verifica si el proveedor existe
+
+
+                    try
+                    {
+                        ProveedorContext dbp = new ProveedorContext();
+                        Proveedor proveedorenlabase = dbp.Database.SqlQuery<Proveedor>("select * from proveedores where Empresa='" + temp._templatePDF.emisor.Nombre + "'").ToList()[0];
+                        int IDpbase = proveedorenlabase.IDProveedor; /// si la consulta no devolvio fila lanazara una excepcion 
+                        elemento.IDProveedor = IDpbase;
+                    }
+                    catch (Exception err)
+                    {
+                        string error = err.Message;
+                        string mensajealusuario = "EL PROVEEDOR NO SE ENCUENTRA REGISTRADO O SU NOMBRE NO CONSIDE CON EXACTITUD A TU REGISTRO VERIFICA PUNTOS, COMAS Y ESPACIOS ";
+                        ViewBag.Mensajeerror = mensajealusuario;
+                        //return View();
+                        elemento.IDProveedor = 0;
+                    }
+
+                    try
+                    {
+                        EncfacturaProvContext dbp = new EncfacturaProvContext();
+                        EncfacturaProv proveedorenlabase = dbp.Database.SqlQuery<EncfacturaProv>("select * from EncfacturaProv where UUID='" + temp._templatePDF.folioFiscalUUID + "'").ToList()[0];
+                        int IDpbase = proveedorenlabase.ID; /// si la consulta no devolvio fila lanazara una excepcion 
+                        string mensajealusuario = "LA FACTURA YA SE ENCUENTRA EN EL SISTEMA ";
+                        ViewBag.Mensajeerror = mensajealusuario;
+                        return View();
+                    }
+                    catch (Exception err)
+                    {
+                        //string error = err.Message;
+
+
+                    }
+
+
+                    elemento.Subtotal = decimal.Parse(temp._templatePDF.subtotal.ToString());
+                    elemento.Total = decimal.Parse(temp._templatePDF.total.ToString());
+                    elemento.IVA = elemento.Total - elemento.Subtotal;
+
+
+
+                    List<c_Moneda> clavemoneda;
+                    clavemoneda = db.Database.SqlQuery<c_Moneda>("select * from c_Moneda WHERE claveMoneda='" + temp._templatePDF.claveMoneda + "'").ToList();
+                    int clave = clavemoneda.Select(s => s.IDMoneda).FirstOrDefault();
+                    elemento.IDMoneda = clave;
+                    elemento.Moneda = temp._templatePDF.claveMoneda;
+                    elemento.Estado = "A";
+                    if (temp._templatePDF.tipo_cambio != "")
+                    {
+                        elemento.TC = decimal.Parse(temp._templatePDF.tipo_cambio);
+                    }
+                    else
+                    {
+                        elemento.TC = 1;
+                    }
+
+
+
+                    elemento.RutaXML = contenidoxml;
+
+                    elemento.UUID = temp._templatePDF.folioFiscalUUID;
+                    elemento.FechaVencimiento = elemento.Fecha;
+                    elemento.FechaRevision = elemento.Fecha;
+                    elemento.Metododepago = temp._templatePDF.metodoPago;
+                    elemento.Formadepago = temp._templatePDF.formaPago;
+                    elemento.ConPagos = false;
+
+                    //string cadenainsert = " insert into dbo.encfacturaprov      ([IDProveedor] ,[NoRecepcion] ,[Serie] ,[Numero] ,[Nombre_Proveedor] ,[Subtotal] ,[IVA] ,[Total] ,[UUID]  ,[RutaPDF] ,[Fecha] ,[TC] ,[IDMoneda] ,[Moneda] ,[Metododepago] ,[Estado] ,[pagada] ,[FormadePago] ,[conPagos] ,[Descuento] ,[FechaVencimiento] ,[FechaRevision])     VALUES";
+                    //cadenainsert += "(" + elemento.IDProveedor + ",0,'" ','"+elemento.Numero+"','" + elemento.Nombre_Proveedor + "'," + elemento.Subtotal + "," + elemento.IVA + "," + elemento.Total;
+                    //cadenainsert += ",'" + elemento.UUID + "',' ',convert(datetime,'" + elemento.Fecha.Day + "/" + elemento.Fecha.Month + "/" + elemento.Fecha.Year + "',103)," + elemento.TC + "," + elemento.IDMoneda + ",'" + elemento.Moneda + "','" + elemento.Metododepago + "','A','0','" + elemento.Formadepago + "','0',0,convert(datetime,'" + elemento.Fecha.Day + "/" + elemento.Fecha.Month + "/" + elemento.Fecha.Year + "',103),convert(datetime,'" + elemento.Fecha.Day + "/" + elemento.Fecha.Month + "/" + elemento.Fecha.Year + "',103))";
+
+
+                //    new EncfacturaProvContext().Database.ExecuteSqlCommand(cadenainsert);
+
+
+                       db.EncfacturaProveedores.Add(elemento);
+                      db.SaveChanges();
+                    ////Aqui actualiza saldos
+                    //ClsDatoEntero idfactura = db.Database.SqlQuery<ClsDatoEntero>("select max(id) as Dato from dbo.EncFacturaProv where IDProveedor =" + elemento.IDProveedor + " ").ToList().FirstOrDefault();
+
+                    //SaldoFacturaProvContext sfp = new SaldoFacturaProvContext();
+                    //string comandoSql = "insert into [dbo].[SaldoFacturaProv](IDFacturaProv, IDProveedor, Serie, Numero, Total, ImporteSaldoAnterior, importepagado,  ImporteSaldoInsoluto, empresa)";
+                    //comandoSql += " values(" + idfactura.Dato + ", " + elemento.IDProveedor + ",  '" + elemento.Serie + "', " + elemento.Numero + ",  " + elemento.Total + ", '" + elemento.Total + "',  0,  " + elemento.Total + ", '" + elemento.Nombre_Proveedor + "')";
+                    //sfp.Database.ExecuteSqlCommand(comandoSql);
+
+                    //con eso lo voy a subir asi
+
+
+
+                    //////////////////////77
+                    ///subiendo pdf
+                    ////////////////////
+
+                    string extension = Path.GetExtension(Request.Files[1].FileName).ToLower();
+
+                    HttpPostedFileBase archivo1 = Request.Files["filepdf"];
+
+                    if (archivo1 != null && archivo1.ContentLength > 0)
+                    {
+                        if (extension == ".pdf")
+                        {
+                            var nombreArchivo = Path.GetFileName(archivo1.FileName);
+                            var path = Path.Combine(Server.MapPath("~/PDFProveedor"), nombreArchivo);
+                            archivo1.SaveAs(path);
+
+                            string nameArchivo = archivo1.FileName;
+
+                            db.Database.ExecuteSqlCommand("update [dbo].[EncFacturaProv] set [RutaPDF]='" + nameArchivo + "' where [UUID]='" + elemento.UUID + "'");
+                        }
+                        else
+                        {
+                            ViewBag.Mensajeerror1 = "No se pudo subir el archivo";
+                        }
+
+                    }
+
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ERR)
+                {
+                    ViewBag.Mensajeerror = ERR.InnerException.Message;
+                    return View();
+                }
+
+
+            }
+            catch (Exception ERR2)
+            {
+                ViewBag.Mensajeerror = "Este archivo Xml no contiene una factura valida";
+                return View();
+            }
+        }
+
+
+        [HttpPost]
+        public JsonResult cancelarFactura(int id)
+        {
+            try
+                {
+
+                   
+                    string cadenasql = "update [EncFacturaProv] set Estado='C' where ID=" + id;
+                    db.Database.ExecuteSqlCommand(cadenasql);
+                    return Json(new HttpStatusCodeResult(200));
+                }
+               
+
+
+     
+            catch (Exception err)
+            {
+                return Json(500, err.Message);
+            }
+
+        }
+
+        public FileResult Descargarxml(int id)
+        {
+            // Obtener contenido del archivo
+
+            EncfacturaProvContext pf = new EncfacturaProvContext();
+            var elemento = pf.EncfacturaProveedores.Single(m => m.ID == id);
+            var stream = new MemoryStream(Encoding.ASCII.GetBytes(elemento.RutaXML));
+
+            return File(stream, "text/plain", "fact prov "+ elemento.Nombre_Proveedor + elemento.Serie + elemento.Numero + ".xml");
+        }
+
+
+        public ActionResult Borrafactura(int id)
+        {
+            // Obtener contenido del archivo
+
+            EncfacturaProvContext pf = new EncfacturaProvContext();
+            EncfacturaProv factura = pf.EncfacturaProveedores.Find(id);
+            pf.EncfacturaProveedores.Remove(factura);
+            pf.SaveChanges();
+
+
+           return  RedirectToAction   ("index", new { searchString=factura.Nombre_Proveedor });
+        }
+
+        /////////////////////// Ver Pagos y sus relaciones ///////////////////////
+        //////////////////////////////////////////////////////////////////////////////
+        public ActionResult VPagosProv(int id, List<VEncPagos> enc)
+        {
+            try
+            {
+
+                VEncPagosProv encFac = db.Database.SqlQuery<VEncPagosProv>("select ID, Nombre_Proveedor, UUID, Numero as NoFactura, Total from dbo.EncFacturaProv where ID =  " + id + "").ToList()[0];
+
+                ViewBag.Nombre = encFac.Nombre_Proveedor;
+                ViewBag.UUID = encFac.UUID;
+                ViewBag.NoFactura = encFac.NoFactura;
+                ViewBag.Total = encFac.Total;
+
+            }
+            catch (Exception err)
+            {
+                ViewBag.Nombre = "";
+                ViewBag.NoFactura = "";
+                ViewBag.Total = "";
+            }
+
+
+            List<VPagosProv> elemento = db.Database.SqlQuery<VPagosProv>("select P.[FechaPago],  D.ImporteSaldoInsoluto, D.importepagado, D.NoParcialidad, D.Estado from dbo.PagoFacturaProv as P left join ([dbo].[DocumentoRelacionadoProv]as D left join [dbo].[PagoFacturaSPEIProv] as S on D.IDPagoFacturaProv = S.IDPagoFacturaProv) on P.IDPagoFacturaProv = D.IDPagoFacturaProv where  D.IDFacturaProv =  " + id + "  order by NoParcialidad").ToList();
+            if (elemento == null)
+            {
+                return HttpNotFound();
+            }
+            return View(elemento);
+
+        }
+
+        public ActionResult ValidarProv()
+        {
+
+            //Valida proveedor en Pago Factura  
+            PagoFacturaProvContext pprov = new PagoFacturaProvContext();
+            string querySQL1 = "update dbo.EncFacturaProv  set IDProveedor = t2.IDProveedor from dbo.EncFacturaProv t1, dbo.Proveedores as t2  where t1.Nombre_Proveedor = t2.Empresa";
+            pprov.Database.ExecuteSqlCommand(querySQL1);
+
+           
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult SubirArchivo(int? id)
+        {
+            ViewBag.id = id;
+            return View();
+        }
+
+        /////////////////////// Boton Subir PDF ///////////////////////
+        /////////////////////////////////////////////////////////////////
+
+        [HttpPost]
+        public ActionResult SubirArchivo(HttpPostedFileBase file, int? id)
+        {
+            string extension = Path.GetExtension(Request.Files[0].FileName).ToLower();
+
+            HttpPostedFileBase archivo = Request.Files["file"];
+
+            if (file != null && file.ContentLength > 0)
+            {
+                if (extension == ".pdf")
+                {
+                    var nombreArchivo = Path.GetFileName(file.FileName);
+                    var path = Path.Combine(Server.MapPath("~/PDFProveedor"), nombreArchivo);
+                    file.SaveAs(path);
+
+                    string nameArchivo = file.FileName;
+
+                    db.Database.ExecuteSqlCommand("update [dbo].[EncFacturaProv] set [RutaPDF]='" + nameArchivo + "' where [ID]='" + id + "'");
+                }
+                else
+                {
+                    ViewBag.Mensajeerror = "No se pudo subir el archivo";
+                }
+                
+            }
+           
+
+            return RedirectToAction("Index");
+
+
+        }
+
+        public FileResult DescargarPdf(int id)
+        {
+            EncfacturaProvContext pf = new EncfacturaProvContext();
+            var elemento = pf.EncfacturaProveedores.Single(m => m.ID == id);
+
+            //var ms = new MemoryStream(Encoding.ASCII.GetBytes("~/PDFProveedor/"+elemento.RutaPDF));
+            //string ruta= HttpContext.Current.Server.MapPath("~/Documentostemporales/Factura" + _templatePDF.serie + _templatePDF.folio + ".pdf");
+            try
+            {
+                string path = Server.MapPath("~/PDFProveedor/" + elemento.RutaPDF);
+                byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+                MemoryStream ms = new MemoryStream(fileBytes, 0, 0, true, true);
+                Response.AddHeader("content-disposition", "attachment;filename=" + elemento.RutaPDF + "");
+                Response.Buffer = true;
+                Response.Clear();
+                Response.OutputStream.Write(ms.GetBuffer(), 0, ms.GetBuffer().Length);
+                Response.OutputStream.Flush();
+                Response.End();
+                return new FileStreamResult(Response.OutputStream, "application/pdf");
+            }
+            catch (Exception err)
+            {
+                string mensaje = err.Message;
+                string text = "No se encontro la factura del proveedor del ticket " + id + " en los archivos del servidor ";
+
+                return File(Encoding.ASCII.GetBytes(text), "text/plain", "Error de descarga.txt");
+              
+
+            }
+           
+        }
+
+        public ActionResult descargarTicket (int id)
+        {
+
+
+
+            EmpresaContext dbe = new EmpresaContext();
+
+            Empresa empresa = dbe.empresas.Single(m => m.IDEmpresa == 2);
+            System.Drawing.Image logoempresa = byteArrayToImage(empresa.Logo);
+            EncfacturaProv facturaprov = new EncfacturaProvContext().EncfacturaProveedores.Find(id);
+
+            GeneradorTicket documentop = new GeneradorTicket(logoempresa, facturaprov);
+            return RedirectToAction("Index");
+
+        }
+
+        ////
+        /// //////////Factura por Proveedor//////////
+        /// 
+
+
+        public ActionResult IndexP(string Numero, string sortOrder, string currentFilter, int? page, int? PageSize, string searchString, string FacPag, string Fechainicio, string Fechafinal)
+        {
+            int p = -1;
+            try
+            {
+                SIAAPI.Models.Comercial.ClsDatoEntero c = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select  [IDProveedor] as Dato from [dbo].[ContactosProv] where [Email] ='" + User.Identity.Name + "'").ToList().FirstOrDefault();
+                p = c.Dato;
+            }
+            catch (Exception err)
+            {
+
+            }
+            Session["Proveedor"] = p;
+
+            List<Proveedor> proveedor = db.Database.SqlQuery<Proveedor>("select * from [dbo].[Proveedores] where [IDProveedor]=" + p + "").ToList();
+            ViewBag.Proveedor = proveedor;
+            decimal total = 0;
+            decimal totalMNX = 0;
+            decimal iva = 0;
+            decimal subtotal = 0;
+
+
+            //Buscar Facturas: Pagadas o no pagadas
+            var FacPagLst = new List<SelectListItem>();
+            //Facturas Pagadas
+            FacPagLst.Add(new SelectListItem { Text = "Pagada", Value = "SI" });
+            FacPagLst.Add(new SelectListItem { Text = "NoPagada", Value = "NO" });
+
+            ViewData["FacPag"] = FacPagLst;
+            ViewBag.FacPag = new SelectList(FacPagLst, "Value", "Text");
+            ViewBag.FacPagseleccionado = FacPag;
+
+
+            ViewBag.sumatoria = "";
+
+
+            string ConsultaSql = "select * from VEncFacturaProvSaldo ";
+            string ConsultaSqlResumen = "select Moneda as MonedaOrigen, (SUM(Subtotal)) as Subtotal, (SUM(IVA)) as IVA, (SUM(Total)) as Total, (SUM(Total * TC)) as TotalenPesos from EncfacturaProv ";
+            string ConsultaAgrupado = "group by Moneda order by Moneda ";
+            string Filtro = string.Empty;
+            string Orden = " order by fecha desc , Nombre_Proveedor  ";
+
+            ///tabla filtro: serie
+
+            //Buscar por numero
+            if (!String.IsNullOrEmpty(Numero))
+            {
+                if (Filtro == string.Empty)
+                {
+                    Filtro = "where Numero ='" + Numero + "'";
+                }
+                else
+                {
+                    Filtro += " and  Numero ='" + Numero + "'";
+                }
+
+            }
+
+
+            ///tabla filtro: Factura pagada/no pagada && Serie, Nombre Cliente
+            if (FacPag != "Todas")
+            {
+                if (FacPag == "SI")
+                {
+                    if (Filtro == string.Empty)
+                    {
+                        Filtro = "where pagada='1'";
+                    }
+                    else
+                    {
+                        Filtro += " and  pagada='1'";
+                    }
+                }
+                if (FacPag == "NO")
+                {
+                    if (Filtro == string.Empty)
+                    {
+                        Filtro = "where pagada='0'";
+                    }
+                    else
+                    {
+                        Filtro += " and  pagada='0'";
+                    }
+                }
+            }
+
+
+
+            ViewBag.CurrentSort = sortOrder;
+
+            ViewBag.NumeroSortParm = String.IsNullOrEmpty(sortOrder) ? "Numero" : "";
+            ViewBag.FechaSortParm = sortOrder == "Fecha" ? "Fecha" : "";
+            ViewBag.Fechainicio = Fechainicio;
+            ViewBag.Fechafinal = Fechafinal;
+
+            // Not sure here
+            if (searchString == null)
+            {
+                searchString = currentFilter;
+            }
+
+            // Pass filtering string to view in order to maintain filtering when paging
+            ViewBag.SearchString = searchString;
+
+            //Paginación
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+            ///Busqueda:Periodo de fechas
+
+            if (Fechainicio == "")
+            {
+                Fechainicio = string.Empty;
+            }
+            if (Fechafinal == "")
+            {
+                Fechafinal = string.Empty;
+            }
+
+            if (!String.IsNullOrEmpty(Fechainicio))  //pusieron una fecha
+            {
+                if (Fechafinal == string.Empty)
+                {
+                    Fechafinal = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString();
+                }
+                if (Filtro == string.Empty)
+                {
+                    Filtro = " where  Fecha BETWEEN  '" + Fechainicio + "'   and '" + Fechafinal + "'";
+                }
+                else
+                {
+                    Filtro += " and  Fecha BETWEEN  '" + Fechainicio + "'   and '" + Fechafinal + "'";
+                }
+            }
+
+            //Ordenacion
+
+            switch (sortOrder)
+            {
+
+                case "Numero":
+                    Orden = " order by numero asc ";
+                    break;
+                case "UUID":
+                    Orden = " order by UUID asc ";
+                    break;
+                case "Fecha":
+                    Orden = " order by fecha ";
+                    break;
+
+                default:
+                    Orden = " order by fecha desc ,  Nombre_Proveedor  ";
+                    break;
+            }
+
+            //var elementos = from s in db.encfacturas
+            //select s;
+            if (Filtro == string.Empty)
+            {
+                Filtro = "where estado = 'A' and IDProveedor = " + p + "";
+            }
+            else
+            {
+                Filtro += " and estado = 'A' and IDProveedor = " + p + " ";
+            }
+
+            string cadenaSQl = ConsultaSql + " " + Filtro + " " + Orden;
+
+            var elementos = dbv.Database.SqlQuery<VEncFacturaProvSaldo>(cadenaSQl).ToList();
+
+
+
+            ViewBag.sumatoria = "";
+            try
+            {
+
+                var SumaLst = new List<string>();
+                var SumaQry = ConsultaSqlResumen + " " + Filtro + " " + ConsultaAgrupado;
+                List<ResumenFac> data = db.Database.SqlQuery<ResumenFac>(SumaQry).ToList();
+                ViewBag.sumatoria = data;
+
+            }
+            catch (Exception err)
+            {
+                total = 0;
+                subtotal = 0;
+                iva = 0;
+                totalMNX = 0;
+            }
+
+            var cadenaSaldoI = "select  e.Moneda as MonedaOrigen, (SUM(s.ImporteSaldoInsoluto)) as SaldoActual,  (SUM(s.ImporteSaldoInsoluto)* e.TC) as TotalenPesos from dbo.EncFacturaProv as e inner join SaldoFacturaprov as s on s.IDFacturaProv=e.id  where s.ImporteSaldoInsoluto>0 and e.idproveedor= " + p + " and  e.Estado='A' group by e.Moneda, e.tc order by e.Moneda ";
+
+            List<ResumenSaldoInsoluto> dataSI = db.Database.SqlQuery<ResumenSaldoInsoluto>(cadenaSaldoI).ToList();
+            ViewBag.sumSaldoI = dataSI;
+
+            //Paginación
+
+            int count = elementos.Count();
+
+            // Populate DropDownList
+            ViewBag.PageSize = new List<SelectListItem>()
+            {
+                new SelectListItem { Text = "10", Value = "10", Selected = true },
+                new SelectListItem { Text = "25", Value = "25" },
+                new SelectListItem { Text = "50", Value = "50" },
+                new SelectListItem { Text = "100", Value = "100" },
+                new SelectListItem { Text = "Todos", Value = count.ToString() }
+             };
+
+            int pageNumber = (page ?? 1);
+            int pageSize = (PageSize ?? 10);
+            ViewBag.psize = pageSize;
+
+            return View(elementos.ToPagedList(pageNumber, pageSize));
+            //Paginación
+        }
+
+        //public ActionResult CreatedesdeArchivo(string returnUrl)
+        //{
+
+        //    return View();
+
+        //}
+
+
+        /////
+        ///  Cargar Factura por proveedor ////
+        ///  
+
+        public ActionResult CreatedesdeArchivoP(string returnUrl)
+        {
+             try
+            {
+                SIAAPI.Models.Comercial.ClsDatoEntero c = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select  [IDProveedor] as Dato from [dbo].[ContactosProv] where [Email] ='" + User.Identity.Name + "'").ToList()[0];
+                int p = c.Dato;
+                List<Proveedor> proveedor = db.Database.SqlQuery<Proveedor>("select * from [dbo].[Proveedores] where [IDProveedor]=" + p + "").ToList();
+                ViewBag.Proveedor = proveedor;
+            }
+            catch (Exception err)
+            {
+               
+            }
+            return View();
+
+        }
+
+        [HttpPost]
+
+        public ActionResult CreatedesdeArchivoP(FormCollection collection, string returnUrl)
+        {
+            EncfacturaProv elemento = new EncfacturaProv();
+
+            try
+            {
+                /*Aqui voy intentar guardar la imagen que me pase la vista*/
+                try
+                {
+                    HttpPostedFileBase archivo = Request.Files["Imag1"];
+                    //archivo.SaveAs(Path.Combine(directory, Path.GetFileName(archivo.FileName)));
+                    // Generador.CreaPDF(Path.Combine(@".\facturas", Path.GetFileName(archivo.FileName)));
+                    StreamReader reader = new StreamReader(archivo.InputStream);
+                    String contenidoxml = reader.ReadToEnd();
+
+
+                    Generador.CreaPDF temp = new Generador.CreaPDF(contenidoxml);
+
+                    elemento.Fecha = System.DateTime.Parse(temp._templatePDF.fechaEmisionCFDI);
+
+
+                    elemento.Serie = temp._templatePDF.serie;
+
+                    try
+                    {
+                        elemento.Numero = temp._templatePDF.folio;
+                    }
+                    catch (Exception err)
+                    {
+                        string mensaje = err.Message;
+                        elemento.Numero = "0";
+                    }
+                    elemento.Nombre_Proveedor = temp._templatePDF.emisor.Nombre;
+
+                    // verifica si el proveedor existe
+
+
+                    try
+                    {
+                        ProveedorContext dbp = new ProveedorContext();
+                        Proveedor proveedorenlabase = dbp.Database.SqlQuery<Proveedor>("select * from proveedores where Empresa='" + temp._templatePDF.emisor.Nombre + "'").ToList()[0];
+                        int IDpbase = proveedorenlabase.IDProveedor; /// si la consulta no devolvio fila lanazara una excepcion 
+                        elemento.IDProveedor = IDpbase;
+                    }
+                    catch (Exception err)
+                    {
+                        //string error = err.Message;
+                        //string mensajealusuario = "EL PROVEEDOR NO SE ENCUENTRA REGISTRADO O SU NOMBRE NO CONSIDE CON EXACTITUD A TU REGISTRO VERIFICA PUNTOS, COMAS Y ESPACIOS ";
+                        //ViewBag.Mensajeerror = mensajealusuario;
+                        //return View();
+                        elemento.IDProveedor = 0;
+                    }
+
+                    try
+                    {
+                        EncfacturaProvContext dbp = new EncfacturaProvContext();
+                        EncfacturaProv proveedorenlabase = dbp.Database.SqlQuery<EncfacturaProv>("select * from EncfacturaProv where UUID='" + temp._templatePDF.folioFiscalUUID + "'").ToList()[0];
+                        int IDpbase = proveedorenlabase.ID; /// si la consulta no devolvio fila lanazara una excepcion 
+                        string mensajealusuario = "LA FACTURA YA SE ENCUENTRA EN EL SISTEMA ";
+                        ViewBag.Mensajeerror = mensajealusuario;
+                        return View();
+                    }
+                    catch (Exception err)
+                    {
+                        //string error = err.Message;
+
+
+                    }
+
+
+                    elemento.Subtotal = decimal.Parse(temp._templatePDF.subtotal.ToString());
+                    elemento.Total = decimal.Parse(temp._templatePDF.total.ToString());
+                    elemento.IVA = elemento.Total - elemento.Subtotal;
+
+
+
+                    List<c_Moneda> clavemoneda;
+                    clavemoneda = db.Database.SqlQuery<c_Moneda>("select * from c_Moneda WHERE claveMoneda='" + temp._templatePDF.claveMoneda + "'").ToList();
+                    int clave = clavemoneda.Select(s => s.IDMoneda).FirstOrDefault();
+                    elemento.IDMoneda = clave;
+                    elemento.Moneda = temp._templatePDF.claveMoneda;
+                    elemento.Estado = "A";
+                    if (temp._templatePDF.tipo_cambio != "")
+                    {
+                        elemento.TC = decimal.Parse(temp._templatePDF.tipo_cambio);
+                    }
+                    else
+                    {
+                        elemento.TC = 1;
+                    }
+
+                    elemento.FechaVencimiento = elemento.Fecha;
+                    elemento.FechaRevision = elemento.Fecha;
+
+                    elemento.RutaXML = contenidoxml;
+
+                    elemento.UUID = temp._templatePDF.folioFiscalUUID;
+
+                    elemento.Metododepago = temp._templatePDF.metodoPago;
+                    elemento.Formadepago = temp._templatePDF.formaPago;
+                    elemento.ConPagos = false;
+                    db.EncfacturaProveedores.Add(elemento);
+                    db.SaveChanges();
+
+                    ///////////////////////
+                    /// SUBIR PDF
+                    /////////////////
+
+                    string extension = Path.GetExtension(Request.Files[1].FileName).ToLower();
+
+                    HttpPostedFileBase archivo1 = Request.Files["file"];
+
+                    if (archivo1 != null && archivo1.ContentLength > 0)
+                    {
+                        if (extension == ".pdf")
+                        {
+                            var nombreArchivo = Path.GetFileName(archivo1.FileName);
+                            var path = Path.Combine(Server.MapPath("~/PDFProveedor"), nombreArchivo);
+                            archivo1.SaveAs(path);
+
+                            string nameArchivo = archivo1.FileName;
+
+                            db.Database.ExecuteSqlCommand("update [dbo].[EncFacturaProv] set [RutaPDF]='" + nameArchivo + "' where [UUID]='" + elemento.UUID + "'");
+                        }
+                        else
+                        {
+                            ViewBag.Mensajeerror1 = "No se pudo subir el archivo";
+                        }
+
+                    }
+
+
+
+                    //return RedirectToAction("Index");
+                    if (!String.IsNullOrEmpty(returnUrl))
+                        return Redirect(returnUrl);
+                    else
+                        return RedirectToAction("IndexP");
+
+                }
+                catch (Exception ERR)
+                {
+                    ViewBag.Mensajeerror = ERR.InnerException.Message;
+                    return View();
+                }
+
+
+            }
+            catch (Exception ERR2)
+            {
+                ViewBag.Mensajeerror = "Este archivo Xml no contiene una factura valida";
+                return View();
+            }
+        }
+
+        ////////////////
+
+        /////////////////////// Ver Pagos Por Proveedores y sus relaciones ///////////////////////
+        //////////////////////////////////////////////////////////////////////////////
+
+        public ActionResult VPagosProvP(int id, List<VEncPagos> enc)
+        {
+            //int idFact = int.Parse(id.ToString());
+            try
+            {
+                string cadena = "select ID, Nombre_Proveedor, UUID, Numero as NoFactura, Total from dbo.EncFacturaProv where ID =  " + id + "";
+
+                VEncPagosProv encFac = db.Database.SqlQuery<VEncPagosProv>(cadena).ToList().FirstOrDefault();
+                ViewBag.Nombre = encFac.Nombre_Proveedor;
+                ViewBag.UUID = encFac.UUID;
+                ViewBag.NoFactura = encFac.NoFactura;
+                ViewBag.Total = encFac.Total;
+
+
+            }
+            catch (Exception err)
+            {
+                ViewBag.Nombre = "";
+                ViewBag.NoFactura = "";
+                ViewBag.Total = "";
+            }
+            string cadena1 = "select P.[FechaPago], FolioP,   D.ImporteSaldoInsoluto, D.importepagado, D.NoParcialidad, D.Estado from dbo.PagoFacturaProv as P left join ([dbo].[DocumentoRelacionadoProv]as D left join [dbo].[PagoFacturaSPEIProv] as S on D.IDPagoFacturaProv = S.IDPagoFacturaProv) on P.IDPagoFacturaProv = D.IDPagoFacturaProv where  D.IDFacturaProv =  " + id + " order by NoParcialidad";
+            List<VPagosProv> elemento = db.Database.SqlQuery<VPagosProv>(cadena1).ToList();
+            if (elemento == null)
+            {
+                return HttpNotFound();
+            }
+            return View(elemento);
+        }
+
+      
+
+        ///
+
+        /////////////////////// Boton Subir PDF por proveedor///////////////////////
+        /////////////////////////////////////////////////////////////////
+        public ActionResult SubirArchivoP(int? id)
+        {
+            try
+            {
+
+                VEncPagosProv encFac = db.Database.SqlQuery<VEncPagosProv>("select ID, Nombre_Proveedor, UUID, Numero as NoFactura, Total from dbo.EncFacturaProv where ID =  " + id + "").ToList()[0];
+
+                ViewBag.Nombre = encFac.Nombre_Proveedor;
+                ViewBag.UUID = encFac.UUID;
+                ViewBag.NoFactura = encFac.NoFactura;
+                ViewBag.Total = encFac.Total;
+
+            }
+            catch (Exception err)
+            {
+                ViewBag.Nombre = "";
+                ViewBag.NoFactura = "";
+                ViewBag.Total = "";
+            }
+            ViewBag.id = id;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SubirArchivoP(HttpPostedFileBase file, int? id)
+        {
+            string extension = Path.GetExtension(Request.Files[0].FileName).ToLower();
+
+            HttpPostedFileBase archivo = Request.Files["file"];
+
+            if (file != null && file.ContentLength > 0)
+            {
+                if (extension == ".pdf")
+                {
+                    var nombreArchivo = Path.GetFileName(file.FileName);
+                    var path = Path.Combine(Server.MapPath("~/PDFProveedor"), nombreArchivo);
+                    file.SaveAs(path);
+
+                    string nameArchivo = file.FileName;
+
+                    db.Database.ExecuteSqlCommand("update [dbo].[EncFacturaProv] set [RutaPDF]='" + nameArchivo + "' where [ID]='" + id + "'");
+                }
+                else
+                {
+                    ViewBag.Mensajeerror = "No se pudo subir el archivo";
+                }
+
+            }
+
+
+            return RedirectToAction("IndexP");
+
+
+        }
+
+
+        public System.Drawing.Image byteArrayToImage(byte[] byteArrayIn)
+        {
+            System.Drawing.Image returnImage = null;
+            try
+            {
+                MemoryStream ms = new MemoryStream(byteArrayIn, 0, byteArrayIn.Length);
+                ms.Write(byteArrayIn, 0, byteArrayIn.Length);
+                returnImage = System.Drawing.Image.FromStream(ms, true);//Exception occurs here
+            }
+            catch { }
+            return returnImage;
+
+        }
+
+        //fecha revi
+
+        public ActionResult FechaRevision(int id, string Mensaje="")
+        {
+            var elemento = db.EncfacturaProveedores.Single(m => m.ID == id);
+            ViewBag.Mensaje = Mensaje;
+            return View(elemento);
+        }
+
+
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult FechaRevision(EncfacturaProv encF, FormCollection collection, int id)
+        {
+           // encF.FechaRevision = DateTime.Parse(collection.Get("FechaRevision"));
+            DateTime FechaRe = encF.FechaRevision;
+            EncfacturaProv elemento = new EncfacturaProvContext().EncfacturaProveedores.Find(id);
+
+            try
+            {
+
+            //    elemento = encF;
+
+
+
+                ClsDatoEntero contarfac = db.Database.SqlQuery<ClsDatoEntero>("select Proveedores.idCondicionesPago as Dato from EncFacturaProv inner join Proveedores on EncFacturaProv.idproveedor=Proveedores.idproveedor  where EncFacturaProv.id=" + elemento.ID).ToList().FirstOrDefault();
+                int conPago = contarfac.Dato;
+                string d = "select DiasCredito as Dato from [CondicionesPago]  where idCondicionesPago=" + conPago;
+                ClsDatoDecimal DIASCRE = db.Database.SqlQuery<ClsDatoDecimal>(d).ToList().FirstOrDefault();
+                decimal? diasCredito = DIASCRE.Dato;
+                if (diasCredito==null)
+                {
+                    diasCredito = 1;
+                }
+
+                DateTime FechaVen = FechaRe.AddDays(Convert.ToInt32(diasCredito.ToString()));
+
+                string cadena = "update EncFacturaProv set FechaRevision=convert(datetime,'" + FechaRe.Day + "/" + FechaRe.Month + "/" + FechaRe.Year + "',103)  ,FechaVencimiento=convert(datetime,'" + FechaVen.Day + "/" + FechaVen.Month + "/" + FechaVen.Year + "',103) where ID=" + id;
+                db.Database.ExecuteSqlCommand(cadena);
+
+                VEncFacturaProvSaldo saldo = db.Database.SqlQuery<VEncFacturaProvSaldo>("select * from VEncFacturaProvSaldo where ID=" + id).ToList().FirstOrDefault();
+
+                if (saldo.ImportePagado==-1)
+                {
+                    SaldoFacturaProvContext sfp = new SaldoFacturaProvContext();
+                    string comandoSql = "insert into [dbo].[SaldoFacturaProv](IDFacturaProv, IDProveedor, Serie, Numero, Total, ImporteSaldoAnterior, importepagado,  ImporteSaldoInsoluto, empresa)";
+                    comandoSql += " values(" + id + ", " + elemento.IDProveedor + ",  '" + elemento.Serie + "', '" + elemento.Numero + "',  " + elemento.Total + ", " + elemento.Total + ",  0,  " + elemento.Total + ", '" + elemento.Nombre_Proveedor + "')";
+                    sfp.Database.ExecuteSqlCommand(comandoSql);
+
+                }
+
+
+
+            }
+            catch (Exception err)
+            {
+               // elemento = encF;
+
+
+
+                //ClsDatoEntero contarfac = db.Database.SqlQuery<ClsDatoEntero>("select Proveedores.idCondicionesPago as dato from EncFacturaProv inner join Proveedores on EncFacturaProv.idproveedor=Proveedores.idproveedor and Proveedores.IDCondicionesPago <> 10 and Proveedores.IDCondicionesPago <>1 and Proveedores.IDCondicionesPago <>2  where EncFacturaProv.id=" + elemento.ID).ToList().FirstOrDefault();
+                //int conPago = contarfac.Dato;
+                //string d = "select DiasCredito as Dato from [CondicionesPago]  where idCondicionesPago=" + conPago;
+                //ClsDatoDecimal DIASCRE = db.Database.SqlQuery<ClsDatoDecimal>(d).ToList().FirstOrDefault();
+                //decimal diasCredito = DIASCRE.Dato;
+
+
+                //DateTime FechaVen = FechaRe.AddDays(Convert.ToInt32(diasCredito));
+                //string cadena = "update EncFacturaProv set FechaRevision=convert(datetime,'" + FechaRe.Day + "/" + FechaRe.Month + "/" + FechaRe.Year + "',103) where ID=" + id;
+
+                //return RedirectToAction("FechaRevision",new { id = elemento.ID, Mensaje = err.Message + " "+ cadena  });
+         
+            }
+
+
+
+           return RedirectToAction("FechaRevision", new { id = elemento.ID, Mensaje = "" });
+
+        }
+
+
+        public ActionResult AntiguedadSaldos()
+        {
+            List<Proveedor> proveedores = new List<Proveedor>();
+            string cadena = "select* from dbo.Proveedores where Empresa in (select distinct Nombre_Proveedor from[dbo].[VEncFacturaSaldoProv] where ImporteSaldoInsoluto> 0) order by Empresa";
+            proveedores = db.Database.SqlQuery<Proveedor>(cadena).ToList();
+            List<SelectListItem> listaproveedor = new List<SelectListItem>();
+            listaproveedor.Add(new SelectListItem { Text = "--Selecciona Proveedor--", Value = "0" });
+
+            foreach (var m in proveedores)
+            {
+                listaproveedor.Add(new SelectListItem { Text = m.Empresa, Value = m.IDProveedor.ToString() });
+            }
+            ViewBag.proveedor = listaproveedor;
+
+
+
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AntiguedadSaldos(AntiguedadSaldosProveedores r, ProveedoresFacturasA C)
+        {
+            int IDProveedor = C.IDProveedor;
+            try
+            {
+
+                ProveedorContext dbc = new ProveedorContext();
+                Proveedor cls = dbc.Proveedores.Find(C.IDProveedor);
+            }
+            catch (Exception ERR)
+            {
+
+            }
+
+
+
+
+            AntiguedadSaldosProveedores report = new AntiguedadSaldosProveedores();
+            byte[] abytes = report.PrepareReport(IDProveedor);
+            return File(abytes, "application/pdf");
+        }
+
+
+    }
+}
+
+
+
+class datosproveedor
+{
+    public int IDMoneda { get; set; }
+    public int IDMetodoPago { get; set; }
+    public int IDFormaPago { get; set; }
+}
+
+

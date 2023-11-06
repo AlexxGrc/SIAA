@@ -1,0 +1,90 @@
+﻿@model SIAAPI.Models.Soporte.RespuestaSoporte
+
+@{
+    ViewBag.Title = "Respuesta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Respuesta del ticket # @ViewBag.Id_Ticket</h2>
+<h3> @ViewBag.Mensaje </h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <h4>Seguimiento para la solución del problema</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(model => model.Id_Ticket)
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Id_Ticket, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Id_Ticket, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Id_Ticket, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Respuesta, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Respuesta, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Respuesta, "", new { @class = "text-danger" })
+            </div>
+
+            <br>
+
+            @if (@Roles.IsUserInRole("Administrador"))
+            {
+                <div class="form-group">
+
+                    <br>
+                    @Html.LabelFor(model => model.Prioridad, "Prioridad", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("Prioridad", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Prioridad, "", new { @class = "text-danger" })
+                    </div>
+
+                </div>
+                <div class="form-group">
+
+                    <br>
+                    @Html.Label("Soporte Cerrar Ticket", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                      @Html.EditorFor(model => model.EstadoTicket)
+                      @Html.ValidationMessageFor(model => model.EstadoTicket, "", new { @class = "text-danger" })
+
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+        @Html.Label("Cliente Cerrar Ticket", htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.EditorFor(model => model.CerradoPorCliente)
+        <div class="checkbox, control-label" col-md-2>
+            @Html.ValidationMessageFor(model => model.CerradoPorCliente, "", new { @class = "text-danger" })
+
+            <h4 align="left" class="alert-warning">
+                Una vez que el ticket sea cerrado por el cliente, se entenderá que el problema ha sido resuelto.
+            </h4>>
+
+        </div>
+
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Generar" class="btn btn-warning btn-xs" />
+            </div>
+        </div>
+    </div>
+}

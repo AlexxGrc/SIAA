@@ -1,0 +1,268 @@
+﻿@model SIAAPI.Models.Comercial.EmpaqueCartaP
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Crear empaque</h2>
+
+<div class="form-horizontal">
+    <h4>Empacar Pedido @ViewBag.Pedido.IDPedido a empacar</h4>
+    <h5 class="text-info">@ViewBag.Cliente.Nombre </h5>
+    <h5 class="text-info">No.Orden @ViewBag.IDOrden </h5>
+
+    <br />
+    @if (ViewBag.Cliente.FacturacionExacta)
+    {
+        <h5 class="text-info">El cliente solicita facturación exacta a su pedido </h5>
+    }
+    else
+    {
+        <h5 class="text-info">El cliente acepta margen adicional de fabricacion a su pedido </h5>
+    }
+</div>
+<table class="table" align="center">
+    <tr style="background-color:lightblue">
+        <th>
+            <h3> @Html.Label("Clave Artículo: ") @ViewBag.Clave </h3>
+        </th>
+</table>
+
+<table>
+    @{
+        string[] atributos = ViewBag.Presentacion.ToString().Split(',');
+        <tr>
+            @foreach (var atri in atributos)
+            {
+                string[] valor = atri.Split((char)58);
+                try
+                {
+                    string Atri = valor[0];
+                    string Val = valor[1];
+                    <td style="background-color:darkblue; font-size:xx-small" class="col-md-1">
+                        <label style="color:white;">@Atri</label>
+                    </td>
+                }
+                catch (Exception err)
+                {
+                    <td class="col-md-1">
+                        <label> </label>
+                    </td>
+                }
+
+            }
+        </tr>
+        <tr>
+            @foreach (var atri in atributos)
+            {
+                string[] valor = atri.Split((char)58);
+                try
+                {
+                    string Val = valor[1];
+                    <td class="col-md-1" style=" font-size:xx-small">
+                        <label>@Val</label>
+                    </td>
+                }
+                catch (Exception err)
+                {
+                    <td class="col-md-1">
+                        <label> </label>
+                    </td>
+                }
+
+
+            }
+        </tr>
+    }
+</table>
+
+<h5 class="text-info">Cantidad: </h5>
+@ViewBag.Cantidad
+
+@using (Html.BeginForm("Create", "EmpaqueCartaPorte", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    <div class="form-horizontal">
+        <h4>Datos de empaque</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <input type="hidden" value="@ViewBag.IDLiberacion " id="IDLiberacion" name="IDLiberacion" />
+        <input type="hidden" value="@ViewBag.Pedido.IDDetPedido " id="IDDetPedido" name="IDDetPedido" />
+        <input type="hidden" value="@ViewBag.IDOrden " id="IDOrden" name="IDOrden" />
+        <input type="hidden" value="@ViewBag.IDEmpaque" id="IDEmpaque" name="IDEmpaque" />
+        @{ if (ViewBag.IDEmpaque == 0)
+            {
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Cantidad empacada</span>
+
+                            <input class="form-control" value="@ViewBag.Cantidad" type="number" step="any" id="Cantidad" name="Cantidad" />
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-xs-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Lote</span>
+                            <input value="@ViewBag.Lote" id="Lote" name="Lote" class="form-control" />
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Peso Total</span>
+
+                            <input class="form-control" required type="number" step="any" id="PesoTotal" name="PesoTotal" />
+
+
+                        </div>
+                    </div>
+
+                    <div class="col-xs-8">
+                        <div class="input-group">
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Lote Materia P</span>
+                            <input class="form-control" id="LoteMP" name="LoteMP" />
+
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Serie</span>
+
+                            <input class="form-control" id="Serie" name="Serie" />
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Pedimento</span>
+
+                            <input class="form-control" id="Pedimento" name="Pedimento" />
+
+
+                        </div>
+                    </div>
+                    <div class="col-xs-8">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Observacion</span>
+
+                            <input class="form-control" id="Observacion" name="Observacion" />
+
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+            }
+
+            else
+            {
+                if (ViewBag.CantidadEmpacada == ViewBag.Cantidad)
+                {
+                    if (!Model.Impreso)
+                    {
+                        @Html.ActionLink("Imprimir Etiquetas", "ImprimirEtiquetas", new { IDEmpaque = Model.IDEmpaque, viene = "PRODUCCIÓN" }, new { @class = "btn btn-info", target = "_blank" })
+
+                    }
+
+                }
+
+            }
+
+
+
+
+
+        }
+
+        @{ try
+            {
+                if (ViewBag.CantidadEmpacada == ViewBag.Cantidad)
+                { }
+                else
+                {
+                    <div class="form-group">
+
+                        <span class="input-group-addon" id="basic-addon1"></span>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">No. Cajas</span>
+
+                                <input class="form-control" step="any" id="NoCaja" name="NoCaja" />
+
+
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">Cantidad Contenido</span>
+                                <input class="form-control" step="any" id="CantContenido" name="CantContenido" />
+
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input class="btn btn-info btn-xs" type="submit" value="Empacar" />
+                        </div>
+                    </div>
+                }
+
+
+            }
+            catch (Exception err)
+            {
+
+            }
+
+        }
+
+    </div>
+
+
+}
+
+@{
+    try
+
+    {
+        string consulta = "select * from detempaquecartaP where idempaque=" + ViewBag.IDEmpaque;
+        var elementos = new SIAAPI.Models.Comercial.EmpaqueCartaPContext().Database.SqlQuery<SIAAPI.Models.Comercial.DetEmpaqueCartaP>(consulta).ToList();
+        Html.RenderPartial("DetalleContenido", elementos);
+    }
+    catch (Exception err)
+    {
+
+    }
+
+}

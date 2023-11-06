@@ -1,0 +1,189 @@
+﻿@model SIAAPI.Models.Cfdi.EncfacturaProv
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Alta de Factura de Proveedores Extranjeros</h2>
+<hr/>
+@using (Html.BeginForm("Create", "FacturaProv", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Proveedor</span>
+                @Html.DropDownListFor(model => model.IDProveedor, ViewBag.idproveedor as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control",  id= "IDProveedor", name = "IDProveedor", @onchange = "cargaprov()" })
+                @Html.ValidationMessageFor(model => model.IDProveedor, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+
+        <div class="col-xs-4">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Fecha</span>
+                @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { type = "date", @class = "form-control", id = "Fecha", name = "Fecha", @onchange = "cargaTC()" } })
+                @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+
+        <div class="col-xs-4">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Serie</span>
+                <input name="Serie" id="Serie" type="text" class="form-control" placeholder="Serie de la factura" aria-describedby="basic-addon1" required="required">
+                @Html.ValidationMessageFor(model => model.Serie, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Número</span>
+                <input name="Numero" id="Numero" type="text" class="form-control" placeholder="0" aria-describedby="basic-addon1" required="required">
+                @Html.ValidationMessageFor(model => model.Numero, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="col-xs-3">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">TC</span>
+                <input name="TC" id="TC" type="text" class="form-control" placeholder="0" aria-describedby="basic-addon1" required="required" }>
+                @Html.ValidationMessageFor(model => model.TC, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+                <br />
+                <div class="row">
+
+                    <div class="col-xs-3">
+                        <div class="input-group">
+
+                            <span class="input-group-addon" id="basic-addon1">Subtotal</span>
+                            <input name="Subtotal" id="Subtotal" type="text" class="form-control" placeholder="0" aria-describedby="basic-addon1" required="required">
+                            @Html.ValidationMessageFor(model => model.Subtotal, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="col-xs-3">
+
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">IVA</span>
+                            <input name="IVA" id="IVA" type="text" class="form-control" placeholder="0" value="0" aria-describedby="basic-addon1" required="required">
+
+                            @Html.ValidationMessageFor(model => model.IVA, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="basic-addon1">Total</span>
+                            <input name="Total" id="Total" type="text" class="form-control" placeholder="0" aria-describedby="basic-addon1" required="required">
+                            @*@Html.EditorFor(model => model.Total, new { htmlAttributes = new { @class = "form-control", @Type = "Number" } })*@
+                            @Html.ValidationMessageFor(model => model.Total, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                        <br />
+                        <div class="row">
+
+
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">Moneda Proveedor</span>
+                                    @Html.DropDownListFor(model => model.IDMoneda, ViewBag.idmoneda as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control", id= "IDMoneda", name = "IDMoneda" })
+                                    @Html.ValidationMessageFor(model => model.IDMoneda, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">Método de pago</span>
+                                    @Html.DropDownListFor(model => model.Metododepago, ViewBag.metododepago as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control", id = "Metododepago", name = "Metododepago" })
+                                    @Html.ValidationMessageFor(model => model.Metododepago, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="basic-addon1">Forma de pago</span>
+                                    @Html.DropDownListFor(model => model.Formadepago, ViewBag.formadepago as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control", id = "Formadepago", name = "Formadepago" })
+                                    @Html.ValidationMessageFor(model => model.Formadepago, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <input type="file" name="fileIMG" class="btn btn-primary" id="fileIMG" />
+
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="modal-footer">
+
+                            <div class="row center-block">
+                                @*<button type="button" name="button" class="btn btn-primary btn-xs" onclick="Guardar()">Guardar</button>*@
+                                <input type="submit" value="Grabar" class="btn btn-success btn-xs" />
+                                @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+                                <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cerrar</button>
+                            </div>
+
+                     </div>
+
+
+}
+
+
+<script>
+    function cargaprov() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("DatoProveedor")',
+            dataType: 'json',
+            data: { idproveedor: $("#IDProveedor").val() },
+            success: function (Proveedor) {
+                $("#IDMoneda").val(Proveedor.IDMoneda);
+                $("#Metododepago").val(Proveedor.IDMetodoPago);
+                $("#Formadepago").val(Proveedor.IDFormaPago);
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+    function cargaTC() {
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("DatoTC")',
+            dataType: 'json',
+            data: { fecha: $("#Fecha").val(), idproveedor: $("#IDProveedor").val() },
+            success: function (TipoCambio) {
+                $("#TC").val(TipoCambio.Dato);
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+   
+    </script>

@@ -1,0 +1,69 @@
+﻿@model SIAAPI.Models.Cfdi.Encfacturas
+
+@{
+    ViewBag.Title = "Registrar factura desde archivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Carga una factura</h3>
+
+
+@using (Html.BeginForm("CreatedesdeArchivo", "FacturaProv", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-md-offset-2 col-md-10">
+        <h4>Registrar factura desde archivo</h4>
+           </div>
+
+    <div class="col-md-offset-2 col-md-10">
+
+        <div class="form-inline">
+            <div class="form-group">
+                <label for="">Indica el archivo .xml</label>
+                <input type="file" id="Imag1" name="filexml" class="form-control" />
+            </div>
+        
+        </div>
+    </div>
+
+
+    <br />
+    <div>
+        <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+    </div>
+
+    <input type="hidden" name="id" id="id" value="@ViewBag.id">
+
+
+   
+
+<div class="col-md-offset-2 col-md-10">
+
+    <div class="form-inline">
+        <div class="form-group">
+            <label for="">Indica el archivo .pdf</label>
+            <input type="file" name="filepdf" class="form-control" />
+        </div>
+        @*<input name="remitonumero" id="remitonumero" type="text" required class="form-control">*@
+    </div>
+    <br />
+    <div>
+        <h2 class="text-danger">@ViewBag.Mensajeerror1</h2>
+    </div>
+
+    <br />
+    <br />
+    <div class="col-md-offset-2 col-md-15">
+        <button type="submit" value="Grabar" class="btn btn-success btn-xs">Cargar Archivos</button> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+    </div>
+
+
+</div>
+
+    <br />
+
+
+
+}
+

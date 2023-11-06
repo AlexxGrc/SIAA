@@ -1,0 +1,395 @@
+﻿@model SIAAPI.Models.Comercial.Proveedor
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="form-group">
+            @{
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>  <h3>Detalle de Proveedor: @Model.Empresa</h3> </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SIAAPI_Proveedores.pdf" })' target="_blank">
+                                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</nav>
+<br>
+<div>
+
+
+    @*menu Tab Content*@
+    <div class="tabs-container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <!--Tabulador detalles-->
+            <li role="tab">
+                <a class="nav-linkactive" id="Detalle-tab" href="#Detalle" data-toggle="tab" role="tab" aria-controls="Detalle" aria-selected="true" aria-expanded="true">Detalles</a>
+            </li>
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Facturacion"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="Bancos-tab" data-toggle="tab" href="#Bancos" role="tab" aria-controls="Bancos" aria-selected="false">Bancos</a>
+                </li>
+            }
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Facturacion"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="contactos-tab" data-toggle="tab" href="#contactos" role="tab" aria-controls="contactos" aria-selected="false">Contactos</a>
+                </li>
+            }
+
+
+        </ul>
+    </div>
+
+</div>
+
+
+
+<div class="tab-content" id="tabs">
+
+    <div class="tab-pane active" id="Detalle" role="tabpanel" aria-labelledby="Detalle-tab" aria-expanded="true">
+
+        <hr />
+        <dl class="dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Calle)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Calle)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NoExt)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NoExt)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NoInt)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NoInt)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Colonia)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Colonia)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Municipio)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Municipio)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CP)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CP)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Estados.Estado)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Estados.Estado)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.paises.Pais)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.paises.Pais)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Telefonouno)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Telefonouno)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Telefonodos)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Telefonodos)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Producto)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Producto)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.RFC)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RFC)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IDRegimenFiscal)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RegimenFiscal.ClaveRegimenFiscal)|@Html.DisplayFor(model => model.RegimenFiscal.Descripcion)
+            </dd>
+            <dt>
+
+                IVA
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.c_TiposIVA.Tasa)|@Html.DisplayFor(model => model.c_TiposIVA.Descripcion)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IDFormaPago)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FormaPago.ClaveFormaPago)|@Html.DisplayFor(model => model.FormaPago.Descripcion)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.IDMetodoPago)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MetodoPago.ClaveMetodoPago)|@Html.DisplayFor(model => model.MetodoPago.Descripcion)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IDCondicionesPago)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CondicionesPago.ClaveCondicionesPago)|@Html.DisplayFor(model => model.CondicionesPago.Descripcion)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.IDMoneda)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Moneda.ClaveMoneda)|@Html.DisplayFor(model => model.Moneda.Descripcion)
+            </dd>
+
+
+            @*<dt>
+                    @Html.DisplayNameFor(model => model.Empresa)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Empresa)
+                </dd>*@
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Confianza)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Confianza)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Servicio)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Servicio)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Tentrego)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Tentrego)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Calidad)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Calidad)
+            </dd>
+
+
+
+        </dl>
+
+        @Html.ActionLink("Editar", "Edit", new { id = Model.IDProveedor, page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString }, new { @class = "btn btn-success btn-xs" }) |
+    </div>
+
+
+
+
+    <div class="tab-pane fade" id="Bancos" name="Bancos" role="tabpanel" aria-labelledby="Bancos-tab">
+        @{
+            SIAAPI.Models.Comercial.BancosProvContext dbbp = new SIAAPI.Models.Comercial.BancosProvContext();
+
+            var lista = from e in dbbp.BancosProvs
+                        where e.IDProveedor == Model.IDProveedor
+                        orderby e.IDBancosProv
+                        select e;
+
+
+        }
+        <h3>Lista de Bancos de Proveedor</h3>
+        <p>
+            @Html.ActionLink("Crear un nuevo registro", "CreateBanco", new { searchString = ViewBag.searchString }, new { @class = "btn btn-warning btn-xs" })
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    Banco
+                </th>
+                <th>
+                    Moneda
+                </th>
+                <th>
+                    Cuenta
+                </th>
+                <th>
+                    CuentaClabe
+
+                </th>
+            </tr>
+
+            @foreach (SIAAPI.Models.Comercial.BancosProv itemb in lista)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => itemb.Banco.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => itemb.Moneda.Descripcion)
+                    </td>
+                    <td></td>
+                    <td>
+                        @Html.DisplayFor(modelItem => itemb.Cuenta)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => itemb.CuentaClabe)
+
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "EditBanco", new { id = itemb.IDBancosProv, searchString = ViewBag.searchString }, new { @class = "btn btn-success btn-xs" })
+                        @Html.ActionLink("Detalles", "DetailsBanco", new { id = itemb.IDBancosProv, searchString = ViewBag.searchString }, new { @class = "btn btn-default btn-xs" })
+                        @Html.ActionLink("Eliminar", "DeleteBanco", new { id = itemb.IDBancosProv, searchString = ViewBag.searchString }, new { @class = "btn btn-danger btn-xs" })
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+
+
+
+    <div class="tab-pane fade" id="contactos" name="contactos" role="tabpanel" aria-labelledby="contactos-tab">
+        <h3>Lista de Contactos de Proveedor</h3>
+        <p>
+            @Html.ActionLink("Registrar un nuevo contacto", "CreateContacto", new { searchString = ViewBag.searchString }, new { @class = "btn btn-warning btn-xs" })
+        </p>
+        @{
+            SIAAPI.Models.Comercial.ContactosProvContext db = new SIAAPI.Models.Comercial.ContactosProvContext();
+            var listacontactos = from e in db.ContactosProvs
+                                 where e.IDProveedor == Model.IDProveedor
+                                 orderby e.IDContactoProv
+                                 select e;
+        }
+        <table class="table">
+            <tr>
+
+                <th>
+                    Contacto
+                </th>
+                <th>
+                    Mail
+                </th>
+                <th>
+                    Telefono
+                </th>
+
+                <th>
+                    Cargo
+                </th>
+            </tr>
+
+            @foreach (SIAAPI.Models.Comercial.ContactosProv itemc in listacontactos)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => itemc.Nombre)
+                    </td>
+                    <td>
+                        <a href="mailto:#">@Html.DisplayFor(modelItem => itemc.Email)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => itemc.Telefono)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Editar", "EditContacto", new { id = itemc.IDContactoProv, searchString = ViewBag.searchString }, new { @class = "btn btn-success btn-xs" })
+                        @Html.ActionLink("Detalles", "DetailsContacto", new { id = itemc.IDContactoProv, searchString = ViewBag.searchString }, new { @class = "btn btn-default btn-xs" })
+                        @Html.ActionLink("Eliminar", "DeleteContacto", new { id = itemc.IDContactoProv, searchString = ViewBag.searchString }, new { @class = "btn btn-danger btn-xs" })
+
+                    </td>
+
+                </tr>
+            }
+
+        </table>
+
+    </div>
+</div>
+<p>
+
+    @Html.ActionLink("Regresar a la lista", "Index", new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString }, new { @class = "btn btn-default btn-xs" })
+</p>

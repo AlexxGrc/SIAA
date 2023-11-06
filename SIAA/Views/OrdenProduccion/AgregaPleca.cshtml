@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewBag.Title = "AgregaPleca";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.Articulo>
+
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+<hr />
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+
+                  
+
+                        <h4>Proceso: Presa</h4>
+                        Tipo de Artículo: Familia de las Plecas
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:", @class = "form-control" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+
+<div class="table-responsive">
+    <div style="border:groove">
+        <div class="table-responsive">
+
+            @if (ViewBag.VerPag != null)
+            {
+                <div class="row">
+                    @foreach (var m in Model)
+                    {
+
+                        <div class="col-md-4">
+                            <div class="row">
+                                <h5><span id="mobilename" style="color:darkred;align-content:center">@m.Descripcion</span></h5>
+                                <p><span class="fa fa-bars" style="color:red;pointer-events:fill"></span>@m.Cref</p>
+
+                            </div>
+                            <a href="">
+                                <img class="a.photo" src="~/imagenes/Upload/@m.nameFoto" style="overflow: hidden; position: relative; width:200px; height:200px; cursor:pointer" />
+                            </a>
+                            <div>
+                                @Html.ActionLink("Agregar", "AgregaPlecaSql", "OrdenProduccion", new { IDArticulo = m.IDArticulo, IDOrden = ViewBag.Orden.IDOrden }, new { @class = "btn btn-success" })
+                            </div>
+
+                        </div>
+
+                    }
+                </div>
+            }
+
+            <div class="pager">
+                Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+                @Model.Count de @Model.TotalItemCount elementos
+                @Html.PagedListPager(Model, page => Url.Action("AgregaPleca",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+            </div>
+
+        </div>
+    </div>
+</div>
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+

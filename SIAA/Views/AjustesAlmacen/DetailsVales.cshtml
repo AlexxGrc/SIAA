@@ -1,0 +1,160 @@
+﻿@model SIAAPI.Models.Inventarios.ValeSalida
+
+@{
+    ViewBag.Title = "DetailsVales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h3>Detalles del vale de salida</h3>
+<hr />
+<div>
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+
+                </dt>
+                <dt>
+                    @Html.Label("Folio")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IDValeSalida)
+                </dd>
+
+                <dt>
+                    @Html.Label("Fecha")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Fecha)
+                </dd>
+
+
+                <dt>
+                    @Html.Label("Entrega a")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Entregar)
+                </dd>
+
+            </dl>
+        </div>
+
+
+
+
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+
+                <dt>
+                    @Html.Label("Concepto")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Concepto)
+                </dd>
+                <dt>
+                    @Html.Label("Solicito")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Solicito)
+                </dd>
+                <dt>
+                    @Html.Label("Observación")
+                </dt>
+                <dd>
+                    @*@{
+            SIAAPI.Models.Comercial.Almacen almacen = new SIAAPI.Models.Comercial.AlmacenContext().Database.SqlQuery<SIAAPI.Models.Comercial.Almacen>("select * from Almacen where IDAlmacen='" + Model.IDAlmacen + "'").ToList().FirstOrDefault();
+
+        }
+        @almacen.Descripcion*@
+                    @Html.DisplayFor(model => model.Observacion)
+                </dd>
+            </dl>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        @*<thead>*@
+        <tr>
+
+            <td>Referencia</td>
+            <td>Artículo</td>
+            <td>Almacén</td>
+
+            <td>Cantidad</td>
+            <td>Precio</td>
+            <td>Moneda</td>
+            <td>Importe</td>
+
+        </tr>
+        @* </thead>*@
+
+        @foreach (SIAAPI.Models.Inventarios.VDetValeSalida item in ViewBag.req)
+        {
+
+
+            SIAAPI.Models.Comercial.Caracteristica car = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where ID=" + item.IDCaracteristica).ToList().FirstOrDefault();
+            SIAAPI.Models.Comercial.ArticuloContext dbar = new SIAAPI.Models.Comercial.ArticuloContext();
+            SIAAPI.Models.Comercial.Articulo articulo = dbar.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>("select * from Articulo where IDArticulo='" + item.IDArticulo + "'").ToList().FirstOrDefault();
+
+        
+                SIAAPI.Models.Comercial.Almacen almacenPartida = new SIAAPI.Models.Comercial.AlmacenContext().Database.SqlQuery<SIAAPI.Models.Comercial.Almacen>("select * from Almacen where IDAlmacen='" + item.IDAlmacen + "'").ToList().FirstOrDefault();
+
+            <tr class="info">
+                <td>
+                    @articulo.Cref
+                </td>
+
+                <td>
+                    <div>@articulo.Descripcion</div>
+                    <div><h5>Número de Presentación @car.IDPresentacion</h5><h6> @item.Presentacion</h6></div>
+                    <br />
+
+                </td>
+                <td>
+                    @almacenPartida.CodAlm
+
+                </td>
+                <td>
+                    @item.Cantidad
+
+                </td>
+
+
+                @* <td>@item.Suministro</td>*@
+                <td>@string.Format("{0:C}", @item.Precio)</td>
+                <td>@item.Moneda</td>
+                <td>@string.Format("{0:C}", @item.Importe)</td>
+
+
+
+            </tr>
+
+        }
+
+    </table>
+</div>
+
+
+
+
+
+
+
+<h5 align="right">Elaboró: @Html.DisplayFor(model => model.User.Username)</h5>
+<p>
+    @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+    @Html.ActionLink("Regresar a la lista", "ValesDeSalida", null, new { @class = "btn btn-default btn-xs" })
+</p>
+

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.VInventarioAlmacen>
+
+@{
+    ViewBag.Title = "View";
+}
+
+
+<p>
+    <a class="btn btn-warning btn-xs" href="@Url.Action("Asignarotro", "OrdenProduccion", new { id = ViewBag.IDcaracteristica, IDOrden = ViewBag.orden })">Asignar material diferente... &raquo;</a>
+</p>
+<table class="table"  style="background-color:black;color:white" >
+    <tr>
+        <th style="font-size:smaller">
+           Clave
+        </th>
+        <th style="font-size:smaller">
+            @Html.DisplayNameFor(model => model.Almacen)
+        </th>
+        <th style="font-size:smaller">
+            Presentacion
+        </th>
+        <th style="font-size:smaller">
+            @Html.DisplayNameFor(model => model.Existencia)
+        </th>
+        
+      
+        <th></th>
+    </tr>
+    </table>
+<table class="table" style="background-color:blanchedalmond">
+@foreach (var item in Model)
+{
+    <tr>
+        <td class="col-md-1" style="font-size:smaller">
+            @Html.DisplayFor(modelItem => item.Cref)
+        </td>
+        <td class="col-md-3" style="font-size:smaller">
+            @Html.DisplayFor(modelItem => item.Almacen)
+        </td>
+        <td class="col-md-3" style="font-size:smaller">
+            @Html.DisplayFor(modelItem => item.Presentacion)
+        </td>
+        <td class="col-md-1"  style="font-size:smaller">
+            @Html.DisplayFor(modelItem => item.Existencia)
+        </td>
+      
+        <td>
+            <form method="post" action='@Url.Action("AddWip", "OrdenProduccion", new { searchString = ViewBag.searchString })'>
+                <div class="col-xs-6">        
+                    <input class="form-control smallTxt" type="number" value="@item.Existencia" min="0" step="any" data-number-to-fixed="3" data-number-stepfactor="100" name="Cantidad" id="Cantidad" required autofocus />
+                    <input type="hidden" class="form-control" name="IDCaracteristica" id="IDCaracteristica"   value="@item.IDCaracteristica ">
+                    <input type="hidden" class="form-control" name="IDAlmacen" id="IDAlmacen"  value="@item.IDAlmacen">
+
+                    <input type="hidden" class="form-control" name="IDOrden" id="IDOrden" value="@ViewBag.orden">
+                    <input type="hidden" class="form-control" name="IDProceso" id="IDProceso" value="@ViewBag.IDProceso">
+                </div>
+              
+                <button class="fa fa-cart-plus fa-2x" style="color:green" type="submit"></button>
+            </form>
+        </td>
+    </tr>
+}
+
+</table>

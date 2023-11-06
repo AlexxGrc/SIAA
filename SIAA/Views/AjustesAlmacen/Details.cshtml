@@ -1,0 +1,90 @@
+﻿@model SIAAPI.Models.Inventarios.AjustesAlmacen
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>AjustesAlmacen</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaAjuste)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaAjuste)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDAlmacenS)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDAlmacenS)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDArticulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDArticulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDCaracteristica)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDCaracteristica)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lote)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lote)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cantidad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoOperacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoOperacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDTrabajadorS)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDTrabajadorS)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDAjuste }) |
+    @Html.ActionLink("Volver a la lista", "Index")
+</p>

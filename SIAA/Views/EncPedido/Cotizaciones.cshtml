@@ -1,0 +1,492 @@
+﻿@model SIAAPI.Models.Comercial.EncPedido
+@{
+    ViewBag.Title = "Requisiciones";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#IDCliente").change(function () {
+            $("#IDMetodoPago").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getmetodo")',
+                dataType: 'json',
+                data: { id: $("#IDCliente").val() },
+                success: function (metodos) {
+                $.each(metodos, function (i, metodo) {
+                $("#IDMetodoPago").append('<option value="' + metodo.Value + '">' +
+                 metodo.Text + '</option>');
+                });
+                },
+                error: function (ex) {
+                alert('Failed to retrieve.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDCliente").change(function () {
+            $("#IDFormapago").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getforma")',
+                dataType: 'json',
+                data: { id: $("#IDCliente").val() },
+                success: function (metodos) {
+                $.each(metodos, function (i, metodo) {
+                $("#IDFormapago").append('<option value="' + metodo.Value + '">' +
+                 metodo.Text + '</option>');
+                });
+                },
+                error: function (ex) {
+                alert('Failed to retrieve.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDCliente").change(function () {
+            $("#IDMoneda").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getmoneda")',
+                dataType: 'json',
+                data: { id: $("#IDCliente").val() },
+                success: function (metodos) {
+                $.each(metodos, function (i, metodo) {
+                $("#IDMoneda").append('<option value="' + metodo.Value + '">' +
+                 metodo.Text + '</option>');
+                });
+                },
+                error: function (ex) {
+                alert('Failed to retrieve.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDCliente").change(function () {
+            $("#IDCondicionesPago").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getcondiciones")',
+                dataType: 'json',
+                data: { id: $("#IDCliente").val() },
+                success: function (metodos) {
+                $.each(metodos, function (i, metodo) {
+                $("#IDCondicionesPago").append('<option value="' + metodo.Value + '">' +
+                 metodo.Text + '</option>');
+                });
+                },
+                error: function (ex) {
+                alert('Failed to retrieve.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+@using (Html.BeginForm("Cotizaciones", "EncPedido", FormMethod.Post))
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Cotización</h3>
+        </div>
+        <div class="panel-body">
+
+            <input type="text" name="id" />
+
+            <button type="submit" class="btn btn-primary btn-xs">Buscar</button>
+
+
+
+
+        </div>
+    </div>
+}
+<h3 class="text-danger">@ViewBag.mensaje</h3>
+@if (ViewBag.otro != 0)
+{
+
+<h2>Detalles</h2>
+
+    foreach (var item in ViewBag.data)
+    {
+    <table>
+        <tr>
+            <B>Cliente: </B>@item.Cliente
+            <br />
+            <B>Fecha: </B>@item.Fecha
+            <B><br />Fecha Requerida: </B>@item.FechaRequiere
+        </tr>
+    </table>
+    }
+<div class="table-responsive">
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>No. Cotización</th>
+                <th>Artículo</th>
+                <th>Presentación</th>
+                <th>Nota</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Importe</th>
+                <th>IVA</th>
+                <th>Total</th>
+
+            </tr>
+        </thead>
+
+        @foreach (var item in ViewBag.datos)
+        {
+            <tr>
+                <td>@item.IDCotizacion</td>
+                <td>@item.Articulo</td>
+                <td>@item.Presentacion</td>
+                <td>@item.Nota</td>
+                <td>@item.Cantidad</td>
+                <td>@string.Format("{0:C}", @item.Costo)</td>
+                <td>@string.Format("{0:C}", @item.Importe)</td>
+                <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+            </tr>
+        }
+
+    </table>
+</div>
+}
+
+@if (ViewBag.dato != 0)
+{
+
+    @*using (Html.BeginForm())
+           {
+        @Html.AntiForgeryToken()*@
+using (Html.BeginForm("Cotizaciones", "EncPedido", FormMethod.Post))
+{
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Fecha, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FechaRequiere, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.FechaRequiere, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.FechaRequiere, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                </div>
+            <div class="row">
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDCliente, "Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @* @Html.DropDownListFor(model => model.Status, ViewBag.ComboStatus as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.DropDownList("IDCliente", ViewBag.cliente as List<SelectListItem>, new { @class = "form-control" })
+
+                            @Html.ValidationMessageFor(model => model.IDCliente, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDMetodoPago, "Método de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+
+                            @Html.DropDownList("IDMetodoPago", ViewBag.metodo as List<SelectListItem>, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IDMetodoPago, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDFormapago, "Forma de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @*@Html.DropDownList("IDFormapago", null, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.DropDownList("IDFormapago", ViewBag.forma as List<SelectListItem>, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IDFormapago, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDMoneda, "Divisa", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @* @Html.DropDownList("IDMoneda", null, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.DropDownList("IDMoneda", ViewBag.moneda as List<SelectListItem>, new { @class = "form-control", @onchange = "Fill()" })
+                            @Html.ValidationMessageFor(model => model.IDMoneda, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDCondicionesPago, "Condiciones de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @* @Html.DropDownList("IDCondicionesPago", null, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.DropDownList("IDCondicionesPago", ViewBag.condiciones as List<SelectListItem>, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IDCondicionesPago, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Vendedor", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDVendedor", ViewBag.vendedor as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col col-md-6 col-sm-1">
+                        <div class="form-group">
+                            @Html.Label("Domicilio de Entrega", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-8">
+                                @Html.DropDownList("Entrega", ViewBag.entrega as List<SelectListItem>, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Entrega, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                        <div class="col col-md-6 col-sm-1">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.IDAlmacen, "Almacen", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-8">
+                                    @Html.DropDownList("IDAlmacen", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.IDAlmacen, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            <div class="row">
+                <div class="col col-md-6 col-sm-1">
+                    @*<div class="form-group">
+                        @Html.LabelFor(model => model.IDUsoCFDI, "Uso CFDI", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDUsoCFDI", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IDUsoCFDI, "", new { @class = "text-danger" })
+                        </div>
+                    </div>*@
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDUsoCFDI, "Uso CFDI", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+
+                            @Html.DropDownList("IDUsoCFDI", ViewBag.usocfdi as List<SelectListItem>, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IDUsoCFDI, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OCompra, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.OCompra, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.OCompra, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Observacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.Observacion, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                       
+                    </div>
+                </div>
+            </div>
+
+
+
+                                        </div>
+
+
+
+
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+
+                            <th>Cotización</th>
+                            <th>Articulo</th>
+                            <th>Presentacion</th>
+                            <th>Compra Mínima</th>
+                            <th>Cantidad</th>
+                            <th>Costo</th>
+                            <th>Importe</th>
+                            <th>IVA</th>
+                            <th>Total</th>
+                            <th>Nota</th>
+                            <th></th>
+                        </tr>
+                        @{ 
+                            var contador = 0;
+                            foreach (var i in ViewBag.carritor)
+                            {
+                            <tr>
+
+                                <td>@i.IDCotizacion</td>
+                                <td>@i.Articulo</td>
+                                <td>@i.Presentacion </td>
+                                @if (i.Cantidad < i.MinimoCompra)
+                                {
+                                <td class="danger">@i.MinimoCompra</td>
+                                }
+                                else
+                                {
+                                <td>@i.MinimoCompra</td>
+                                }
+                                <td>@*@i.Cantidad*@
+                                    @{string cadena = "Cantidad" + contador;
+                                    }
+                                    <input type="number"  class="form-control" id="@cadena" name="Cantidad" value="@i.Cantidad"></td>
+                                <td>@i.Costo</td>
+                                <td>@i.Importe</td>
+                                <td>@i.ImporteIva</td>
+                                <td>@i.ImporteTotal</td>
+                                <td>@i.Nota</td>
+                                <td>
+                                    <a class="edit" onclick="Actualizar(@i.IDCarritoCotizacion,@contador )">
+                                        <i class="tbl_del_btn fa fa-refresh"></i>
+                                        @Html.ActionLink(" ", "deletecarrito", new { id = i.IDCarritoCotizacion }, new { @class = "tbl_del_btn fa fa-trash" })
+
+</td>
+                            </tr>
+
+                                }
+                            }
+                    </table>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped" width="50">
+                        <tr>
+                            <th class="col-lg-1">
+                                Moneda Origen
+                            </th>
+                            <th class="col-lg-1">
+                                Subtotal
+                            </th>
+                            <th class="col-lg-1">
+                                IVA
+                            </th>
+                            <th class="col-lg-1">
+                                Total
+                            </th>
+                            <th class="col-lg-1">
+                                Total en Pesos Mexicanos
+                            </th>
+                        </tr>
+                        @foreach (var itemresumen in ViewBag.sumatoria)
+                        {
+
+                            <tr>
+                                <td class="col-lg-1">
+                                    @itemresumen.MonedaOrigen
+                                </td>
+                                <td class="col-lg-1">
+                                    @String.Format("{0:C}", itemresumen.Subtotal)
+                                </td>
+                                <td class="col-lg-1">
+                                    @String.Format("{0:C}", itemresumen.IVA)
+                                </td>
+                                <td class="col-lg-1">
+                                    @String.Format("{0:C}", itemresumen.Total)
+                                </td>
+                                <td class="col-lg-1">
+                                    @String.Format("{0:C}", itemresumen.TotalenPesos)
+                                </td>
+
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Grabar" class="btn btn-success" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default" })
+                    </div>
+
+
+                </div>
+
+
+                }
+                }
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+
+<script>
+
+        var urledit = '@Url.Action("Edititem", "EncPedido")';
+
+        function Actualizar(id, numero) {
+            var cantidad = document.getElementById("Cantidad" + numero).value
+            $.post(urledit, { id: id, cantidad: cantidad }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+</script>

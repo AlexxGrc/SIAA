@@ -1,0 +1,86 @@
+﻿
+@model PagedList.IPagedList<SIAAPI.Models.Inventarios.Almacenista>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Almacenistas</h3>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+                        @Html.ActionLink("Registrar un nuevo almacenista", "Create", null, new { @class = "btn btn-warning btn-xs" }) |
+                        Elementos por página: @Html.DropDownList("pageSize")  |
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+
+@*Tabla de datos*@
+<div class="table-responsive">
+    <table class="table" style="width:75%" align="center">
+        @foreach (var item in Model)
+        {
+
+            <td></td>
+
+            <td class="bg-primary col-lg-4" style="border:1px; border-radius: 15px" align="center" width="50%">
+                <h3 class="card-title"> @Html.DisplayFor(modelItem => item.RFC)</h3>
+                @if (item.Activo.Equals(true))
+                {
+                    <h5 class="card-title alert-success">@Html.DisplayFor(modelItem => item.Nombre)</h5>
+                }
+                else
+                {
+                    <h5 class="card-title alert-danger">@Html.DisplayFor(modelItem => item.Nombre)</h5>
+                }
+
+                <img class="card-img-top " src="@Url.Action("RenderImage", new { id=item.IDA })" alt="Sin imagen" width="140" height="180">
+
+                <p class="card-text"><a href="mailto:#" class="bg-primary text-white">@Html.DisplayFor(modelItem => item.Mail)</a></p>
+
+
+                <small class="text-muted">
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IDA }, new { @class = "btn btn-success btn-xs" })
+
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IDA }, new { @class = "btn btn-default btn-xs" })
+
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.IDA }, new { @class = "btn btn-danger btn-xs" })
+                </small>
+
+            </td>
+
+
+
+        }
+    </table>
+</div>
+
+@*Paginación*@
+<div class="pager">
+    Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+    @Model.Count de @Model.TotalItemCount elementos
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+</div>
+

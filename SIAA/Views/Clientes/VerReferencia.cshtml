@@ -1,0 +1,181 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.ReferenciaPagoCliente>
+
+@{
+    ViewBag.Title = "VerReferencia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Referencia de Pago Cliente</h3>
+
+@{
+    if (ViewBag.dato == 0)
+    {
+        <p>
+            @Html.ActionLink("Crear Referencia de Pago", "CreateR", null, new { @class = "btn btn-warning btn-xs" }) | @Html.ActionLink("Crear un nuevo registro de Banco", "CreateB", null, new { @class = "btn btn-warning btn-xs" })
+        </p>
+    }
+    else
+    {
+        <p>
+       @Html.ActionLink("Crear un nuevo registro de Banco", "CreateB", null, new { @class = "btn btn-warning btn-xs" })
+        </p>
+    }
+}
+ 
+    <table class="table">
+        <tr>
+            <th colspan="3">
+                .                                                 .
+            </th>
+            <th colspan="5">
+                Días de Revisión
+            </th>
+            <th colspan="4">
+                |    Días de Pago
+            </th>
+            <th colspan="6">
+
+            </th>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.IDCliente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Moroso)
+            </th>
+
+            <th>
+
+                @Html.DisplayNameFor(model => model.Limitedecredito)
+            </th>
+            <th>
+
+                @Html.DisplayNameFor(model => model.RiesgoAlcanzado)
+            </th>
+            <th>
+                Lu
+            </th>
+            <th>
+                Ma
+            </th>
+            <th>
+                Mi
+            </th>
+            <th>
+                Ju
+            </th>
+            <th>
+                Vi
+            </th>
+
+            <th>
+                Lu
+            </th>
+            <th>
+                Ma
+            </th>
+            <th>
+                Mi
+            </th>
+            <th>
+                Ju
+            </th>
+            <th>
+                Vi
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clientes.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Moroso)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Limitedecredito)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RiesgoAlcanzado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaRevLu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaRevMa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaRevMi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaRevJu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaRevVi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaPagLu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaPagMa)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaPagMi)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaPagJu)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiaPagVi)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "EditR", new { id = item.IDReferenciaPagoCliente }, new { @class = "btn btn-success btn-xs" }) |
+                    @Html.ActionLink("Detalles", "DetailsR", new { id = item.IDReferenciaPagoCliente }, new { @class = "btn btn-default btn-xs" }) |
+                    @*@Html.ActionLink("Eliminar", "DeleteR", new { id = item.IDReferenciaPagoCliente }, new { @class = "btn btn-danger btn-xs" })*@
+                </td>
+            </tr>
+
+        }
+
+    </table>
+<br />
+<h3>Cuentas Bancarias de  Cliente</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Banco</th>
+                <th>No. Cuenta Bancaria</th>
+                <th>Divisa</th>
+            
+            </tr>
+        </thead>
+
+        @foreach (var item in ViewBag.data)
+        {
+            <tr>
+                <td>@item.Cliente</td>
+                <td>@item.Banco</td>
+                <td>@item.CuentaBanco</td>
+                <td>@item.Moneda</td>
+           
+                <td>
+                    @Html.ActionLink("Editar", "EditB", new { id = item.IDBancoCliente }, new { @class = "btn btn-default btn-xs" }) |
+                    @Html.ActionLink("Detalles", "DetailsB", new { id = item.IDBancoCliente }, new { @class = "btn btn-default btn-xs" }) |
+                    @Html.ActionLink("Eliminar", "DeleteB", new { id = item.IDBancoCliente }, new { @class = "btn btn-danger btn-xs" })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+
+
+    <p>
+     @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+    </p>

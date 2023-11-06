@@ -1,0 +1,114 @@
+﻿@*@model List<SIAAPI.ViewModels.Comercial.VDetOrdenCompra>*@
+@model IEnumerable<SIAAPI.ViewModels.Comercial.VDetOrdenCompra>
+@{
+    ViewBag.Title = "Recepcion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*@model IEnumerable<SIAAPI.ViewModels.Comercial.VDetOrdenCompra>
+    @{
+        ViewBag.Title = "Recepcion";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <h2>Recepcion</h2>
+
+    <p>
+        @Html.ActionLink("Crea un nuevo registro", "Create")
+    </p>*@
+
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDOrdenCompra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Articulo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Presentacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Costo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Importe)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.ImporteIva)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImporteTotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nota)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            @Html.HiddenFor(modelItem => item.IDDetOrdenCompra)
+            <td>
+
+                @Html.DisplayFor(modelItem => item.IDOrdenCompra)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Articulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Presentacion)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Costo)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Importe)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImporteIva)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImporteTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nota)
+            </td>
+
+
+            <td>
+
+                <a class="delete" data-id="@item.IDDetOrdenCompra">
+                    <i class="tbl_del_btn fa fa-trash"></i>
+
+                </a>
+            </td>
+        </tr>
+
+
+
+    }
+
+</table>
+
+
+
+

@@ -1,0 +1,168 @@
+﻿@*@model SIAAPI.Models.Produccion.Bitacora*@
+@model  SIAAPI.Models.Produccion.Bitacora
+
+
+<script defer src="~/Scripts/cascade.combo.js"></script>
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutBitacora.cshtml";
+    var idTra = ViewBag.ListTra as IEnumerable<SelectListItem>;
+    var IDProceso = ViewBag.ListProce as IEnumerable<SelectListItem>;
+    var IDMaquina = ViewBag.ListMaquina as IEnumerable<SelectListItem>;
+    var IDOrden = ViewBag.ListOrden as IEnumerable<SelectListItem>;
+}
+
+<h2>Registro de Lote de Trabajo</h2>
+@using (Html.BeginForm("Create", "Bitacora", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaInicio, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @Html.EditorFor(model => model.FechaInicio, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.horafecha } })
+                @Html.ValidationMessageFor(model => model.FechaInicio, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDTrabajador, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @*@Html.EditorFor(model => model.IDTrabajador, new
+                    {
+                        @class = "form-control",
+                        id= "IDTrabajador",
+
+                        @onkeyup = "traeNombre()"
+                    })*@
+                <input type="number" class="form-control" id="IDTrabajador" name="IDTrabajador" onkeyup="traeNombre()" placeholder="Ingrese número de trabajador" />
+
+                @*onchange="location.href='@Url.Action("getJsonMaquinaoPorProceso", "Bitacora")'"*@
+
+
+                @*@Html.DropDownListFor(model => model.IDTrabajador, idTra, new
+                    {
+                        @class = "form-control",
+                        //data_cascade_combo = "#IDProceso",
+                        //data_cascade_combo_source = Url.Action("getJsonProcesoPorTrabajador", "Bitacora"),
+                        //data_cascade_combo_param_name = "IDTrabajador",
+                        @onchange = "traeNombre(this.value)"
+                    })*@
+            </div>
+            <label id="nombre"></label>
+        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.IDProceso, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-6">
+
+                    @Html.DropDownListFor(model => model.IDProceso, IDProceso, new
+               {
+                   @class = "form-control",
+                   data_cascade_combo = "#IDMaquina",
+                   data_cascade_combo_source = Url.Action("getJsonMaquinaoPorProceso", "Bitacora"),
+                   data_cascade_combo_param_name = "IDProceso"
+               })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDMaquina, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @*@Html.DropDownListFor(model => model.IDMaquina, IDMaquina, new { @class = "form-control", id = "IDMaquina" })
+                    @Html.ValidationMessageFor(model => model.IDMaquina, "", new { @class = "text-danger" })*@
+
+                @Html.DropDownListFor(model => model.IDMaquina, IDMaquina, new
+           {
+               @class = "form-control",
+               data_cascade_combo = "#IDOrden",
+               data_cascade_combo_source = Url.Action("getJsonOrdenPorMaquina", "Bitacora"),
+               data_cascade_combo_param_name = "IDMaquina"
+           })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDOrden, "Orden de Producción", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-6">
+                @*@Html.DropDownList("IDOrden", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDOrden, "", new { @class = "text-danger" })*@
+                @Html.DropDownListFor(model => model.IDOrden, IDOrden, new { @class = "form-control", id = "IDOrden" })
+                @Html.ValidationMessageFor(model => model.IDOrden, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <h3 class="text-danger">@ViewBag.mensaje</h3>
+        <div class="form-group">
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" />
+            </div>
+
+
+        </div>
+
+
+
+
+        <div class="form-group">
+
+            <div class="col-md-offset-2 col-md-10">
+                @Html.ActionLink("Regresar a la lista", "Prioridad", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+
+
+        </div>
+    </div>
+
+}
+
+<script>
+    function traeNombre() {
+
+        var val = $("#IDTrabajador").val();
+        $.get('/Bitacora/GetNombreTrabajador', { 'id': val }, function (response) {
+            //you just need to get the response so $.get is enough to manipulate
+            //this will be called once you get the response from controller, typically a callback
+            //alert("entra"+ val)
+            if (response.result) //same result variable we are returning from controller.
+            {
+
+                document.getElementById('nombre').innerHTML = response.result;
+            } else {
+
+            }
+        })
+
+    }
+</script>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDTrabajador").change(function () {
+            $("#IDMaquina").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getJsonMaquinaoPorProceso")',
+                dataType: 'json',
+                data: { id: $("#IDTrabajador").val() },
+                success: function (metodos) {
+                $.each(metodos, function (i, metodo) {
+                    $("#IDMaquina").append('<option value="' + metodo.Value + '">' +
+                 metodo.Text + '</option>');
+                });
+                },
+                error: function (ex) {
+                alert('Failed to retrieve.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+</script>

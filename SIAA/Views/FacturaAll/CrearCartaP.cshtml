@@ -1,0 +1,839 @@
+﻿@model SIAAPI.clasescfdi.ClsCartaporte2
+@{
+    ViewBag.Title = "CrearCartaP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@{
+    var DomicilioEntrega = ViewBag.ListEntrega as List<SelectListItem>;
+    var IDDomicilioOrigen = ViewBag.ListOrigen as List<SelectListItem>;
+}
+
+<h2>Crear CartaPorte de  la factura @ViewBag.prefactura.SerieDigital  @ViewBag.prefactura.NumeroDigital  </h2>
+
+<table class="table">
+    <tr>
+        <th>
+            <div><h2>Emisor</h2></div>
+        </th>
+        <th>
+            <div><h2>Receptor</h2></div>
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <div><h5>@ViewBag.empresa.RazonSocial</h5></div>
+            <div><h5>@ViewBag.empresa.RFC</h5></div>
+        </td>
+
+        <td>
+
+
+            <div>
+
+                <div><h5>@ViewBag.cliente.Nombre</h5></div>
+                <div><h5>@ViewBag.cliente.RFC</h5></div>
+
+            </div>
+        </td>
+    </tr>
+
+
+
+</table>
+
+
+
+@using (Html.BeginForm())
+{
+              
+    <input value="@ViewBag.IDCliente" id="IDEmisor" name="IDEmisor" type="hidden" />
+    <input value="@ViewBag.IDFactura" id="IDFactura" name="IDFactura" type="hidden" />
+    <input value="@Model.SerieF" id="SerieF" name="SerieF" type="hidden" />
+    <input value="@Model.NoFactura" id="NoFactura" name="NoFactura" type="hidden" />
+    <table>
+        <tr>
+            <th>Distancia Recorrida</th>
+            <th>Fecha y Hora de Salida</th>
+            <th>Fecha y hora de Llegada</th>
+        </tr>
+        <tr>
+            <td><input type="Number" id="DistanciaRecorrida" name="DistanciaRecorrida" x-moz-errormessage="Por favor, especifique la distancia en numero."></td>
+            <td><input type="datetime-local" id="FechaSalida" name="FechaSalida" x-moz-errormessage="Por favor, especifique una fecha."></td>
+            <td><input type="datetime-local" id="FechaLlegada" name="FechaLlegada" x-moz-errormessage="Por favor, especifique una fecha."></td>
+
+        </tr>
+
+    </table>
+
+
+    @Html.AntiForgeryToken()
+    <h4>Datos</h4>
+
+    <div class="form-horizontal">
+        <div class="row">
+            @*RFC/ LICENCIA*@
+
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Domicilio Origen", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @{
+                            string cadenasql = "Select * from [dbo].[VOrigen]";
+                          
+
+
+                            List<SIAAPI.Models.CartaPorte.VOrigen> vDomicilio = new SIAAPI.Models.CartaPorte.OrigenContext().Database.SqlQuery<SIAAPI.Models.CartaPorte.VOrigen>(cadenasql).ToList();
+
+
+
+
+                                                <select class="form-control" name="IDDomicilioOrigen" id="IDDomicilioOrigen" onchange="DomicilioO(this.value)">
+                                                    <option selected value="0">Selecciona un Domicilio de Origen</option>
+
+                                                    @{ foreach (SIAAPI.Models.CartaPorte.VOrigen n in vDomicilio)
+                                                        {
+                                                           
+
+                                                                <option value="@n.IDDomicilioOrigen">@n.Estado @n.Municipio  @n.NumExt</option>
+
+
+
+
+                                                        }
+                                                    }
+                                                </select>
+                        }
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <h3><div>Ubicacion Origen</div></h3>
+    <table class="table">
+        <tr style="background-color:gray">
+            <th>
+                <div> Calle </div>
+            </th>
+            <th>
+                <div> Num Ext </div>
+            </th>
+            <th>
+                <div> Num int </div>
+            </th>
+            <th>
+                <div> Colonia </div>
+            </th>
+            <th>
+                <div> Localidad </div>
+            </th>
+
+
+            <th>
+                <div> Municipio </div>
+            </th>
+            <th>
+                <div> Estado </div>
+            </th>
+            <th>
+                <div> Pais </div>
+            </th>
+            <th>
+                <div> Codigo Postal </div>
+            </th>
+            <th>
+                <div> Referencia </div>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <label id="CalleO"></label>
+            </td>
+            <td>
+                <label id="NumEO"></label>
+            </td>
+            <td>
+                <label id="NumIO"></label>
+            </td>
+            <td>
+                <label id="ColoniaO"></label>
+            </td>
+            <td>
+                <label id="LocalidadO"></label>
+            </td>
+            <td>
+                <label id="MunicipioO"></label>
+            </td>
+            <td>
+                <label id="EstadoO"></label>
+            </td>
+            <td>
+                <label id="PaisO"></label>
+            </td>
+            <td>
+                <label id="CPO"></label>
+            </td>
+            <td>
+                <label id="ReferenciaO"></label>
+            </td>
+
+        </tr>
+
+
+
+    </table>
+
+    <br />
+    <div class="form-horizontal">
+        <div class="row">
+            @*RFC/ LICENCIA*@
+
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Domicilio Entrega", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @{
+
+                            string cadenasqlE = "Select * from [dbo].[VEntrega] where IDCliente=" + ViewBag.IDCliente;
+                            List<SIAAPI.Models.Comercial.VEntregaC> vEntrega = new SIAAPI.Models.CartaPorte.OrigenContext().Database.SqlQuery<SIAAPI.Models.Comercial.VEntregaC>(cadenasqlE).ToList();
+
+
+
+
+                            <select class="form-control" name="IDDomicilioEntrega" id="IDDomicilioEntrega" onchange="DomicilioE(this.value)">
+                                <option selected value="0">Selecciona un Domicilio de Entrega</option>
+
+                                @{ foreach (SIAAPI.Models.Comercial.VEntregaC n in vEntrega)
+                                    {
+                                        //if (almacen.IDAlmacen != item.IDAlmacen) // SI NO ES EL MODELO SOLO LO AÑADE AL COMBO
+                                        //{
+
+                                        <option value="@n.IDDomicilioEntrega">@n.Estado @n.Municipio  @n.NumExt</option>
+                                        //}
+
+                                    }
+                                }
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <h3><div>Ubicacion Destino</div></h3>
+    <table class="table">
+        <tr style="background-color:gray">
+            <th>
+                <div> Calle </div>
+            </th>
+            <th>
+                <div> Num Ext </div>
+            </th>
+            <th>
+                <div> Num int </div>
+            </th>
+            <th>
+                <div> Colonia </div>
+            </th>
+            <th>
+                <div> Localidad </div>
+            </th>
+
+
+            <th>
+                <div> Municipio </div>
+            </th>
+            <th>
+                <div> Estado </div>
+            </th>
+            <th>
+                <div> Pais </div>
+            </th>
+            <th>
+                <div> Codigo Postal </div>
+            </th>
+            <th>
+                <div> Referencia </div>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <label id="CalleE"></label>
+            </td>
+            <td>
+                <label id="NumEE"></label>
+            </td>
+            <td>
+                <label id="NumIE"></label>
+            </td>
+            <td>
+                <label id="ColoniaE"></label>
+            </td>
+            <td>
+                <label id="LocalidadE"></label>
+            </td>
+            <td>
+                <label id="MunicipioE"></label>
+            </td>
+            <td>
+                <label id="EstadoE"></label>
+            </td>
+            <td>
+                <label id="PaisE"></label>
+            </td>
+            <td>
+                <label id="CPE"></label>
+            </td>
+            <td>
+                <label id="ReferenciaE"></label>
+            </td>
+
+        </tr>
+
+
+
+    </table>
+
+
+
+    <div class="form-horizontal">
+        <div class="row">
+            @*RFC/ LICENCIA*@
+
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Autotransporte", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @{
+
+                            string cadenasqlA = "Select * from [dbo].[ParqueVehicular]";
+                            List<SIAAPI.Models.CartaPorte.ParqueVehicular> auto = new SIAAPI.Models.CartaPorte.c_ConfigAutotransporteDBContext().Database.SqlQuery<SIAAPI.Models.CartaPorte.ParqueVehicular>(cadenasqlA).ToList();
+
+
+
+
+                            <select class="form-control" name="IDTransporte" id="IDTransporte" onchange="DomicilioA(this.value)">
+                                <option selected value="0">Selecciona un Autotransporte</option>
+
+                                @{ foreach (SIAAPI.Models.CartaPorte.ParqueVehicular n in auto)
+                                    {
+                                        //if (almacen.IDAlmacen != item.IDAlmacen) // SI NO ES EL MODELO SOLO LO AÑADE AL COMBO
+                                        //{
+
+                                        <option value="@n.IDParqueV">@n.Modelo @n.AnnoVehiculo @n.Placa @n.Color  </option>
+                                        //}
+
+                                    }
+                                }
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <h3><div>Autotransporte Federal</div></h3>
+    <br />
+
+    <table class="table">
+        <tr style="background-color:dodgerblue">
+            <th>
+                <div>Permiso SCT</div>
+            </th>
+            <th>
+                <div>No Permiso SCT</div>
+            </th>
+            <th>
+                <div>Nombre Aseguradora</div>
+            </th>
+            <th>
+                <div>Poliza Seguro</div>
+            </th>
+            <th>
+                <div>Configuracion Vehicular</div>
+            </th>
+            <th>
+                <div>Placa Vehicular</div>
+            </th>
+            <th>
+                <div>Año Modelo</div>
+            </th>
+            <th>
+                <div>SubTipo Remolque </div>
+            </th>
+            <th>
+                <div>Placa</div>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <label id="ClavePermisoSCT"></label>
+            </td>
+            <td>
+                <label id="NoPermisoSCT"></label>
+            </td>
+            <td>
+                <label id="Aseguradora"></label>
+            </td>
+            <td>
+                <label id="PolizaSeguro"></label>
+            </td>
+            <td>
+                <label id="ClaveVehiculo"></label>
+            </td>
+            <td>
+                <label id="PlacaVehicular"></label>
+            </td>
+            <td>
+                <label id="AnnoVehiculo"></label>
+            </td>
+            <td>
+                <label id="ClaveRemolque"></label>
+            </td>
+            <td>
+                <label id="Placa"></label>
+            </td>
+        </tr>
+
+
+
+    </table>
+
+    <div class="form-horizontal">
+        <div class="row">
+            @*RFC/ LICENCIA*@
+
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Operador", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @{
+
+                            string cadenasqlC = "Select * from [dbo].[Chofer]";
+                            List<SIAAPI.Models.Administracion.Chofer> chofer = new SIAAPI.Models.Administracion.ChoferesContext().Database.SqlQuery<SIAAPI.Models.Administracion.Chofer>(cadenasqlC).ToList();
+
+
+
+
+                            <select class="form-control" name="IDOperador" id="IDOperador" onchange="Operador(this.value)">
+                                <option selected value="0">Selecciona un Autotransporte</option>
+
+                                @{ foreach (SIAAPI.Models.Administracion.Chofer n in chofer)
+                                    {
+                                        //if (almacen.IDAlmacen != item.IDAlmacen) // SI NO ES EL MODELO SOLO LO AÑADE AL COMBO
+                                        //{
+
+                                        <option value="@n.IDChofer">@n.Nombre </option>
+                                        //}
+
+                                    }
+                                }
+                            </select>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <h3><div>Operador</div></h3>
+    <table class="table">
+        <tr style="background-color:dodgerblue">
+            <th>
+                <div>RFC Operador</div>
+            </th>
+            <th>
+                <div>No de Licencia</div>
+            </th>
+            <th colspan="2">
+                <div>Nombre Operador</div>
+            </th>
+            <th colspan="8">
+                <div>.</div>
+            </th>
+
+        </tr>
+        <tr>
+            <td>
+                <label id="RFCOpe"></label>
+            </td>
+            <td>
+                <label id="LicenciaOpe"></label>
+               
+            </td>
+            <td>
+                <label id="NombreOpe"></label>
+            </td>
+            <td>
+            </td>
+
+        </tr>
+
+
+
+    </table>
+
+
+    <h3><div>Domicilio Operador</div></h3>
+    <table class="table">
+        <tr style="background-color:dodgerblue">
+            <th>
+                <div> Calle </div>
+            </th>
+            <th>
+                <div> Num Ext </div>
+            </th>
+            <th>
+                <div> Num int </div>
+            </th>
+            <th>
+                <div> Colonia </div>
+            </th>
+            <th>
+                <div> Localidad </div>
+            </th>
+            <th>
+                <div> Referencia </div>
+            </th>
+
+            <th>
+                <div> Municipio </div>
+            </th>
+            <th>
+                <div> Estado </div>
+            </th>
+            <th>
+                <div> Pais </div>
+            </th>
+            <th>
+                <div> Codigo Postal </div>
+            </th>
+        </tr>
+        <tr>
+            <td>
+                <label id="CalleOpe"></label>
+            </td>
+            <td>
+                <label id="NumExtOpe"></label>
+            </td>
+            <td>
+                <label id="NumIntOpe"></label>
+            </td>
+            <td>
+                <label id="ColoniaOpe"></label>
+            </td>
+            <td>
+                <label id="LocalidadOpe"></label>
+            </td>
+            <td>
+                <label id="ReferenciaOpe"></label>
+            </td>
+            <td>
+
+                <label id="MunicipioOpe"></label>
+            </td>
+            <td>
+                <label id="EstadoOpe"></label>
+            </td>
+            <td>
+                <label id="PaisOpe"></label>
+            </td>
+            <td>
+                <label id="CPOpe"></label>
+            </td>
+        </tr>
+
+
+
+    </table>
+    <br />
+
+    <h3><div>Mercancias</div></h3>
+    <table class="table">
+        <tr style="background-color:burlywood">
+            <th>
+                <div> Bienes Trasportados</div>
+            </th>
+            <th>
+                <div> Descripcion</div>
+            </th>
+            <th>
+                <div>Cantidad</div>
+            </th>
+            <th>
+                <div>Clave unidad</div>
+            </th>
+            <th>
+                <div>Material Peligroso</div>
+            </th>
+            <th>
+                <div>Peso en Kg</div>
+            </th>
+            <th>
+                <div>Valor en Mercancia</div>
+            </th>
+            <th>
+                <div>Moneda</div>
+            </th>
+
+        </tr>
+
+        @{
+            int ContadorMercancia = 0;
+        }
+        @foreach (SIAAPI.clasescfdi.ClsCartaporte2.MercanciaCP mercancia in ViewBag.Listamercancia)
+        {
+            //int contador = 1;
+            <tr>
+                <td>
+                    @mercancia.CodigoFamiliaPS
+                </td>
+                <td>
+                    @mercancia.Descripcion
+                </td>
+                <td>
+                    @mercancia.cantidad
+                </td>
+                <td>
+                    @mercancia.Claveunidad
+                </td>
+                <td>
+                    @mercancia.materialpeligroso
+                </td>
+                <td>
+                    @{
+                        string peso = "PesoMercancia" + ContadorMercancia;
+                    }
+                    <input id="@peso" name="@peso" value="@mercancia.PesoKg" step="any" type="number" />
+                    @* <input id="PesoMercancia" name="PesoMercancia" value="@mercancia.PesoKg" step="any" type="number" />*@
+                    @*@mercancia.PesoKg*@
+                </td>
+                <td>
+                    @mercancia.valor
+                </td>
+                <td>
+                    @mercancia.clavemoneda
+                </td>
+
+            </tr>
+            ContadorMercancia++;
+        }
+
+    </table>
+
+
+    <div class="col-md-offset-2 col-md-10">
+        <input onclick="GuardarPerfil()" id="Enviar" value="Guardar Perfil" class="btn btn-success btn-xs" /> |  <input type="submit" id="Enviar" value="Timbrar" class="btn btn-success btn-xs" />
+
+
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+    function DomicilioO() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetOrigenB")',
+            dataType: 'json',
+            data: { id: $("#IDDomicilioOrigen").val()},
+            success: function (obj) {
+                //alert(obj.calle);
+                $('#CalleO').text(obj.calle);
+                $('#NumEO').text(obj.numext);
+                $('#NumIO').text(obj.numint);
+                $('#ColoniaO').text(obj.colonia);
+                $('#LocalidadO').text(obj.localidad);
+                $('#MunicipioO').text(obj.municipio);
+                $('#EstadoO').text(obj.estado);
+                $('#PaisO').text(obj.pais);
+                $('#CPO').text(obj.cp);
+                $('#ReferenciaO').text(obj.referencia);
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+</script>
+<script>
+
+    function DomicilioE() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetEntregaB")',
+            dataType: 'json',
+            data: { id: $("#IDDomicilioEntrega").val()},
+            success: function (obj) {
+
+                $('#CalleE').text(obj.calle);
+                $('#NumEE').text(obj.numext);
+                $('#NumIE').text(obj.numint);
+                $('#ColoniaE').text(obj.colonia);
+                $('#LocalidadE').text(obj.localidad);
+                $('#MunicipioE').text(obj.municipio);
+                $('#EstadoE').text(obj.estado);
+                $('#PaisE').text(obj.pais);
+                $('#CPE').text(obj.cp);
+                $('#ReferenciaE').text(obj.referencia);
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+</script>
+<script>
+
+    function DomicilioA() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetAutotransporte")',
+            dataType: 'json',
+            data: { id: $("#IDTransporte").val()},
+            success: function (obj) {
+
+                $('#ClavePermisoSCT').text(obj.ClavePermisoSCT);
+                $('#NoPermisoSCT').text(obj.NoPermisoSCT);
+                $('#Aseguradora').text(obj.Aseguradora);
+                $('#PolizaSeguro').text(obj.PolizaSeguro);
+                $('#ClaveVehiculo').text(obj.ClaveVehiculo);
+                $('#PlacaVehicular').text(obj.PlacaVehiculo);
+                $('#AnnoVehiculo').text(obj.AnnoVehiculo);
+                $('#ClaveRemolque').text(obj.ClaveRemolque);
+                $('#Placa').text(obj.Placa);
+
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+</script>
+
+<script>
+
+    function Operador() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetOperador")',
+            dataType: 'json',
+            data: { id: $("#IDOperador").val()},
+            success: function (obj) {
+
+                $('#RFCOpe').text(obj.RFC);
+                $('#NombreOpe').text(obj.Nombre);
+                $('#LicenciaOpe').text(obj.NoLicencia);
+                $('#CalleOpe').text(obj.Calle);
+                $('#NumExtOpe').text(obj.NumExt);
+                $('#NumIntOpe').text(obj.NumInt);
+                $('#ColoniaOpe').text(obj.c_Colonia);
+                $('#LocalidadOpe').text(obj.c_Localidad);
+                $('#ReferenciaOpe').text(obj.Referencia);
+                $('#MunicipioOpe').text(obj.c_Municipio);
+                $('#EstadoOpe').text(obj.c_Estado);
+                $('#PaisOpe').text(obj.c_Pais);
+                $('#CPOpe').text(obj.CP);
+
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+</script>
+<script>
+
+    @*function GuardarPerfil() {
+        var IDOrigen = document.getElementById("IDDomicilioOrigen").value
+        var IDEntrega = document.getElementById("IDDomicilioEntrega").value
+        var Distancia = document.getElementById("DistanciaRecorrida").value
+        var IDTransporte = document.getElementById("IDParqueV").value
+        var IDOperador = document.getElementById("IDOperador").value
+        var IDEmisor = document.getElementById("IDEmisor").value
+        var IDFactura = document.getElementById("IDFactura").value
+         $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GuardarPer")',
+            dataType: 'json',
+             data: { IDOrigen: IDOrigen, IDEntrega: IDEntrega, Distancia: Distancia, IDTransporte: IDTransporte, IDOperador: IDOperador, IDEmisor: IDEmisor, IDFactura: IDFactura},
+            success: function (obj) {
+                location.reload();
+                row.change;
+                //$('#CalleE').text(obj.calle);
+                //$('#NumEE').text(obj.numext);
+                //$('#NumIE').text(obj.numint);
+                //$('#ColoniaE').text(obj.colonia);
+                //$('#LocalidadE').text(obj.localidad);
+                //$('#MunicipioE').text(obj.municipio);
+                //$('#EstadoE').text(obj.estado);
+                //$('#PaisE').text(obj.pais);
+                //$('#CPE').text(obj.cp);
+                //$('#ReferenciaE').text(obj.referencia);
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }*@
+
+                    function GuardarPerfil() {
+                        var urledit = '@Url.Action("GuardarPer", "FacturaAll")';
+
+                        var IDOrigen = document.getElementById("IDDomicilioOrigen" ).value
+                        var IDEntrega = document.getElementById("IDDomicilioEntrega").value
+                        var Distancia = document.getElementById("DistanciaRecorrida").value
+                        var IDTransporte = document.getElementById("IDTransporte").value
+                        var IDOperador = document.getElementById("IDOperador").value
+                        var IDEmisor = document.getElementById("IDEmisor").value
+                        var IDFactura = document.getElementById("IDFactura").value
+
+                        //alert(IDOrigen);
+                        //alert(IDEntrega);
+                        //alert(Distancia);
+                        //alert(IDTransporte);
+                        //alert(IDTransporte);
+                        //alert(IDEmisor);
+                        //alert(IDFactura);
+
+
+                        $.post(urledit, {IDOrigen: IDOrigen, IDEntrega: IDEntrega, Distancia: Distancia, IDTransporte: IDTransporte, IDOperador: IDOperador, IDEmisor: IDEmisor, IDFactura: IDFactura }, function (response) {
+                if (response) {
+                   /* location.reload();*/
+                   /* row.change;*/
+                    alert("Perfil guardado ¡ Exitosamente !");
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+</script>

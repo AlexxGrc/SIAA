@@ -1,0 +1,410 @@
+﻿@model SIAAPI.Models.Comercial.EncPedido
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles Pedido</h3>
+
+
+    <hr />
+    @*<dl class="dl-horizontal">*@
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDCliente)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Clientes.Nombre)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Fecha)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.FechaRequiere)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.FechaRequiere)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDVendedor)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Vendedor.Nombre)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.OCompra)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.OCompra)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Observacion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Observacion)
+                </dd>
+
+            </dl>
+        </div>
+
+
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDUsoCFDI)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_UsoCFDI.Descripcion)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDFormapago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_FormaPago.ClaveFormaPago)|@Html.DisplayFor(model => model.c_FormaPago.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDMetodoPago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_MetodoPago.ClaveMetodoPago)|@Html.DisplayFor(model => model.c_MetodoPago.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDMoneda)
+                </dt>
+                <dd>
+
+                    @Html.DisplayFor(model => model.c_Moneda.ClaveMoneda)|@Html.DisplayFor(model => model.c_Moneda.Descripcion)
+
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.TipoCambio)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TipoCambio)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDCondicionesPago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CondicionesPago.ClaveCondicionesPago)|@Html.DisplayFor(model => model.CondicionesPago.Descripcion)
+                </dd>
+            </dl>
+
+        </div>
+    </div>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <thead>
+            <tr>
+              
+               
+               <th>Cotización</th>
+                <th>Artículo</th>
+                <th>Presentación</th>
+                <th>Nota</th>
+                <th>Venta Mínima</th>
+                <th>Cantidad</th>
+                <th>Suministro</th>
+                <th>Precio</th>
+                <th>Importe</th>
+                <th>IVA</th>
+                <th>Total</th>
+                @*<th>Remisión</th>
+                <th>Prefactura</th>*@
+                <th>Orden de Producción</th>
+
+            </tr>
+        </thead>
+
+        @foreach (var item in ViewBag.req)
+        {
+            if (item.Status.Equals("Cancelado"))
+            {
+                <tr class="danger">
+
+                    @if (item.IDDetExterna != 0)
+                    {
+                        <td>
+                            @item.IDDetExterna
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            N/A
+                        </td>
+                    }
+                    <td>@item.Articulo</td>
+                    <td>@item.Presentacion</td>
+                    <td>@item.Nota</td>
+                    <td>@item.MinimoVenta</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Suministro</td>
+                    <td>@string.Format("{0:C}", @item.Costo)</td>
+                    <td>@string.Format("{0:C}", @item.Importe)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+                    @*@if (item.IDRemision != 0)
+                    {
+                        <td>
+                            @item.IDRemision
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            N/A
+                        </td>
+                    }
+                    @if (item.IDPrefactura != 0)
+                    {
+                        <td>
+                            @item.IDPrefactura
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            N/A
+                        </td>
+                    }*@
+                    @if (item.GeneraOrdenP != 0)
+                    {
+                        <td>
+                            @item.GeneraOrdenP
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            N/A
+                        </td>
+                    }
+                </tr>
+            }
+            else
+            {
+                <tr>
+
+                    @if (item.IDDetExterna != 0)
+                    {
+                        <td>
+                            @item.IDDetExterna
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            N/A
+                        </td>
+                    }
+
+                    @if (item.Status.Equals("Activo"))
+                    {
+                        <td class="success">
+                            @item.Articulo
+                        </td>
+                    }
+                    else if (item.Status.Equals("Inactivo"))
+                    {
+                        <td class="danger">
+                            @item.Articulo
+                        </td>
+                    }
+                    else if (item.Status.Equals("Finalizado"))
+                    {
+                        <td>
+                            @item.Articulo
+                        </td>
+                    }
+                    else if (item.Status.Equals("Recepcionado") || item.Status.Equals("PreFacturado"))
+                    {
+                        <td class="warning">
+                            @item.Articulo
+                        </td>
+                    }
+
+                    <td>@item.Presentacion</td>
+                    <td>@item.Nota</td>
+                    @if (item.Cantidad < item.MinimoVenta)
+                    {
+                        <td class="danger">@item.MinimoVenta</td>
+                    }
+                    else
+                    {
+                        <td>@item.MinimoVenta</td>
+                    }
+                    <td>@item.Cantidad</td>
+                    <td>@item.Suministro</td>
+                    <td>@string.Format("{0:C}", @item.Costo)</td>
+                    <td>@string.Format("{0:C}", @item.Importe)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+                    @*@if (item.IDRemision != 0)
+                    {
+                        <td>
+                            @item.IDRemision
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            N/A
+                        </td>
+                    }
+                    @if (item.IDPrefactura != 0)
+                    {
+                        <td>
+                            @item.IDPrefactura
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            N/A
+                        </td>
+                    }*@
+                    @if (item.GeneraOrdenP != false)
+                    {
+
+                        if (item.GeneraOrden.Equals(true) && item.Status.Equals("Activo") || item.Status.Equals("PreFacturado") || item.Status.Equals("Finalizado")|| item.Status.Equals("Recepcionado"))
+                        {
+                            SIAAPI.Models.Produccion.OrdenProduccionContext db = new SIAAPI.Models.Produccion.OrdenProduccionContext();
+                            int iddetpedido = item.IDDetPedido;
+                            int idordenc = db.Database.SqlQuery<int>("select count(IDOrden) from OrdenProduccion where IDDetPedido=" + iddetpedido + "").FirstOrDefault();
+                            if (idordenc == 0 && item.Status.Equals("Activo") || item.Status.Equals("PreFacturado"))
+                            {
+                            <td>
+                                @*@Html.ActionLink("Genera Orden Producción", "", "EncRemision", new { id = item.IDRemision }, new { @class = "btn btn-success btn-xs" })*@
+                                <a class="edit" onclick=GeneraOrdenP(@item.IDDetPedido)><span class="btn btn-warning btn-xs">Genera Orden Producción</span></a>
+                            </td>
+                            }
+                            else
+                            {
+                                SIAAPI.Models.Comercial.ClsDatoEntero idorden = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select IDOrden as Dato from OrdenProduccion where IDDetPedido=" + iddetpedido + "").ToList()[0];
+                                ViewBag.datoidorden = idorden.Dato.ToString();
+
+                            <td>
+                                @{
+
+                                    string nombre = ViewBag.datoidorden;
+                                }
+                                <center>@Html.ActionLink(nombre, "TerminacionProceso", "OrdenProduccion",null, null)</center> 
+                                   
+                            
+                            </td>
+                                        }
+
+                                    }
+                    }
+                                    else
+                                    {
+                        <td>
+                            N/A
+                        </td>
+                    }
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th class="col-lg-1">
+                Moneda Origen
+            </th>
+            <th class="col-lg-1">
+                Subtotal
+            </th>
+            <th class="col-lg-1">
+                IVA
+            </th>
+            <th class="col-lg-1">
+                Total
+            </th>
+            <th class="col-lg-1">
+                Total en Pesos Mexicanos
+            </th>
+        </tr>
+        @foreach (var itemresumen in ViewBag.sumatoria)
+        {
+
+            <tr>
+                <td class="col-lg-1">
+                    @itemresumen.MonedaOrigen
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Subtotal)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.IVA)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Total)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.TotalenPesos)
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+
+    <h5 align="right">Elaboró: @Html.DisplayFor(model => model.User.Username)</h5> 
+<p>
+    @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+    @Html.ActionLink("Regresar a la lista", "IndexPedido", null, new { @class = "btn btn-default btn-xs" })
+</p>
+
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+    <script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+
+    <script>
+
+    var urledit = '@Url.Action("GeneraOrden", "EncPedido")';
+
+        function GeneraOrdenP(id) {
+
+            $.post(urledit, { id: id }, function (response) {
+               if (response.errorMessage) {
+
+                    swal("El producto no tiene planeación", "", "error")
+               }
+              else if (response) {
+                   location.reload();
+                   swal("Planeación Encontrada", "", "success")
+
+               }
+            })
+
+        }
+
+
+    </script>

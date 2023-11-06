@@ -1,0 +1,150 @@
+﻿@model SIAAPI.Models.CartaPorte.ParqueVehicular
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Eliminar Parque Vehicular</h3>
+
+<h4>¿Está seguro de borrar este registro?</h4>
+<div>
+   
+    <dl class="dl-horizontal">
+
+        @{ SIAAPI.Models.CartaPorte.ParqueVehicularDBContext db = new SIAAPI.Models.CartaPorte.ParqueVehicularDBContext();
+
+
+            List<SIAAPI.Models.CartaPorte.c_TipoPermiso> listados = db.Database.SqlQuery<SIAAPI.Models.CartaPorte.c_TipoPermiso>("select*from c_TipoPermiso where IDTipoPermiso=" + Model.IDPermisoSCT).ToList();
+            var permiso = listados.Select(s => s.Descripcion);
+
+            List<SIAAPI.Models.CartaPorte.c_ConfigAutotransporte> lista = db.Database.SqlQuery<SIAAPI.Models.CartaPorte.c_ConfigAutotransporte>("select*from c_ConfigAutotransporte where IDConfAutoT=" + Model.IDVehiculo).ToList();
+            var vehiculo = lista.Select(s => s.Descripcion);
+
+            List<SIAAPI.Models.CartaPorte.c_SubTipoRem> listas = db.Database.SqlQuery<SIAAPI.Models.CartaPorte.c_SubTipoRem>("select*from c_SubTipoRem where IDTRemolque=" + Model.IDRemolque).ToList();
+            var remolque = listas.Select(s => s.RemoSemi);
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDPermisoSCT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => permiso)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClavePermisoSCT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClavePermisoSCT)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoPermisoSCT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoPermisoSCT)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Aseguradora)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aseguradora)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PolizaSeguro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PolizaSeguro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDVehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => vehiculo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveVehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveVehiculo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PlacaVehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PlacaVehiculo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnnoVehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnnoVehiculo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modelo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Modelo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Color)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.IDRemolque)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => remolque)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveRemolque)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveRemolque)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Placa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Placa)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+<div class="form-actions no-color">
+    <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> 
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</div>
+    }
+</div>

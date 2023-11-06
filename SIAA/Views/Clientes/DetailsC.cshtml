@@ -1,0 +1,80 @@
+﻿@model SIAAPI.Models.Comercial.Cobro
+
+<div>
+    <h3>Detalles de Domicilio de Cobro de Cliente: @Html.DisplayFor(model => model.Clientes.Nombre)</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Clientes.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clientes.Nombre)
+        </dd>*@
+
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CalleCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CalleCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumExtCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumExtCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumIntCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumIntCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ColoniaCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ColoniaCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MunicipioCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MunicipioCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CPCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CPCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estados.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estados.Estado)
+        </dd>
+
+    </dl>
+</div>
+
+
+<p>
+    @Html.ActionLink("Editar", "EditC", new { id = Model.IDCobro }, new { @class = "btn btn-success btn-xs" }) |
+  @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+</p>

@@ -1,0 +1,433 @@
+﻿
+
+
+
+@model SIAAPI.ClasesProduccion.ClsDigital
+
+@{
+    ViewBag.Title = "CargarsuajeDigital";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>*@
+
+
+<table>
+
+    <tr>
+        <td class="col-lg-8">
+            <h3>Solicitud de Suaje digital</h3>
+        </td>
+
+    </tr>
+
+</table>
+
+
+<div class="text-danger"><h2>@ViewBag.Error</h2></div>
+
+@using (Html.BeginForm())
+{
+
+   
+
+
+
+    <table>
+
+
+
+        <tr>
+
+          
+            <td>
+
+
+                <div>
+                    <div>Cliente:</div>
+                    <div class="col-md-8">
+                       
+                       @ViewBag.Cliente
+                    </div>
+                </div>
+
+
+
+            </td>
+
+
+        </tr>
+
+       
+
+    </table>
+
+
+
+        <table class="table-responsive col-12">
+
+            <tr>
+                <td colspan="12">
+                    <div class="form-group">
+                        <h6>Vendedor</h6>
+                        <div class="col-md-8">
+                           @ViewBag.Vendedor
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    <div class="form-group">
+                        <h6>Etiqueta</h6>
+                        <div class="col-md-10">
+                            @Model.Descripcion
+                           
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Maquina: </h6>
+                        @Model.Maquina
+                       
+                    </div>
+                </td>
+
+
+
+
+
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Figura: </h6>
+                        @Model.TipoSuajeFigura
+                        
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Tipo Corte: </h6>
+                        @Model.TipoCorte
+                       
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Esquinas: </h6>
+                        @Model.Esquinas
+                        
+                    </div>
+                </td>
+
+
+
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Metodo de etiquetadp: </h6>
+                        @Model.Metodo
+                       
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Presentacion: </h6>
+                        @Model.Presentacion
+                        
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Acabado: </h6>
+                        @Model.Acabado
+                       
+                    </div>
+                </td>
+
+            </tr>
+
+
+
+        </table>
+        <h3>Detalles</h3>
+        <table style="background-color:wheat" class="table table-striped col-12">
+            <tr>
+                <td>
+
+
+                    <div class="form-group">
+                        <h6>Eje  en mm</h6>
+                        <div class="col-md-10">
+                            @Model.anchoproductomm
+                           
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Avance  en mm</h6>
+                        <div class="col-md-10">
+                            @Model.largoproductomm
+                           
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Cav Eje</h6>
+                        <div class="col-md-10">
+                            @Model.cavidadesdesuajeEje
+                           
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Cav Avance </h6>
+                        <div class="col-md-10">
+                            @Model.cavidadesdesuajeAvance
+                           
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+
+                    <div class="form-group">
+                        <h6>Gap al eje en mm</h6>
+                        <div class="col-md-10">
+                            @Model.gapeje
+                           
+                        </div>
+                    </div>
+
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <h6>Gap al Avance en mm</h6>
+                        <div class="col-md-10">
+                            @Model.gapavance
+                            
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <h6>Calibre Material</h6>
+                        <div class="col-md-10">
+                         No especificado
+                            
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Calibre Respaldo</h6>
+                        <div class="col-md-10">
+                         No especificado
+
+
+                           
+                        </div>
+                    </div>
+                </td>
+
+
+
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <div class="form-group">
+                        <h6>TH</h6>
+                        <div class="col-md-10">
+                            @Model.TH
+                           
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Eje Maquina</h6>
+                        <div class="col-md-10">
+                            @Model.EjeMaquina
+                            
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Largo real</h6>
+                        <div class="col-md-10">
+                            @Math.Round(Model.largoreal,3)
+                           
+                        </div>
+                    </div>
+                </td>
+                <td>
+                  
+                </td>
+            </tr>
+            <tr>
+                @*<td>
+                        <button class="btn-warning" onclik="CalculaDientes">Calculos </button>
+                    </td>*@
+            </tr>
+        </table>
+
+        <br />
+
+
+        <br />
+
+        <table>
+
+            <tr>
+                <th><div class="col-md-1"><h4>Material</h4></div></th>
+
+                <th><div class="col-md-5">@ViewBag.Material</div></th>
+
+            </tr>
+
+           
+
+
+        </table>
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+
+
+              
+            </div>
+        </div>
+
+
+}
+
+
+
+<script>
+
+
+
+
+
+            function CalculaDientes() {
+
+
+
+
+                var avance = document.getElementById("Largomm").value;
+                // alert('avance.' + avance);
+                var gapAv = document.getElementById("Gapavance").value;
+                // alert('gavava.' + gapAv);
+                var cavAvan = document.getElementById("CavidadesdeSuajeAvance").value;
+
+
+                var maquina = document.getElementById("Maquina").value;
+
+
+
+
+                    var suma = parseFloat(avance) + parseFloat(gapAv);
+                    //alert('suma.' + suma);
+                    var multi = parseFloat(suma) * parseFloat(cavAvan);
+                    //alert('multi.' + multi);
+                    var div = parseFloat(multi) / 3.175;
+                    //alert('div.' + div);
+
+                    var dientes = div;
+
+                    var dientesReal = Math.floor(dientes);
+
+
+                    $("#Dientes").val(dientesReal);
+                    var paso = true;
+
+                    var mvarCorreccionlargo = ((3.175 * dientesReal) / cavAvan) - gapAv;
+
+                    $("#largoreal").val(mvarCorreccionlargo);
+
+                    if (dientesReal < 48 && maquina == "Digital") {
+                        alert("¡ups! ,Los dientes son menores de 48 incrementa tu cavidades al avance");
+                        paso = false;
+                    }
+                    if (dientesReal > 200 && maquina == "Digital") {
+                        alert("¡ups! ,Los dientes son mayores a 200 decrementa tu cavidades al avance");
+                        paso = false;
+                    }
+                    if (dientesReal < 72 && maquina == "Nilpeter") {
+                        alert("¡ups! Los dientes son menores de 72 incrementa tu cavidades al avance");
+                        paso = false;
+                    }
+                    if (dientesReal > 170 && maquina == "Nilpeter") {
+                        alert("¡ups! Los dientes son mayores de 170 decrementa tu cavidades al avance");
+                        paso = false;
+                    }
+
+                return dientesReal;
+
+            }
+
+
+
+            function actualizacomboArticulo(e) {
+
+
+
+                if (e.keyCode === 18) {
+
+                    var control = "#clave";
+                    var selectcontrol = "#IDMaterial";
+                    $(selectcontrol).empty();
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("getarticulosblando")',
+                        dataType: 'json',
+                        data: { buscar: $(control).val() },
+                        success: function (articulos) {
+
+                            for (i = 0; i < articulos.length; i++) {
+                                var Value = articulos[i].Value;
+
+                                var Text = articulos[i].Text;
+                                var select = "Selecciona un articulo";
+                                $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                            }
+                            $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                        },
+                        error: function (ex) {
+                            //alert('Falle.' + ex.data);
+                        }
+
+                    });
+                }
+            }
+
+
+
+
+
+
+
+</script>

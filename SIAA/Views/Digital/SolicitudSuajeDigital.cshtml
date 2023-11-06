@@ -1,0 +1,593 @@
+﻿@model SIAAPI.ClasesProduccion.ClsDigital
+
+@{
+    ViewBag.Title = "SolicitudSuajeDigital";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>*@
+
+
+<h1></h1>
+
+<table>
+
+    <tr>
+        <td class="col-lg-8">
+            <h3>Solicitud de Suaje digital</h3>
+        </td>
+     
+    </tr>
+  
+</table>
+
+
+<div class="text-danger"><h2>@ViewBag.Error</h2></div>
+
+@using (Html.BeginForm())
+{
+  
+    <div class="form-horizontal">
+        Cliente: <input type="checkbox" name="cliente" id="cliente" onclick="myFunction()">
+
+        Cliente Prospecto: <input type="checkbox" name="clientep" id="clientep" onclick="myFunctionP()">
+
+      </div>
+
+
+
+
+        <table>
+
+            
+
+            <tr id="uno" class="form-group" style="display:none">
+
+                <td class="col-lg-3" style="display:ruby-text">
+                    <label class="text-info" style="font-size:small"> Escribe una palabra o parte de ella y presiona "Alt Gr"</label>
+                    <br /><input id="clavecli" name="clavecli" onkeyup="getClientesBlando(event)" />
+                </td>
+                <td>
+
+
+                    <div >
+                       <div>Cliente:</div> 
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDCliente", null, htmlAttributes: new { @class = "form-control", @name = "IDCliente", @id = "IDCliente" })
+                            @Html.ValidationMessageFor(model => model.IDCliente, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                       
+
+                </td>
+
+
+            </tr>
+
+            <tr id="dos" class="form-group" style="display:none">
+
+                <td class="col-lg-3" style="display:ruby-text">
+                   <label class="text-info" style="font-size:small"> Escribe una palabra o parte de ella y presiona "Alt Gr"</label>
+                    <br /><input id="clavepro" name="clavepro" onkeyup="getprospe(event)" />
+                </td>
+                <td>
+
+
+                    <div >
+                        <div> Cliente Prospecto</div>
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDClienteP", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IDClienteP, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                </td>
+
+
+            </tr>
+
+
+
+          
+
+
+        </table>
+
+
+
+        <table class="table-responsive col-12">
+
+            <tr>
+                <td colspan="12">
+                    <div class="form-group">
+                        <h6>Vendedor</h6>
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDVendedor", null, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.IDVendedor, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    <div class="form-group">
+                        <h6>Etiqueta</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control", id = "Descripcion", name = "Descripcion" } })
+                            @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Maquina: </h6>
+                        @Html.DropDownList("Maquina", null, Model.Maquina, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Maquina, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+
+
+
+
+
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Figura: </h6>
+                        @Html.DropDownList("TipoSuajeFigura", null, Model.TipoSuajeFigura, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TipoSuajeFigura, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Tipo Corte: </h6>
+                        @Html.DropDownList("TipoCorte", null, Model.TipoCorte, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.TipoCorte, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Esquinas: </h6>
+                        @Html.DropDownList("Esquinas", null, Model.Esquinas, htmlAttributes: new { @class = "form-control" ,name="Esquinas" })
+                        @Html.ValidationMessageFor(model => model.Esquinas, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+
+
+
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Metodo de etiquetadp: </h6>
+                        @Html.DropDownList("Metodo", null, Model.Metodo, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Metodo, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+            
+                <td>
+                    <div class="col-md-12">
+                        <h6 style="font-size: small">Acabado: </h6>
+                        @Html.DropDownList("Acabado", null, Model.Acabado, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Acabado, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+             
+            </tr>
+
+
+
+        </table>
+        <h3>No te desplazes con enter, por favor desplazate con la tecla "tab"</h3>
+        <table style="background-color:cadetblue" class="table-responsive col-12">
+            <tr>
+                <td>
+
+
+                    <div class="form-group">
+                        <h6>Eje  en mm</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.anchoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Anchomm", name = "Anchomm" } })
+                            @Html.ValidationMessageFor(model => model.anchoproductomm, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Avance  en mm</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.largoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Largomm", name = "Largomm"} })
+                            @Html.ValidationMessageFor(model => model.largoproductomm, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Cav Eje</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.cavidadesdesuajeEje, new { htmlAttributes = new { @class = "form-control", id = "Cavidades", name = "Cavidades" } })
+                            @Html.ValidationMessageFor(model => model.cavidadesdesuajeEje, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Cav Avance </h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.cavidadesdesuajeAvance, new { htmlAttributes = new { @class = "form-control", id = "CavidadesdeSuajeAvance", name = "CavidadesdeSuajeAvance", onchange = "CalculaDientes()" } })
+                            @Html.ValidationMessageFor(model => model.cavidadesdesuajeAvance, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+
+                    <div class="form-group">
+                        <h6>Gap al eje en mm</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.gapeje, new { htmlAttributes = new { @class = "form-control", id = "Gapeje", name = "Gapeje" } })
+                            @Html.ValidationMessageFor(model => model.gapeje, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <h6>Gap al Avance en mm</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.gapavance, new { htmlAttributes = new { @class = "form-control", id = "Gapavance", name = "Gapavance", onchange = "CalculaDientes()" } })
+                            @Html.ValidationMessageFor(model => model.gapavance, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="form-group">
+                        <h6>Calibre Material</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CalibreMaterial, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CalibreMaterial, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Calibre Respaldo</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CalibreRespaldo, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CalibreRespaldo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+
+
+
+
+            </tr>
+
+
+            <tr>
+
+                <td>
+                    <div class="form-group">
+                        <h6>TH</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.TH, new { htmlAttributes = new { @class = "form-control", id = "Dientes", name = "Dientes" } })
+                            @Html.ValidationMessageFor(model => model.TH, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Eje Maquina</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.EjeMaquina, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.EjeMaquina, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <h6>Largo real</h6>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.largoreal, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.largoreal, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                @*<td>
+                    <button class="btn-warning" onclik="CalculaDientes">Calculos </button>
+                </td>*@
+            </tr>
+        </table>
+
+        <br />
+
+
+        <br />
+
+        <table>
+
+            <tr>
+                <th><div class="col-md-1"><h4>Cintas</h4></div></th>
+
+                <th><div class="col-md-5"></div></th>
+
+            </tr>
+
+            <tr>
+
+                <td class="col-lg-3">
+                    Escribe el material
+                </td>
+                <td>
+
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Material, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Material, "", new { @class = "text-danger" })
+                    </div>
+                    <input id="AnchoCinta" name="AnchoCinta" value="0" hidden />
+
+                </td>
+              
+                <button onclick="CalculaDientes()" class="btn-reddit">Calculos</button>
+
+            </tr>
+
+
+        </table>
+
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+
+
+                <input type="submit" id="btnSiguiente" name="Enviar" value="Realizar Solicitud" class="btn btn-info  "  />
+
+                @*<input type="submit" id="btnSiguiente" name="Enviar" value="Crear Articulo para un Cliente" class="btn btn-warning btn-xs" />
+                    <input type="submit" id="btnSiguiente" name="Enviar" value="Asignar matriz a un Articulo Existente" class="btn btn-info  btn-xs" />*@
+
+
+            </div>
+        </div>
+
+
+        }
+        <div>
+            @Html.ActionLink("ir  a la lista", "Index")
+        </div>
+
+
+
+        <script>
+
+
+           
+
+
+            function CalculaDientes() {
+
+               
+
+
+                var avance = document.getElementById("Largomm").value;
+                // alert('avance.' + avance);
+                var gapAv = document.getElementById("Gapavance").value;
+                // alert('gavava.' + gapAv);
+                var cavAvan = document.getElementById("CavidadesdeSuajeAvance").value;
+
+
+                var maquina = document.getElementById("Maquina").value;
+
+             
+
+               
+                    var suma = parseFloat(avance) + parseFloat(gapAv);
+                    //alert('suma.' + suma);
+                    var multi = parseFloat(suma) * parseFloat(cavAvan);
+                    //alert('multi.' + multi);
+                    var div = parseFloat(multi) / 3.175;
+                    //alert('div.' + div);
+
+                    var dientes = div;
+                    
+                    var dientesReal = Math.floor(dientes);
+
+
+                    $("#Dientes").val(dientesReal);
+                    var paso = true;
+              
+                    var mvarCorreccionlargo = ((3.175 * dientesReal) / cavAvan) - gapAv;
+
+                    $("#largoreal").val(mvarCorreccionlargo);
+                   
+                    if (dientesReal < 48 && maquina == "Digital") {
+                        alert("¡ups! ,Los dientes son menores de 48 incrementa tu cavidades al avance");
+                        paso = false;
+                    }
+                    if (dientesReal > 200 && maquina == "Digital") {
+                        alert("¡ups! ,Los dientes son mayores a 200 decrementa tu cavidades al avance");
+                        paso = false;
+                    }
+                    if (dientesReal < 72 && maquina == "Nilpeter") {
+                        alert("¡ups! Los dientes son menores de 72 incrementa tu cavidades al avance");
+                        paso = false;
+                    }
+                    if (dientesReal > 170 && maquina == "Nilpeter") {
+                        alert("¡ups! Los dientes son mayores de 170 decrementa tu cavidades al avance");
+                        paso = false;
+                    }
+                   
+                return dientesReal;
+
+            }
+
+
+
+            function actualizacomboArticulo(e) {
+
+
+
+                if (e.keyCode === 18) {
+
+                    var control = "#clave";
+                    var selectcontrol = "#IDMaterial";
+                    $(selectcontrol).empty();
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("getarticulosblando")',
+                        dataType: 'json',
+                        data: { buscar: $(control).val() },
+                        success: function (articulos) {
+
+                            for (i = 0; i < articulos.length; i++) {
+                                var Value = articulos[i].Value;
+
+                                var Text = articulos[i].Text;
+                                var select = "Selecciona un articulo";
+                                $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                            }
+                            $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                        },
+                        error: function (ex) {
+                            //alert('Falle.' + ex.data);
+                        }
+
+                    });
+                }
+            }
+
+
+
+            function getClientesBlando(e) {
+
+
+
+                if (e.keyCode === 18) {
+
+                    var control = "#clavecli";
+                    var selectcontrol = "#IDCliente";
+                   
+                    $(selectcontrol).empty();
+                   
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("getClientesBlando")',
+                        dataType: 'json',
+                        data: { buscar: $(control).val() },
+                        success: function (articulos) {
+
+                            for (i = 0; i < articulos.length; i++) {
+                                var Value = articulos[i].Value;
+
+                                var Text = articulos[i].Text;
+                                var select = "Selecciona un cliente";
+                                $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+                               
+                            }
+                            $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                           
+
+                        },
+                        error: function (ex) {
+                            //alert('Falle.' + ex.data);
+                        }
+
+                    });
+                }
+            }
+
+            function getprospe(e) {
+
+
+
+                if (e.keyCode === 18) {
+
+                    var control = "#clavepro";
+                    var selectcontrol = "#IDClienteP";
+
+                    $(selectcontrol).empty();
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("getProspeBlando")',
+                        dataType: 'json',
+                        data: { buscar: $(control).val() },
+                        success: function (articulos) {
+
+                            for (i = 0; i < articulos.length; i++) {
+                                var Value = articulos[i].Value;
+
+                                var Text = articulos[i].Text;
+                                var select = "Selecciona un cliente";
+                                $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                            }
+                            $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+
+
+                        },
+                        error: function (ex) {
+                            //alert('Falle.' + ex.data);
+                        }
+
+                    });
+                }
+            }
+
+
+
+
+
+
+
+
+        </script>
+
+        <script>
+
+            function myFunction() {
+                var checkBox = document.getElementById("cliente");
+                var text = document.getElementById("uno");
+                
+                if (checkBox.checked == true) {
+                    text.style.display = "block";
+
+                    document.getElementById("clientep").disabled = true;
+                    document.getElementById("cliente").checked = true;
+                    document.getElementById("clientep").checked = false;
+
+                }
+               
+            }
+
+            function myFunctionP() {
+                var checkBox = document.getElementById("clientep");
+                var text = document.getElementById("dos");
+                if (checkBox.checked == true) {
+                    text.style.display = "block";
+
+                    document.getElementById("cliente").disabled = true;
+                    document.getElementById("clientep").checked = true;
+                    document.getElementById("cliente").checked = false;
+
+                }
+            }
+        </script>

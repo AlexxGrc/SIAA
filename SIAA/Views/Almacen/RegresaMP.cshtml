@@ -1,0 +1,302 @@
+﻿@model List<SIAAPI.Models.Produccion.WorkinProcess>
+@{
+    ViewBag.Title = "RegresaMP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head runat="server">
+    <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.js" type="text/javascript"></script>
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+   
+</head>
+
+@*<h3>aaa</h3>*@
+
+@using (Html.BeginForm("RegresaMP", "Almacen", FormMethod.Post))
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Orden : @ViewBag.idOrden</h3>
+        </div>
+        <div class="panel-body">
+
+            <input type="text" name="id" />
+
+            <button type="submit" class="btn btn-primary btn-xs">Buscar</button>
+
+
+
+
+        </div>
+    </div>
+}
+<h2>Detalles</h2>
+
+<input value="@ViewBag.idOrden" name="idorden" id="idorden" type="hidden" />
+<div class="table-responsive">
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th>Cref</th>
+
+                <th>Lote</th>
+                <th>Lote interno</th>
+                <th>M2 cinta</th>
+                <th>M2 ocupados</th>
+                <th>M2 disponibles</th>
+                <th>Metros lineales</th>
+                <th>Metros ocupados</th>
+                <th>Metros disponibles</th>
+                <th>Regreso</th>
+
+
+            </tr>
+        </thead>
+
+        @{try
+            {
+                var contador = 0;
+
+                foreach (var item in Model)
+                {
+                    try
+                    {
+                        contador++;
+
+                        var nombrepeso = "Peso" + contador;
+                        var nombremetro = "Metro" + contador;
+                        SIAAPI.Models.Inventarios.InventarioContext db = new SIAAPI.Models.Inventarios.InventarioContext();
+                        SIAAPI.Models.Comercial.ClsDatoString cref = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select cref as Dato from Articulo where idArticulo=" + item.IDArticulo + "").ToList()[0];
+                        SIAAPI.Models.Comercial.ClsDatoString presentacion = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select presentacion as Dato from  [VArtCaracteristica] where idcaracteristica=" + item.IDCaracteristica + "").ToList()[0];
+                        SIAAPI.Models.Inventarios.Clslotemp lote = db.Database.SqlQuery<SIAAPI.Models.Inventarios.Clslotemp>("select * from  [Clslotemp] where ID=" + item.IDClsMateriaPrima + "").ToList()[0];
+
+
+                        SIAAPI.Models.Comercial.ClsDatoEntero opcionb = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select max(c.id) as Dato from Clslotemp as c inner join WorkinProcess as w on c.id=w.idClsMateriaPrima where c.idcaracteristica=" + item.IDCaracteristica + " and w.orden=" + item.Orden).ToList().FirstOrDefault();
+
+
+
+                        <tr>
+                            <td>@cref.Dato</td>
+
+
+                            <td>@lote.Lote</td>
+                            <td>@lote.LoteInterno</td>
+                            <td>@lote.MetrosCuadrados</td>
+                            <td>@lote.Metrosutilizados</td>
+                            <td>@lote.MetrosDisponibles</td>
+                            <td>@lote.Largo</td>
+
+
+
+                            @if (item.IDClsMateriaPrima == opcionb.Dato)
+                            {
+                                decimal regla = (lote.MetrosDisponibles * Convert.ToDecimal(lote.Largo)) / lote.MetrosCuadrados;
+                                decimal md = Convert.ToDecimal(lote.Largo) - regla;
+                                if (item.Devuelto != 0)
+                                {
+
+                                    <td>
+                                        @Math.Round(md, 0)
+
+                                    </td>
+                                    <td>
+                                        @Math.Round((lote.Largo - md), 0)
+                                    </td>
+                                    <td>
+
+                                        <form method="post" action='@Url.Action("ImprimirEtiquetasDevolucion", "Almacen", new { IDWorkinprocess = item.IDWorkingProcess })'>
+                                            <button class="fa fa-print fa-2x" style="color:green" type="submit"></button>
+
+                                        </form>
+
+
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        0
+                                    </td>
+                                    <td>
+                                        0
+                                    </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("EditMP", "Almacen", new { id = item.IDClsMateriaPrima })'>
+                                            <div class="col-xs-6">
+
+                                                Peso:   <input class="form-control smallTxt" type="text" name="@nombrepeso" id="@nombrepeso" onkeyup="Actualizapeso('@cref.Dato',@contador,'@nombremetro')" autofocus />
+                                                ML:     <input class="form-control smallTxt" type="number" placeholder="0" value="0" min="0" step="any" data-number-to-fixed="3" data-number-stepfactor="100" name="Metro" id="@nombremetro" required />
+                                                <input type="hidden" class="form-control" value="@item.Orden" name="idorden" id="idorden" placeholder="0">
+                                            </div>
+
+                                            <button class="fa fa-floppy-o fa-2x" style="color:green" type="submit" id="ocultar" onclick="myFunction()"></button>
+                                        </form>
+
+
+                                    </td>
+                                }
+
+
+                            }
+                            else
+                            {
+                                decimal regla = (lote.MetrosDisponibles * Convert.ToDecimal(lote.Largo)) / lote.MetrosCuadrados;
+                                decimal md = Convert.ToDecimal(lote.Largo) - regla;
+
+                                if (item.Devuelto != 0)
+                                {
+
+                                    <td>
+                                        @Math.Round(md, 0)
+
+                                    </td>
+                                    <td>
+                                        @Math.Round((lote.Largo - md), 0)
+                                    </td>
+                                    <td>
+
+                                        <form method="post" action='@Url.Action("ImprimirEtiquetasDevolucion", "Almacen", new { IDWorkinprocess = item.IDWorkingProcess })'>
+                                            <button class="fa fa-print fa-2x" style="color:green" type="submit"></button>
+
+                                        </form>
+
+
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        0
+                                    </td>
+                                    <td>
+                                        0
+                                    </td>
+                                    <td>
+                                        @*<form method="post" action='@Url.Action("EditMP", "Almacen", new { id = item.IDClsMateriaPrima})'>
+                                                <div class="col-xs-6">
+                                                    <input type="hidden" class="form-control" value="@item.Orden" name="idorden" id="idorden" placeholder="0">
+                                                 Peso: <input class="form-control smallTxt" type="text" placeholder="0" value="0"   name="@nombrepeso" id="@nombrepeso"  onkeyup="Actualizapeso('@cref.Dato',@contador,'@nombremetro')" autofocus />
+                                                 ML:   <input class="form-control smallTxt" type="number" placeholder="0" value="0" min="0" step="any" data-number-to-fixed="3" data-number-stepfactor="100" name="@nombremetro" id="@nombremetro" required  />
+
+                                                </div>
+
+                                                <button class="fa fa-floppy-o fa-2x" style="color:green" type="submit" id="ocultar" onclick="myFunction()"></button>
+                                            </form>*@
+
+
+                                    </td>
+                                }
+                            }
+
+
+                        </tr>
+
+
+
+
+
+                    }
+                    catch (Exception err4)
+                    {
+                        string error = err4.Message;
+                    }
+
+                }
+
+
+
+
+
+
+
+
+
+
+            }
+            catch (Exception err)
+            {
+
+            }
+
+
+
+
+
+
+
+
+        }
+
+    </table>
+
+
+</div>
+<div class="row center-block">
+    @*<button type="button" name="button" class="btn btn-primary btn-xs" onclick="Guardar()">Guardar</button>*@
+    @*<input type="submit" value="Guardar" class="button" onclick="ActualizarMP(@IDMP.Dato,@contador )">
+        <input type="submit" value="Grabar" class="btn btn-success btn-xs" />*@
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default" })
+</div>
+
+
+
+
+<h3 class="text-danger">@ViewBag.mensaje</h3>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+      function ActualizarMP(id, numero) {
+        var urledit = '@Url.Action("EditMP", "Almacen")';
+        var Metro = document.getElementById("MetUti" + numero).value
+
+
+        //var idmoneda = document.getElementById("IDMoneda").value
+        $.post(urledit, { id: id, Metro: Metro }, function (response) {
+            if (response) {
+                location.reload();
+                row.change;
+            }
+        }).fail(function (response) {
+            // display error message?
+        });
+    }
+</script>
+
+<script>
+
+    function Actualizapeso(id, numero, control) {
+        var ruta = '@Url.Action("JsonPeso", "Almacen")';
+        var Peso = document.getElementById("Peso" + numero).value
+
+        var controlfin = control;
+
+
+        //var idmoneda = document.getElementById("IDMoneda").value
+        $.ajax({
+            type: "GET",
+            url: ruta,
+            dataType: 'json',
+            data: { cref : id , Peso: Peso},
+            success: function (data) {
+
+                document.getElementById(controlfin).value=data;
+            }
+        });
+
+      }
+
+
+
+
+</script>
+
+<script type="text/javascript" language="javascript">
+    function myFunction() {
+        var x = document.getElementById("ocultar");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>

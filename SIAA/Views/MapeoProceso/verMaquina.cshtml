@@ -1,0 +1,94 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.VMaquinaProceso>
+
+@{
+    ViewBag.Title = "verMaquina";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<h2>Máquinas definidas para el proceso: </h2>
+<h3>@((ViewBag.datosProceso as ICollection<SIAAPI.Models.Produccion.Proceso>).First().NombreProceso)</h3>
+
+
+<hr />
+
+
+@*<tr>
+            <td class="hidden">
+                @Html.DisplayNameFor(model => model.IDArticulo)
+                </th>
+    <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+
+            <th></th>
+        </tr>*@
+<table class="table">
+    @foreach (var item in Model)
+    {
+
+        <tr class="success">
+
+            <td scope="col">
+                <h4>
+                    Ordenes de producción en la máquina:
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </h4>
+            </td>
+
+        </tr>
+            <tr>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>
+                    @{
+                        SIAAPI.Models.Produccion.OrdenProduccionContext dbp = new SIAAPI.Models.Produccion.OrdenProduccionContext();
+                        string cadena = "SELECT * FROM [dbo].[OrdenProduccion] where IDOrden in (select IDOrden from[dbo].[ArticuloProduccion] as P, [dbo].[VMaquinaProceso] as M where   P.IDProceso = " + ViewBag.idproceso + " and P.IDArticulo = " + item.IDArticulo + " and P.IDArticulo = M.IDArticulo and P.IDProceso = M.IDProceso and EstadoOrden= 'Programada')";
+                        //int maquina = valor.IDArticulo;
+                        List<SIAAPI.Models.Produccion.OrdenProduccion> datosordenes = dbp.Database.SqlQuery<SIAAPI.Models.Produccion.OrdenProduccion>(cadena).ToList();
+                        ViewBag.datosordenes = datosordenes;
+                        if (datosordenes.Count > 0)
+                        {
+                            <table>
+                                <tr>
+                                    <th>Orden </th>
+
+                                    <th>Descripcion</th>
+                                    <th>  </th>
+                                    <th>Presentacion</th>
+                                    <th>Cantidad</th>
+                                    <th>Prioridad</th>
+                                </tr>
+                                @foreach (SIAAPI.Models.Produccion.OrdenProduccion orden in datosordenes)
+                                {
+                                    //SIAAPI.Models.Comercial.Articulo articulo = 
+                                    <tr>
+                                        <td><h3>@orden.IDOrden</h3></td>
+
+                                        <td><h6>@orden.Descripcion</h6></td>
+                                        <td></td>
+                                        <td><h6>@orden.Presentacion</h6></td>
+                                        <td>@orden.Cantidad</td>
+                                        <td>@orden.Prioridad</td>
+                                    </tr>
+                                }
+                            </table>
+
+
+
+                        }
+                    }
+                </td>
+            </tr>
+
+
+                        }
+
+</table>
+
+
+
+
+
+@Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<SIAAPI.Models.Inventarios.VInventarioInicial>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Inventario de productos</h3>
+@using (Html.BeginForm("Index", "Inventario", FormMethod.Post))
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+           
+        </div>
+        <div class="panel-body">
+            @*@Html.DropDownList("IDAlmacen", null, htmlAttributes: new { @class = "form-control" })
+            @Html.DropDownList("IDArticulo", null, htmlAttributes: new { @class = "form-control" })*@
+            @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" })
+            Elementos por página: @Html.DropDownList("pageSize")
+            Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+            <button type="submit" class="btn btn-default btn-xs">Buscar</button>
+            <button type="submit" class="btn btn-primary btn-xs" formaction="/Inventario/Report/">Generar Reporte</button>
+            @*<div class="row"><a href=@("/Inventario/Report/") class="btn btn-primary">Generar Reporte</a></div>*@
+           
+        </div>
+    </div>
+}
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Almacen)
+                </th>*@
+            <th>
+                @Html.ActionLink("Almacen", "Index", new { sortOrder = ViewBag.AlmacenSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Producto", "Index", new { sortOrder = ViewBag.ProductoSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Presentacion", "Index", new { sortOrder = ViewBag.IDMovimientoSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.Label("Cantidad", htmlAttributes: new { @class = "LabelCSSTop" })
+             </th>
+               
+            <th> @Html.Label("Unidad", htmlAttributes: new { @class = "LabelCSSTop" })</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="hidden">
+                    @Html.HiddenFor(modelItem => item.IDInventario)
+                    @Html.HiddenFor(modelItem => item.IDAlmacen)
+                    @Html.HiddenFor(modelItem => item.IDArticulo)
+                    @Html.HiddenFor(modelItem => item.IDCaracteristica)
+                    @Html.HiddenFor(modelItem => item.IDClaveUnidad)
+                </td>
+                <td>
+                     @Html.DisplayFor(modelItem => item.Almacen)
+                    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Producto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Presentacion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unidad)
+                </td>
+                <td>
+                    @*@Html.ActionLink("Editar", "Edit", new { id = item.IDInventario }, new { @class = "btn btn-success btn-xs" })*@
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IDInventario }, new { @class = "btn btn-default btn-xs" })
+                   @* @Html.ActionLink("Eliminar", "Delete", new { id=item.IDInventario }, new { @class = "btn btn-danger btn-xs" })*@
+                    </td>
+            </tr>
+            <tr>
+
+            </tr>
+        }
+
+    </table>
+    </div>

@@ -1,0 +1,50 @@
+﻿@model SIAAPI.Models.Administracion.c_RegimenFiscal
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Regimen Fiscal</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveRegimenFiscal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveRegimenFiscal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AplicaFisica)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AplicaFisica)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AplicaMoral)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AplicaMoral)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

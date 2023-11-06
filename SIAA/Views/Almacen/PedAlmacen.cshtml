@@ -1,0 +1,237 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Vdetsolicitud>
+
+@{
+    ViewBag.Title = "PedAlmacen";
+}
+
+<h2>Pedidos contra Almacen</h2>
+@ViewBag.Mensaje
+@{int contador = 0;}
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <div>
+                        Almacen:
+                        @*@Html.DropDownList("IDAlmacen", ViewBag.IDAlmacen as List<SelectListItem>, htmlAttributes: new { @class = "form-control" })*@
+                        @Html.DropDownList("IDAlmacen", ViewBag.IDAlmacen as List<SelectListItem>, "", new { @class = "form-control" })
+                     
+                        Filtro: @Html.TextBox("searchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        
+                        <input type="submit" name="Enviar" value="Aplicar" class="btn btn-info btn-xs" />
+                       
+                    </div>
+
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Cref)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.IDAlmacen)
+        </th>
+        <th>Observacion</th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>
+        <th>
+            <table class="table">
+                <tr>
+                    <th>
+                        Almacén
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Existencia)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PorLlegar)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Apartado)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Disponibilidad)
+                    </th>
+                </tr>
+            </table>
+        </th>
+      
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+                <div> @Html.DisplayFor(modelItem => item.Cref)</div>
+
+
+                <div>
+                    <h5 font-size="xx-small" class="text-info">@Html.DisplayFor(modelItem => item.descripcion)</h5>
+                </div>
+                <div>
+                    <h6 font-size="xxx-small" class="text-success" style="text-decoration:auto">
+                        @Html.DisplayFor(modelItem => item.Presentacion)
+                    </h6>
+                </div>
+            </td>
+            
+            <td>
+                    @{ SIAAPI.Models.Comercial.Almacen almacen = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.Find(item.IDAlmacen);
+                        var almacenes = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.OrderBy(s => s.CodAlm);
+                    }
+                    @almacen.CodAlm
+                    @{string nombrecom = "IDALMACEN" + contador;
+                    }
+                    <select id="@nombrecom" name="@nombrecom">
+                        @foreach (SIAAPI.Models.Comercial.Almacen almancencam in almacenes)
+                        {
+                            if (almacen.CodAlm != almancencam.CodAlm)
+                            {
+                            <option value="@almancencam.IDAlmacen" >@almancencam.CodAlm</option>
+                            }
+                            else
+                            {
+                                <option value="@almancencam.IDAlmacen" selected="selected">@almancencam.CodAlm</option>
+                            }
+                        }
+                    </select>
+
+                </td>
+            @{ string ObservacioPedido = "";
+                if (item.Documento=="Pedido")
+                {
+                    SIAAPI.Models.Comercial.EncPedido pedido = new SIAAPI.Models.Comercial.PedidoContext().EncPedidos.Find(item.Numero);
+                    ObservacioPedido = pedido.Observacion;
+                }
+
+            }
+            <td>
+                Por Favor no ultilices el enter en este control
+                @{ string nombreobs = "observacion" + contador;}
+                <textarea disabled name="@nombreobs" id="@nombreobs" rows="3" cols="20"> @item.Documento @item.Numero  @ObservacioPedido </textarea>
+            </td>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+            @{
+                SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+                //SIAAPI.Models.Comercial.InventarioAlmacen inventario = dd.Database.SqlQuery<SIAAPI.Models.Comercial.InventarioAlmacen>("select* from InventarioAlmacen where idalmacen=" + item.IDAlmacen + " and idcaracteristica=" + item.Caracteristica_ID).ToList().FirstOrDefault();
+                var almacenesP = dd.Database.SqlQuery<SIAAPI.Models.Comercial.InventarioAlmacen>("select*  from InventarioAlmacen where idarticulo=" + item.IDArticulo + "and idcaracteristica="+ item.Caracteristica_ID).ToList();
+
+             }
+            <td>
+                <table class="table">
+                    @foreach (SIAAPI.Models.Comercial.InventarioAlmacen co in almacenesP)
+                    {
+                        SIAAPI.Models.Comercial.Almacen almacenporart = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.Find(co.IDAlmacen);
+                        <tr>
+                            <td>
+                                @almacenporart.CodAlm
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => co.Existencia)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => co.PorLlegar)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => co.Apartado)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => co.Disponibilidad)
+                            </td>
+                        </tr>
+                    }
+                </table>
+              
+                </td>
+
+
+
+
+                @{string cadena = "Cantidad" + contador;
+
+                    decimal cantidad = item.Cantidad;
+
+                    if (item.Disponibilidad <= 0)
+                    {
+                        cantidad = item.Cantidad;
+                        <td>
+                            <input type="number" id="@cadena" name="@cadena" value="@item.Cantidad" size="10">
+                        </td>
+                        <td>
+                            <button class="btn btn-primary" onclick="Solicitar(@item.IDDetSolicitud,@contador)">Requerir</button>
+                            @Html.ActionLink("No Requerir", "Nosolicitar", new { id = @item.IDDetSolicitud }, new { @class = "btn btn-warning" })
+
+                        </td>
+                    }
+                    if (item.Disponibilidad > 0)
+                    {
+                        cantidad = 0;
+                        <td>
+                            <input type="number" id="@cadena" name="@cadena" value="0" size="10">
+                            <button class="btn btn-primary" onclick="Solicitar(@item.IDDetSolicitud,@contador)">Requerir</button>
+
+                            @Html.ActionLink("No Requerir", "Nosolicitar", new { id = item.IDDetSolicitud }, new { @class = "btn btn-warning" })
+                        </td>
+                    }
+
+                }
+
+
+                </tr>
+                contador = contador + 1;
+
+            }
+
+</table>
+<h5>Almacenes</h5>
+<table class="table">
+  @{var almacenes3 = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.OrderBy(s => s.CodAlm);
+      <thead class="text-info">Codigo </thead>
+      <thead  class="text-info">Almacen</thead>
+      foreach (SIAAPI.Models.Comercial.Almacen almancencam in almacenes3)
+      {
+         <tr>
+             <td>@almancencam.CodAlm</td>
+             <td class="text-info">@almancencam.Descripcion</td>
+         </tr>
+          }
+      }
+</table>
+
+
+
+<script>
+    function Solicitar(id_, control) {
+    
+        var can = document.getElementById("Cantidad" + control).value;
+        var idal = document.getElementById("IDALMACEN" + control).value;
+        var obs = document.getElementById("observacion" + control).value;
+    
+        var url = "/Almacen/Solicitar/"+ id_+"?Cantidad="+can+"&IDAlmacen="+ idal +"&observacion="+ obs;
+      
+
+            window.location.href = url;
+}
+</script>
+

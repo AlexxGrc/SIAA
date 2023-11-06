@@ -1,0 +1,130 @@
+﻿@model SIAAPI.ClasesProduccion.ClsCotizador
+
+@{
+    <h1> Precios a cotizar </h1>
+
+    <select id="Monedafinal" class="Monedafinal" name="Monedafinal" onchange="Cambiar()">
+        @if (ViewBag.idMonedaconvenida == 180)
+        {
+            <option value="USD">USD</option>
+            <option value="MXN" selected>MXN</option>
+        }
+        else
+        {
+            <option value="USD" selected>USD</option>
+            <option value="MXN">MXN</option>
+        }
+    </select>
+
+
+    
+    <table class="table">
+      
+            <thead class="thead-dark">
+                <tr>
+                    <th>Cantidades</th>
+                    <th><div>@ViewBag.Cantidad1 Millares</div></th>
+                    <th><div>@ViewBag.Cantidad2 Millares</div></th>
+                    <th><div>@ViewBag.Cantidad3 Millares</div></th>
+                    <th><div>@ViewBag.Cantidad4 Millares</div></th>
+                </tr>
+
+                <tr>
+
+                        <td>
+                            <div class="form-group">
+                                Precios
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <div class="form-group">
+
+                                <input type="number" name="precioconvenido1" id="precioconvenido1" step="any" value="@Model.precioconvenidos.precio1"  />
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <input type="number" name="precioconvenido2" id="precioconvenido2" step="any" value="@Model.precioconvenidos.precio2" />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <input type="number" name="precioconvenido3" id="precioconvenido3" step="any" value="@Model.precioconvenidos.precio3"  />
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <input type="number" name="precioconvenido4" id="precioconvenido4" step="any" value="@Model.precioconvenidos.precio4"  />
+                            </div>
+                        </td>
+                        <td>
+                            @*<input id="myButton" type="button" value="Actualizar" />*@
+
+                            @*<form action="ActualizarPrecioConvenido" method="post">
+                                @Html.Hidden("precioconvenido1", Model.precioconvenidos.precio1)
+                                @Html.Hidden("precioconvenido2", Model.precioconvenidos.precio2)
+                                @Html.Hidden("precioconvenido3", Model.precioconvenidos.precio3)
+                                @Html.Hidden("precioconvenido4", Model.precioconvenidos.precio4)
+                                <input type="submit" value="Actualizar">
+                            </form>*@
+
+                            @*@using (Html.BeginForm("Actualizar", "ActualizarPrecioConvenido", FormMethod.Post))
+                            {
+                                @Html.Hidden("precioconvenido1", Model.precioconvenidos.precio1)
+                                @Html.Hidden("precioconvenido2", Model.precioconvenidos.precio2)
+                                @Html.Hidden("precioconvenido3", Model.precioconvenidos.precio3)
+                                @Html.Hidden("precioconvenido4", Model.precioconvenidos.precio4)
+                                <input type="submit" value="Actualizar" />
+                            }*@
+                        </td>
+
+
+
+                        
+                </tr>
+
+
+
+
+    </table>
+    
+}
+<script>
+    function Cambiar() {
+
+        var combo = document.getElementById("Monedafinal");
+        var selected = combo.options[combo.selectedIndex].text;
+
+        if (selected =="MXN")
+        {
+
+            document.getElementById("precioconvenido1").value = document.getElementById("precioconvenido1").value * @ViewBag.TC;
+            document.getElementById("precioconvenido2").value = document.getElementById("precioconvenido2").value * @ViewBag.TC;
+            document.getElementById("precioconvenido3").value = document.getElementById("precioconvenido3").value * @ViewBag.TC;
+            document.getElementById("precioconvenido4").value = document.getElementById("precioconvenido4").value * @ViewBag.TC;
+            document.getElementById("precioconvenido1").min = document.getElementById("precioconvenido1").min * @ViewBag.TC;
+            document.getElementById("precioconvenido2").min = document.getElementById("precioconvenido2").min * @ViewBag.TC;
+            document.getElementById("precioconvenido3").min = document.getElementById("precioconvenido3").min * @ViewBag.TC;
+            document.getElementById("precioconvenido4").min = document.getElementById("precioconvenido4").min * @ViewBag.TC;
+        }
+        if (selected =="USD")
+        {
+
+            document.getElementById("precioconvenido1").value = document.getElementById("precioconvenido1").value / @ViewBag.TC;
+            document.getElementById("precioconvenido2").value = document.getElementById("precioconvenido2").value / @ViewBag.TC;
+            document.getElementById("precioconvenido3").value = document.getElementById("precioconvenido3").value / @ViewBag.TC;
+            document.getElementById("precioconvenido4").value = document.getElementById("precioconvenido4").value / @ViewBag.TC;
+            document.getElementById("precioconvenido1").min = document.getElementById("precioconvenido1").min / @ViewBag.TC;
+            document.getElementById("precioconvenido2").min = document.getElementById("precioconvenido2").min / @ViewBag.TC;
+            document.getElementById("precioconvenido3").min = document.getElementById("precioconvenido3").min / @ViewBag.TC;
+            document.getElementById("precioconvenido4").min = document.getElementById("precioconvenido4").min / @ViewBag.TC;
+        }
+    }
+</script>
+

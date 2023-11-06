@@ -1,0 +1,78 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.DetEmpaqueCartaP>
+
+
+
+<h2>Listado</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("No. Caja")
+        </th>
+
+        <th>
+            @Html.Label("Contenido")
+        </th>
+
+
+        <th></th>
+    </tr>
+    @{
+        decimal contador = 0;
+    }
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoCaja)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.CantContenido)
+            </td>
+
+            <td>
+                    
+            </td>
+
+            @*<td>
+                    @Html.ActionLink("Eliminar", "Eliminarcinta", new { id = item.ID, IDDetRecepcion = item.IDDetOrdenCompra }, new { @class = "btn btn-default" })
+                </td>*@
+        </tr>
+        contador += item.CantContenido;
+
+
+
+        SIAAPI.Models.Comercial.EmpaqueCartaP empaque = new SIAAPI.Models.Comercial.EmpaqueCartaPContext().EmpaqueCartaP.Where(s => s.IDEmpaque == item.IDEmpaque).FirstOrDefault();
+
+        ViewBag.CantidadEmpacar = empaque.Cantidad;
+    }
+    <tr>
+        <td></td>
+        <td>@Html.Label("TOTAL: ") @contador</td>
+    </tr>
+
+</table>
+
+@{
+    if (ViewBag.CantidadEmpacar == contador)
+    {
+        <h4>EMPAQUE COMPLETO</h4>
+        <i class="fa fa-check-circle-o fa-5x" style="color:forestgreen" aria-hidden="true"></i>
+
+    }
+    else if (contador > ViewBag.CantidadEmpacar )
+    {
+
+        <h4>LA CANTIDAD EMPACADA ES MAYOR A LA QUE SE DEBE EMPACAR </h4>
+
+        <i class="fa fa-times-circle fa-5x" style="color:red" aria-hidden="true"></i>
+    }
+    else
+    {
+        <h4>FALTA POR EMPACAR</h4>
+        <i class="fa fa-times-circle-o fa-5x" style="color:palevioletred" aria-hidden="true"></i>
+    }
+
+}

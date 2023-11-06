@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.BancosProv>
+<h3>Lista de Bancos de Proveedor</h3>
+<p>
+    @Html.ActionLink("Crear un nuevo registro", "CreateBanco", null, new { @class = "btn btn-warning btn-xs" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDBanco)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IDMoneda)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Proveedor.Empresa)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Cuenta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CuentaClabe)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Banco.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Moneda.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Proveedor.Empresa)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Cuenta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CuentaClabe)
+        </td>*@
+        <td>
+            @Html.ActionLink("Editar", "EditBanco", new { id=item.IDBancosProv }, new { @class = "btn btn-success btn-xs" }) 
+            @Html.ActionLink("Detalles", "DetailsBanco", new { id=item.IDBancosProv }, new { @class = "btn btn-default btn-xs" }) 
+            @Html.ActionLink("Eliminar", "DeleteBanco", new { id=item.IDBancosProv }, new { @class = "btn btn-danger btn-xs" })
+        </td>
+    </tr>
+}
+
+</table>
+<div>
+    @Html.ActionLink("Regresar a la lista", "Index", new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString }, new { @class = "btn btn-default btn-xs" })
+</div>

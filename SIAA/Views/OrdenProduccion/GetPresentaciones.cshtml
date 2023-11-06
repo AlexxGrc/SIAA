@@ -1,0 +1,211 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Caracteristica>
+@{
+    ViewBag.Title = "GetPresentaciones";
+}
+<div id="listado" style="display:block">
+    <h3>Listado de Presentaciones<br /></h3>
+    <h4 class="text-success"><label>Artículo: </label> <label>@ViewBag.Descripcion </label></h4>
+    </div>
+<div id="registropres" style="display:none">
+    <h3>Registro de Artículo de Producción<br /></h3>
+</div>
+   
+<hr>
+ 
+    <div id="label" style="display:none">
+  
+    <div class="row">
+        <div class="columna col-md-6 col-sm-1">
+            <h5><label>Proceso: </label><p id="labelproceso"></p></h5>
+        </div>
+        <div class="columna col-md-6 col-sm-1">
+            <h5><label>Orden de Producción: </label><p id="noorden"></p></h5>
+        </div>
+     
+    </div>
+        <div class="row">
+            <div class="columna col-md-6 col-sm-1">
+                <h5><label>Artículo a producir:</label> <p id="artiomodal"></p></h5>
+            </div>
+            <table>
+                <tr>
+                    <div class="columna col-md-6 col-sm-1">
+                        <h5><label>Presentación a producir:</label> <p id="presomodal"></p></h5>
+                    </div>
+                </tr>
+            </table>
+        </div>
+        <div class="row">
+            <table>
+                <tr>
+                    <div class="columna col-md-6 col-sm-1">
+                        <h5><label>Artículo: </label> <p>@ViewBag.Descripcion </p></h5>
+                    </div>
+                    <div class="columna col-md-6 col-sm-1">
+                        <h5><label>Presentación:</label> <b><p class="text-success" id="labelpres"></p></b></h5>
+                    </div>
+                </tr>
+            </table>
+        </div>
+        <hr>
+        <br />
+</div>
+        <div id="ok" style="display:block">
+            <table class="table" id="TablaPresentaciones">
+
+
+                @{foreach (var item in Model)
+            {
+                        <tr>
+                            <td>
+                                @{
+                                    string[] atributos = item.Presentacion.ToString().Split(',');
+                                    foreach (var atri in atributos)
+                                    {
+                                        string[] valor = atri.Split((char)58);
+                                        string Atri = valor[0];
+                                        string Val = valor[1];
+
+                                        <label class="text-info">@Atri :</label><label class="text-danger">@Val</label>
+                                       
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                @{
+                                    SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.Articulo_IDArticulo);
+                                    SIAAPI.Models.Administracion.c_ClaveUnidad cunidad = new SIAAPI.Models.Administracion.c_ClaveUnidadContext().c_ClaveUnidades.Find(articulo.IDClaveUnidad);
+                                }
+                                <p><button type="button" name="button" class="btn btn-warning btn-xs" onclick="actionregistro(@item.ID,@item.Articulo_IDArticulo,'@item.Presentacion',@articulo.IDClaveUnidad,'@cunidad.Nombre')">Elegir</button><p></p></p>
+                            </td>
+
+                        </tr>
+                                    }
+
+                }
+            </table>
+        </div>
+        <div id="registro" class="form-group" style="display:none">
+            <div class="form-horizontal">
+                <div class="form-group">
+
+                    @Html.Label("Cantidad", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <input type="text" name="Cantidad" id="Cantidad" class="form-control" value="1" required="required" /> 
+                      
+                    </div>
+                  
+                </div>
+              
+                <div class="form-group">
+
+                    @Html.Label("Unidad", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <h5> <p id="unidad"></p></h5>
+                        <input type="hidden" name="idunidad" id="idunidad" class="form-control" value="0" />
+                    </div>
+
+                </div>
+                    <div class="form-group">
+                        @Html.Label("Indicaciones", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            <input type="text" name="Indicaciones" id="Indicaciones" class="form-control" />
+                        </div>
+                    </div>
+
+
+                    <input type="hidden" name="articulo" id="articulo" />
+                    <input type="hidden" name="caracteristica" id="caracteristica" />
+                    <input type="hidden" id="idordenmodal" />
+                    <input type="hidden" id="idprocesomodal" />
+                <input type="hidden" id="idcardenmodal" />
+                </div>
+           
+
+            <div class="modal-footer">
+
+                <button type="button" name="button" class="btn btn-success btn-xs" onclick="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-warning btn-xs" data-dismiss="modal">Cerrar</button>
+            </div>
+            </div>
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+        <script>
+
+            function actionregistro(id, idarticulo, presentacion,idcunidad,cunidad) {
+                async: true;
+                var texto = document.getElementById("ok");
+                texto.style.display = "none";
+
+                var textlabel = document.getElementById("label");
+                textlabel.style.display = "block";
+                document.querySelector('#labelpres').innerText = presentacion;
+
+
+                var textregistropres = document.getElementById("registropres");
+                textregistropres.style.display = "block";
+
+                var textlistado = document.getElementById("listado");
+                textlistado.style.display = "none";
+
+
+                $('#articulo').val(idarticulo);
+                $('#caracteristica').val(id);
+                document.querySelector('#unidad').innerText = cunidad;
+                $('#idunidad').val(idcunidad);
+                var text = document.getElementById("registro");
+                text.style.display = "block";
+            }
+        </script>
+<script>
+
+   
+
+    function Guardar() {
+        async: true;
+        var url = '@Url.Action("addarticuloproduccion", "OrdenProduccion")';
+        $.post(url, { idcaorden: document.getElementById("idcardenmodal").value, idorden: document.getElementById("idordenmodal").value, idarticulo: document.getElementById("articulo").value, idcaracteristica: document.getElementById("caracteristica").value, idproceso: document.getElementById("idprocesomodal").value, cantidad: document.getElementById("Cantidad").value, idunidad: document.getElementById("idunidad").value, indicaciones: document.getElementById("Indicaciones").value }, function (response) {
+            if (response.errorMessage) {
+
+                swal("La Formula no se puede evaluar, por lo tanto, el artículo no fue registrado", "", "error")
+            }
+            else if (response) {
+                swal("Formula valida y producto registrado con éxito", "", "success")
+          $('#myModal').remove();
+           location.reload();
+               
+
+            }
+            
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+</script>
+        @*<script>
+
+            function Tinta() {
+                async: true;
+                //$('#FormulaRelacion').val("(ANCHO*LARGO*C*8.5)/(2926103.4*PORCENTAJEDETINTA)");
+                $('#FormulaRelacion').val("(ANCHO*ALTO*C*8.5)/(2926103.4*0.5)");
+            }
+        </script>
+        <script>
+
+            function MP() {
+                async: true;
+
+                $('#FormulaRelacion').val("(((C*1000)/ALPASO)*(ALTO/1000)+120)/1524");
+            }
+        </script>*@
+<script>
+
+            function Cancelar() {
+                async: true;
+                $('#myModal').remove();
+            }
+</script>
+

@@ -1,0 +1,349 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SIAAPI Producción</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/Estilos/plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="~/Estilos/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/Estilos/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="~/Estilos/plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link href="~/Estilos/Menu/css/adminlte.css" rel="stylesheet" />
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="~/Estilos/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/Estilos/plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="~/Estilos/plugins/summernote/summernote-bs4.m
+</head>
+
+
+<div id="wrapper">
+    <!-- Navigation navbar-default-->
+    <nav class="navbar navbar-default-vigma navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <!-- .navbar-header -->
+        <div class="navbar-header">
+
+
+
+
+
+            <img src="~/imagenes/logoclass.jpg" width="120" height="105" class="navbar-brand" />
+            <a class="navbar-brand" href="~/Home/MyProfile">SIAAPI</a>
+
+            <!-- /.navbar-header -->
+            <!-- .navbar-top-links -->
+
+            <ul class="nav navbar-top-links navbar-right">
+
+                @*<li class="text-capitalize">
+
+
+
+
+                    </li>*@
+
+
+
+                <!-- /.dropdown -->
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+
+                        <li>
+                            @{
+                                if (Request.IsAuthenticated)
+                                {
+                                    using (Html.BeginForm("Logout", "MyAccount", FormMethod.Post, new { id = "logoutForm" }))
+                                    {
+
+
+                                        <a href=javascript:document.getElementById('logoutForm').submit()><i class="fa fa-sign-out fa-fw"></i>Salir</a>
+
+                                    }
+                                }
+                                else
+                                {
+
+                                    <a href="MyAccount/Logout"><i class="fa fa-user fa-fw"></i>Ingresar</a>
+
+                                }
+                            }
+                        </li>
+
+
+
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+
+            <table class="table-responsive">
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+
+
+                                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                                    <a class="btn btn-primary btn-xs" style="font-size:smaller" href="@Url.Action("Prioridad", "OrdenProduccion")" role="button">Órdenes </a>
+                                </td>
+
+
+                                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                                    @Html.ActionLink("Bitacora", "Index", "Bitacora", new { idorden = @ViewBag.idorden }, new { @class = "btn btn-warning btn-xs" })
+                                </td>
+
+                                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                                    <a class="btn btn-default btn-xs" style="font-size:smaller" href="@Url.Action("Mapeo", "OrdenProduccion")" role="button">Mapeo de Órdenes </a>
+                                </td>
+
+
+
+                                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                                    <a class="btn btn-primary btn-xs" style="font-size:smaller" href="@Url.Action("Index", "MapeoProceso")" role="button">Mapeo Procesos</a>
+                                </td>
+
+                                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                                    <a class="btn btn-primary btn-xs" style="font-size:smaller" href="@Url.Action("OrdenesLiberadas", "OrdenProduccion")" role="button">Órdenes Liberadas</a>
+                                </td>
+                                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                                    <a class="btn btn-primary btn-xs" style="font-size:smaller" href="@Url.Action("OrdenesALiberar", "OrdenProduccion")" role="button">Órdenes a Liberar</a>
+                                </td>
+                                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                                    <a class="btn btn-success btn-xs" style="font-size:smaller" href="@Url.Action("EntreFechasProd", "OrdenProduccion")" role="button">Descargar Excel</a>
+                                </td>
+                                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                                    <a class="btn btn-success btn-xs" style="font-size:smaller" href="@Url.Action("EntreFechasMtsL", "OrdenProduccion")" role="button">Mts Lineales</a>
+                                </td>
+
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td>
+
+                        @using (Html.BeginForm("Prioridad", "OrdenProduccion", FormMethod.Post))
+                        {
+
+                            <div class="input-group">
+                                <input type="text" name="id" placeholder="Introduce num. Orden:" />
+
+                                <input type="submit" value="Buscar" name="Buscar" id="Buscar" class="btn btn-warning btn-xs" />
+
+                            </div>
+                        }
+                        @*@Html.ActionLink("Buscar Ordenes", "BuscarOrden", "OrdenProduccion", new { idorden = @ViewBag.idorden }, new { @class = "btn btn-warning btn-xs" })*@
+                    </td>
+
+                </tr>
+
+            </table>
+        </div>
+
+    </nav>
+
+</div>
+
+
+<div class="modal" id="btn_modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"><strong>Artículo</strong></h4>
+
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                @*@ViewBag.idorden*@
+                @Html.Hidden("id", "", new { @class = "hiddenid" })
+
+                @{
+                    try
+                    {
+
+                        string cadena1 = "select * from Articulo as A inner join OrdenProduccion as O on A.IDArticulo=O.IDArticulo where O.IDOrden=" + ViewBag.idorden;
+                        SIAAPI.Models.Comercial.ArticuloContext dbart = new SIAAPI.Models.Comercial.ArticuloContext();
+                        List<SIAAPI.Models.Comercial.Articulo> articulo = dbart.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>(cadena1).ToList();
+                        ViewBag.Articulo = articulo;
+
+                    }
+                    catch
+                    {
+
+                    }
+
+
+
+                }
+                @{try
+                    {
+                        foreach (var item in ViewBag.Articulo)
+                        { <td>
+                                <img src="~/imagenes/Upload/@item.nameFoto" alt="" height="500" width="500">
+                            </td>
+                            <td class="col-lg-4">
+                                <strong>  Descripción: @item.Descripcion</strong>
+                            </td>
+
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+
+
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalProgramada" tabindex="-1" role="dialog">
+    <div class="modal-dialog lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">Programar Orden de Producción <label id="labelorden"></label></h3>
+            </div>
+
+            <input type="hidden" class="form-control" name="mensaje" id="mensaje">
+            <br />
+            <div class="form-group">
+                @Html.Label("Fecha", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    <input type="date" class="form-control" name="fecha" id="fecha">
+                </div>
+            </div>
+
+            <br /><br /><br /><br />
+
+
+            <!-- Modal Actions -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-xs" onclick="Actualizar()">Guardar</button>
+
+                <button type="button" class="btn btn-warning btn-xs" data-dismiss="modal">Cerrar</button>
+            </div>
+
+            <!-- End Modal Actions -->
+        </div>
+        <!-- End Modal Content -->
+    </div>
+    <!-- End Modal Dialog -->
+</div>
+
+<body>
+    <div id="content" style="background-color:#ffffff" class="clear_fix">
+        @RenderBody()
+    </div>
+
+
+
+    <div class="text-center">
+        <img src="~/imagenes/aguilan.png" width="120" height="60" />
+    </div>
+
+
+
+</body>
+</html>
+
+<!-- Bootstrap 4 -->
+<script src="~/Estilos/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="~/Estilos/plugins/chart.js/Chart.min.js"></script>
+<!-- Sparkline -->
+<script src="~/Estilos/plugins/sparklines/sparkline.js"></script>
+<!-- JQVMap -->
+<script src="~/Estilos/plugins/jqvmap/jquery.vmap.min.js"></script>
+<script src="~/Estilos/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+<!-- jQuery Knob Chart -->
+<script src="~/Estilos/plugins/jquery-knob/jquery.knob.min.js"></script>
+<!-- daterangepicker -->
+<script src="~/Estilos/plugins/moment/moment.min.js"></script>
+<script src="~/Estilos/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="~/Estilos/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Summernote -->
+<script src="~/Estilos/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="~/Estilos/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+
+<script src="~/Estilos/Menu/js/adminlte.js"></script>
+
+<script src="~/Estilos/Menu/js/demo.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+
+<script src="~/Estilos/Menu/js/pages/dashboard.js"></script>
+
+
+<script>
+
+    $("#btn_modal").trigger("click");
+    $("#btn_modalP").trigger("click");
+
+
+</script>
+<script>
+    function ModalPro(valor) {
+        var valor = valor;
+        $('#mensaje').val(valor);
+        document.querySelector('#labelorden').innerText = valor;
+        $('#ModalProgramada').modal('show')
+    }
+</script>
+
+
+
+<script>
+
+
+
+    function Actualizar() {
+                  var url = '@Url.Action("addfechapro", "OrdenProduccion")';
+                    $.post(url, { id: @ViewBag.idorden, fecha:document.getElementById("fecha").value }, function (response) {
+                        if (response) {
+                            $('#ModalProgramada').remove();
+                            location.reload();
+
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                }
+
+
+</script>

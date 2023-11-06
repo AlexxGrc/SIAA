@@ -1,0 +1,374 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.VCarrito>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#IDProveedor").change(function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("getPrecio")',
+                    dataType: 'json',
+                    data: { id: $("#IDProveedor").val() },
+                    success: function () {
+                        location.reload();
+                    }
+
+                });
+                return false;
+            })
+        });
+</script>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="form-group">
+            @{
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>  <h3>Carrito de compras</h3> </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SIAAPI_Compras_Carrito.pdf" })' target="_blank">
+                                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</nav>
+<br>
+@{using (Html.BeginForm("grabar", "CarritoC"))
+    {
+
+        <h6 align="right"><a href="@Url.Action("TiendaGeneralC", "TiendaC")"><span class="btn btn-primary btn-xs">Productos</span></a></h6>
+
+        SIAAPI.Models.Comercial.ProveedorContext prov = new SIAAPI.Models.Comercial.ProveedorContext();
+        List<SIAAPI.Models.Login.User> userid = prov.Database.SqlQuery<SIAAPI.Models.Login.User>("select * from [dbo].[User] where Username='" + User.Identity.Name + "'").ToList();
+        int usuario = userid.Select(s => s.UserID).FirstOrDefault();
+
+        SIAAPI.Models.Comercial.ClsDatoEntero contarcarrito = prov.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDCarrito) as Dato from CarritoC where usuario='" + usuario + "'").ToList()[0];
+        if (contarcarrito.Dato != 0)
+        {
+            SIAAPI.Models.Comercial.ClsDatoEntero contarproveedor = prov.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select distinct IDProveedor as Dato from CarritoC where usuario='" + usuario + "'").ToList()[0];
+            if (contarproveedor.Dato != 0)
+            {
+                <h2>
+                    <i class="fa fa-calculator"></i>
+                    <span></span>
+
+
+                    @if (@Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista"))
+                    {
+                        <a href="@Url.Action("Create", "EncRequisiciones")"><span class="btn btn-primary btn-xs">Requisición</span></a>
+                    }
+                    @if (@Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Sistemas"))
+                    {
+                        <a href="@Url.Action("Create", "EncOrdenCompra")"><span class="btn btn-warning btn-xs">Orden de Compra</span></a>
+                    }
+
+
+
+                </h2>
+                var proveedor = prov.Proveedores.OrderBy(s => s.Empresa).ToList();
+                List<SelectListItem> li = new List<SelectListItem>();
+                SIAAPI.Models.Comercial.Proveedor mm = prov.Proveedores.Find(contarproveedor.Dato);
+                li.Add(new SelectListItem { Text = mm.Empresa, Value = mm.IDProveedor.ToString() });
+                li.Add(new SelectListItem { Text = "--Selecciona Proveedor--", Value = "0" });
+
+                foreach (var m in proveedor)
+                {
+                    li.Add(new SelectListItem { Text = m.Empresa, Value = m.IDProveedor.ToString() });
+                    ViewBag.cliente = li;
+
+                }
+                <div class="form-group">
+
+                    <div class="col-md-8">
+                        @Html.DropDownList("IDProveedor", ViewBag.cliente as List<SelectListItem>, new { @class = "form-control" })
+
+                    </div>
+                </div>
+                <br />
+                <br />
+            }
+            else
+            {
+                <div class="form-group">
+
+                    <div class="col-md-8">
+                        @Html.DropDownList("IDProveedor", ViewBag.proveedor as List<SelectListItem>, new { @class = "form-control" })
+
+                    </div>
+                </div>
+                <br />
+                <br />
+            }
+        }
+
+
+
+
+
+
+
+        <div class="table-responsive">
+            <table class="table table-striped" id="TableCar">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Cref)</th>
+                    <th>@Html.DisplayNameFor(model => model.Descripcion)</th>
+
+                    <th>@Html.DisplayNameFor(model => model.Presentacion)</th>
+
+                </tr>
+            </table>
+        </div>
+
+        var contador = 0;
+        foreach (var item in Model)
+        {
+            SIAAPI.Models.Comercial.Caracteristica cara2 = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where ID=" + item.IDCaracteristica).ToList().FirstOrDefault();
+            string cadenaid = "Id" + contador;
+            <input type="hidden" name="@cadenaid" id="@cadenaid" value="@item.IDCarrito" />
+            <table class="table table-striped">
+
+                <tr>
+                    <td style="background-color:burlywood">
+                        @Html.DisplayFor(modelItem => item.Cref)
+                    </td>
+                    <td colspan="2" style="background-color:cornsilk">
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td colspan="9" style="background-color:cornsilk">
+                        <div>Numero de Presentacion @cara2.IDPresentacion</div>
+                        <div>
+                            <table>
+                                @{
+                                    string[] atributos = cara2.Presentacion.ToString().Split(',');
+                                    <tr>
+                                        @foreach (var atri in atributos)
+                                        {
+                                            string[] valor = atri.Split((char)58);
+                                            string Atri = "";
+                                            string Val = "";
+                                            try
+                                            {
+                                                 Atri = valor[0];
+                                                 Val = valor[1];
+                                            }
+                                            catch (Exception err)
+                                            {
+
+                                            }
+                                            <td style="background-color:burlywood; font-size:xx-small" class="col-md-1">
+                                                <label style="color:white;">@Atri</label>
+                                            </td>
+                                        }
+                                    </tr>
+                                    <tr>
+                                        @foreach (var atri in atributos)
+                                        {
+                                            string[] valor = atri.Split((char)58);
+                                            try
+                                            {
+                                                string Val = valor[1];
+                                                <td class="col-md-1" style=" font-size:xx-small">
+                                                    <label>@Val</label>
+                                                </td>
+                                            }
+                                            catch (Exception err)
+                                            {
+                                                <td class="col-md-1">
+                                                    <label> </label>
+                                                </td>
+                                            }
+
+
+                                        }
+                                    </tr>
+                                }
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table class="table table-striped">
+                <tr cellspacing="5">
+                    <th width="400px">
+                        @Html.DisplayNameFor(model => model.Nota)
+                    </th>
+                    <th width="200px">
+                        @Html.DisplayNameFor(model => model.Cantidad)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Unidad)
+                    </th>
+                    <th>@Html.DisplayNameFor(model => model.Moneda)</th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Precio)
+                    </th>
+
+                    <th>@Html.DisplayNameFor(model => model.Importe)</th>
+                    <th>@Html.DisplayNameFor(model => model.preciomex)</th>
+                    <th></th>
+                </tr>
+                <tr>
+
+
+                    <td width="400">
+                        @{string cadenaa = "Nota" + contador;
+                        }
+                        <input type="text" class="form-control" id="@cadenaa" name="@cadenaa" value="@item.Nota">
+
+
+                    </td>
+
+                    <td width="200">
+                        @{string cadena = "Cantidad" + contador;
+                        }
+                        <input type="number" step="0.5" class="form-control" id="@cadena" name="@cadena" value="@item.Cantidad">
+
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Unidad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Moneda)
+                    </td>
+                    <td>
+
+                        @{string cadenaprecio = "Precio" + contador;
+
+                            <input type="number" step="0.5" class="form-control" id="@cadenaprecio" name="@cadenaprecio" value="@item.Precio">
+                        }
+                    </td>
+
+
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.Importe)*@
+                        @String.Format("{0:C}", item.Importe)
+                    </td>
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.preciomex)*@
+                        @String.Format("{0:C}", item.preciomex)
+                    </td>
+
+                    <td>
+
+                        <a class="edit" onclick="ActualizarCarrito(@item.IDCarrito,@contador )">
+                            <i class="tbl_del_btn fa fa-refresh"></i>
+                            </a>
+                            <a class="delete" data-id="@item.IDCarrito">
+                                <i class="tbl_del_btn fa fa-trash"></i>
+
+                            </a>
+                    </td>
+                </tr>
+            </table>
+            contador++;
+        }
+        <input type="submit" value="Gabrar todo" class="btn-success" />
+    }
+}
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th class="col-lg-1">
+                Moneda Origen
+            </th>
+            <th class="col-lg-1">
+                Subtotal
+            </th>
+            <th class="col-lg-1">
+                IVA
+            </th>
+            <th class="col-lg-1">
+                Total
+            </th>
+            @*<th class="col-lg-1">
+                    Total en Pesos Mexicanos
+                </th>*@
+        </tr>
+        @foreach (var itemresumen in ViewBag.sumatoria)
+        {
+
+            <tr>
+                <td class="col-lg-1">
+                    @itemresumen.MonedaOrigen
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Subtotal)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.IVA)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Total)
+                </td>
+                @*<td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.TotalenPesos)
+                    </td>*@
+
+            </tr>
+        }
+    </table>
+</div>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+        var url = '@Url.Action("Deleteitem", "CarritoC")';
+        $('.delete').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>
+
+<script>
+
+        var urledit = '@Url.Action("Edititem", "CarritoC")';
+
+        function ActualizarCarrito(id, numero) {
+            var nota = document.getElementById("Nota" + numero).value
+            var cantidad = document.getElementById("Cantidad" + numero).value
+
+            var Precio = document.getElementById("Precio" + numero).value
+            $.post(urledit, { id: id, cantidad: cantidad, nota: nota, Precio: Precio }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+</script>

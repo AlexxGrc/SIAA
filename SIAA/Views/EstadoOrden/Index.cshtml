@@ -1,0 +1,67 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.EstadoOrden>
+
+@{
+            ViewBag.Title = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <h3>Estados de la orden</h3>
+    <hr />
+
+    <p>
+        @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-primary navbar-btn btn-xs" })
+
+    </p>
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipo)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    @if (item.Tipo == "G")
+                    {
+                        <td>
+                            Estado General de la Orden
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            Estado del Proceso
+                        </td>
+
+                    }
+
+
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", new { id = item.IDEstadoOrden }, new { @class = "btn btn-success btn-xs" })
+                        @Html.ActionLink("Detalles", "Details", new { id = item.IDEstadoOrden }, new { @class = "btn btn-default btn-xs" })
+                        @Html.ActionLink("Eliminar", "Delete", new { id = item.IDEstadoOrden }, new { @class = "btn btn-danger btn-xs" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+        </div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+﻿@model SIAAPI.Models.Inventarios.VInventarioInicial
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <h3>Inventario </h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IDAlmacen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDAlmacen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Almacen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Almacen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDArticulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDArticulo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Producto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Producto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDCaracteristica)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDCaracteristica)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Presentacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Presentacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Version)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Version)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cantidad)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Unidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Unidad)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDInventario }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

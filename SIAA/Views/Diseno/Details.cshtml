@@ -1,0 +1,257 @@
+﻿@model SIAAPI.Models.Diseno.SolicitudDiseno
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles</h2>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+
+                <h3>
+                    @Html.Label("Solicitud: ")
+
+
+
+                    @{
+                        string solicitudad = "";
+                        if (Model.TipodeSolicitud == "Diseno" || Model.TipodeSolicitud == "Diseño")
+                        {
+                            solicitudad = "Diseño";
+                        }
+                        else if (Model.TipodeSolicitud=="Pleca")
+                        {
+                            solicitudad = "Pleca";
+                        }
+                        else
+                        {
+                            solicitudad = "Suaje";
+                        }
+                    }
+                    @Html.Label(solicitudad)
+                    @Html.Label(" / ")
+                    @Html.Label("Código: ")
+
+                    @{
+                        if (solicitudad== "Diseño")
+                        {
+
+                            @Html.Label(" FSG - 75")
+
+
+
+
+                        }
+                        if (solicitudad == "Suaje")
+                        {
+
+                            @Html.Label(" FSG - 78")
+
+
+                        }
+                    }
+
+
+
+
+
+                </h3>
+
+            </div>
+        </form>
+    </div>
+</nav>
+
+
+<div>
+    <h4></h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Cliente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cliente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendedor.RFC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vendedor.RFC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumeroRevision)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumeroRevision)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDCotizacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDCotizacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaCompromiso)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaCompromiso)
+        </dd>
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoEtiqueta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoEtiqueta)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Embobinado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Embobinado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EstadodeSolicitud)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EstadodeSolicitud)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaAutorizacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaAutorizacion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaTerminacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaTerminacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FoliodeGrabado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FoliodeGrabado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaContrato)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaContrato)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaEntGrabado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaEntGrabado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumerodeGrabados)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumerodeGrabados)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cm2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cm2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumeroRepeticiones)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumeroRepeticiones)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumerodeCirel)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumerodeCirel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.consumomensual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.consumomensual)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MontoAnticipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MontoAnticipo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observaciones)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observaciones)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ID }, new { @class = "btn btn-success btn-xs" })|
+    @if (Model.TipodeDiseno != "Suaje Digital" && Model.TipodeDiseno != "Diseno Digital")
+    {
+        @Html.ActionLink("Ver Cotización", "CotizadorRapido1", new { id = Model.IDCotizacion, IDDisenoS=Model.ID }, new { @class = "btn btn-info btn-xs" });
+    }
+
+    @if (Model.TipodeDiseno == "Suaje Digital" && Model.TipodeSolicitud == "Suaje")
+    {
+        @Html.ActionLink("Ver Solicitud", "CargarsuajeDigital", "Digital", new { Id = Model.IDCotizacion, IDDisenoS = Model.ID }, new { @class = "btn btn-info btn-xs" });
+    }
+    @if (Model.TipodeDiseno == "Diseno Digital" && Model.TipodeSolicitud == "Diseno" && Model.TipoEtiqueta == "Digital")
+    {
+        @Html.ActionLink("Ver Solicitud", "CargarDisenoDigital", "Digital", new { Id = Model.IDCotizacion, IDDisenoS = Model.ID }, new { @class = "btn btn-info btn-xs" });
+    }
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

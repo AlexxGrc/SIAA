@@ -1,0 +1,259 @@
+﻿@model SIAAPI.Models.Suajes.ValeSuaje
+
+@{
+    ViewBag.Title = "CrearValeSalida";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+
+<input type="hidden" class="form-control" name="id" value="@ViewBag.id">
+<h3>Crear Vale</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Fecha, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @{
+                string fecha = DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year;
+            }
+            @Html.EditorFor(model => fecha, new { htmlAttributes = new { @class = "form-control", @value = fecha, @disabled = "disabled" } })
+            @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    @Html.HiddenFor(model => model.IDAlmacen, new { htmlAttributes = new { @class = "form-control", @value = ViewBag.IDAlmacen } })
+
+
+    <div class="form-group">
+        @Html.Label("Entregado a:", new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Entregar, new { htmlAttributes = new { @class = "form-control" } })
+
+            @Html.ValidationMessageFor(model => model.Entregar, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Concepto:", new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Concepto, new { htmlAttributes = new { @class = "form-control" } })
+
+            @Html.ValidationMessageFor(model => model.Concepto, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Solicito:", new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Solicito, new { htmlAttributes = new { @class = "form-control" } })
+
+            @Html.ValidationMessageFor(model => model.Solicito, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Observacion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Observacion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Tipo de Operación", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EnumDropDownListFor(model => model.TipoOVale, htmlAttributes:
+                      new
+                      {
+                          @class = "form-control"
+                      })
+            @Html.ValidationMessageFor(model => model.TipoOVale, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="table-responsive" id="actualiza">
+        <table class="table table-striped" width="50">
+            <thead>
+                <tr>
+                    <th>Descripción</th>
+                    <th>Presentación</th>
+
+                    <th>Cantidad</th>
+                    <th>Unidad</th>
+
+                    <th>Precio</th>
+                    <th>Moneda</th>
+                    <th>Importe</th>
+                    @*<th>Precio MXN</th>*@
+                    <th>Almacén</th>
+                    <th></th>
+                </tr>
+            </thead>
+            @{
+                var contador = 0;
+            }
+            @foreach (var item in ViewBag.carrito)
+            {
+                SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+                <tr>
+                    <td>@item.Cref</td>
+                    <td>
+                        @*<div>@item.Descripcion</div>*@
+                        <div><h6>@item.Presentacion</h6></div>
+                    </td>
+
+                    <td>@item.Cantidad</td>
+                    <td>@item.Unidad</td>
+
+                    <td>
+                        @{string cadenaP = "Precio" + contador;}
+                        <input type="number" step="any" class="form-control" id="@cadenaP" name="Precio" value="@item.Precio">
+
+                    </td>
+                    <td>@item.Moneda</td>
+                    <td>@string.Format("{0:C}", @item.Importe)</td>
+                    @*<td>@string.Format("{0:C}", @item.preciomex)</td>*@
+                    <td>
+                        @{
+                            SIAAPI.Models.Comercial.AlmacenContext db = new SIAAPI.Models.Comercial.AlmacenContext();
+                            int almacen = 0;
+                            if (item.IDAlmacen == 0)
+                            {
+                                almacen = ViewBag.idalma;
+                                db.Database.ExecuteSqlCommand("UPDATE [CarritoValeSuaje] SET [IDAlmacen]= " + almacen + " where idcarritovaleSuaje='" + item.IDCarritoValeSuaje + "'");
+
+                            }
+                            else
+                            {
+                                almacen = item.IDAlmacen;
+                            }
+
+                            string cadena = "select codAlm as Dato from Almacen where idAlmacen='" + almacen + "'";
+                            SIAAPI.Models.Comercial.ClsDatoString cod = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadena).ToList().FirstOrDefault();
+                        }
+                        @cod.Dato
+                    </td>
+                    <td>
+                        <a class="delete" data-id="@item.IDCarritoValeSuaje">
+                            <i class="tbl_del_btn fa fa-trash"></i>
+
+                        </a>
+                    </td>
+                </tr>
+
+
+                if (articulo.IDFamilia == 80 || articulo.IDFamilia == 91 || articulo.IDFamilia == 81 || articulo.IDFamilia == 75 || articulo.IDFamilia == 71 || articulo.IDFamilia == 76 || articulo.IDFamilia == 93 || articulo.IDFamilia == 72 || articulo.IDFamilia == 11 || articulo.IDFamilia == 69)
+                {
+                    <tr>
+                        <td>
+                            @Html.Label("Motivo:")
+                        </td>
+                        <td>
+
+
+                            <select name="select">
+                                @{ 
+                                    string cadenaMotivo = "MotivoSuaje" + contador;
+                                }
+                                <option id="@cadenaMotivo" name="@cadenaMotivo" value="Desgaste">Desgaste</option>
+                                <option id="@cadenaMotivo" name="@cadenaMotivo" value="Daño" selected>Daño</option>
+                                <option id="@cadenaMotivo" name="@cadenaMotivo" value="Cambio">Cambio de material</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                }
+
+
+            }
+
+        </table>
+    </div>
+
+
+
+
+    @{
+
+
+
+        if (ViewBag.dato == 0)
+        {
+            <h3 class="text-danger">No se puede realizar un Vale sin productos en el carrito</h3>
+        }
+        @*if (ViewBag.datoprecio != 0)
+            {
+                <h3 class="text-danger">No se puede realizar un Vale con el precio de producto en 0</h3>
+            }*@
+        if (ViewBag.datocantidad != 0)
+        {
+            <h3 class="text-danger">No se puede realizar un Vale con la cantidad de producto en 0</h3>
+        }
+
+
+        if (ViewBag.dato != 0 && ViewBag.datocantidad == 0)
+        {
+
+            <div class="form-group">
+
+                <div class="col-md-offset-2 col-md-10">
+
+                    <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar al carrito", "Index", "Carrito", null, new { @class = "btn btn-default btn-xs" })
+
+                </div>
+
+
+            </div>
+        }
+        else
+        {
+            <div class="form-group">
+
+                <div class="col-md-offset-2 col-md-10">
+
+                    @Html.ActionLink("Regresar al carrito", "Index", "Carrito", null, new { @class = "btn btn-default btn-xs" })
+
+                </div>
+
+
+            </div>
+
+        }
+
+
+    }
+</div>
+
+}
+
+
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+
+             $('.delete').click(function () {
+                        var url = '@Url.Action("DeleteitemVale", "AjustesAlmacen")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>

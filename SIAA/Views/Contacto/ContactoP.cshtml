@@ -1,0 +1,142 @@
+﻿@model SIAAPI.Models.Administracion.Contacto
+@{
+    ViewBag.Title = "ContactoP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.showSuccessAlert)
+{
+    <script>
+                    alert('Tu mensaje ha sido enviado');
+    </script>
+}
+<h2>Contáctanos</h2>
+<hr />
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <hr />
+            <div class="col-sm-8">
+                <div class="mapouter">
+                    <div style="width: 100%"><iframe width="100%" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=400&amp;hl=es&amp;q=Tercera%20Sur%2039,%20Independencia,%2054915%20Buenavista,%20M%C3%A9x.+(Class%20Labels%20S.%20de%20R.L.%20de%20C.V.)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe><a href="https://www.mapsdirections.info/marcar-radio-circulo-mapa/">Calculadora de radio del mapa</a></div>
+                    <style>
+                        .mapouter {
+                            position: relative;
+                            text-align: right;
+                            height: 500px;
+                            width: 600px;
+                        }
+
+                        .gmap_canvas {
+                            overflow: hidden;
+                            background: none !important;
+                            height: 500px;
+                            width: 600px;
+                        }
+                    </style>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <h3>CLASS LABELS S. DE R.L. DE C.V.</h3>
+                <p>
+                    TERCERA SUR NO. 39 <br />
+                    COLONIA INDEPENDENCIA  <br />
+                    TULTITLAN, ESTADO DE MEXICO <br />
+                </p>
+                <p><i class="fa fa-phone"></i> <abbr title="Telefono"></abbr> TEL: 55 2620 4200 </p><hr />
+
+                <p><i class="fa fa-university fa-2x"></i> <abbr title="Departamento"></abbr> Compras </p>
+                 <p><i class="fa fa-user"></i> <abbr title="Usuario"></abbr>Angelica Herrans </p>
+                 <p><i class="fa fa-envelope-o"></i> <abbr title="Email"></abbr> <a href="mailto:compras@class-labels.com">compras@class-labels.com</a></p>
+                <p><i class="fa fa-phone"></i> <abbr title="Celular"></abbr>cel. 55 5467 5553 </p>
+                <p><i class="fa fa-phone"></i> <abbr title="Celular"></abbr>ext. 104 </p>
+                 <hr />
+                 <p><i class="fa fa-university fa-2x"></i> <abbr title="Departamento"></abbr> Pagos </p>
+                 <p><i class="fa fa-user"></i> <abbr title="Usuario"></abbr>Orlando Cruz Ayala </p>
+                 <p><i class="fa fa-envelope-o"></i> <abbr title="Email"></abbr> <a href="mailto:compras@class-labels.com">gfinanzas@class-labels.com</a></p>
+                <p><i class="fa fa-phone"></i> <abbr title="Celular"></abbr>cel. 55 9596 5633 </p>
+                                
+                <hr />
+                <p><i class="fa fa-university fa-2x"></i> <abbr title="Departamento"></abbr> Sistemas </p>
+                <p><i class="fa fa-user"></i> <abbr title="Usuario"></abbr>Ing Jair Mojica </p>
+                <p><i class="fa fa-envelope-o"></i> <abbr title="Email"></abbr> <a href="mailto:tis@class-labels.com">tis@class-labels.com</a></p>
+                <p><i class="fa fa-phone"></i> <abbr title="Celular"></abbr>55 5068 8693 </p>
+                <hr />
+                <ul class="list-unstyled list-inline list-social-icons">
+                    <li class="tooltip-social facebook-link"><a title="Facebook" data-placement="top" data-toggle="tooltip" href="https://www.facebook.com/classlabels"><i class="fa fa-facebook-square fa-2x"></i></a></li>
+                    <li class="tooltip-social linkedin-link"><a title="Google+" data-placement="top" data-toggle="tooltip" href="https://class-labels.com/"><i class="fa fa-internet-explorer fa-linkedin-square fa-2x"></i></a></li>
+
+                        @*<li class="tooltip-social twitter-link"><a title="Twitter" data-placement="top" data-toggle="tooltip" href="#twitter-profile"><i class="fa fa-twitter-square fa-2x"></i></a></li>*@
+                        @*<li class="tooltip-social google-plus-link"><a title="Google+" data-placement="top" data-toggle="tooltip" href="#google-plus-page"><i class="fa fa-google-plus-square fa-2x"></i></a></li>*@
+                    </ul>
+</div>
+        </div>
+    </div><!-- /.row-->
+</div>
+<hr>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        <h1 class="page-header"> <small>Con gusto un ejecutivo te atenderá!</small></h1>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.Departamento, htmlAttributes: new { @class = "control-label col-md-2" })
+                @{
+                    IEnumerable<string> strList = new List<string> { "Compras", "Pagos", "Sistemas" };
+                }
+                @Html.DropDownList("Departamento", new SelectList(strList, strList.FirstOrDefault()))
+
+                @Html.ValidationMessageFor(model => model.Departamento, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nombre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Telefono, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Mensaje, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.Mensaje, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Mensaje, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Enviar" class="btn btn-success btn-xs" />
+            </div>
+        </div>
+    </div>
+
+}
+
+

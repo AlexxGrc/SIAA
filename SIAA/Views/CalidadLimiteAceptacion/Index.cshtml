@@ -1,0 +1,112 @@
+﻿@model IEnumerable<SIAAPI.Models.Calidad.CalidadLimiteAceptacion>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CodigoLetra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TamanoMuestra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AC1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RE1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AC15)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RE15)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AC25)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RE25)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AC4)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RE4)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AC65)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RE65)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AC10)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RE10)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.CodigoLetra)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.TamanoMuestra)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AC1)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RE1)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AC15)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RE15)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AC25)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RE25)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AC4)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RE4)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AC65)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RE65)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.AC10)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RE10)
+    </td>
+    <td>
+        @Html.ActionLink("Editar", "Edit", new { id = item.IDAceptacion }, new { @class = "btn btn-success btn-xs" })
+        @Html.ActionLink("Detalles", "Details", new { id = item.IDAceptacion }, new { @class = "btn btn-default btn-xs" })
+        @Html.ActionLink("Eliminar", "Delete", new { id = item.IDAceptacion }, new { @class = "btn btn-danger btn-xs" })
+    </td>
+</tr>
+}
+
+</table>

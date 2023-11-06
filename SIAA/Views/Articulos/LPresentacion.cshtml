@@ -1,0 +1,63 @@
+﻿@model IEnumerable<SIAAPI.ViewModels.Articulo.LPresentacion>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDPresentacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cotizacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.version)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Presentacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.jsonPresentacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Articulo_IDArticulo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.obsoleto)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDPresentacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cotizacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.version)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Presentacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.jsonPresentacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Articulo_IDArticulo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.obsoleto)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

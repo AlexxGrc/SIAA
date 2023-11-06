@@ -1,0 +1,133 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Articulo>
+
+@{
+    ViewBag.Title = "Asignar a un articulo";
+}
+
+
+
+<h2>Asignar a un articulo</h2>
+
+
+@if (ViewBag.Articulo != null)
+{
+    <h3> Esta Cotizacion sera asignada a </h3>
+    SIAAPI.Models.Comercial.Articulo arti = (SIAAPI.Models.Comercial.Articulo)ViewBag.Articulo;
+    <h3 class="text-danger">@arti.Cref</h3>
+    <h3 class="text-info">@arti.Descripcion</h3>
+
+}
+
+@if (ViewBag.Caracteristica != null)
+{
+
+
+    SIAAPI.Models.Comercial.Caracteristica caraarti = (SIAAPI.Models.Comercial.Caracteristica)ViewBag.Caracteristica;
+
+    <tach2>Presentacion @caraarti.IDPresentacion</tach2>
+    <table>
+        @try
+        {
+
+            string[] atributoss = caraarti.Presentacion.Split(',');
+            <tr>
+                @foreach (var atri in atributoss)
+                {
+                    string[] valor = atri.Split((char)58);
+                    string Atri = valor[0];
+                    string Val = valor[1];
+                    <td style="background-color:burlywood" class="col-md-1">
+                        <label style="color:white;">@Atri</label>
+                    </td>
+                }
+            </tr>
+                <tr>
+                    @foreach (var atri in atributoss)
+                    {
+                        string[] valor = atri.Split((char)58);
+                        string Atri = valor[0];
+                        string Val = valor[1];
+                        <td class="col-md-1">
+                            <label>@Val</label>
+                        </td>
+                    }
+                </tr>
+
+
+        }
+        catch (Exception err)
+        {
+        }
+
+    </table>
+
+    <td>
+        @Html.ActionLink("Seleccionar", "Seleccionar", new { id = caraarti.Articulo_IDArticulo, idCotizacion = ViewBag.IDCotizacion })
+
+    </td>
+
+}
+
+@if (ViewBag.Caracteristica == null)
+{
+
+
+using (Html.BeginForm())
+{
+
+    <div class="form-horizontal">
+        <h4 class="text-danger">@ViewBag.errorpersonalizado</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Buscar Clave de Producto</span>
+                    <div class="col-md-8">
+                        <input type="text" name="filtro" id="filtro" value="@ViewBag.filtro"> </input>
+
+                    </div>
+                    <div class="col-md-2">
+                        <input type="submit" value="Buscar" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<br />
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cref)
+                </td>
+                <td>
+                    <div font-size="xx-small">@Html.DisplayFor(modelItem => item.Descripcion)</div>
+                </td>
+                <td>
+                        @{List<SIAAPI.Models.Comercial.Caracteristica> listaPresentacion = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from caracteristica where Articulo_IdArticulo=" + item.IDArticulo).OrderBy(s => s.IDPresentacion).ToList();
+                            foreach (SIAAPI.Models.Comercial.Caracteristica cara in listaPresentacion)
+                            {
+
+                                <div>NP @cara.IDPresentacion </div>
+                                <div>@cara.Presentacion</div>
+                                    <div>@Html.ActionLink("Seleccionar", "Seleccionar", new { id = cara.ID, idCotizacion = ViewBag.IDCotizacion })</div>
+
+
+
+                                }
+                            }
+            </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+}

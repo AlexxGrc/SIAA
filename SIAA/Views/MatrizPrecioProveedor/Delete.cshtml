@@ -1,0 +1,65 @@
+﻿@model SIAAPI.Models.Comercial.MatrizPrecioProveedor
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Matriz de Precio del Proveedor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IDProveedor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Proveedor.Empresa)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IDArticulo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Articulo.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RangInf)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RangInf)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RangSup)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RangSup)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Precio)
+        </dt>
+
+        <dd>
+            @String.Format("{0:C}", Model.Precio)
+         
+        </dd>
+
+ 
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Index", new { id = Model.IDMatrizPrecio}, new { @class = "btn  btn-default btn-xs" })
+        </div>
+    }
+</div>

@@ -1,0 +1,315 @@
+﻿@model SIAAPI.Models.Comercial.EncPedido
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar pedido @Model.IDPedido</h2>
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" value="@ViewBag.page" id="page" name="page" />
+    <input type="hidden" value="@ViewBag.searchString" id="searchString" name="searchString" />
+    @Html.AntiForgeryToken()
+
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                
+                <dt>
+                 <h5>@Html.DisplayNameFor(model => model.IDCliente)</h5>  
+                </dt>
+
+                <dd>
+                  <h4>@Html.DisplayFor(model => model.Clientes.Nombre)</h4> 
+                </dd>
+
+                <dt>
+                   <h5>@Html.DisplayNameFor(model => model.Fecha)</h5>
+                </dt>
+
+                <dd>
+                  <h5>@Html.DisplayFor(model => model.Fecha)</h5>  
+                </dd>
+
+                <dt>
+                   <h5>@Html.DisplayNameFor(model => model.FechaRequiere)</h5> 
+                </dt>
+
+                <dd>
+                  <h5>@Html.DisplayFor(model => model.FechaRequiere)</h5> 
+                </dd>
+                <dt>
+                  <h4>@Html.DisplayNameFor(model => model.IDVendedor)</h4>
+                </dt>
+
+                <dd>
+                   <h4>@Html.DisplayFor(model => model.Vendedor.Nombre)</h4>
+                </dd>
+                <dt>
+                   <h4>@Html.DisplayNameFor(model => model.OCompra)</h4> 
+                </dt>
+
+                <dd>
+                  <h4>@Html.DisplayFor(model => model.OCompra)</h4>  
+                </dd>
+                <dt>
+                  <h4>@Html.DisplayNameFor(model => model.Observacion)</h4>  
+                </dt>
+
+                <dd>
+                   <h4>@Html.DisplayFor(model => model.Observacion)</h4>
+                </dd>
+
+            </dl>
+        </div>
+    </div>
+       
+
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.IDPedido)
+
+
+            @Html.HiddenFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+
+
+            @Html.HiddenFor(model => model.FechaRequiere, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            @Html.HiddenFor(model => model.IDCliente, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+            @Html.HiddenFor(model => model.IDMetodoPago, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            @Html.HiddenFor(model => model.IDFormapago, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            @Html.HiddenFor(model => model.IDMoneda, new { htmlAttributes = new { @class = "form-control" } })
+
+            @Html.HiddenFor(model => model.IDCondicionesPago, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+            @Html.HiddenFor(model => model.IDAlmacen, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            @Html.HiddenFor(model => model.IDUsoCFDI, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+            @Html.HiddenFor(model => model.Subtotal, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+            @Html.HiddenFor(model => model.IVA, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+            @Html.HiddenFor(model => model.Total, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            @Html.HiddenFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+
+
+            @Html.HiddenFor(model => model.UserID, new { htmlAttributes = new { @class = "form-control" } })
+
+            <div class="form-group">
+                @Html.Label("Vendedor", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDVendedor", ViewBag.vendedor as List<SelectListItem>, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDVendedor, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TipoCambio, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.TipoCambio, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TipoCambio, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Observacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Observacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Entrega, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Entrega, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Entrega, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.OCompra, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.OCompra, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.OCompra, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+
+                <tr>
+
+
+                    <td>Referencia</td>
+                    <td>Artículo</td>
+
+                    <td>Nota</td>
+                    <td>Almacén</td>
+
+                    <td>Cantidad</td>
+                    <td>Remisionado</td>
+                    <td>Precio</td>
+                    <td>Importe</td>
+
+
+
+                </tr>
+
+                @{ int contadordeordenes = 0;
+                    bool etiquetaDigital = false;
+                    bool generaOPP = false;
+                    int contador = 0;
+                }
+
+                @foreach (SIAAPI.ViewModels.Comercial.VDetPedido item in ViewBag.req)
+                {
+                   string cadenaai = "Iddetpedido" + contador;
+                    
+                    <input type="hidden" class="form-control" id="@cadenaai" name="Iddetpedido" value="@item.IDDetPedido">
+
+                    @*<input type="hidden" id="Iddetpedido" name="Iddetpedido" value="@item.IDDetPedido" />*@
+
+                    try
+                    {
+                        SIAAPI.Models.Comercial.ClsDatoEntero idEntero = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDPlotter) as dato from DetPedido as d inner join ArticulosGOPPlotter as a on a.IDPresentacion=d.Caracteristica_ID where  d.IDPedido=" + item.IDPedido).ToList().FirstOrDefault();
+
+                        if (idEntero.Dato > 0)
+                        {
+                            generaOPP = true;
+                        }
+                    }
+                    catch (Exception err)
+                    {
+
+                    }
+                    SIAAPI.Models.Comercial.ClsDatoEntero idCuenta = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDDetPedido) as dato from DetPedido as d inner join Articulo as a on a.IDArticulo=d.IDArticulo where a.IDFamilia=62 and d.IDPedido=" + item.IDPedido).ToList().FirstOrDefault();
+
+                    if (idCuenta.Dato > 0)
+                    {
+                        etiquetaDigital = true;
+                    }
+
+
+                    SIAAPI.Models.Comercial.Caracteristica car = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where ID=" + item.Caracteristica_ID).ToList().FirstOrDefault();
+                    SIAAPI.Models.Comercial.ArticuloContext dbar = new SIAAPI.Models.Comercial.ArticuloContext();
+                    SIAAPI.Models.Comercial.Articulo articulo = dbar.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>("select * from Articulo where cref='" + item.Cref + "'").ToList().FirstOrDefault();
+                    SIAAPI.Models.Comercial.ClsDatoEntero idArt = dbar.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select idarticulo as Dato from Articulo where cref='" + item.Cref + "'").ToList().FirstOrDefault();
+                    string color = "success";
+                    if (item.Status.Equals("Cancelado"))
+                    {
+                        color = "danger";
+                    }
+                    if (item.Status.Equals("Activo"))
+                    {
+                        color = "suceess";
+                    }
+                    if (item.Status.Equals("Finalizado"))
+                    {
+                        color = "default";
+                    }
+                    if (item.Status.Equals("Inactivo"))
+                    {
+                        color = "info";
+                    }
+                    if (item.Status.Equals("Prefacturado"))
+                    {
+                        color = "warning";
+                    }
+
+                    <tr class="@color">
+                        <td>
+                            @item.Cref
+                        </td>
+
+                        <td>
+                            <div>@item.Articulo</div>
+                            <div><h5 class="text-info">Número de Presentación @car.IDPresentacion</h5><h6> @item.Presentacion</h6></div>
+                            <br />
+
+                        </td>
+
+                        <td>
+                            @{string cadenaa = "Nota" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadenaa" name="Nota" value="@item.Nota">
+
+                        </td>
+                        @*<td><input type="text" id="Nota" name="Nota" value="@item.Nota" /></td>*@
+                        <td>
+                            @{
+                                SIAAPI.Models.Comercial.AlmacenContext dba = new SIAAPI.Models.Comercial.AlmacenContext();
+                                SIAAPI.Models.Comercial.ClsDatoString almacen = dba.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select CodAlm as Dato from Almacen where idalmacen=" + item.IDAlmacen).ToList().FirstOrDefault();
+                                SIAAPI.Models.Comercial.Articulo a = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+
+                            }
+                            @if (a.CtrlStock)
+                            {
+                                @almacen.Dato
+                            }
+                            else
+                            {
+                                string n = "N/A";
+                                @n
+                            }
+                        </td>
+
+                        <td>
+                            @item.Cantidad
+
+                        </td>
+                        <td>@item.Suministro</td>
+                        <td>@string.Format("{0:C}", @item.Costo)</td>
+                        <td>@string.Format("{0:C}", @item.Importe)</td>
+
+
+
+                    </tr>
+                                    contador++;
+                                }
+            </table>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success" />
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("Volver a la lista", "Index")
+        </div>
+
+
+
+        }

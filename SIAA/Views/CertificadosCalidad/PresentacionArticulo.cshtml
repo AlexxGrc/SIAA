@@ -1,0 +1,122 @@
+﻿@model SIAAPI.Models.Calidad.CertificadoCalidad
+
+@{
+    ViewBag.Title = "PresentacionArticulo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PresentacionArticulo</h2>
+
+@using (Html.BeginForm())
+{
+    <input type="hidden" value="@ViewBag.IDCertificado" id="IDCertificado" name="IDCertificado" />
+
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+                <th>
+                    PARÁMETRO
+                </th>
+                <th>
+                    VALORES
+                </th>
+                <th>
+                    MÉTODO
+                </th>
+                <th>
+                    RESULTADO
+                </th>
+
+                <th></th>
+            </tr>
+            @{
+                var contador = 0;
+                string[] arraydatos;
+                arraydatos = ViewBag.Presentacion.Split(',');
+                int cuantos = arraydatos.Length;
+
+                string acc = null;
+                string valor = null;
+                float[] tamanoenc = new float[cuantos];
+
+                for (int i = 0; i < arraydatos.Length; i++)
+                {
+                    tamanoenc[i] = 50f;
+
+                }
+                string Embobinado = "A";
+                for (int i = 0; i < arraydatos.Length; i++)
+                {
+
+
+
+                    string cuenta = arraydatos[i];
+                    string[] arraydatoscortados;
+                    arraydatoscortados = cuenta.Split(':');
+                    acc = arraydatoscortados[0] /*+ ": " + arraydatoscortados[1] + "   "*/;
+                    valor = arraydatoscortados[1];
+
+                    if (acc == "EMBOBINADO")
+                    {
+                        if (valor == "")
+                        {
+                            valor = "A";
+                        }
+                        Embobinado = valor;
+                    }
+
+
+                    <tr>
+                        <td>
+                            @{string cadenaP = "Parametro" + contador;
+                            }
+                            <input type="hidden" value="@acc" name="@cadenaP" id="@cadenaP" />
+                            @Html.DisplayFor(modelItem => acc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => valor)
+                        </td>
+                        <td>
+                            @{string cadenaal = "IDMetodo" + contador;
+                                var Metodos = new SIAAPI.Models.Calidad.MetodoContext().Database.SqlQuery<SIAAPI.Models.Calidad.Metodo>("select * from Metodo").ToList();
+
+                            }
+                            <select name="@cadenaal" id="@cadenaal">
+                                @{ foreach (SIAAPI.Models.Calidad.Metodo metodo in Metodos)
+                                    {
+
+                                        <option value="@metodo.Descripcion" selected>@metodo.Descripcion</option>
+
+                                    }
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            @{string cadenaR = "Resultado" + contador;
+                            }
+                            <input type="text" step="0.5" class="form-control" id="@cadenaR" name="@cadenaR" value="@valor">
+
+                        </td>
+                    </tr>
+
+
+
+
+
+                }
+            }
+
+
+        </table>
+    </div>
+
+    <div class="form-group">
+
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    </div>
+
+}
+
+

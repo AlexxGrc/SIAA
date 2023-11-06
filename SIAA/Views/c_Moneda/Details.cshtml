@@ -1,0 +1,51 @@
+﻿@model SIAAPI.Models.Administracion.c_Moneda
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div>
+    <h3>Detalles de Divisa</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveMoneda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveMoneda)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoDecimales)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoDecimales)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Variacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Variacion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDMoneda }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index",null, new { @class = "btn btn-default btn-xs" })
+</p>

@@ -1,0 +1,47 @@
+﻿@model SIAAPI.Models.Administracion.c_Banco
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <h3>Detalles de Banco</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveBanco)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveBanco)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RazonSocial)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RazonSocial)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RFC)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RFC)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDBanco }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index",null, new { @class = "btn btn-default btn-xs" })
+</p>

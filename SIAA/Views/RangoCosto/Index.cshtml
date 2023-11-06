@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SIAAPI.Models.PlaneacionProduccion.RangoPlaneacionCosto>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPlaneacion.cshtml";
+}
+
+<h2>Rango para la planeacion</h2>
+
+<p>
+    @Html.ActionLink("Crear nuevo rango", "Create", null, new { @class = "btn btn-primary navbar-btn btn-xs" })
+</p>
+<table class="table">
+    <tr>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.RangoInf)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RangoSup)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Costo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.RangoInf)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RangoSup)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Cantidad)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Costo)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.IDRP }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.IDRP }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.IDRP })
+        </td>
+    </tr>
+}
+
+</table>

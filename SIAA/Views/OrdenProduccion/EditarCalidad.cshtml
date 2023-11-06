@@ -1,0 +1,346 @@
+﻿@model SIAAPI.Models.Calidad.CertificadoCalidad
+
+@{
+    ViewBag.Title = "EditarCalidad";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<input type="hidden" class="form-control" name="idLiberacion" value="@ViewBag.IDLibera">
+<h2>Calidad</h2>
+
+@using (Html.BeginForm("EditarCalidad", "OrdenProduccion", new { page = ViewBag.page } ,FormMethod.Post))
+{
+
+    <div class="text-danger"><h5>@ViewBag.Mensaje</h5></div>
+    <br />
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @*@Html.HiddenFor(model => model.IDLibera)*@
+
+    <div class="row">
+        <input type="hidden" name="CodigoLetra" value="@ViewBag.Letra">
+        <input type="hidden" name="IDLibera" value="@ViewBag.IDLibera">
+        <div class="col col-md-6 col-sm-1">
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDOrden, "No. Orden", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.IDOrden, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.IDOrden, disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.IDOrden, "", new { @class = "text-danger" })
+                    <input type="hidden" name="IDOrden" value="@ViewBag.IDOrden">
+                    @Html.HiddenFor(model => model.IDLibera, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.IDLibera } })
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col col-md-6 col-sm-1">
+            <div class="form-group">
+                @Html.Label("Artículo", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDArticulo", null, new { @class = "form-control", @disabled = "disabled" })
+                    @Html.HiddenFor(model => model.IDArticulo, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group">
+            @Html.Label("Cliente", new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDCliente", ViewBag.IDCliente as List<SelectListItem>, new { @class = "form-control", name = "IDCliente", id = "IDCliente" })
+
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="row">
+        <div class="col col-md-6 col-sm-1">
+            <div class="form-group">
+                @Html.Label("Cantidad liberada", new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.CantidadLiberada } })
+                    @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                    <input type="hidden" name="Cantidad" value="@ViewBag.CantidadLiberada">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col col-md-6 col-sm-1">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.FechaCertificado, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @{
+                        string fecha = DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year;
+                    }
+                    @Html.EditorFor(model => model.FechaCertificado, new { htmlAttributes = new { @disabled = "disabled", @class = "form-control", @Value = fecha } })
+                    @Html.ValidationMessageFor(model => model.FechaCertificado, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-md-6 col-sm-1">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDInspeccion, "Inspección", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+
+                    @Html.DropDownList("IDInspeccion", ViewBag.IDInspeccion as List<SelectListItem>, new { @class = "form-control", name = "IDInspeccion", id = "IDInspeccion", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.IDInspeccion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col col-md-6 col-sm-1">
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDMuestreo, "Muestreo", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDMuestreo", ViewBag.IDMuestreo as List<SelectListItem>, new { @class = "form-control", name = "IDMuestreo", id = "IDMuestreo", @disabled = "disabled" })
+
+                    @Html.ValidationMessageFor(model => model.IDMuestreo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col col-md-6 col-sm-1">
+            <div class="form-group">
+                @Html.Label("Revisar", new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @ViewBag.Revisar
+                </div>
+            </div>
+        </div>
+
+        <div class="col col-md-6 col-sm-1">
+            <div class="form-group">
+                @Html.Label("¿Cuantás estuvierón mal?", new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    <input type="number" class="form-control" text="0" name="CantidadMal" id="CantidadMal" value="0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+                <th style="background-color: #996515; color: #F2F3F4 ">
+                    ATRIBUTO
+                </th>
+                <th style="background-color: #996515; color: #F2F3F4 ">
+                    ESPECIFICACIÓN
+                </th>
+                <th style="background-color: #996515; color: #F2F3F4 ">
+                    UNIDAD
+                </th>
+                <th style="background-color: #996515; color: #F2F3F4 ">
+                    MÉTODO
+                </th>
+                <th style="background-color: #996515; color: #F2F3F4 ">
+                    RESULTADO
+                </th>
+
+                <th></th>
+            </tr>
+            @{
+                var contador = 0;
+                string[] arraydatos;
+                arraydatos = ViewBag.PresentacionResultado.Split(',');
+                string[] arraydatosMetodo;
+                arraydatosMetodo = ViewBag.PresentacionMetodo.Split(',');
+                string[] arraydatosTintas;
+                arraydatosTintas = ViewBag.PresentacionTintas.Split(',');
+
+                int cuantos = arraydatos.Length;
+                int cuantosT = arraydatosTintas.Length;
+
+                string acc = null;
+                string valor = null;
+                string accm = null;
+                string valorm = null;
+                string acct = null;
+                string valort = null;
+                string metodot = null;
+                float[] tamanoenc = new float[cuantos];
+                float[] tamanoencT = new float[cuantosT];
+                for (int i = 0; i < arraydatos.Length; i++)
+                {
+                    tamanoenc[i] = 50f;
+
+                }
+                string Embobinado = "A";
+                for (int i = 0; i < arraydatos.Length; i++)
+                {
+                    ////para método
+                    string cuentaMetodo = arraydatosMetodo[i];
+                    string[] arraydatosMetodoCortados;
+                    arraydatosMetodoCortados = cuentaMetodo.Split(':');
+                    accm = arraydatosMetodoCortados[0] /*+ ": " + arraydatoscortados[1] + "   "*/;
+                    valorm = arraydatosMetodoCortados[1];
+
+                    string unidad = "N/A";
+
+
+                    string cuenta = arraydatos[i];
+                    string[] arraydatoscortados;
+                    arraydatoscortados = cuenta.Split(':');
+                    acc = arraydatoscortados[0] /*+ ": " + arraydatoscortados[1] + "   "*/;
+                    valor = arraydatoscortados[1];
+
+                    if (acc == "EMBOBINADO")
+                    {
+                        if (valor == "")
+                        {
+                            valor = "A";
+                        }
+                        Embobinado = valor;
+                    }
+
+
+                        <tr>
+                            <td>
+                                @{string cadenaP = "Parametro" + contador;
+                                }
+                                <input type="hidden" value="@acc" name="@cadenaP" id="@cadenaP" />
+                                @Html.DisplayFor(modelItem => acc)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => valor)
+                            </td>
+                            <td>
+                                @{
+                                    if (acc.ToUpper() == "ANCHO" || acc.ToUpper() == "LARGO")
+                                    {
+                                        unidad = "MILIMETROS";
+                                    }
+                                    else if (acc.ToUpper() == "ETIQUETAXR")
+                                    {
+                                        unidad = "PIEZAS";
+                                    }
+                                    else if (acc.ToUpper() == "CENTRO")
+                                    {
+                                        unidad = "PULGADAS";
+                                    }
+                                    else if (acc.ToUpper() == "TINTAS")
+                                    {
+                                        unidad = "ΔE";
+                                    }
+                                    else if (acc.ToUpper() == "CYREL")
+                                    {
+                                        unidad = "VISUAL";
+                                    }
+
+
+                                    string cadenaaUni = "Unidad" + contador;
+                                }
+                                <input type="hidden" value="@unidad" name="@cadenaaUni" id="@cadenaaUni" />
+
+
+                                @unidad
+                            </td>
+                            <td>
+                                @{string cadenaal = "IDMetodo" + contador;
+                                    var Metodos = new SIAAPI.Models.Calidad.MetodoContext().Database.SqlQuery<SIAAPI.Models.Calidad.Metodo>("select * from Metodo").ToList();
+
+                                }
+                                <select name="@cadenaal" id="@cadenaal">
+                                    @{ foreach (SIAAPI.Models.Calidad.Metodo metodo in Metodos)
+                                        {
+                                            SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                                            string cadena1 = " select * from dbo.Metodo where [Descripcion]= '" + valorm + "'";
+                                            SIAAPI.Models.Calidad.Metodo m = new SIAAPI.Models.Calidad.MetodoContext().Database.SqlQuery<SIAAPI.Models.Calidad.Metodo>(cadena1).ToList().FirstOrDefault();
+
+
+                                            if (metodo.Descripcion != valorm) // SI NO ES EL MODELO SOLO LO AÑADE AL COMBO
+                                            {
+                                                if (m != null)
+                                                {
+                                                    <option value="@metodo.Descripcion">@metodo.Descripcion</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@valorm">@valorm</option>
+                                                }
+
+                                            }
+                                            else // SI ES IGUAL AL MODELO LO CREA Y LO SELECCIONA
+                                            {
+                                                <option value="@metodo.Descripcion" selected>@metodo.Descripcion</option>
+                                            }
+
+
+                                        }
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                @{string cadenaR = "Resultado" + contador;
+                                }
+                                <input type="text" step="0.5" class="form-control" id="@cadenaR" name="@cadenaR" value="@valor">
+
+                            </td>
+                        </tr>
+
+
+
+
+
+                }
+            }
+
+
+        </table>
+    </div>
+
+
+
+
+</div>
+
+    SIAAPI.Models.Comercial.Clientes cliente = new SIAAPI.Models.Comercial.ClientesContext().Clientes.Find(ViewBag.Cliente);
+
+
+    <div>
+        <div>@cliente.Nombre </div>
+        @if (cliente.FacturacionExacta == true)
+        {
+            <div>Factura Exacto </div>
+        }
+        else
+        {
+            <div>Acepta Margen</div>
+        }
+        @if (cliente.CertificadoCalidad == true)
+        {
+            <div>Requiere Certificado</div>
+        }
+        else
+        {
+            <div>No requiere Certificado</div>
+        }
+    </div>
+
+
+    <div class="form-group">
+
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    </div>
+}
+
+

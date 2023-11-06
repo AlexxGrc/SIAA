@@ -1,0 +1,106 @@
+﻿@model SIAAPI.ViewModels.Cfdi.ViewComplento
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.idEncFac)
+    <div class="form-horizontal">
+        <h3>Elaborar Complemento</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Factura
+
+                    </div>
+                    <div class="panel-body">
+                        @ViewBag.Cliente
+
+                    </div>
+                    <div class="panel-footer">
+
+                        @ViewBag.Monto
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-8">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDFormaPago, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    <div class="col-md-6 col-sm-12">
+                        @*    @Html.EditorFor(model => model.IDFormaPago, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(model => model.IDFormaPago, ViewBag.listaformapago as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDFormaPago, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDMetodoPago, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @* @Html.EditorFor(model => model.IDMetodoPago, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(model => model.IDMetodoPago, ViewBag.listametodopago as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDMetodoPago, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDTipoRelacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @* @Html.EditorFor(model => model.IDTipoRelacion, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(model => model.IDTipoRelacion, ViewBag.listaTipoRelacion as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDTipoRelacion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDUsoCFDI, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @*@Html.EditorFor(model => model.IDUsoCFDI, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(model => model.IDUsoCFDI, ViewBag.listauso as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDUsoCFDI, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDTipoComprobante, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @* @Html.EditorFor(model => model.IDTipoComprobante, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(model => model.IDTipoComprobante, ViewBag.listatipocomprobante as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDTipoComprobante, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.serie, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @* @Html.EditorFor(model => model.IDTipoComprobante, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @Html.DropDownListFor(model => model.serie, ViewBag.listaserie as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.serie, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UUID, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.UUID, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UUID, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

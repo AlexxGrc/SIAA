@@ -1,0 +1,43 @@
+﻿@model SIAAPI.Models.Administracion.c_TipoComprobante
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div>
+    <h3>Detalles de Tipo Comprobante</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveTipoComprobante)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveTipoComprobante)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValorMaximo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValorMaximo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDTipoComprobante }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index",null, new { @class = "btn btn-default btn-xs" })
+</p>

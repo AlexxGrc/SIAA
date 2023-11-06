@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Error";
+    Layout = "~/Views/Shared/_LayoutPlaneacionE.cshtml";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+</head>
+<body>
+    
+       @{
+           string cadena = ViewBag.Error;
+           string[] cadenas = cadena.Split(',');
+           foreach( string cad in cadenas)
+           {
+               <div>
+                   <h3>@cad </h3>
+               </div>
+           }
+
+    } 
+        
+  
+</body>
+</html>

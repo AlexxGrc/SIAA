@@ -1,0 +1,1837 @@
+﻿
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.OrdenProduccion>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+    ViewBag.Title = "Prioridad";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+@*<h3>Asignación de Prioridad</h3>*@
+@*<hr />*@
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">*@
+
+
+@*Busqueda*@
+
+<div>
+    <form>
+
+        @using (Html.BeginForm())
+        {
+            <div class="clear_fix">
+
+                <table>
+                    <tr>
+                        <td>
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    Elementos por página: @Html.DropDownList("pageSize")
+                                </div>
+                            </div>
+
+                        </td>
+                        <td> Máquinas: </td>
+                        <td>
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    @Html.DropDownList("Maquina", (IEnumerable<SelectListItem>)ViewBag.Maquinas, null, htmlAttributes: new { @class = "form-control", @id = "Maquina", @onchange = "CambiaMaquina(this)" })
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            Estados:
+                        </td>
+                        <td>
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                     @Html.DropDownList("Estado", (IEnumerable<SelectListItem>)ViewBag.Estados, null, htmlAttributes: new { @class = "form-control", @id = "Estado" })
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-xs-12">
+                                <div class="input-group">
+                                    Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-xs-7">
+                                <div class="input-group">
+                                    <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" />
+                                    <span class="sr-only">(current)</span>
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+
+
+            </div>
+
+        }
+
+    </form>
+</div>
+
+<br>
+@*Busqueda*@
+
+@{
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+
+                    <h3> ÓRDENES DE STOCK</h3>
+
+
+
+                </div>
+
+            </form>
+        </div>
+    </nav>
+    <div class="table-responsive">
+        <table style="height: 54px; width: 754px; border: 1px solid black; border-collapse: collapse;">
+
+
+            <th style="height: 18px; width: 194.125px; border: 1px solid black; background-color: #0d6efd;color:#F2F3F4 ">
+                <span style="color: #ffffee"></span>    @Html.Label("Orden ")
+
+            </th>
+            <th  style="height: 18px; width: 110.531px; border: 1px solid black; background-color: #0d6efd;">
+                <span style="color: #ffffee;">Fechas </span>
+               
+            </th>
+            <th style="height: 18px; width: 110.531px; border: 1px solid black; background-color: #0d6efd;">
+                <span style="color: #ffffee;">@Html.Label("Cliente")</span>
+
+            </th>
+           
+            <th style="height: 18px; width: 110.531px; border: 1px solid black; background-color: #0d6efd;">
+                <span style="color: #ffffee;">@Html.Label("Cantidad")</span>
+
+            </th>
+            <<th style="height: 18px; width: 110.531px; border: 1px solid black; background-color: #0d6efd;">
+                <span style="color: #ffffee;">@Html.Label("EJE")</span>
+
+            </th>
+            <th style="height: 18px; width: 110.531px; border: 1px solid black; background-color: #0d6efd;">
+                <span style="color: #ffffee;">@Html.Label("AVANCE")</span>
+
+            </th>
+            <th style="height: 18px; width: 110.531px; border: 1px solid black; background-color: #0d6efd;">
+                <span style="color: #ffffee;">@Html.Label("MATERIEALES PRENSA")</span>
+
+            </th>
+
+            <th style="height: 18px; width: 110.531px; border: 1px solid black; background-color: #0d6efd;">
+                <span style="color: #ffffee;">@Html.Label("SURTIDA")</span>
+
+            </th>
+            <th style="height: 18px; width: 110.531px; border: 1px solid black; background-color: #0d6efd;">
+                <span style="color: #ffffee;">@Html.Label("ACCIONES")</span>
+
+            </th>
+            <th> </th>
+
+            @{ int controln1 = 0;
+                int contadorprioridad1 = 1;
+            }
+            @foreach (SIAAPI.Models.Produccion.OrdenProduccion item in ViewBag.OrdenesStock)
+            {
+                try
+                {
+                    SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                    SIAAPI.Models.Comercial.ClsDatoString cref = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select cref as Dato from  [Articulo] where [IDARTICULO]='" + item.IDArticulo + "'").ToList().FirstOrDefault();
+
+                    SIAAPI.Models.Comercial.ClientesContext d1b = new SIAAPI.Models.Comercial.ClientesContext();
+                    SIAAPI.Models.Comercial.ClsDatoString cliente = d1b.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Nombre as Dato from  [Clientes] where [idCliente]=" + item.IDCliente + "").ToList().FirstOrDefault();
+                    <tr>
+
+                        @{
+
+                            //////////////// oloresc claasss
+                            string noorden = item.IDOrden.ToString();
+                            string Estado = item.EstadoOrden;
+                            string Color = "#F5FBEF";
+                            string Colorborder = "#FFFFFF";
+                            string colororden = "black";
+                            string Colorpedido = "#51000F";
+                            if (Estado == "Conflicto")
+                            {
+                                Color = "#673AB7";
+                                Colorborder = "#FFFFFF";
+                                colororden = "color:#FFFFFF";
+                                Colorpedido = "#FFFFFF";
+                            }
+                            if (Estado == "En Revision")
+                            {
+                                Color = "#e4007c";
+                                Colorborder = "#FFFFFF";
+                                colororden = "color:#FFFFFF";
+                                Colorpedido = "#FFFFFF";
+                            }
+                            if (Estado == "Lista")
+                            {
+                                Color = "#ffc107";
+                                Colorborder = "#FFFFFF";
+                                colororden = "color:#FFFFFF";
+                                Colorpedido = "#FFFFFF";
+                            }
+                            if (Estado == "Programada")
+                            {
+                                Color = "#3063FE";
+                                Colorborder = "#FFFFFF";
+                                colororden = "color:#FFFFFF";
+
+                                Colorpedido = "#FFFFFF";
+                            }
+
+                            if (Estado == "Iniciada")
+                            {
+                                Color = "#F5FE2E";
+                                Colorborder = "#FFFFFF";
+                                colororden = "color:#000000";
+                                Colorpedido = "#000000";
+                            }
+
+                            if (Estado == "Finalizada")
+                            {
+                                Color = "#03B45D";
+                                Colorborder = "#FFFFFF";
+                                colororden = "color:#FFFFFF";
+                                Colorpedido = "#FFFFFF";
+                            }
+                            if (Estado == "Cancelada")
+                            {
+                                Color = "#FD0009";
+                                Colorborder = "#FFFFFF";
+                                colororden = "color:#FFFFFF";
+                                Colorpedido = "#FFFFFF";
+                            }
+                        
+                        }
+                        <td style="background:@Color;border-color:@Colorborder">
+
+                            <h4>   @Html.ActionLink(noorden, "Details", "OrdenProduccion", new { id = item.IDOrden }, new { @style = colororden })</h4>
+                            <p style="color:#000000">@cref.Dato</p>
+                            <p style="color:@Colorpedido">@item.EstadoOrden</p>
+                            @{
+                                string articuloMa = "";
+                                try
+                                {
+                                    string estado = "";
+                                    if (item.EstadoOrden == "Iniciada")
+                                    {
+                                        estado = "Iniciado";
+                                    }
+                                    if (item.EstadoOrden == "Programada")
+                                    {
+                                        estado = "Programado";
+                                    }
+
+                                    SIAAPI.Models.Comercial.ClsDatoEntero idmaquina = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select idmaquina as dato from prioridades where idorden=" + item.IDOrden + " and estado<>'Terminado'").ToList().FirstOrDefault();
+                                    SIAAPI.Models.Comercial.ClsDatoString estadoP = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select estado as dato from prioridades where idorden=" + item.IDOrden + " and idmaquina=" + idmaquina.Dato).ToList().FirstOrDefault();
+
+                                    SIAAPI.Models.Comercial.Articulo articuloM = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(idmaquina.Dato);
+                                    articuloMa = articuloM.Descripcion;
+                                    string colorm = "";
+                                    string colorbm = "";
+                                    if (estadoP.Dato == "Programado")
+                                    {
+                                        colorm = "#3063FE";
+                                        colorbm = "#FFFFFF";
+
+                                    }
+
+                                    if (estadoP.Dato == "Iniciada")
+                                    {
+                                        colorm = "#F5FE2E";
+                                        colorbm = "#FFFFFF";
+
+                                    }
+                                    <table>
+                                        <tr>
+                                            <td style="background:@colorm;border-color:@colorbm">
+                                                <h5 style="color:@Colorpedido">
+                                                    Máquina:
+                                                    <br />
+                                                    @articuloMa
+                                                    <br />
+                                                    Proceso:
+                                                    <br />
+                                                    @estadoP.Dato
+                                                </h5>
+                                            </td>
+
+                                        </tr>
+                                    </table>
+
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+
+                            }
+
+
+                            <h5 style="color:@Colorpedido">Pedido: @item.IDPedido</h5>
+                            <h5 style="color:@Colorpedido">Cotizacion: @item.IDHE</h5>
+                        </td>
+
+
+                        <td style="font-size:medium">
+                            @{ try
+                                {
+                                    SIAAPI.Models.Inventarios.VMovimientoAlmacen vMovimiento = new SIAAPI.Models.Inventarios.VMovimientoAlmacenContext().Database.SqlQuery<SIAAPI.Models.Inventarios.VMovimientoAlmacen>("select * from VMovimientoAlmacen where NoDocumento=" + item.IDPedido + " and Documento='Pedido' and accion='Pedido'").FirstOrDefault();
+
+                                    <div class="text-info">@item.FechaCreacion</div>
+                                    try
+                                    {
+                                        <div class="text-info">Fecha Programada. </div>
+                                        <div> @item.FechaProgramada.ToString().Substring(0, 10)</div>
+
+                                    }
+                                    catch (Exception err)
+                                    {
+
+                                    }
+
+                                    try
+                                    {
+                                        <div class="text-info">Fecha Autorización Pedido. </div>
+                                        <div> @vMovimiento.FechaMovimiento.ToShortDateString() @vMovimiento.Hora.ToString().Substring(0, 10)</div>
+                                    }
+                                    catch (Exception err)
+                                    {
+
+                                    }
+
+
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+                            }
+                        </td>
+                        <td style="font-size:medium">
+                            @{
+
+                                @item.FechaCompromiso.ToString("dd/MM/yyyy");
+                            }
+                        </td>
+                        <td style="font-size:x-large">
+                            <div> @cliente.Dato</div>
+                            <div class="text-info">@item.Indicaciones</div>
+                            <table>
+                                <tr>
+                                    <td>
+                                        @Html.Label("Vendedor")
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @{
+                                            SIAAPI.Models.Comercial.EncPedido pedido = new SIAAPI.Models.Comercial.PedidoContext().EncPedidos.Find(item.IDPedido);
+                                            SIAAPI.Models.Comercial.Vendedor vendedor = new SIAAPI.Models.Comercial.VendedorContext().Vendedores.Find(pedido.IDVendedor);
+                                        }
+                                        @vendedor.Nombre
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td class="text-capitalize">
+                            @{
+                                decimal cantidaddo = Math.Round(item.Cantidad, 2);
+                                SIAAPI.Models.Comercial.Articulo art = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+                                string clave = art.c_ClaveUnidad.ClaveUnidad;
+
+
+
+                            }
+                            <h3>@cantidaddo  @clave</h3>
+                        </td>
+                        @{ FormulaSiaapi.Formulas FORMULA = new FormulaSiaapi.Formulas();
+                            FORMULA.cadenadepresentacion = item.Presentacion;
+
+                            Double ancho = 0;
+                            double largo = 0;
+                            try
+                            {
+                                ancho = FORMULA.getvalor("ANCHO", item.Presentacion);
+                                largo = FORMULA.getvalor("LARGO", item.Presentacion);
+                            }
+                            catch
+                            {
+
+                            }
+                        }
+
+
+                        <td style="font-size:small">
+                            @ancho
+                        </td>
+                        <td style="font-size:small">
+                            @largo
+                        </td>
+
+
+
+                        <td style="box-shadow: 0px 0px 3px 3px;" width="10%">
+                            @{
+                                string cadenaxx = "select AP.IDArtProd as IDArtProd, AP.Existe,A.IDArticulo as IDArticulo,A.Cref as Articulo,TA.Descripcion as TipoArticulo,C.Presentacion as Caracteristica, C.ID as IDCaracteristica, P.NombreProceso as Proceso,AP.IDOrden,AP.Cantidad,CU.Nombre as Unidad,AP.Indicaciones,AP.CostoPlaneado,AP.CostoReal from ArticuloProduccion as AP inner join Articulo as A on A.IDArticulo = AP.IDArticulo inner join TipoArticulo as TA on A.IDTipoArticulo = TA.IDTipoArticulo inner join Caracteristica as C on C.ID = AP.IDCaracteristica inner join Proceso as P on P.IDProceso = AP.IDProceso inner join c_ClaveUnidad as CU on CU.IDClaveUnidad = AP.IDClaveUnidad where AP.IDOrden = " + item.IDOrden + " and(TA.Descripcion = 'Insumo' or TA.Descripcion = 'Tintas' or TA.Descripcion = 'Cintas' or TA.Descripcion = 'Herramienta'  or TA.Descripcion = 'Maquina')";
+                                List<SIAAPI.Models.Produccion.VArticulosProduccion> articulosproduccion = new SIAAPI.Models.Produccion.ArticulosProduccionContext().Database.SqlQuery<SIAAPI.Models.Produccion.VArticulosProduccion>(cadenaxx).ToList();
+
+                                //ViewBag.DatosP = articulosproduccion;
+
+                            }
+                            <table>
+
+                                @{
+
+                                    foreach (SIAAPI.Models.Produccion.VArticulosProduccion VAorden in articulosproduccion)
+                                    {
+                                        SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(VAorden.IDArticulo);
+
+                                        <tr>
+
+
+                                            <td>
+
+                                                @if (VAorden.Existe.Equals(true))
+                                                {
+
+                                                    <a><span class="fa fa-check-circle" style="font-size:16px;color:green"></span></a>
+                                                }
+                                                else
+                                                {
+                                                    <a><span class="fa fa-times-circle" style="font-size:16px;color:red"></span></a>
+
+                                                }
+
+                                            </td>
+                                            <td style="word-wrap: break-word;min-width: 200px;max-width:390px ; ">
+                                                @if (VAorden.TipoArticulo == "Cintas")
+                                                {
+                                                    SIAAPI.Models.Comercial.ClientesContext dd = new SIAAPI.Models.Comercial.ClientesContext();
+                                                    SIAAPI.Models.Comercial.ClsDatoEntero idfamilia = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select idfamilia as Dato from  [Articulo] where [idarticulo]=" + articulo.IDArticulo + "").ToList().FirstOrDefault();
+
+                                                    decimal cantidad = VAorden.Cantidad;
+                                                    string caracteristica = VAorden.Caracteristica;
+                                                    FormulaSiaapi.Formulas form = new FormulaSiaapi.Formulas();
+                                                    decimal valorancho = decimal.Parse(form.getvalor("ANCHO", caracteristica).ToString());
+                                                    if (valorancho == 0)
+                                                    {
+                                                        valorancho = decimal.Parse(form.getvalor("ANCHO DE LA CINTA", caracteristica).ToString());
+                                                    }
+                                                    int largomts = 0;
+                                                    try
+                                                    {
+                                                        largomts = int.Parse(Math.Truncate(cantidad / (valorancho / 1000)).ToString());
+
+                                                    }
+                                                    catch (Exception err)
+                                                    {
+
+                                                    }
+
+                                                    <a href="#" role="button" style="font-size:10px" class="btn btn-secondary popover-test" title="@VAorden.Caracteristica" data-toggle="popover" data-placement="right"> @articulo.Cref @largomts Mts </a>
+
+
+                                                    if (item.EstadoOrden == "Conflicto" || item.EstadoOrden == "Lista")
+                                                    {
+
+                                                        @Html.ActionLink("Asignar", "AsignarMaterial", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd, idorden = item.IDOrden }, new { @class = "btn btn-success btn-xs" })
+
+                                                    }
+
+
+                                                }
+                                                else
+                                                {
+                                                    SIAAPI.Models.Comercial.Caracteristica cara = new SIAAPI.Models.Comercial.CarritoContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select*from Caracteristica where id=" + VAorden.IDCaracteristica).FirstOrDefault();
+
+                                                    SIAAPI.Models.Comercial.Articulo aRT = new SIAAPI.Models.Comercial.CarritoContext().Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>("select*from Articulo where idarticulo=" + cara.Articulo_IDArticulo).FirstOrDefault();
+
+                                                    
+                                                    if (cara.obsoleto)
+                                                    {
+                                                        <a href="#" role="button"  style="color:#FF0000; class="btn btn-secondary popover-test" title="@VAorden.Caracteristica" data-toggle="popover" data-placement="right" data-content="@VAorden.Caracteristica"> @articulo.Cref  </a>
+
+                                                    }
+                                                    else if (aRT.obsoleto)
+                                                    {
+                                                        <a href="#" role="button" style="color:#FF0000;" class="btn btn-secondary popover-test" title="@VAorden.Caracteristica" data-toggle="popover" data-placement="right" data-content="@VAorden.Caracteristica"> @articulo.Cref  </a>
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#" role="button" style="font-size:10px" class="btn btn-secondary popover-test" title="@VAorden.Caracteristica" data-toggle="popover" data-placement="right" data-content="@VAorden.Caracteristica"> @articulo.Cref  </a>
+
+                                                    }
+
+
+                                                    SIAAPI.Models.Comercial.ClientesContext dd = new SIAAPI.Models.Comercial.ClientesContext();
+                                                    SIAAPI.Models.Comercial.ClsDatoEntero idfamilia = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select idfamilia as Dato from  [Articulo] where [idarticulo]=" + articulo.IDArticulo + "").ToList().FirstOrDefault();
+                                                    if (item.EstadoOrden == "Conflicto" || item.EstadoOrden == "Lista")
+                                                    {
+
+                                                        if (idfamilia.Dato == 11 || idfamilia.Dato == 71 || idfamilia.Dato == 72 || idfamilia.Dato == 77 || idfamilia.Dato == 69 || idfamilia.Dato == 75 || idfamilia.Dato == 76 || idfamilia.Dato == 79 || idfamilia.Dato == 80 || idfamilia.Dato == 93 || idfamilia.Dato == 81)
+                                                        {
+                                                            @Html.ActionLink("Cambiar", "CambiarSuaje", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd }, new { @class = "btn btn-success btn-xs" })
+
+                                                        }
+
+                                                        if (idfamilia.Dato == 70 || idfamilia.Dato == 95)
+                                                        {
+                                                            @Html.ActionLink("Cambiar", "CambiarPleca", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd }, new { @class = "btn btn-success btn-xs" })
+
+                                                        }
+                                                        if (idfamilia.Dato == 70 || idfamilia.Dato == 95)
+                                                        {
+                                                            <a class="delete" data-id="@VAorden.IDArtProd">
+                                                                <i class="tbl_del_btn fa fa-trash"></i>
+
+                                                            </a>
+
+
+
+                                                        }
+                                                        if (idfamilia.Dato == 28)
+                                                        {
+                                                            @Html.ActionLink("Cambiar", "CambiarCentro", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd }, new { @class = "btn btn-success btn-xs" })
+
+
+
+
+                                                        }
+
+                                                    }
+
+
+
+
+
+                                                    if ((VAorden.TipoArticulo == "Maquina") && (VAorden.Proceso == "Prensa"))
+                                                    {
+                                                        SIAAPI.Models.Produccion.Proceso xp = new SIAAPI.Models.Produccion.ProcesoContext().Database.SqlQuery<SIAAPI.Models.Produccion.Proceso>("SELECT * from Proceso where NombreProceso='" + VAorden.Proceso + "'").ToList().FirstOrDefault();
+                                                        var maquinas = new SIAAPI.ViewModels.produccion.MaquinaRepository().GetMaquinaByProceso(xp.IDProceso);
+                                                        string nombrecontrol = "Maquina" + controln1;
+                                                        controln1 += 1;
+                                                        <select name="@nombrecontrol" id="@nombrecontrol" onchange="CambiaMaquina(@VAorden.IDOrden,@VAorden.IDArticulo,@xp.IDProceso, this.value)">
+                                                            @foreach (var itemmaq in maquinas)
+                                                            {
+                                                                if (VAorden.IDArticulo == int.Parse(itemmaq.Value))
+                                                                {
+                                                                    <option value="@itemmaq.Value" selected>@itemmaq.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@itemmaq.Value">@itemmaq.Text</option>
+                                                                }
+                                                            }
+
+                                                        </select>
+
+
+
+                                                    }
+
+                                                    ////Sellado
+                                                    if ((VAorden.TipoArticulo == "Maquina") && (VAorden.Proceso == "Sellado"))
+                                                    {
+                                                        if (item.IDModeloProduccion == 7)
+                                                        {
+                                                            SIAAPI.Models.Produccion.Proceso xp = new SIAAPI.Models.Produccion.ProcesoContext().Database.SqlQuery<SIAAPI.Models.Produccion.Proceso>("SELECT * from Proceso where NombreProceso='" + VAorden.Proceso + "'").ToList().FirstOrDefault();
+                                                            var maquinas = new SIAAPI.ViewModels.produccion.MaquinaRepository().GetMaquinaByProceso(xp.IDProceso);
+                                                            string nombrecontrol = "Maquina" + controln1;
+                                                            controln1 += 1;
+                                                            <select name="@nombrecontrol" id="@nombrecontrol" onchange="CambiaMaquina(@VAorden.IDOrden,@VAorden.IDArticulo,@xp.IDProceso, this.value)">
+                                                                @foreach (var itemmaq in maquinas)
+                                                                {
+                                                                    if (VAorden.IDArticulo == int.Parse(itemmaq.Value))
+                                                                    {
+                                                                        <option value="@itemmaq.Value" selected>@itemmaq.Text</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@itemmaq.Value">@itemmaq.Text</option>
+                                                                    }
+                                                                }
+
+                                                            </select>
+                                                        }
+
+
+
+
+                                                    }
+                                                    ////embobinado
+                                                    if ((VAorden.TipoArticulo == "Maquina") && (VAorden.Proceso == "Embobinado"))
+                                                    {
+                                                        SIAAPI.Models.Produccion.Proceso xp = new SIAAPI.Models.Produccion.ProcesoContext().Database.SqlQuery<SIAAPI.Models.Produccion.Proceso>("SELECT * from Proceso where NombreProceso='" + VAorden.Proceso + "'").ToList().FirstOrDefault();
+                                                        var maquinas = new SIAAPI.ViewModels.produccion.MaquinaRepository().GetMaquinaByProceso(xp.IDProceso);
+                                                        string nombrecontrol = "Maquina" + controln1;
+                                                        controln1 += 1;
+                                                        <select name="@nombrecontrol" id="@nombrecontrol" onchange="CambiaMaquina(@VAorden.IDOrden,@VAorden.IDArticulo,@xp.IDProceso, this.value)">
+                                                            @foreach (var itemmaq in maquinas)
+                                                            {
+                                                                if (VAorden.IDArticulo == int.Parse(itemmaq.Value))
+                                                                {
+                                                                    <option value="@itemmaq.Value" selected>@itemmaq.Text</option>
+                                                                    ViewBag.MaquinaSelec = itemmaq.Value;
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@itemmaq.Value">@itemmaq.Text</option>
+                                                                }
+                                                            }
+
+                                                        </select>
+
+
+
+                                                    }
+
+
+                                                }
+
+                                            </td>
+
+                                        </tr>
+
+
+
+
+                                    }
+
+
+
+
+}
+
+                            <tr>
+
+                                @{ try
+                                    {
+                                        if (item.Arrastre)
+                                        {
+                                            @Html.Label("LLEVA ARRASTRE")
+                                        }
+                    }
+                    catch (Exception err)
+                    {
+
+                    }
+
+                                }
+
+                            </tr>
+                            </table>
+
+                        </td>
+
+                        <td>
+                            @{
+                                try
+                                {
+                                    string cadena = "select*from materialasignado where entregado>0 and orden=" + item.IDOrden;
+                                    var datos = new SIAAPI.Models.Produccion.VMatAsignadoContext().Database.SqlQuery<SIAAPI.Models.Produccion.VMatAsignadoContext>(cadena).ToList();
+
+                                    if (datos.Count() > 0)
+                                    {
+                                        <i class="fa fa-check fa-2x" aria-hidden="true"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                                    }
+                                }
+                                catch (Exception err)
+                                {
+                                    <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                                }
+
+                            }
+
+
+                        </td>
+                        <td>
+
+
+
+                            @Html.ActionLink("Seleccionar", "Seleccionar", new { id = item.IDOrden, pageSize1 = ViewBag.psize, searchString1 = ViewBag.SearchString }, new { @class = "btn btn-primary btn-xs" })
+                            <br />
+                            @if (item.EstadoOrden == "Lista")
+                            {
+                                @Html.ActionLink("Programar", "Programar", new { orden = item.IDOrden }, new { @class = "btn btn-primary btn-xs" })
+
+                                //<button type="button" name="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#ModalProgramada" onclick="idorden(id= @ViewBa)">Programar</button>
+                                <br />
+
+                            }
+
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas"))
+                            {
+                                if (item.EstadoOrden != "Cancelada")
+                                {
+                                    @Html.ActionLink("Cambiar Estado", "CambioEstado", new { idorden = item.IDOrden, idtrabajador = 1 }, new { @class = "btn btn-warning btn-xs" })
+
+
+                                }
+                            }
+
+                            
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas"))
+                            {
+                                if (item.EstadoOrden == "Conflicto" )
+                                {
+                                    @Html.ActionLink("Editar Observación", "EditarObservcion", new { idorden = item.IDOrden, idtrabajador = 1 }, new { @class = "btn btn-warning btn-xs" })
+
+
+                                }
+                            }
+
+                                @if (item.EstadoOrden == "Iniciada" && item.Liberar == "Activo")
+                                {
+                                    @Html.ActionLink("Liberar", "LiberarOrden", new { id = item.IDOrden, Mensaje = "" }, new { @class = "btn btn-info btn-xs" })
+
+
+                                }
+
+                                @Html.ActionLink(" ", "PDF", new { id = item.IDOrden }, new { @class = "fa fa-file-pdf-o" })
+
+
+
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas"))
+                            {
+                                    if (item.EstadoOrden == "Conflicto")
+                                    {
+                                        <td>
+                                            @Html.ActionLink("Cambiar Planeacion", "CambioPlaneacion", new { id = item.IDCaracteristica, Mensaje = "" }, new { @class = "btn btn-info btn-xs" })
+                                
+
+                                            @Html.ActionLink("Agregar Pleca", "AgregaPleca", new { id = item.IDOrden }, new { @class = "btn btn-info btn-xs" })
+                                            @Html.ActionLink("Actualiza Presentacion", "ActualizaPretin", new { IDOrden = item.IDOrden }, new { @class = "btn btn-warning btn-xs" })
+                                        </td>
+                                    }
+                            }
+                    </tr>
+                }
+                catch (Exception er)
+                {
+
+                }
+
+
+            }
+        </table>
+
+    </div>
+}
+
+
+
+<h3>órdenes @Model.TotalItemCount</h3>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+
+               
+                <h3> ÓRDENES DE PRODUCCIÓN</h3>
+
+
+
+
+
+            </div>
+
+        </form>
+    </div>
+</nav>
+
+<div>
+    <table style="height: 54px; width: auto; border: 1px solid black; border-collapse: collapse;">
+        <tr>
+            <th style="height: 18px; width: 70px; border: 1px solid black; background-color: #039be5;color:#F2F3F4 ">
+                <span style="color: #ffffee"> Orden </span>:
+
+            </th>
+
+            <th style="height: 18px; width: 80px; border: 1px solid black; background-color: #039be5;color:#F2F3F4 ">
+                <span style="color: #ffffee"> Detalles </span>: de la orden
+
+            </th>
+            <th style="height: 18px; width: 70px; border: 1px solid black; background-color: #039be5;">
+                <span style="color: #ffffee;"> Fechas </span>
+            </th>
+
+            <th style="height: 18px; width: 300px; border: 1px solid black; background-color: #039be5;">
+                <span style="color: #ffffee;"> Cliente  </span>
+            </th>
+            <th style="height: 18px; width: 120px; border: 1px solid black; background-color: #039be5;">
+                <span style="color: #ffffee;"> Cantidad </span>
+            </th>
+            <th style="height: 18px; width: 70px; border: 1px solid black; background-color: #039be5;">
+                <span style="color: #ffffee;"> EJE_ETIQ.</span>
+            </th>
+            <th style="height: 18px; width: 70px; border: 1px solid black; background-color: #039be5;">
+                <span style="color: #ffffee;"> AVANCE</span>
+            </th>
+            <th style="height: 18px; width: 70px; border: 1px solid black; background-color: #039be5;">
+                <span style="color: #ffffee;"> Materiales</span>
+            </th>
+
+            <th style="height: 18px; width: 40px; border: 1px solid black; background-color: #039be5;">
+                <span style="color: #ffffee;"> Surtida </span>
+            </th>
+            <th style="height: 18px; width: 70px; border: 1px solid black; background-color: #039be5;">
+                <span style="color: #ffffee;"> Acciones </span>
+            </th>
+        </tr>
+
+        @{ int controln = 0;
+           
+        }
+
+        @foreach (SIAAPI.Models.Produccion.OrdenProduccion item in Model)
+        {
+            int stock = 0;
+            try
+            {
+                SIAAPI.Models.Comercial.ClsDatoEntero datoEntero = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(idpedidosStock) as Dato from PedidosStock where idorden=" + item.IDOrden + " and IDPedido=" + item.IDPedido).FirstOrDefault();
+                stock = datoEntero.Dato;
+            }
+            catch (Exception err)
+            {
+
+            }
+
+            if (stock == 0)
+            {
+                SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                SIAAPI.Models.Comercial.ClsDatoString cref = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select cref as Dato from  [Articulo] where [IDARTICULO]='" + item.IDArticulo + "'").ToList().FirstOrDefault();
+
+                SIAAPI.Models.Comercial.ClientesContext d1b = new SIAAPI.Models.Comercial.ClientesContext();
+                SIAAPI.Models.Comercial.ClsDatoString cliente = d1b.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Nombre as Dato from  [Clientes] where [idCliente]=" + item.IDCliente + "").ToList().FirstOrDefault();
+                <tr>
+
+                    @{
+
+                        //////////////// oloresc claasss
+                        string noorden = item.IDOrden.ToString();
+                        string Estado = item.EstadoOrden;
+                        string Color = "#F5FBEF";
+                        string Colorborder = "#FFFFFF";
+                        string colororden = "black";
+                        string Colorpedido = "#51000F";
+                        if (Estado == "Conflicto")
+                        {
+                            Color = "#673AB7";
+                            Colorborder = "#FFFFFF";
+                            colororden = "color:#FFFFFF";
+                            Colorpedido = "#FFFFFF";
+                        }
+                        if (Estado == "En Revision" || Estado=="Revisada")
+                        {
+                            Color = "#e4007c";
+                            Colorborder = "#FFFFFF";
+                            colororden = "color:#FFFFFF";
+                            Colorpedido = "#FFFFFF";
+                        }
+                        if (Estado == "Lista")
+                        {
+                            Color = "#ffc107";
+                            Colorborder = "#FFFFFF";
+                            colororden = "color:#FFFFFF";
+                            Colorpedido = "#FFFFFF";
+                        }
+                        if (Estado == "Programada")
+                        {
+                            Color = "#3063FE";
+                            Colorborder = "#FFFFFF";
+                            colororden = "color:#FFFFFF";
+
+                            Colorpedido = "#FFFFFF";
+                        }
+
+                        if (Estado == "Iniciada")
+                        {
+                            Color = "#F5FE2E";
+                            Colorborder = "#FFFFFF";
+                            colororden = "color:#000000";
+                            Colorpedido = "#000000";
+                        }
+
+                        if (Estado == "Finalizada")
+                        {
+                            Color = "#03B45D";
+                            Colorborder = "#FFFFFF";
+                            colororden = "color:#FFFFFF";
+                            Colorpedido = "#FFFFFF";
+                        }
+                        if (Estado == "Cancelada")
+                        {
+                            Color = "#FD0009";
+                            Colorborder = "#FFFFFF";
+                            colororden = "color:#FFFFFF";
+                            Colorpedido = "#FFFFFF";
+                        }
+                    }
+
+                    @*/////////columna del Estado de la orden/////////////////////////////*@
+                    <td style="background-color:@Color;border-color:@Colorborder">
+                        <table style=" width: 100%; height: 162px;">
+                            <tbody>
+
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px;background-color:@Color"><h2>   @Html.ActionLink(noorden, "Details", "OrdenProduccion", new { id = item.IDOrden }, new { @style = colororden })</h2></td>
+                                </tr>
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; color:black ; font-size:small; background-color:@Color">@item.EstadoOrden</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        @{
+                            string articuloMa = "";
+                            try
+                            {
+                                string estado = "";
+                                if (item.EstadoOrden == "Iniciada")
+                                {
+                                    estado = "Iniciado";
+                                }
+                                if (item.EstadoOrden == "Programada")
+                                {
+                                    estado = "Programado";
+                                }
+
+                                SIAAPI.Models.Comercial.ClsDatoEntero idmaquina = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select idmaquina as dato from prioridades where idorden=" + item.IDOrden + " and estado<>'Terminado'").ToList().FirstOrDefault();
+                                SIAAPI.Models.Comercial.ClsDatoString estadoP = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select estado as dato from prioridades where idorden=" + item.IDOrden + " and idmaquina=" + idmaquina.Dato).ToList().FirstOrDefault();
+
+                                SIAAPI.Models.Comercial.Articulo articuloM = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(idmaquina.Dato);
+                                articuloMa = articuloM.Descripcion;
+                                string colorm = "";
+                                string colorbm = "";
+                                if (estadoP.Dato == "Programado")
+                                {
+                                    colorm = "#3063FE";
+                                    colorbm = "#FFFFFF";
+
+                                }
+
+                                if (estadoP.Dato == "Iniciada")
+                                {
+                                    colorm = "#F5FE2E";
+                                    colorbm = "#FFFFFF";
+
+                                }
+                                <table>
+                                    <tr>
+                                        <td style="background:@colorm;border-color:@colorbm">
+                                            <h5 style="color:@Colorpedido">
+                                                Máquina:
+                                                <br />
+                                                @articuloMa
+                                                <br />
+                                                Proceso:
+                                                <br />
+                                                @estadoP.Dato
+                                            </h5>
+                                        </td>
+
+                                    </tr>
+                                </table>
+
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+
+                        }
+
+                    </td>
+                    @* ///////////columna de la Descripciones de la orden /////////////////////////////////*@
+                    <td style="        background-color: white;
+                            border-color: @Colorborder;
+                         border: 1px solid black;
+                        ">
+
+                        <table border="15" style="border-style: solid; border-color: white; width: 100%; height: 162px;">
+                            <tbody>
+
+
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; background-color: #F933A3; color: #ffff;font-size:x-small; align-content:center"> MATERIAL </td>
+                                </tr>
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; color:black; background-color:white; align-content:safe center">@cref.Dato</td>
+                                </tr>
+
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; background-color: #F933A3; color: #ffff; font-size:x-small">PEDIDO</td>
+
+                                </tr>
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px;color: black; font-size:small; background-color:white"> @item.IDPedido</td>
+                                </tr>
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; background-color:#A03B74; color: #ffff;font-size:medium">COTIZACION</td>
+
+                                </tr>
+                                <tr style="height: 8px;">
+                                    <td style="        width: 100%;
+        height: 8px;
+        color: black;
+        font-size: medium;
+        background-color: white">
+                                        @item.IDHE
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+
+
+
+
+                    </td>
+
+                    @*///////////Fechas //////////////////// *@
+                    <td style="font-size:small; width: 70px; border: 1px solid black;">
+                        <table border="15px" style="border-style: solid; border-color: white; width: 100%; height: 162px;">
+                            <tbody>
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; background-color:#8BC34A ; color: #ffff;"> CREACION</td>
+                                </tr>
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px;">@item.FechaCreacion</td>
+                                </tr>
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; background-color: #8BC34A; color: #ffff;"> COMPROMISO </td>
+                                </tr>
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px;">@item.FechaCompromiso</td>
+                                </tr>
+
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; background-color:#689F38; color: #ffff;"> AUT. PEDIDO</td>
+                                </tr>
+                                @{ try
+                                    {
+                                        SIAAPI.Models.Inventarios.VMovimientoAlmacen vMovimiento = new SIAAPI.Models.Inventarios.VMovimientoAlmacenContext().Database.SqlQuery<SIAAPI.Models.Inventarios.VMovimientoAlmacen>("select * from VMovimientoAlmacen where NoDocumento=" + item.IDPedido + " and Documento='Pedido' and accion='Pedido'").FirstOrDefault();
+
+
+                                        <tr style="height: 8px;">
+                                            <td style="width: 100%; height: 8px;">@vMovimiento.FechaMovimiento.ToShortDateString() @vMovimiento.Hora.ToString().Substring(0, 10)</td>
+                                        </tr>
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        <tr style="height: 8px;">
+                                        </tr>
+                                    }
+                                }
+                                <tr style="height: 8px;">
+                                    <td style="width: 100%; height: 8px; background-color: #2E7D32; color: #ffff;">PROGRAMADA</td>
+                                </tr>
+                                <tr style="height: 8px;">
+                                    @{ try
+                                        {
+                                            <td style="width: 100%; height: 8px;"> @item.FechaProgramada.ToString().Substring(0, 10)</td>
+                                        }
+                                        catch (Exception err)
+                                        {
+                                            <td />
+                                        }
+                                    }
+
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </td>
+                    @*//////////////Nombre de la etiqueta///////////////////////*@
+                    <td style="        font-size: large;
+                            border: 1px solid black;
+                            ">
+                        <table style="border: 15px; border-style:solid; border-color:white">
+                            <tr>
+                                <td>
+                                    <div style="font-size:x-large "> @cliente.Dato</div>
+                                    <div class="text-danger">@item.Indicaciones</div>
+                                    <div class="text-info"> @Html.Label("Vendedor")</div>
+
+                                    @{
+                                        SIAAPI.Models.Comercial.EncPedido pedido = new SIAAPI.Models.Comercial.PedidoContext().EncPedidos.Find(item.IDPedido);
+                                        SIAAPI.Models.Comercial.Vendedor vendedor = new SIAAPI.Models.Comercial.VendedorContext().Vendedores.Find(pedido.IDVendedor);
+                                    }
+                                    <div class="text-info"> @vendedor.Nombre</div>
+
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    @*///////columna de la cantidad*@
+                    <td style=" align-items:center;text-align:center;
+                    font-size: xx-large;
+                    border: 1px solid black;
+                    ">
+                        @{
+                            decimal cantidaddo = Math.Round(item.Cantidad, 2);
+                            SIAAPI.Models.Comercial.Articulo art = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+                            string clave = art.c_ClaveUnidad.ClaveUnidad;
+
+
+
+                        }
+                        <h3>@cantidaddo  @clave</h3>
+                    </td>
+
+                    @*///////////////columnas de ancho y largo*@
+
+                    @{ FormulaSiaapi.Formulas FORMULA = new FormulaSiaapi.Formulas();
+                        FORMULA.cadenadepresentacion = item.Presentacion;
+
+                        Double ancho = 0;
+                        double largo = 0;
+                        try
+                        {
+                            ancho = FORMULA.getvalor("ANCHO", item.Presentacion);
+                            largo = FORMULA.getvalor("LARGO", item.Presentacion);
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+
+
+                    <td style=" align-items:center;
+                    text-align:center;
+                    font-size: xx-large;
+                    border: 1px solid black;
+                    ">
+                        <table style=" border:15px solid; border-color:white">
+                            <tr><td> @ancho</td></tr>
+                        </table>
+
+                    </td>
+                    <td style=" text-align:center;
+                    font-size: xx-large;
+                    border: 1px solid black;
+                    ">
+                        <table style=" border:15px solid; border-color:white">
+                            <tr><td> @largo</td></tr>
+                        </table>
+                    </td>
+
+                    @*///////////////////////columna de checkin/////////////// *@
+
+                    <td style="box-shadow: 0px 0px 4px 4px;" width="10%">
+
+                        @{
+                            string cadenaxx = "select AP.IDArtProd as IDArtProd, AP.Existe,A.IDArticulo as IDArticulo,A.Cref as Articulo,TA.Descripcion as TipoArticulo,C.Presentacion as Caracteristica, C.ID as IDCaracteristica, P.NombreProceso as Proceso,AP.IDOrden,AP.Cantidad,CU.Nombre as Unidad,AP.Indicaciones,AP.CostoPlaneado,AP.CostoReal from ArticuloProduccion as AP inner join Articulo as A on A.IDArticulo = AP.IDArticulo inner join TipoArticulo as TA on A.IDTipoArticulo = TA.IDTipoArticulo inner join Caracteristica as C on C.ID = AP.IDCaracteristica inner join Proceso as P on P.IDProceso = AP.IDProceso inner join c_ClaveUnidad as CU on CU.IDClaveUnidad = AP.IDClaveUnidad where AP.IDOrden = " + item.IDOrden + " and(TA.Descripcion = 'Insumo' or TA.Descripcion = 'Tintas' or TA.Descripcion = 'Cintas' or TA.Descripcion = 'Herramienta'  or TA.Descripcion = 'Maquina')";
+                            List<SIAAPI.Models.Produccion.VArticulosProduccion> articulosproduccion = new SIAAPI.Models.Produccion.ArticulosProduccionContext().Database.SqlQuery<SIAAPI.Models.Produccion.VArticulosProduccion>(cadenaxx).ToList();
+
+                            //ViewBag.DatosP = articulosproduccion;
+
+                        }
+                        <table style=" border:15px solid; border-color:white">
+
+                            @{
+
+                                foreach (SIAAPI.Models.Produccion.VArticulosProduccion VAorden in articulosproduccion)
+                                {
+                                    SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(VAorden.IDArticulo);
+
+                                    <tr>
+
+
+                                        <td>
+
+                                            @if (VAorden.Existe.Equals(true))
+                                            {
+
+                                                <a><span class="fa fa-check-circle fa-2x" style="font-size:16px;color:green"></span></a>
+                                            }
+                                            else
+                                            {
+                                                <a><span class="fa fa-times-circle fa-2x" style="font-size:16px;color:red"></span></a>
+
+                                            }
+
+                                        </td>
+                                        <td style="word-wrap: break-word;min-width: 400px;max-width:500px ; ">
+                                            @if (VAorden.TipoArticulo == "Cintas")
+                                            {
+                                                SIAAPI.Models.Comercial.ClientesContext dd = new SIAAPI.Models.Comercial.ClientesContext();
+                                                SIAAPI.Models.Comercial.ClsDatoEntero idfamilia = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select idfamilia as Dato from  [Articulo] where [idarticulo]=" + articulo.IDArticulo + "").ToList().FirstOrDefault();
+
+                                                decimal cantidad = VAorden.Cantidad;
+                                                string caracteristica = VAorden.Caracteristica;
+                                                FormulaSiaapi.Formulas form = new FormulaSiaapi.Formulas();
+                                                decimal valorancho = decimal.Parse(form.getvalor("ANCHO", caracteristica).ToString());
+                                                if (valorancho == 0)
+                                                {
+                                                    valorancho = decimal.Parse(form.getvalor("ANCHO DE LA CINTA", caracteristica).ToString());
+                                                }
+                                                int largomts = 0;
+                                                try
+                                                {
+                                                    largomts = int.Parse(Math.Truncate(cantidad / (valorancho / 1000)).ToString());
+
+                                                }
+                                                catch (Exception err)
+                                                {
+
+                                                }
+
+                                                <a href="#" role="button" style="font-size:14px" class="btn btn-secondary popover-test" title="@VAorden.Caracteristica" data-toggle="popover" data-placement="right"> @articulo.Cref @largomts Mts </a>
+
+
+                                                if (item.EstadoOrden == "Conflicto" || item.EstadoOrden == "Lista")
+                                                {
+
+                                                    @Html.ActionLink("Asignar", "AsignarMaterial", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd, idorden = item.IDOrden }, new { @class = "btn btn-success btn-xs" })
+
+                                                }
+
+
+                                            }
+                                            else
+                                            {
+                                                <a href="#" role="button" style="font-size:14px" class="btn btn-secondary popover-test" title="@VAorden.Caracteristica" data-toggle="popover" data-placement="right" data-content="@VAorden.Caracteristica"> @articulo.Cref  </a>
+
+
+                                                SIAAPI.Models.Comercial.ClientesContext dd = new SIAAPI.Models.Comercial.ClientesContext();
+                                                SIAAPI.Models.Comercial.ClsDatoEntero idfamilia = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select idfamilia as Dato from  [Articulo] where [idarticulo]=" + articulo.IDArticulo + "").ToList().FirstOrDefault();
+                                                if (item.EstadoOrden == "Conflicto" || item.EstadoOrden == "Lista")
+                                                {
+
+                                                    if (idfamilia.Dato == 11 || idfamilia.Dato == 71 || idfamilia.Dato == 72 || idfamilia.Dato == 77 || idfamilia.Dato == 69 || idfamilia.Dato == 75 || idfamilia.Dato == 76 || idfamilia.Dato == 79 || idfamilia.Dato == 80 || idfamilia.Dato == 93 || idfamilia.Dato == 81)
+                                                    {
+                                                        @Html.ActionLink("Cambiar", "CambiarSuaje", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd }, new { @class = "btn btn-success btn-xs" })
+
+                                                    }
+
+                                                    if (idfamilia.Dato == 70 || idfamilia.Dato == 95)
+                                                    {
+                                                        @Html.ActionLink("Cambiar", "CambiarPleca", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd }, new { @class = "btn btn-success btn-xs" })
+
+                                                    }
+                                                    if (idfamilia.Dato == 70 || idfamilia.Dato == 95)
+                                                    {
+                                                        <a class="delete" data-id="@VAorden.IDArtProd">
+                                                            <i class="tbl_del_btn fa fa-trash"></i>
+
+                                                        </a>
+
+
+
+                                                    }
+                                                    if (idfamilia.Dato == 28)
+                                                    {
+                                                        @Html.ActionLink("Cambiar", "CambiarCentro", "OrdenProduccion", new { IDArtPro = VAorden.IDArtProd }, new { @class = "btn btn-success btn-xs" })
+
+
+
+
+                                                    }
+                                                    if (idfamilia.Dato == 11 || idfamilia.Dato == 71 || idfamilia.Dato == 72 || idfamilia.Dato == 77 || idfamilia.Dato == 69 || idfamilia.Dato == 75 || idfamilia.Dato == 76 || idfamilia.Dato == 79 || idfamilia.Dato == 80 || idfamilia.Dato == 93 || idfamilia.Dato == 81)
+                                                    {
+                                                        <a class="delete" data-id="@VAorden.IDArtProd">
+                                                            <i class="tbl_del_btn fa fa-trash"></i>
+
+                                                        </a>
+                                                    }
+
+                                                }
+
+
+
+
+
+                                                if ((VAorden.TipoArticulo == "Maquina") && (VAorden.Proceso == "Prensa"))
+                                                {
+                                                    SIAAPI.Models.Produccion.Proceso xp = new SIAAPI.Models.Produccion.ProcesoContext().Database.SqlQuery<SIAAPI.Models.Produccion.Proceso>("SELECT * from Proceso where NombreProceso='" + VAorden.Proceso + "'").ToList().FirstOrDefault();
+                                                    var maquinas = new SIAAPI.ViewModels.produccion.MaquinaRepository().GetMaquinaByProceso(xp.IDProceso);
+                                                    string nombrecontrol = "Maquina" + controln;
+                                                    controln += 1;
+                                                    <select name="@nombrecontrol" id="@nombrecontrol" onchange="CambiaMaquina(@VAorden.IDOrden,@VAorden.IDArticulo,@xp.IDProceso, this.value)">
+                                                        @foreach (var itemmaq in maquinas)
+                                                        {
+                                                            if (VAorden.IDArticulo == int.Parse(itemmaq.Value))
+                                                            {
+                                                                <option value="@itemmaq.Value" selected>@itemmaq.Text</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@itemmaq.Value">@itemmaq.Text</option>
+                                                            }
+                                                        }
+
+                                                    </select>
+
+
+
+                                                }
+
+                                                ////Sellado
+                                                if ((VAorden.TipoArticulo == "Maquina") && (VAorden.Proceso == "Sellado"))
+                                                {
+                                                    if (item.IDModeloProduccion == 7)
+                                                    {
+                                                        SIAAPI.Models.Produccion.Proceso xp = new SIAAPI.Models.Produccion.ProcesoContext().Database.SqlQuery<SIAAPI.Models.Produccion.Proceso>("SELECT * from Proceso where NombreProceso='" + VAorden.Proceso + "'").ToList().FirstOrDefault();
+                                                        var maquinas = new SIAAPI.ViewModels.produccion.MaquinaRepository().GetMaquinaByProceso(xp.IDProceso);
+                                                        string nombrecontrol = "Maquina" + controln;
+                                                        controln += 1;
+                                                        <select name="@nombrecontrol" id="@nombrecontrol" onchange="CambiaMaquina(@VAorden.IDOrden,@VAorden.IDArticulo,@xp.IDProceso, this.value)">
+                                                            @foreach (var itemmaq in maquinas)
+                                                            {
+                                                                if (VAorden.IDArticulo == int.Parse(itemmaq.Value))
+                                                                {
+                                                                    <option value="@itemmaq.Value" selected>@itemmaq.Text</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@itemmaq.Value">@itemmaq.Text</option>
+                                                                }
+                                                            }
+
+                                                        </select>
+                                                    }
+
+
+
+
+                                                }
+                                                ////embobinado
+                                                if ((VAorden.TipoArticulo == "Maquina") && (VAorden.Proceso == "Embobinado"))
+                                                {
+                                                    SIAAPI.Models.Produccion.Proceso xp = new SIAAPI.Models.Produccion.ProcesoContext().Database.SqlQuery<SIAAPI.Models.Produccion.Proceso>("SELECT * from Proceso where NombreProceso='" + VAorden.Proceso + "'").ToList().FirstOrDefault();
+                                                    var maquinas = new SIAAPI.ViewModels.produccion.MaquinaRepository().GetMaquinaByProceso(xp.IDProceso);
+                                                    string nombrecontrol = "Maquina" + controln;
+                                                    controln += 1;
+                                                    <select name="@nombrecontrol" id="@nombrecontrol" onchange="CambiaMaquina(@VAorden.IDOrden,@VAorden.IDArticulo,@xp.IDProceso, this.value)">
+                                                        @foreach (var itemmaq in maquinas)
+                                                        {
+                                                            if (VAorden.IDArticulo == int.Parse(itemmaq.Value))
+                                                            {
+                                                                <option value="@itemmaq.Value" selected>@itemmaq.Text</option>
+                                                                ViewBag.MaquinaSelec = itemmaq.Value;
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@itemmaq.Value">@itemmaq.Text</option>
+                                                            }
+                                                        }
+
+                                                    </select>
+
+
+
+                                                }
+
+
+                                            }
+
+                                        </td>
+
+                                    </tr>
+
+
+
+
+                                }
+
+
+                            }
+
+                            <tr>
+
+                                @{
+                                    try
+                                    {
+                                        if (item.Arrastre)
+                                        {
+                                            @Html.Label("LLEVA ARRASTRE")
+                                        }
+                                    }
+                                    catch (Exception err)
+                                    {
+
+                                    }
+                                }
+
+                            </tr>
+                        </table>
+
+                    </td>
+
+                    @*/////columna de material entredo */////////////////////*@
+
+                    @{
+                        try
+                        {
+                            string cadena = "select*from materialasignado where entregado>0 and orden=" + item.IDOrden;
+                            var datos = new SIAAPI.Models.Produccion.VMatAsignadoContext().Database.SqlQuery<SIAAPI.Models.Produccion.VMatAsignadoContext>(cadena).ToList();
+
+                            if (datos.Count() > 0)
+                            {
+                                <td style="background-color:green"></td>
+                            }
+                            else
+                            {
+                                <td style="background-color:red"></td>
+                            }
+                        }
+                        catch (Exception err)
+                        {
+                            <td style="background-color:red"></td>
+                        }
+
+                    }
+
+                    @*///////acciones*//////////////////*@
+
+                    <td>
+                        <table style="        border: 15px;
+                            border-style: solid;
+                            border-color: white
+
+                           ">
+                            <tr>
+                                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                                    @Html.ActionLink(" ", "Details", new { id = item.IDOrden }, new { @class = "fa fa-file-text fa-2x", target = "_blank", title = "Detalles de la orden", style="color:blue" })
+                                </td>
+                                <td>@Html.ActionLink(" ", "PDF", new { id = item.IDOrden }, new { @class = "fa fa-file-pdf-o fa-2x", title = "Ver orden de produccion en pdf", style = "color:red", target="_blank" })</td>
+                                <td><button type="button" class="fa fa-file-image-o fa-2x" ,style="color:#2196F3" data-toggle="modal" data-target="#btn_modal" onclick="idorden(id= item.IDOrden)"></button></td>
+                             
+                                
+                                <td>@if (@Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Mesacontrol") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas"))
+                                {
+                                    if (item.EstadoOrden == "Conflicto" )
+                                    {
+
+                                        @Html.ActionLink(" ", "EditarObservcion", new { idorden = item.IDOrden, idtrabajador = 1 }, new { @class = "fa fa-comment fa-2x", title = "Editar observacion", style="Color:blue" })
+
+
+                                    }
+                                }</td>
+
+                                <td>@if (@Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Mesacontrol") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas"))
+                                {
+                                    if (item.EstadoOrden == "Conflicto")
+                                    {
+                                   
+                                    @Html.ActionLink(" ", "ActualizaPretin", new { IDOrden = item.IDOrden }, new { @class = "fa fa-exchange fa-2x", title = "Actualizar presentacion", style = "color:blue" })
+
+                                    }
+                                }</td>
+                                <td>
+                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas"))
+                                    {
+                                        if (item.EstadoOrden != "Cancelada")
+                                        {
+                                            @Html.ActionLink(" ", "CambioEstado", new { idorden = item.IDOrden, idtrabajador = 1 }, new { @class = "fa fa-code-fork fa-2x", title = "Cambiar Estado de la orden",style= "color:#663a82" })
+
+
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                @if (item.EstadoOrden == "Conflicto")
+                                {
+                                    if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("MesaControl") || @Roles.IsUserInRole("Compras"))
+                                    {
+                                        <td>
+                                            @Html.ActionLink(" ", "CambioPlaneacion", new { id = item.IDCaracteristica, Mensaje = "" }, new { @class = "fa fa-product-hunt fa-2x", title = "Cambiar la planeacion", style = "Color:#ff0080" })
+                                        </td>
+                                        <td>
+
+
+                                            @Html.ActionLink(" ", "AgregaPleca", new { id = item.IDOrden }, new { @class = "fa fa-server fa-2x", title = "Agregar pleca", style = "Color:#ff0080" })
+                                        </td>
+
+                                    }
+
+
+                                    if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("MesaControl"))
+                                    {
+
+
+                                        <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                                            @Html.ActionLink(" ", "EnRevision", new { IDOrden = item.IDOrden, page = ViewBag.page, PageSize = ViewBag.psize }, new { @class = "fa fa-pencil fa-2x", title = "Revisado", style = "Color:#ff0080" })
+                                        </td>
+
+                                    }
+                                }
+                                @if (item.EstadoOrden == "En Revision")
+                                {
+
+                                    if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("MesaControl"))
+                                    {
+
+
+                                        <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                                            @Html.ActionLink(" ", "Checkin", new { id = item.IDOrden }, new { @class = "fa fa-check-square fa-2x", title = "Check in", style = "Color:#e4007c" })
+                                        </td>
+
+                                    }
+                                }
+                                </tr>
+                            <tr>
+                               
+                               
+                                <td>
+                                    <br />
+                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") )
+                                    {
+                                        if (item.EstadoOrden == "Lista")
+                                        {
+                                        @Html.ActionLink(" ", "Programar", new { orden = item.IDOrden }, new { @class = "fa fa-calendar fa-2x", style = "color:blue", title = "Programar" })
+
+                                            //<button type="button" name="button" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#ModalProgramada" onclick="idorden(id= @ViewBa)">Programar</button>
+                                        <br />
+
+                                        }
+                                    }
+                                </td>
+
+                                  
+
+                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion"))
+                                        {
+                                            if (item.EstadoOrden != "Finalizado" && item.EstadoOrden == "Iniciada")
+                                            {
+                                            <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                                                @Html.ActionLink(" ", "LiberarOrden", new {  id = item.IDOrden }, new { @class = "fa fa-level-up btn-xs fa-2x", title="Liberar Orden de Producción", style="color:green" })
+                                            </td>
+                                            }
+                                        }
+                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion"))
+                                    {
+                                        if (item.EstadoOrden != "Finalizado" && item.EstadoOrden == "Iniciada")
+                                        {
+                                            <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                                                @Html.ActionLink(" ", "DetailsLOP", new { id = item.IDOrden }, new { @class = "fa fa-list btn-xs fa-2x", title="Liberaciones", style="color:green", taget="_blank" })
+                                            </td>
+                                        }
+                                    }
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion"))
+                                {
+                                    if (item.EstadoOrden == "Iniciada" || item.EstadoOrden == "Finalizada")
+                                    {
+                                        <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                                            @Html.ActionLink(" ", "Incidencias", new { id = item.IDOrden }, new { @class = "fa fa-list btn-xs fa-2x", style = "color:orange", title = "Incidencias de orden de trabajo" })
+                                        </td>
+                                    }
+                                }
+
+
+                             
+                        </tr>
+                         </table>
+                        @*//////fin ta tabla de acciones*@
+                     </td>
+                    @*/////////fin de colmna de acciones*@
+                 </tr>
+                 @*////////////fin de renglon por orden*@
+            }
+        }
+        
+     </table>
+                         
+               
+
+
+
+
+           
+                
+
+</div>
+
+
+
+        <div class="modal" id="btn_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title"><strong>Artículo</strong></h4>
+
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        @*@ViewBag.idorden*@
+                @Html.Hidden("id", "", new { @class = "hiddenid" })
+
+                @{
+                    try
+                    {
+
+                        string cadena1 = "select * from Articulo as A inner join OrdenProduccion as O on A.IDArticulo=O.IDArticulo where O.IDOrden=" + ViewBag.idorden;
+                        SIAAPI.Models.Comercial.ArticuloContext dbart = new SIAAPI.Models.Comercial.ArticuloContext();
+                        List<SIAAPI.Models.Comercial.Articulo> articulo = dbart.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>(cadena1).ToList();
+                        ViewBag.Articulo = articulo;
+
+                    }
+                    catch
+                    {
+
+                    }
+
+
+
+                }
+                @{try
+                    {
+                        foreach (var item in ViewBag.Articulo)
+                        { <td>
+                    <img src="~/imagenes/Upload/@item.nameFoto" alt="" height="500" width="500">
+                </td>
+                            <td class="col-lg-4">
+                                <strong>  Descripción: @item.Descripcion</strong>
+                            </td>
+
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+
+
+
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalProgramada" tabindex="-1" role="dialog">
+    <div class="modal-dialog lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">Programar Orden de Producción <label id="labelorden"></label></h3>
+            </div>
+
+            <input type="hidden" class="form-control" name="mensaje" id="mensaje">
+            <br />
+            <div class="form-group">
+                @Html.Label("Fecha", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    <input type="date" class="form-control" name="fecha" id="fecha">
+                </div>
+            </div>
+
+            <br /><br /><br /><br />
+
+
+            <!-- Modal Actions -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-xs" onclick="Actualizar()">Guardar</button>
+
+                <button type="button" class="btn btn-warning btn-xs" data-dismiss="modal">Cerrar</button>
+            </div>
+
+            <!-- End Modal Actions -->
+        </div>
+        <!-- End Modal Content -->
+    </div>
+    <!-- End Modal Dialog -->
+</div>
+
+
+@*Paginación*@
+@using (Html.BeginForm("Prioridad", "OrdenProduccion", FormMethod.Get, new { id = "pageSizeForm" }))
+{
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount órdenes
+
+        @Html.PagedListPager(Model, page => Url.Action("Prioridad", new
+{
+   page,
+   currentFilter = ViewBag.CurrentFilter,
+   searchString = ViewBag.SearchString,
+   pageSize = ViewBag.psize,
+   IDTipoArticulo = ViewBag.IDTipoArticulo,
+   Estado = ViewBag.Estado
+}))
+
+
+    </div>
+}
+@*Paginación*@
+
+@*<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>*@
+<script>
+function myFunction(id) {
+    var checkBox = document.getElementById("cliente");
+    var text = document.getElementById("uno");
+    if (checkBox.checked == true) {
+        text.style.display = "block";
+        document.getElementById("clientep").disabled = true;
+
+    } else {
+        text.style.display = "none";
+        document.getElementById("clientep").disabled =false;
+    }
+}
+
+
+function CambiaMaquina(numorden,IDArtProd,IDProceso,valor)
+{
+
+
+        var url = '@Url.Action("CambiarMaquina", "OrdenProduccion")';
+        async: true;
+    //    var row = $(this).closest('tr');
+    $.post(url, {  id :IDArtProd, idmaquinanueva:valor,  orden:numorden, proceso:IDProceso }, function (response) {
+            if (response) {
+
+               //swal("La maquina ha sido cambiada!", "", "success");
+                //location.reload();
+
+            }
+        }).fail(function (response) {
+          //swal("La maquina no pudo ser cambiada!", "", "error")
+        });
+    }
+
+function CambiaCaracteristica(numorden,IDArtProd,IDCaracteristica,valor)
+{
+
+
+        var url = '@Url.Action("CambiarCaracteristica", "OrdenProduccion")';
+        async: true;
+    //    var row = $(this).closest('tr');
+    $.post(url, {  id :IDArtProd, idcaracteristicanueva:valor,  orden:numorden, caracteristica:IDCaracteristica }, function (response) {
+            if (response) {
+
+               //swal("No  ha sido cambiada!", "", "success");
+                //location.reload();
+
+            }
+        }).fail(function (response) {
+             //swal("No pudo ser cambiada!", "", "error")
+        });
+    }
+
+
+
+
+    $(function () {
+        $('[data-toggle="popover"]').popover({
+            delay: { show: 800, hide: 300 },
+            html: true,
+            content: function () {
+                return $('.popover').html();
+            }
+        });
+    })
+
+
+</script>
+
+
+
+<script>
+    $('#IDTipoArticulo').on('change', function () {
+
+        @ViewBag.IDTipoArticulo= $(this).text;
+    });
+
+</script>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+
+             $('.delete').click(function () {
+                        var url = '@Url.Action("EliminarPleca", "OrdenProduccion")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>
+
+<script>
+
+    $("#btn_modal").trigger("click");
+    $("#btn_modalP").trigger("click");
+
+
+</script>
+<script>
+    function ModalPro(valor) {
+        var valor = valor;
+        $('#mensaje').val(valor);
+        document.querySelector('#labelorden').innerText = valor;
+        $('#ModalProgramada').modal('show')
+    }
+</script>
+
+
+
+<script>
+
+
+
+    function Actualizar() {
+                  var url = '@Url.Action("addfechapro", "OrdenProduccion")';
+                    $.post(url, { id: @ViewBag.idorden, fecha:document.getElementById("fecha").value }, function (response) {
+                        if (response) {
+                            $('#ModalProgramada').remove();
+                            location.reload();
+
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                }
+
+
+</script>

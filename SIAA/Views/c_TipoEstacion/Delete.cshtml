@@ -1,0 +1,56 @@
+﻿@model SIAAPI.Models.CartaPorte.c_TipoEstacion
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Eliminar Tipo Estación</h3>
+
+<h4>¿Está seguro de borrar este registro?</h4>
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.DescripcionEstacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescripcionEstacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveTransporte)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveTransporte)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FIVigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FIVigencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FFVigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FFVigencia)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> 
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

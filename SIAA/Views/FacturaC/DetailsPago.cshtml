@@ -1,0 +1,290 @@
+﻿@model SIAAPI.Models.Cfdi.VPagoFactura
+
+<div>
+    <h3>Detalles del pago</h3>
+    <hr />
+
+    <hr />
+    <dl class="dl-horizontal">
+      
+        <dt>
+            @Html.DisplayNameFor(model => model.IDPagoFactura)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.IDPagoFactura)
+        </dd>
+
+        <dd>
+            @Html.DisplayFor(model => model.folio)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.folio)
+        </dt>  
+
+        <dd>
+
+            @Html.DisplayFor(model => model.FechaPago)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaPago)
+        </dt>
+
+        <dt>
+            Cliente
+        </dt>
+
+        <dd>
+            <dl>
+                <dd></dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDCliente)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.IDCliente)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Nombre)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.RFC)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RFC)
+                </dd>
+            </dl>
+        </dd>
+        <dt>
+            Datos del Pago
+        </dt>
+
+        <dd>
+            <dl>
+                <dd></dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.ClaveFormaPago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ClaveFormaPago)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ClaveDivisa)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ClaveDivisa)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Divisa)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Divisa)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.TC)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TC)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NoOperacion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NoOperacion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Monto)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Monto)
+                </dd>
+                 @if (Model.StatusPago == "C")
+                    {
+                        <dd>
+                            @*@Html.DisplayFor(model => model.StatusPago)*@
+                            <h2 class="alert-danger">Cancelado</h2>
+                        </dd>
+                    }
+                    else
+                    {
+                        <dd>
+                            @*@Html.DisplayFor(model => model.StatusPago)*@
+                            <h2 class="alert-success">Activo</h2>
+                        </dd>
+                    }
+            </dl>
+        </dd>
+        <dt>
+            Datos Banco Emisor
+        </dt>
+
+        <dd>
+            <dl>
+                <dd></dd>
+                @*<dt>
+                    @Html.DisplayNameFor(model => model.RFCBancoEmisor)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RFCBancoEmisor)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NombreBancoEmisor)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NombreBancoEmisor)
+                </dd>*@
+            </dl>
+        </dd>
+        @*<dt>
+            Datos del Banco Receptor
+        </dt>
+
+        <dd>
+            <dl>*@
+                <dd></dd>
+                @*<dt>
+                    @Html.DisplayNameFor(model => model.RFCBancoReceptor)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.RFCBancoReceptor)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.NombreBancoReceptor)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NombreBancoReceptor)
+                </dd>*@
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.TipoCadenaPago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TipoCadenaPago)
+                </dd>
+            @*</dl>
+        </dd>*@
+        <dt>
+            Observaciones:
+        </dt>
+
+        <dd>
+            <dl>
+                <dd></dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Observacion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Observacion)
+                </dd>
+            </dl>
+        </dd>
+
+    </dl>
+</div>
+ 
+@if (@ViewBag.pagoFacturaSPEI != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                <h4> 
+                    Cadena de Pago SPEI
+                </h4>
+            <tr>
+                    <th>Certificado de Pago</th>
+                    <th>Cadena Pago</th>
+                    <th>Sello de Pago</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.pagoFacturaSPEI)
+            {
+                <tr>
+                    <td>@item.CertificadoPago</td>
+                    <td>@item.IDTipoCadenaPago </td>
+                    <td>@item.SelloPago</td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+@if (@ViewBag.detallesDR != null) {
+<div class="table-responsive">
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <h4> Documentos Relacionados </h4>
+            </tr>
+            <tr>
+              
+
+                <th>ID Factura</th>
+                <th>Serie</th>
+                <th>Número</th>
+                <th>Clave Moneda</th>
+                <th>Descripción</th>
+                <th>TC</th>
+                <th>Método de Pago</th>
+                <th>Importe Saldo Insoluto</th>
+                <th>Importe Pagado</th>
+                <th>No. Parcialidad</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in ViewBag.detallesDR)
+        {
+            <tr>
+                <td>@item.IDFactura</td>
+                <td>@item.Serie </td>
+                <td>@item.Numero</td>
+                <td>@item.ClaveMoneda</td>
+                <td>@item.Descripcion</td>
+                <td>@item.TC</td>
+                <td>@item.IDMetododepago</td>
+                <td>@string.Format("{0:C}", @item.ImporteSaldoInsoluto)</td>
+                <td>@string.Format("{0:C}", @item.ImportePagado)</td>
+                <td>@item.NoParcialidad</td>
+            </tr>
+        }
+
+    </table>
+</div>
+}
+<p>
+   @* @Html.ActionLink("Editar", "Edit", new { id = Model.IDPagoFactura }, new { @class = "btn btn-success btn-xs" })|*@
+    @Html.ActionLink("Volver a la lista", "IndexPago", null, new { @class = "btn btn-default btn-xs" })
+</p>

@@ -1,0 +1,243 @@
+﻿
+
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.VBitacora>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+
+@{
+    ViewBag.Title = "ProcesosIniciados";
+    Layout = "~/Views/Shared/_LayoutBitacora.cshtml";
+}
+
+<h2>Procesos Iniciados</h2>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <div>
+                        <table><tr><td> Elementos por página: @Html.DropDownList("pageSize") | Escribe parte del Articulo o de la referencia : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" }) | <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span></td></tr></table>
+                    </div>
+
+                    <div></div>
+
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+
+@*Busqueda*@
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Orden de Producción")
+            @*  @Html.DisplayNameFor(model => model.IDOrdenP)*@
+        </th>
+        <th>
+            @Html.Label("Estado Orden")
+            
+        </th>
+        <th>
+            @Html.Label("Responsable")
+            @* @Html.DisplayNameFor(model => model.IDTrabajador)*@
+        </th>
+        <th>
+            @Html.Label("Fecha de Inicio")
+            @*@Html.DisplayNameFor(model => model.FechaInicio)*@
+        </th>
+        <th>
+            @Html.Label("Fecha de Fin")
+            @*@Html.DisplayNameFor(model => model.FechaFin)*@
+        </th>
+        <th>
+            @Html.Label("Diferencia de Horas")
+            @* @Html.DisplayNameFor(model => model.DiferenciaHoras)*@
+        </th>
+        <th>
+            @Html.Label("Proceso")
+            @*@Html.DisplayNameFor(model => model.ReporteDesperfecto)*@
+        </th>
+        <th>
+            @Html.Label("Estatus")
+            @*@Html.DisplayNameFor(model => model.ReporteDesperfecto)*@
+        </th>
+        <th>
+            @Html.Label("Cantidad")
+            @*@Html.DisplayNameFor(model => model.ReporteDesperfecto)*@
+        </th>
+        <th>
+            @Html.Label("Observación")
+            @* @Html.DisplayNameFor(model => model.Observacion)*@
+        </th>
+        <th>
+            @Html.Label("Adjunto")
+            @*@Html.DisplayNameFor(model => model.ReporteDesperfecto)*@
+        </th>
+
+        @*<th></th>*@
+    </tr>
+
+    @{
+        try
+        {
+
+            //string cadena1 = "select * from Bitacora where IDEstadoOrden=13";
+            //SIAAPI.Models.Produccion.VBitacoraContext dbart = new SIAAPI.Models.Produccion.VBitacoraContext();
+            //List<SIAAPI.Models.Produccion.VBitacora> t = dbart.Database.SqlQuery<SIAAPI.Models.Produccion.VBitacora>(cadena1).ToList();
+            //ViewBag.Articulo = t;
+            //SIAAPI.Models.Produccion.TrabajadorContext dbt = new SIAAPI.Models.Produccion.TrabajadorContext();
+            //SIAAPI.Models.Produccion.Trabajador tr = dbt.Trabajadores.Find(dbart.Trabajador);
+        }
+        catch
+        {
+
+        }
+
+
+
+
+        foreach (var item in Model)
+        {
+            //  string Cadena = "Select idEstadoOrden from OrdenProduccion where idOrden=" + item.IDOrden;
+            SIAAPI.Models.Produccion.OrdenProduccionContext db = new SIAAPI.Models.Produccion.OrdenProduccionContext();
+            //var elemento =   db.Database.ExecuteSqlCommand(Cadena);
+
+            //SIAAPI.Models.Produccion.ClsDatoString finaliza = db.Database.SqlQuery<ClsDatoString>("select (select Descripcion from EstadoOrden where IDEstadoOrden=OrdenProduccionDetalle.IDEstadoOrden) as Dato from OrdenProduccionDetalle where IDOrden=" + ido + " and IDProceso=" + idprocesoanterior + "").ToList()[0];
+           var elemento  = db.Database.SqlQuery<int>("Select idEstadoOrden from OrdenProduccion where idOrden="+ item.IDOrden).FirstOrDefault();
+
+
+            SIAAPI.Models.Produccion.EstadoOrden eso = new SIAAPI.Models.Produccion.EstadoOrdenContext().EstadoOrdenes.Find(elemento);
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDOrden)
+                </td>
+                <td>
+                    @eso.Descripcion
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Trabajador.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaInicio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaFin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiferenciaHoras)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Proceso.NombreProceso)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstadoOrden.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad) @Html.DisplayFor(modelItem => item.c_ClaveUnidad.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observacion)
+                </td>
+                <td>
+                    @if (item.Imagen == null)
+                    {
+                        <a class="w3-hover-opacity"><img src="@Url.Action("RenderImage", new { id = item.IDBitacora })" class="img-responsive" width="50" height="50"></a>
+
+                    }
+                    else
+                    {
+                        <a href="Bitacora/RenderImage/@item.IDBitacora" class="w3-hover-opacity"><img src="@Url.Action("RenderImage", new { id = item.IDBitacora })" class="img-responsive" width="50" height="50"></a>
+
+                    }
+
+                    @*<img src="@Url.Action("RenderImage", new { id=item.IDBitacora})" class="img-responsive" width="50" height="50" />*@
+                </td>
+
+                <td>
+                    @{
+                        try
+                        {
+                            //var elemento = new SIAAPI.Models.Produccion.TrabajadorContext().Trabajadores.Single(s => s.Nombre.Equals(User.Identity.Name));
+                            if (item.FechaFin == null)
+                            {
+                                @Html.ActionLink("Finalizar Bitacora", "FinalizaB", new { id = item.IDBitacora }, new { @class = "btn btn-danger btn-xs" })
+                            }
+
+                            @Html.ActionLink("Reporte de Incidencia", "Reportes", new { id = item.IDBitacora }, new { @class = "btn btn-default btn-xs" })
+                        }
+                        catch (Exception err)
+                        {
+
+                        }
+                    }
+
+
+
+
+
+                </td>
+                @*<td>
+                    @if (ViewBag.vercreate == null && ViewBag.idorden != null && ViewBag.idproceso != null)
+                    {
+
+                        SIAAPI.Models.Produccion.BitacoraContext bdb = new SIAAPI.Models.Produccion.BitacoraContext();
+                        int IDORDEN = ViewBag.idorden;
+                        int IDPROCESO = ViewBag.idproceso;
+                        //SIAAPI.Models.Comercial.ClsDatoEntero countfinaliza = bdb.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDOrdenDetalle) as Dato from OrdenProduccionDetalle where IDOrden=" + IDORDEN + " and IDProceso=" + IDPROCESO + "").ToList()[0];
+                        SIAAPI.Models.Comercial.ClsDatoString finaliza = bdb.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select (select Descripcion from EstadoOrden where IDEstadoOrden=OrdenProduccionDetalle.IDEstadoOrden) as Dato from OrdenProduccionDetalle where IDOrden=" + IDORDEN + " and IDProceso=" + IDPROCESO + "").ToList()[0];
+
+
+
+                        <h3>Listado de Lote de Trabajo</h3>
+                        <hr />
+                        if (!finaliza.Dato.Equals("Terminado"))
+                        {
+                            <h6 align="right">@Html.ActionLink("Finalizar Proceso", "FinalizaProceso", new { idorden = ViewBag.idorden, idproceso = ViewBag.idproceso }, new { @class = "btn btn-danger btn-xs" })</h6>
+                        }
+                        else if (finaliza.Dato.Equals("Terminado"))
+                        {
+                            <h6 align="right" class="text-danger">Proceso Finalizado</h6>
+                        }
+                    }
+                </td>*@
+            </tr>
+        }
+    }
+</table>
+
+
+@*Paginación*@
+@using (Html.BeginForm("ProcesosIniciados", "Bitacora", FormMethod.Get, new { id = "pageSizeForm" }))
+{
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+
+        @Html.PagedListPager(Model, page => Url.Action("ProcesosIniciados", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize,
+       Familia = ViewBag.Familia
+   }))
+
+
+    </div>
+}
+@*Paginación*@
+

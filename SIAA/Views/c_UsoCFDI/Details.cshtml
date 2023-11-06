@@ -1,0 +1,35 @@
+﻿@model SIAAPI.Models.Administracion.c_UsoCFDI
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles de Uso CFDI</h3>
+
+<div>
+  
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveCFDI)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveCFDI)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDUsoCFDI }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index",null, new { @class = "btn btn-default btn-xs" })
+</p>

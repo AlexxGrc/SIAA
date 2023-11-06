@@ -1,0 +1,171 @@
+﻿@model List<SIAAPI.ViewModels.Comercial.VCarritoRemisionKit>
+@{
+    ViewBag.Title = "RemisionKit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    Remisionar Kit
+</h2>
+@using (Html.BeginForm("updateRemisionKit", "EncRemision", FormMethod.Post))
+{
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+
+                <th>
+                    @Html.Label("Clave")
+                </th>
+                <th>
+                    @Html.Label("Descripcion")
+                </th>
+
+
+                <th>
+                    @Html.Label("Cantidad")
+                </th>
+
+
+            </tr>
+            @if (Model != null && Model.Count > 0)
+            {
+                SIAAPI.Models.Comercial.RemisionContext db = new SIAAPI.Models.Comercial.RemisionContext();
+                int j = 0;
+                foreach (var k in ViewBag.Detremision)
+                {
+
+
+                    int IDArticulo = k.IDArticulo;
+                    SIAAPI.Models.Comercial.Articulo articuloK = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(IDArticulo);
+                    // SIAAPI.Models.Comercial.Caracteristica caracteristica = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where Articulo_IDArticulo=" + IDArticulo).ToList().FirstOrDefault();
+
+
+
+
+                    string cadenakit = "select [IDCarritoRemisionKit],[IDPedido],[IDArticulo],[Cantidad],[Costo],[CantidadPedida],[Caracteristica_ID],[IDAlmacen],[Suministro],[jsonPresentacion],[UserID],[IDDetExterna]from CarritoRemisionKit where IDDetExterna=" + k.IDDetRemision;
+                    List<SIAAPI.ViewModels.Comercial.VCarritoRemisionKit> remision = db.Database.SqlQuery<SIAAPI.ViewModels.Comercial.VCarritoRemisionKit>(cadenakit).ToList();
+                    <tr class="info">
+
+                        <td>@articuloK.Cref</td>
+                        <td>@articuloK.Descripcion</td>
+                        <td></td>
+                    </tr>
+
+
+                    foreach (SIAAPI.ViewModels.Comercial.VCarritoRemisionKit i in remision)
+                    {
+
+
+
+
+
+                        <tr name="@i.IDCarritoRemisionKit">
+                            @Html.TextBoxFor(a => a[j].IDDetExterna, new { @class = "form-control", @Value = i.IDDetExterna, @type = "hidden" })
+                            @Html.TextBoxFor(a => a[j].IDPedido, new { @class = "form-control", @Value = i.IDPedido, @type = "hidden" })
+                            @Html.TextBoxFor(a => a[j].IDCarritoRemisionKit, new { @class = "form-control", @Value = i.IDCarritoRemisionKit, @type = "hidden" })
+                            @Html.TextBoxFor(a => a[j].Cantidad, new { @class = "form-control", @Value = i.CantidadPedida, @type = "hidden" })
+                            @Html.TextBoxFor(a => a[j].Caracteristica_ID, new { @class = "form-control", @Value = i.Caracteristica_ID, @type = "hidden" })
+                            @Html.TextBoxFor(a => a[j].Costo, new { @class = "form-control", @Value = i.Costo, @type = "hidden" })
+
+                            @{
+
+                                int IDC = i.IDArticulo;
+                                SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(IDC);
+                                SIAAPI.Models.Comercial.Caracteristica caracteristicas = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where id=" + i.Caracteristica_ID).ToList().FirstOrDefault();
+
+                            }
+
+                            <td>@articulo.Cref</td>
+                            <td>
+                                @Html.DisplayFor(modelItem => articulo.Descripcion)
+                                <div> @Html.DisplayFor(modelItem => caracteristicas.IDPresentacion) | @Html.DisplayFor(modelItem => caracteristicas.Presentacion)</div>
+                            </td>
+
+
+                            @*<td>@Html.DisplayFor(modelItem => i.Cantidad)</td>*@
+                            @{
+                                SIAAPI.Models.Comercial.PedidoContext oc = new SIAAPI.Models.Comercial.PedidoContext();
+                                SIAAPI.Models.Comercial.DetPedido detPedido = oc.DetPedido.Find(i.IDDetExterna);
+                            }
+
+
+                            <td>@Html.TextBoxFor(a => a[j].Suministro, new { @class = "form-control", style = "width:80px;", @Value = i.CantidadPedida })</td>
+
+
+
+
+                        </tr>
+
+
+                      
+                        j++;
+                    }
+
+
+
+
+                }
+
+
+
+
+
+            }
+
+
+
+
+
+
+        </table>
+    </div>
+    <input class="btn btn-success" type="submit" value="Aceptar" id="ocultar" onclick="myFunction()" />
+}
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript" language="javascript">
+    function myFunction() {
+        var x = document.getElementById("ocultar");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    function asignarMP(e) {
+
+        var lote = document.getElementById("lote").value;
+        var idremision = document.getElementById("remision").value;
+
+        var url = "/EncRemision/descontarlote";
+        if (e.keyCode === 13) {
+            e.preventDefault();
+
+            $.post(url, { loteinterno: lote, remision: idremision }, function (response) {
+
+                window.location.reload(true);
+
+            })
+        }
+    }
+</script>
+<script>
+
+        var url = '@Url.Action("Deleteremi", "EncRemision")';
+        $('.delete').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>

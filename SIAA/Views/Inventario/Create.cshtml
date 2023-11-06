@@ -1,0 +1,142 @@
+﻿@model SIAAPI.Models.Inventarios.Inventario
+
+@{
+    ViewBag.Title = "Create";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    var idcaracteristica = ViewBag.PresentacionList as List<SelectListItem>;
+    var idarticulo = ViewBag.IDArticulo as List<SelectListItem>;
+}
+<script defer src="~/Scripts/cascade.combo.js"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h3>Inventario Inicial</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDAlmacen, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDAlmacen", ViewBag.IDAlmacen as List<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>
+        <table>
+            <td class="col-lg-3">
+                Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                <br /><input id="clave" name="clave" onkeyup="actualizacombo(event)" />
+            </td>
+            <td class="col-lg-9">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDArticulo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+
+                        @*@Html.DropDownListFor(model => model.IDArticulo, ViewBag.IDCaracteristica as List<SelectListItem>, new { @class = "form-control" })*@
+                        @Html.DropDownListFor(model => model.IDArticulo, idarticulo, new
+                   {
+                       @class = "form-control",
+                       @name = "IDArticulo",
+                       @id = "IDArticulo",
+                       data_cascade_combo = "#IDCaracteristica",
+                       data_cascade_combo_source = Url.Action("getJsonCaracteristicaArticulo", "Inventario"),
+                       data_cascade_combo_param_name = "id",
+                       @onchange = "traeunidad(this.value)"
+
+                   })
+                    </div>
+                </div>
+            </td>
+
+        </table>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDCaracteristica, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+
+                @Html.DropDownListFor(model => model.IDCaracteristica, idcaracteristica, new { @class = "form-control", id = "IDCaracteristica" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cantidad, "{0:0.0000}", new { @type = "number" })
+                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                <label id="unidad"></label>
+            </div>
+        </div>
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" />
+                @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+
+</div>
+
+<script>
+    function traeunidad(val) {
+        $.get('/Inventario/GetUnidad',{'id':val},function(response){
+            //you just need to get the response so $.get is enough to manipulate
+            //this will be called once you get the response from controller, typically a callback
+            if(response.result) //same result variable we are returning from controller.
+            {
+
+                document.getElementById('unidad').innerHTML = response.result;
+            } else {
+
+            }
+        })
+
+    }
+
+    function actualizacombo(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clave";
+            var selectcontrol = "#IDArticulo";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getarticulosblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un articulo";
+                          $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+                    
+                    }
+                       $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+</script>
+
+@*@section scripts{
+        <script defer src="~/Scripts/cascade.combo.js"></script>
+    }*@
+

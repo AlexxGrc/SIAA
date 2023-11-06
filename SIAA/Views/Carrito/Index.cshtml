@@ -1,0 +1,466 @@
+﻿@model SIAAPI.Models.Comercial.Carrito
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var inventarioalmacenes = ViewBag.InventarioList as List<SelectListItem>;
+    var Oficinas = ViewBag.Oficina as List<SelectListItem>;
+}
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script defer src="~/Scripts/cascade.combo.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#IDCliente").change(function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("getPrecio")',
+                    dataType: 'json',
+                    data: { id: $("#IDCliente").val() },
+                    success: function () {
+                        location.replace("Carrito" + "?IDCliente=" + $("#IDCliente").val());
+                        //location.reload( );
+                    }
+
+                });
+                return false;
+            })
+        });
+</script>
+
+
+@{
+    <h3 class="text-danger ">@ViewBag.Mensaje</h3>
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Oficina", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(model => model.IDOficina, Oficinas, new
+             {
+                  @class = "form-control",
+                  @id="IDOficina",
+                  @name="IDOficina",
+                  data_cascade_combo = "#IDCliente",
+                  data_cascade_combo_source = Url.Action("getJsonClientesvsOficina", "Carrito"),
+                  data_cascade_combo_param_name = "id"
+              })
+
+            </div>
+        </div>
+      
+        <div class="form-group">
+            @Html.Label("Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+
+                @*@Html.DropDownListFor(model => model.IDArticulo, ViewBag.IDCaracteristica as List<SelectListItem>, new { @class = "form-control" })*@
+                @Html.DropDownListFor(model => model.IDCLiente, inventarioalmacenes, new
+            {
+                @class = "form-control",
+                @name = "IDCliente",
+                @id = "IDCliente",
+
+                })
+
+            </div>
+        </div>
+    </div>
+        @*<div class="form-group">
+
+                <div class="col-md-8">
+                    @Html.DropDownList("IDCliente", ViewBag.cliente as List<SelectListItem>, new { @class = "form-control" })
+
+                </div>
+            </div>*@
+
+        <h6 align="right"><a href="@Url.Action("TiendaGeneral", "Tienda")"><span class="btn btn-primary btn-xs">Productos</span></a></h6>
+
+        SIAAPI.Models.Comercial.ClientesContext prov = new SIAAPI.Models.Comercial.ClientesContext();
+        List<SIAAPI.Models.Login.User>
+            userid = prov.Database.SqlQuery<SIAAPI.Models.Login.User>
+                ("select * from [dbo].[User] where Username='" + User.Identity.Name + "'").ToList();
+                int usuario = userid.Select(s => s.UserID).FirstOrDefault();
+
+                SIAAPI.Models.Comercial.ClsDatoEntero contarcarrito = prov.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>
+                    ("select count(IDCarrito) as Dato from Carrito where usuario='" + usuario + "'").ToList()[0];
+                    if (contarcarrito.Dato != 0)
+                    {
+                    <h2>
+                        <i class="fa fa-calculator"></i>
+                        <span></span>
+
+
+                        @if (@Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerenteventas") || @Roles.IsUserInRole("Sistemas"))
+                        {
+                            <a href="@Url.Action("Create", "EncCotizacion")"><span class="btn btn-primary btn-xs">Cotización</span></a>
+                        }
+                        @if (@Roles.IsUserInRole("Cliente") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerenteventas") || @Roles.IsUserInRole("Sistemas"))
+                        {
+                            <a href="@Url.Action("Create", "EncPedido")"><span class="btn btn-warning btn-xs">Pedido</span></a>
+                        }
+
+
+                    </h2>
+
+
+
+
+                    }
+                    }
+<br />
+
+<h3 class="text-danger ">REVISAR QUE EL ALMACÉN SEA CORRECTO</h3>
+
+                    <br />
+                    <div class="table">
+                        <table class="table table-striped" id="TableCar">
+                            <tr>
+
+                                <th width="40px">Referencia</th>
+                                <th width="150px">Articulo</th>
+
+                            </tr>
+                        </table>
+                        @{using (Html.BeginForm())
+                            {
+                                var contador = 0;
+                                foreach (SIAAPI.Models.Comercial.VCarritoV item in ViewBag.VCarritoElementos)
+                                {
+                                    SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+                                    SIAAPI.Models.Comercial.Caracteristica cara2 = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where ID=" + item.IDCaracteristica).ToList().FirstOrDefault();
+                                    <div>
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <td style="background-color:burlywood">
+                                                    @articulo.Cref
+                                                </td>
+                                                <td colspan="2" style="background-color:cornsilk">
+                                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                                </td>
+                                                <td colspan="9" style="background-color:cornsilk">
+                                                    <div>Numero de Presentacion @cara2.IDPresentacion</div>
+                                                    <div>
+                                                        <table>
+                                                            @{
+                                                                string[] atributos = cara2.Presentacion.ToString().Split(',');
+                                                                <tr>
+                                                                    @foreach (var atri in atributos)
+                                                                    {
+                                                                        string[] valor = atri.Split((char)58);
+                                                                        try
+                                                                        {
+                                                                            string Atri = valor[0];
+                                                                            string Val = valor[1];
+                                                                            <td style="background-color:darkblue; font-size:xx-small" class="col-md-1">
+                                                                                <label style="color:white;">@Atri</label>
+                                                                            </td>
+                                                                        }
+                                                                        catch (Exception err)
+                                                                        {
+                                                                            <td class="col-md-1">
+                                                                                <label> </label>
+                                                                            </td>
+                                                                        }
+
+                                                                    }
+                                                                </tr>
+                                                                <tr>
+                                                                    @foreach (var atri in atributos)
+                                                                    {
+                                                                        string[] valor = atri.Split((char)58);
+                                                                        try
+                                                                        {
+                                                                            string Val = valor[1];
+                                                                            <td class="col-md-1" style=" font-size:xx-small">
+                                                                                <label>@Val</label>
+                                                                            </td>
+                                                                        }
+                                                                        catch (Exception err)
+                                                                        {
+                                                                            <td class="col-md-1">
+                                                                                <label> </label>
+                                                                            </td>
+                                                                        }
+
+
+                                                                    }
+                                                                </tr>
+                                                            }
+                                                        </table>
+                                                    </div>
+
+
+                                                </td>
+
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div>
+                                        <table class="table">
+                                            <tr>
+
+                                                <th>
+                                                    @Html.DisplayNameFor(model => item.Cantidad)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => item.Unidad)
+                                                </th>                            
+                                                <th>@Html.DisplayNameFor(model => item.Moneda)</th>
+                                                <th>                             
+                                                    @Html.DisplayNameFor(model => item.Precio)
+                                                </th>                            
+                                                <th>@Html.DisplayNameFor(model => item.Importe)</th>
+                                                <th>@Html.DisplayNameFor(model => item.preciomex)</th>
+
+                                                <th> Almacén</th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+
+
+                                                <td>
+                                                    @{string cadena = "Cantidad" + contador;
+                                                    }
+                                                    <input type="number" step="0.5" class="form-control" id="@cadena" name="Cantidad" value="@item.Cantidad">
+
+
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Unidad)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Moneda)
+                                                </td>
+                                                <td>
+                                                    @*@Html.DisplayFor(modelItem => item.Precio)*@
+                                                    @String.Format("{0:C}", item.Precio)
+                                                </td>
+
+
+                                                <td>
+                                                    @*@Html.DisplayFor(modelItem => item.Importe)*@
+                                                    @String.Format("{0:C}", item.Importe)
+                                                </td>
+                                                <td>
+                                                    @*@Html.DisplayFor(modelItem => item.preciomex)*@
+                                                    @String.Format("{0:C}", item.preciomex)
+                                                </td>
+                                                <td>
+                                                    @{
+
+                                                        SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                                                        SIAAPI.Models.Comercial.Articulo articuloA = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+                                                        string cadenaal = "IDAlmacen" + contador;
+                                                        //var ALMACENES = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.OrderBy(S => S.CodAlm);
+
+                                                        string CODOFICINA = "";
+                                                        if (ViewBag.IDDOficina!=0)
+                                                        {
+                                                            SIAAPI.Models.Comercial.Oficina oficina = new SIAAPI.Models.Comercial.OficinaContext().Oficinas.Find(ViewBag.IDDOficina);
+                                                            CODOFICINA = oficina.NombreOficina;
+                                                        }
+                                                        List<SelectListItem> entrega = new List<SelectListItem>();
+                                                        List<SIAAPI.Models.Comercial.Almacen> ALMACENES = db.Database.SqlQuery<SIAAPI.Models.Comercial.Almacen>("select distinct(f.idalmacen) , a.*  from Almacen as a inner join FamAlm as f on f.idalmacen=a.idalmacen where f.idfamilia=" + articuloA.IDFamilia).ToList();
+                                                        if (CODOFICINA!="")
+                                                        {
+                                                            ALMACENES = db.Database.SqlQuery<SIAAPI.Models.Comercial.Almacen>("select distinct(f.idalmacen) , a.*  from Almacen as a inner join FamAlm as f on f.idalmacen=a.idalmacen where a.descripcion like '%"+CODOFICINA+"%' and  f.idfamilia=" + articuloA.IDFamilia).ToList();
+
+                                                        }
+                                                        int almacenValor = 0;
+
+                                                        //ALMACENES.Add(new SelectListItem { Text = "El Cliente Recoge", Value = "El Cliente Recoge" });
+
+                                                        <select name="@cadenaal" id="@cadenaal">
+                                                            @{ foreach (SIAAPI.Models.Comercial.Almacen almacen in ALMACENES)
+                                                                {
+                                                                    <option value="0">SELECCIONA UN ALMACEN Y GUARDA</option>
+                                                                    if (almacen.IDAlmacen != item.IDAlmacen) // SI NO ES EL MODELO SOLO LO AÑADE AL COMBO
+                                                                    {
+                                                                        <option value="@almacen.IDAlmacen">@almacen.Descripcion</option>
+                                                                    }
+                                                                    else // SI ES IGUAL AL MODELO LO CREA Y LO SELECCIONA
+                                                                    {
+                                                                        <option value="@almacen.IDAlmacen" selected>@almacen.Descripcion</option>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </select>
+
+                                                    }
+
+                                                    @* @Html.DropDownList("IDAlmacen", null, htmlAttributes: new { @id = cadenaal, @name = cadenaal,  @class = "form-control" })*@
+
+
+
+
+                                                </td>
+                                                <td>
+
+                                                    <a class="edit" onclick="Actualizar(@item.IDCarrito,@contador )">
+                                                        <i class="tbl_del_btn fa fa-save"></i>
+                                                    </a>
+                                                    <a class="delete" data-id="@item.IDCarrito">
+                                                        <i class="tbl_del_btn fa fa-trash"></i>
+
+                                                    </a>
+
+                                                    @{
+                                                        if (item.IDCliente != 0)
+                                                        {
+                                                            SIAAPI.Models.Comercial.ArticuloContext dbA = new SIAAPI.Models.Comercial.ArticuloContext();
+
+                                                            SIAAPI.Models.Comercial.ClsDatoEntero
+                                                                                countMatriz = dbA.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDMatrizPrecio) as Dato from MatrizPrecioCliente where IDArticulo =" + item.IDArticulo + " and IDCliente =" + item.IDCliente + "").ToList()[0];
+
+
+                                                            if (countMatriz.Dato == 0)
+                                                            {
+                                                                @Html.ActionLink("Crear MPC", "Agrega", "MatrizPrecioCliente", new { id = item.IDCarrito }, new { @class = "btn btn-success btn-xs" })
+
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.ActionLink("Ver MPC", "Agrega", "MatrizPrecioCliente", new { id = item.IDCarrito }, new { @class = "btn btn-success btn-xs" })
+                                                            }
+                                                        }
+                                                    }
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nota</td>
+                                                <td colspan="7">
+                                                    @{string cadenaa = "Nota" + contador;
+                                                    }
+                                                    <input type="text" class="form-control" id="@cadenaa" name="Nota" value="@item.Nota">
+
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    contador++;
+                                }
+                            }
+                        }
+
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped" width="50">
+                            <tr>
+                                <th class="col-lg-1">
+                                    Moneda Origen
+                                </th>
+                                <th class="col-lg-1">
+                                    Subtotal
+                                </th>
+                                <th class="col-lg-1">
+                                    IVA
+                                </th>
+                                <th class="col-lg-1">
+                                    Total
+                                </th>
+                                @*<th class="col-lg-1">
+                                        Total en Pesos Mexicanos
+                                    </th>*@
+                            </tr>
+                            @foreach (var itemresumen in ViewBag.sumatoria)
+                            {
+
+                                <tr>
+                                    <td class="col-lg-1">
+                                        @itemresumen.MonedaOrigen
+                                    </td>
+                                    <td class="col-lg-1">
+                                        @String.Format("{0:C}", itemresumen.Subtotal)
+                                    </td>
+                                    <td class="col-lg-1">
+                                        @String.Format("{0:C}", itemresumen.IVA)
+                                    </td>
+                                    <td class="col-lg-1">
+                                        @String.Format("{0:C}", itemresumen.Total)
+                                    </td>
+                                    @*<td class="col-lg-1">
+                                            @String.Format("{0:C}", itemresumen.TotalenPesos)
+                                        </td>*@
+
+                                </tr>
+                            }
+                        </table>
+                    </div>
+
+
+                    @{
+
+
+                        if (ViewBag.articulosc != null)
+                        {
+                            List<SIAAPI.Models.Comercial.ArticulosComprados> ARTICUC = (List<SIAAPI.Models.Comercial.ArticulosComprados>)ViewBag.articulosc;
+                            Html.RenderPartial("Articuloscomprados", ARTICUC);
+
+                        }
+
+
+
+                    }
+
+                    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+                    <script>
+
+
+             $('.delete').click(function () {
+                        var url = '@Url.Action("Deleteitem", "Carrito")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+                    </script>
+
+                    <script>
+
+
+
+                    function Actualizar(id, numero) {
+                        var urledit = '@Url.Action("Edititem", "Carrito")';
+            var nota = document.getElementById("Nota" + numero).value
+            var cantidad = document.getElementById("Cantidad" + numero).value
+            var idalmacen = document.getElementById("IDAlmacen" + numero).value
+            $.post(urledit, { id: id, cantidad: cantidad, nota: nota, idalmacen:idalmacen }, function (response) {
+
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+
+
+
+
+    function AgregaCarrito(id) {
+        var urlagre = '@Url.Action("AddCarritoGeneral", "Carrito")';
+            $.post(urlagre, { id: id}, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+                    </script>

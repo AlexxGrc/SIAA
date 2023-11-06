@@ -1,0 +1,212 @@
+﻿
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.OrdenProduccion>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Listado de Órdenes de Producción</h3>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                <p>
+                    Elementos por página: @Html.DropDownList("pageSize")  |
+                    Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                    Fecha inicio: @Html.TextBox("Fechainicio", ViewBag.Fechainicio as string, new { type = "date" })
+                    Fecha final:  @Html.TextBox("Fechafinal", ViewBag.Fechafinal as string, new { type = "date" })
+
+                    <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span>
+                </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@{ 
+    if (ViewBag.Vista)
+    {
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    Órdenes Ingresadas: @ViewBag.Ingresadas
+                    <br />
+                    Órdenes Producidas: @ViewBag.Producidas
+
+                </div>
+            </form>
+        </div>
+    </nav>
+    }
+}
+@*Busqueda*@
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @Html.ActionLink("Orden Producción", "Index", new { sortOrder = ViewBag.ASortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+           
+            <th>
+                @Html.Label("Cliente")
+            </th>
+            <th>
+                @Html.Label("Artículo")
+            </th>
+           
+            <th>
+                @Html.Label("Fecha Compromiso")
+            </th>
+           
+            <th>
+                @Html.Label("Cantidad")
+            </th>
+           
+           
+           
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDOrden)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cliente.Nombre)
+                </td>
+             
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+             
+
+                
+              
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaCompromiso)
+                </td>
+              
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+              
+                              
+                <td>
+          
+                    @Html.ActionLink("PDF", "PDF", new { id = item.IDOrden }, new { @class = "btn btn-primary btn-xs" })
+                     @*@if (item.EstadoOrden == "Iniciada" )
+                    {
+                        @Html.ActionLink("Liberar", "LiberarOrden", new { id = item.IDOrden, Mensaje = "" }, new { @class = "btn btn-info btn-xs" })
+
+
+                    }*@
+                   </td>
+              
+            </tr>
+        }
+
+    </table>
+    </div>
+
+<div class="modal fade" id="ModalProgramada" tabindex="-1" role="dialog">
+    <div class="modal-dialog lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3 class="modal-title">Programar Orden de Producción <label id="labelorden"></label></h3>
+            </div>
+
+            <input type="hidden" class="form-control" name="mensaje" id="mensaje">
+            <br />
+            <div class="form-group">
+                @Html.Label("Fecha", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    <input type="date" class="form-control" name="fecha" id="fecha">
+                </div>
+            </div>
+
+            <br /><br /><br /><br />
+            
+
+            <!-- Modal Actions -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-xs" onclick="Actualizar()">Guardar</button>
+
+                <button type="button" class="btn btn-warning btn-xs" data-dismiss="modal">Cerrar</button>
+            </div>
+
+            <!-- End Modal Actions -->
+        </div>
+        <!-- End Modal Content -->
+    </div>
+    <!-- End Modal Dialog -->
+</div>
+
+
+    @*Paginación*@
+    @using (Html.BeginForm("Index", "OrdenProduccion", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+        <div class="pager">
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+            @Model.Count de @Model.TotalItemCount elementos
+
+            @Html.PagedListPager(Model, page => Url.Action("Index", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize
+   }))
+
+
+        </div>
+    }
+    @*Paginación*@
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+    function ModalPro(valor) {
+                    var valor = valor;
+                    $('#mensaje').val(valor);
+                    document.querySelector('#labelorden').innerText = valor;
+                    $('#ModalProgramada').modal('show')
+                }
+</script>
+
+
+<script>
+
+                var url = '@Url.Action("addfechapro", "OrdenProduccion")';
+
+                function Actualizar() {
+                    $.post(url, { id: document.getElementById("mensaje").value, fecha:document.getElementById("fecha").value }, function (response) {
+                        if (response) {
+                            $('#ModalProgramada').remove();
+                            location.reload();
+
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                }
+
+
+</script>

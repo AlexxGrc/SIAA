@@ -1,0 +1,317 @@
+﻿@model SIAAPI.ViewModels.CartaPorte.VParqueVehicular
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h3>Detalle Parque Vehicular</h3>
+
+<div>
+
+    <dl class="dl-horizontal">
+
+        <dd>
+            @Html.HiddenFor(model => model.IDParqueV)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ClavePermisoSCT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClavePermisoSCT) | @Html.DisplayFor(model => model.TipoPermiso)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoPermisoSCT)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoPermisoSCT)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Aseguradora)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Aseguradora)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PolizaSeguro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PolizaSeguro)
+        </dd>
+
+         <dt>
+            @Html.DisplayNameFor(model => model.ClaveVehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveVehiculo) | @Html.DisplayFor(model => model.TipoVehiculo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PlacaVehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PlacaVehiculo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnnoVehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnnoVehiculo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modelo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Modelo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Color)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Color)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveRemolque)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveRemolque) | @Html.DisplayFor(model => model.TipoRemolque)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Placa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Placa)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EsArrendado)
+        </dt>
+        @if (Model.EsArrendado == false)
+        {
+            <dd>
+                @Html.Label("No")
+            </dd>
+        }
+        else
+        {
+            <dd>
+                @Html.Label("Si")
+            </dd>
+        }
+        <dt>
+            @Html.DisplayNameFor(model => model.TienePropietario)
+        </dt>
+        @if (Model.TienePropietario == false)
+        {
+            <dd>
+                @Html.Label("No")
+            </dd>
+        }
+        else
+        {
+            <dd>
+                @Html.Label("Si")
+            </dd>
+        }
+
+    </dl>
+</div>
+
+
+@*Arrendatario*@
+
+@if(Model.EsArrendado != false)
+{ 
+    if (@ViewBag.Arrendatario != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <h3>
+                            Arrendatario
+                        </h3>
+                    <tr>
+                        <th>RFC</th>
+                        <th>Nombre</th>
+                        <th>No. de Reg Tributario </th>
+                        <th>Calle</th>
+                        <th>No. Ext</th>
+                        <th>No. Int</th>
+                    </tr>
+                </thead>
+
+                @foreach (var itemA in ViewBag.Arrendatario)
+                {
+                    <tr>
+                        <td>@itemA.RFCArrendatario</td>
+                        <td>@itemA.NombreArrendatario </td>
+                        <td>@itemA.NumRegIdTribArrendatario</td>
+                        <td>@itemA.Calle</td>
+                        <td>@itemA.NumExt</td>
+                        <td>@itemA.NumInt</td>
+                    </tr>
+                    <tr>
+                        @Html.ActionLink("Desasignar", "QuitarA", new { id = Model.IDParqueV }, new { @class = "btn btn-danger btn-xs" })
+                    </tr>
+                }
+
+            </table>
+        </div>
+    }
+}
+
+@if (Model.EsArrendado != false)
+{
+    if (@ViewBag.Arrendatario != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+
+                    <tr>
+                        <th>País</th>
+                        <th>Clave Estado</th>
+                        <th>Clave Municipio</th>
+                        <th>Municipio</th>
+                        <th>Clave Localidad</th>
+                        <th>Localidad</th>
+                        <th>Clave Colonia</th>
+                        <th>Colonia</th>
+                        <th>CP</th>
+                        <th>Referencia</th>
+                    </tr>
+                </thead>
+
+                @foreach (var itemA in ViewBag.Arrendatario)
+                {
+                    <tr>
+                        <td>@itemA.c_Pais</td>
+                        <td>@itemA.c_Estado</td>
+                        <td>@itemA.c_Municipio</td>
+                        <td>@itemA.Municipio</td>
+                        <td>@itemA.c_Localidad</td>
+                        <td>@itemA.Localidad</td>
+                        <td>@itemA.c_Colonia</td>
+                        <td>@itemA.Colonia</td>
+                        <td>@itemA.CP</td>
+                        <td>@itemA.Referencia</td>
+                    </tr>
+
+                }
+
+            </table>
+        </div>
+    }
+}
+
+@*Propietario*@
+
+@if (Model.TienePropietario != false)
+{
+    if (@ViewBag.Propietario != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <h3>
+                            Propietario
+                        </h3>
+                    <tr>
+                        <th>RFC</th>
+                        <th>Nombre</th>
+                        <th>No. de Reg Tributario </th>
+                        <th>Residencia Fiscal </th>
+                        <th>Calle</th>
+                        <th>No. Ext</th>
+                        <th>No. Int</th>
+                        </tr>
+                    <tr></tr>
+                </thead>
+
+                @foreach (var itemP in ViewBag.Propietario)
+                {
+                    <tr>
+                        <td>@itemP.RFCPropietario</td>
+                        <td>@itemP.NombrePropietario </td>
+                        <td>@itemP.NumRegIdTribPropietario</td>
+                        <td>@itemP.ResidenciaFiscal</td>
+                        <td>@itemP.Calle</td>
+                        <td>@itemP.NumExt</td>
+                        <td>@itemP.NumInt</td>
+                        
+                </tr>        
+              
+                    <tr>
+                        @Html.ActionLink("Desasignar", "QuitarP", new { id = Model.IDParqueV }, new { @class = "btn btn-danger btn-xs" })
+                    </tr>
+                }
+
+            </table>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+
+                        <th>País</th>
+                        <th>Clave Estado</th>
+                        <th>Clave Municipio</th>
+                        <th>Municipio</th>
+                        <th>Clave Localidad</th>
+                        <th>Localidad</th>
+                        <th>Clave Colonia</th>
+                        <th>Colonia</th>
+                        <th>CP</th>
+                        <th>Referencia</th>
+                    </tr>
+                    <tr></tr>
+                </thead>
+
+                @foreach (var itemP in ViewBag.Propietario)
+                {
+                    <tr>
+                        <td>@itemP.c_Pais</td>
+                        <td>@itemP.c_Estado</td>
+                        <td>@itemP.c_Municipio</td>
+                        <td>@itemP.Municipio</td>
+                        <td>@itemP.c_Localidad</td>
+                        <td>@itemP.Localidad</td>
+                        <td>@itemP.c_Colonia</td>
+                        <td>@itemP.Colonia</td>
+                        <td>@itemP.CP</td>
+                        <td>@itemP.Referencia</td>
+                    </tr>
+
+                }
+
+            </table>
+        </div>
+    }
+}
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDParqueV }, new { @class = "btn btn-success btn-xs" })
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>
+

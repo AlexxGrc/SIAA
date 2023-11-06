@@ -1,0 +1,97 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.ArticuloProduccion>
+
+@{
+    ViewBag.Title = "AsignaciondematerialdelaOrden";
+
+    SIAAPI.Models.Produccion.OrdenProduccion orden = ViewBag.orden;
+}
+<h3>Asignacion de materiales de la Orden @orden.IDOrden para el pedido @orden.IDPedido </h3>
+<h5>cliente @orden.Cliente.Nombre</h5>
+
+@{ 
+    var procesos = ViewBag.ordendeprocesos;
+
+    foreach (SIAAPI.Models.Produccion.OrdenProduccionDetalle elemento in procesos)
+    {
+        SIAAPI.Models.Produccion.Proceso proceso = new SIAAPI.Models.Produccion.ProcesoContext().Procesos.Find(elemento.IDProceso);
+
+        <h2>@proceso.NombreProceso</h2>
+        <table class="table">
+
+
+            @foreach (var item in Model)
+            {
+                SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+
+
+                if (item.IDProceso == proceso.IDProceso && (articulo.IDTipoArticulo == 4 || articulo.IDTipoArticulo == 6 || articulo.IDTipoArticulo == 7))
+                {
+                    <table>
+                        <tr>
+                            <table>
+                                <tr>
+                                    <td class="col-md-1">
+                                        <div class="text-info">@articulo.Cref</div>
+                                    </td>
+                                    <td class="col-md-5">
+                                        @{ SIAAPI.Models.Comercial.Caracteristica caracteristica = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where ID=" + item.IDCaracteristica).ToList()[0];}
+                                        <div class="text-capitalize">@caracteristica.Presentacion</div>
+                                    </td>
+
+                                    <td class="col-md-1">
+                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                    </td>
+
+                                    @{
+                                        SIAAPI.Models.Administracion.c_ClaveUnidad unidad = new SIAAPI.Models.Administracion.c_ClaveUnidadContext().c_ClaveUnidades.Find(item.IDClaveUnidad);
+                                    }
+
+                                    <td class="col-md-1">
+                                        @unidad.Nombre
+                                    </td>
+                                    <td class="col-md-4">
+                                        @{ 
+                                            decimal dato = 0;
+                                            try
+                                            {
+                                                SIAAPI.Models.Comercial.ClsDatoDecimal cantidad = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select SUM(cantidad) as Dato from [dbo].[WorkinProcess] where IDorden=" + orden.IDOrden + " and IDProceso=" + proceso.IDProceso + " and IDCaracteristica= " + caracteristica.ID).ToList().FirstOrDefault();
+                                                dato = cantidad.Dato;
+                                            }
+                                            catch(Exception err)
+                                            {
+
+                                            }
+                                        }
+                                        @dato Asignados
+                                       
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </tr>
+                    <tr>
+                        <td class="col-lg-12 col-md-12 col-sm-12">
+                            @{  
+                                ViewBag.orden = item.IDOrden;
+                                ViewBag.IDCaracteristica = item.IDCaracteristica;
+                                ViewBag.IDProceso = item.IDProceso;
+
+                                var inventario = new SIAAPI.Models.Comercial.InventarioAlmacenContext().VInventarioAlmacenes.Where(S => S.IDArticulo == item.IDArticulo && S.Existencia > 0).OrderBy(s => s.Almacen);
+
+                                Html.RenderPartial("Asignacioninvent", inventario);
+                            }
+
+                        </td>
+                    </tr>
+                </table>
+
+
+                                    }
+
+
+
+                                }
+            </table>
+       
+    }
+}

@@ -1,0 +1,98 @@
+﻿@model SIAAPI.Models.miempresa.SGC
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eliminar</h2>
+
+<h3>Esta seguro de eliminar este registro?</h3>
+<div>
+    <h4>SGC</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Codigo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Codigo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoVersion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoVersion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Departamentos.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Departamentos.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DoctoSGC.Documento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DoctoSGC.Documento)
+        </dd>
+        @*<dt>
+            @Html.DisplayNameFor(model => model.RutaArchivo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RutaArchivo)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Documento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Documento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaHora)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaHora)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Obsoleto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Obsoleto)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" />
+            @Html.ActionLink("Regresar a la lista", "Procedimientos", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

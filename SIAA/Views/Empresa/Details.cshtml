@@ -1,0 +1,168 @@
+﻿@model SIAAPI.Models.Comercial.EmpresaDetalle
+
+<div>
+    <h3>Detalles de la Empresa</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RazonSocial)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RazonSocial)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Director)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Director)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Director_finanzas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Director_finanzas)
+        </dd>
+
+
+
+
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Persona_de_Compras)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Persona_de_Compras)
+        </dd>
+
+
+
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Recepcion_caja)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Recepcion_caja)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoExt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoExt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoInt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoInt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Colonia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colonia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Municipio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Municipio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RFC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model._RegimenFiscal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model._RegimenFiscal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mail)
+        </dt>
+
+        <dd>
+            <a href="mailto:#">@Html.DisplayFor(model => model.mail)</a> 
+          @*  @Html.DisplayFor(model => model.mail)*@
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Siglas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Siglas)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDEmpresa }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index",null, new { @class = "btn btn-default btn-xs" })
+</p>

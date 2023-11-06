@@ -1,0 +1,86 @@
+﻿@model SIAAPI.Reportes.AntiguedadSaldos
+
+@{
+    ViewBag.Title = "AntiguedadSaldos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Antiguedad de Saldos</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <hr />
+
+    <br /><br />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <table>
+        <td class="col-lg-3">
+            Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+            <br /><input id="clave" name="clave" onkeyup="actualizacomboC(event)" />
+        </td>
+        <td class="col-lg-9">
+            <div class="form-group">
+                @Html.Label("Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @*@Html.EditorFor(model => model.idcliente, new { htmlAttributes = new { type = "date", @class = "form-control" } })*@
+                    @Html.DropDownList("idcliente", ViewBag.cliente as List<SelectListItem>, htmlAttributes: new { @class = "form-control", id= "idcliente", name= "idcliente" })
+                    @Html.ValidationMessageFor(model => model.idcliente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </td>
+
+    </table>
+
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" name="Enviar" value="Generar reporte" class="btn btn-info btn-xs" /> | <input name="Enviar" type="submit" value="Generar Excel" class="btn btn-info btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+    </div>
+</div>
+}
+
+
+<script>
+     function actualizacomboC(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clave";
+            var selectcontrol = "#idcliente";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getClientesB")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un Cliente";
+                          $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                       $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+</script>

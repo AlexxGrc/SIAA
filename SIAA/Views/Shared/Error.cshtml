@@ -1,0 +1,27 @@
+﻿@*@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">Ha ocurrido un error procesando tu peticion.</h2>*@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Error</title>
+</head>
+<body>
+    <h2>
+        @*Ocurrio un error mientras se procesaba la solicitud.*@
+        @ViewBag.Error
+    </h2>
+    @RenderBody()
+</body>
+</html>
+

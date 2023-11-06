@@ -1,0 +1,670 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.VInventarioAlmacen>
+
+@{
+    ViewBag.Title = "AsignarMaterial";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+@{
+    SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+    string c = "select idcaracteristica as Dato from  [ArticuloProduccion] where idartprod=" + ViewBag.IDArtProduc;
+    SIAAPI.Models.Comercial.ClsDatoEntero idcaracteristicaprod = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(c).ToList().FirstOrDefault();
+    SIAAPI.Models.Comercial.ClsDatoString caracteristicaProd = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select presentacion as Dato from  [Caracteristica] where [id]=" + idcaracteristicaprod.Dato).ToList().FirstOrDefault();
+
+    FormulaSiaapi.Formulas formul = new FormulaSiaapi.Formulas();
+    string anchoR = formul.getValorCadena("ANCHO", caracteristicaProd.Dato);
+
+    decimal mlinealC = ViewBag.can / (Convert.ToDecimal(anchoR) / 1000);
+    decimal metrolienalC = Math.Round(mlinealC, 3);
+
+
+}
+<input type="hidden" name="idarticulopro" id="idarticulopro" value="@ViewBag.IDArtProduc" />
+<h2>@ViewBag.DescripcionArt | @caracteristicaProd.Dato | @ViewBag.can  m2 | @metrolienalC M Lineales </h2>
+<br />
+
+<h2>
+    Material Asignado orden no. @ViewBag.idorden
+</h2>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+
+            <th>
+                @Html.Label("Clave")
+            </th>
+            <th>
+                @Html.Label("Descripción")
+            </th>
+            <th>
+                @Html.Label("Ancho")
+            </th>
+            <th>
+                @Html.Label("Largo")
+            </th>
+            <th>
+                @Html.Label("Metros lineales")
+            </th>
+            <th>
+                @Html.Label("Lote")
+            </th>
+            <th>
+                @Html.Label("Entregado")
+            </th>
+            <th>
+
+            </th>
+            <th></th>
+        </tr>
+
+        @{
+            string cadena = "select * from MaterialAsignado where orden=" + ViewBag.idorden;
+
+            List<SIAAPI.Models.Comercial.MaterialAsignado> ele = new SIAAPI.Models.Comercial.InventarioAlmacenContext().Database.SqlQuery<SIAAPI.Models.Comercial.MaterialAsignado>(cadena).ToList();
+            int contadorM = 1;
+        }
+        @foreach (SIAAPI.Models.Comercial.MaterialAsignado item in ele)
+        {
+            SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.idmapri);
+            <tr>
+                <td>
+                    @Html.Label(articulo.Cref)
+                </td>
+                <td>
+                    @Html.Label(articulo.Descripcion)
+                </td>
+                <td>
+                    @{
+                        int ancho = Convert.ToInt32(item.ancho);
+                    }
+                    @ancho
+
+                </td>
+                <td>
+                    @{
+                        int largo = Convert.ToInt32(item.largo);
+                    }
+                    @largo
+                </td>
+                <td>
+                    @Math.Round(item.cantidad, 3)
+                </td>
+                <td>
+                    @item.lote
+
+                </td>
+                <td>
+                    @item.entregado
+                </td>
+                <td>
+                    @{
+                        string cadenaIDAlmacen = "IDAlmacenM" + contadorM;
+                    }
+                    <input type="hidden" step="0.5" class="form-control" id="@cadenaIDAlmacen" name="@cadenaIDAlmacen" value="@item.idalmacen">
+
+
+                    @{ string cadenac = "CantidadM" + contadorM;}
+                    <input type="number" id="@cadenac" name="@cadenac" value="@item.cantidad" size="10">
+                    <button class="btn btn-primary" onclick="SolicitarR(@item.IDMaterialAsignado,@contadorM)">Requerir</button>
+                </td>
+
+
+                <td>
+                    <a class="delete" data-id="@item.IDMaterialAsignado">
+                        <i class="tbl_del_btn fa fa-trash"></i>
+
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+<br />
+
+
+
+
+<h2>Asignar Material</h2>
+<br>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+
+                        Clave: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Buscar" })
+                        <input type="hidden" name="IDArtPro" id="IDArtPro" value="@ViewBag.IDArtProduc" />
+                        <input type="hidden" step="0.5" class="form-control" id="idorden" name="idorden" value="@ViewBag.idorden" />
+
+                        <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span>
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Almacen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cref)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Articulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Presentacion)
+            </th>
+
+            <th>
+                @Html.Label("Existencia M Lineales")
+            </th>
+
+            <th>
+                @Html.Label("Apartado M Lineales")
+            </th>
+            <th>
+                @Html.Label("Disponible M Lineales")
+            </th>
+            <th>
+                @Html.Label("Metros Lineales")
+            </th>
+            <th></th>
+        </tr>
+        @{
+            int contador = 1;
+        }
+        @foreach (SIAAPI.Models.Comercial.VInventarioAlmacen item in ViewBag.Elementos)
+        {
+            try
+            {
+                SIAAPI.Models.Inventarios.InventarioContext db = new SIAAPI.Models.Inventarios.InventarioContext();
+
+
+                FormulaSiaapi.Formulas formu = new FormulaSiaapi.Formulas();
+
+                string ancho = formu.getValorCadena("ANCHO", item.Presentacion);
+
+
+                <input type="hidden" step="0.5" class="form-control" id="orden" name="orden" value="@ViewBag.idorden" />
+                <input type="hidden" step="0.5" class="form-control" id="IDArtProduc" name="IDArtProduc" value="@ViewBag.IDArtProduc" />
+
+
+                <tr>
+
+                    <td>
+
+                        @{
+                            string cadenaIDAlmacen = "IDAlmacen" + contador;
+                        }
+                        <input type="hidden" step="0.5" class="form-control" id="@cadenaIDAlmacen" name="IDAlmacen" value="@item.IDAlmacen">
+
+                        @Html.DisplayFor(modelItem => item.Almacen)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cref)
+                    </td>
+
+                    <td>
+                        @{
+                            string cadenaArticulo = "IDArticulo" + contador;
+                        }
+                        <input type="hidden" step="0.5" class="form-control" id="@cadenaArticulo" name="IDArticulo" value="@item.IDArticulo">
+                        @Html.DisplayFor(modelItem => item.Articulo)
+                    </td>
+                    <td>
+                        @{
+                            string cadenaPresentacion = "IDCaracteristica" + contador;
+                            string cadenaPresentacion1 = "Presentacion" + contador;
+                        }
+                        <input type="hidden" step="0.5" class="form-control" id="@cadenaPresentacion" name="IDCaracteristica" value="@item.IDCaracteristica">
+                        <input type="hidden" step="0.5" class="form-control" id="@cadenaPresentacion1" name="Presentacion" value="@item.Presentacion">
+
+                        @Html.DisplayFor(modelItem => item.Presentacion)
+                    </td>
+
+                    <td>
+                        @{
+                            decimal exixtencialineales = item.Existencia / (Convert.ToDecimal(ancho) / 1000);
+                            if (exixtencialineales < 0)
+                            {
+                                exixtencialineales = 0;
+                            }
+                            string cadenaex = "Existencia" + contador;
+                        }
+                        @Html.DisplayFor(modelItem => exixtencialineales, new { id = cadenaex, name = "Existencia", value = exixtencialineales })
+                        <input type="hidden" step="0.5" class="form-control" id="@cadenaex" name="Existencia" value="@exixtencialineales">
+
+                    </td>
+                    <td>
+                        @*@{
+            decimal apartadolineales = item.Apartado / (Convert.ToDecimal(ancho) / 1000);
+            if (apartadolineales < 0)
+            {
+                apartadolineales = 0;
+            }
+            string cadenaapa = "Apartado" + contador;
+        }
+        @Html.DisplayFor(modelItem => apartadolineales, new { id = cadenaapa, name = "Apartado", value = apartadolineales })*@
+                        @{
+                            decimal apartadolineales = 0;
+                            try
+                            {
+
+                                SIAAPI.Models.Comercial.ClsDatoDecimal APARTADO = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("SELECT SUM(CANTIDAD) as Dato FROM Vapartado where idarticulo=" + item.IDArticulo + " and idcaracteristica=" + item.IDCaracteristica + " and idalmacen=" + item.IDAlmacen).FirstOrDefault();
+
+                                apartadolineales = Math.Round(APARTADO.Dato, 0);
+                                <button onclick="PresentarApartados(@item.IDArticulo,@item.IDCaracteristica  ,@item.IDAlmacen,this)" class="btn btn-info btn-xs">@apartadolineales</button>
+
+                                try
+                                {
+                                    decimal m2 = Math.Round((apartadolineales * decimal.Parse(ancho) * 0.001M), 4);
+
+                                    new SIAAPI.Models.Comercial.ArticuloContext().Database.ExecuteSqlCommand("inventarioalmacen set apartado=" + m2 + ", disponibilidad= existencia-" + m2 + " where idcaracteristica=" + item.IDCaracteristica + " and idarticulo=" + item.IDArticulo + " and idalmacen=" + item.IDAlmacen);
+                                }
+                                catch (Exception err2)
+                                {
+
+                                }
+
+                            }
+                            catch (Exception err)
+                            {
+                                apartadolineales = 0;
+                                <div>0</div>
+                                try
+                                {
+                                    new SIAAPI.Models.Comercial.ArticuloContext().Database.ExecuteSqlCommand("inventarioalmacen set apartado=0, disponibilidad= existencia where idcaracteristica=" + item.IDCaracteristica + " and idarticulo=" + item.IDArticulo + " and idalmacen=" + item.IDAlmacen);
+                                }
+                                catch (Exception err2)
+                                {
+
+                                }
+                            }
+
+
+                            string cadenaapa = "Apartado" + contador;
+                            }
+
+
+
+
+
+                        <input type="hidden" step="0.5" class="form-control" id="@cadenaapa" name="Apartado" value="@apartadolineales">
+
+                    </td>
+                    <td>
+                        @{
+                            decimal disponiblelineales = exixtencialineales - apartadolineales;
+                            //if (disponiblelineales < 0)
+                            //{
+                            //    disponiblelineales = 0;
+                            //}
+                            string cadenadis = "Disponibilidad" + contador;
+                        }
+                        @Html.DisplayFor(modelItem => disponiblelineales, new { id = cadenadis, name = "Disponibilidad", value = disponiblelineales })
+                        <input type="hidden" step="0.5" class="form-control" id="@cadenadis" name="Disponibilidad" value="@disponiblelineales">
+
+                    </td>
+                    <td>
+
+                        @{
+                            decimal mlineal = ViewBag.can / (Convert.ToDecimal(ancho) / 1000);
+                            if (mlineal < 0)
+                            {
+                                mlineal = 0;
+                            }
+                            decimal metrolienal = Math.Round(mlineal, 3);
+                            string cadenacan = "Cantidad" + contador;
+                        }
+
+                        <input type="number" step="0.5" class="form-control" id="@cadenacan" name="Cantidad" value="@metrolienalC">
+
+                    </td>
+
+                    <td>
+                        @{
+                            string ocultar = "ocultar" + contador;
+                        }
+                        <input type="submit" value="Asignar" id="@ocultar" class="btn btn-success btn-xs" onclick="myFunction(@contador),CambiarMaterial(@item.IDInventarioAlmacen,@contador)" />
+
+                        @*}*@
+                    </td>
+                </tr>
+            }
+            catch (Exception e)
+            {
+
+            }
+            contador++;
+        }
+
+    </table>
+</div>
+<h5>@ViewBag.mensaje</h5>
+<div class="titulo_boton">
+
+    <a style='cursor: pointer;' onClick="muestra_oculta('contenido')" title="" class="boton_mostrar">Ver más...</a>
+</div>
+
+<div class="table-responsive" id="contenido">
+    <div>
+        <h2>Más Existencias</h2>
+    </div>
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Almacen)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cref)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Articulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Presentacion)
+            </th>
+
+            <th>
+                @Html.Label("Existencia M Lineales")
+            </th>
+            <th>
+                @Html.Label("Apartado M Lineales")
+            </th>
+            <th>
+                @Html.Label("Disponible M Lineales")
+            </th>
+            <th>
+                @Html.Label("Metros Lineales")
+            </th>
+            <th></th>
+        </tr>
+
+
+        @{
+            try
+            {
+
+
+
+                foreach (SIAAPI.Models.Comercial.VInventarioAlmacen item in ViewBag.Elementos2)
+                {
+                    try
+                    {
+
+                        FormulaSiaapi.Formulas formu = new FormulaSiaapi.Formulas();
+
+                        string ancho = formu.getValorCadena("ANCHO", item.Presentacion);
+
+
+                        <input type="hidden" step="0.5" class="form-control" id="orden" name="orden" value="@ViewBag.idorden" />
+                        <input type="hidden" step="0.5" class="form-control" id="IDArtProduc" name="IDArtProduc" value="@ViewBag.IDArtProduc" />
+
+
+                        <tr>
+                            <td>
+
+                                @{
+                                    string cadenaIDAlmacen = "IDAlmacen" + contador;
+                                }
+                                <input type="hidden" step="0.5" class="form-control" id="@cadenaIDAlmacen" name="IDAlmacen" value="@item.IDAlmacen">
+
+                                @Html.DisplayFor(modelItem => item.Almacen)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cref)
+                            </td>
+
+                            <td>
+                                @{
+                                    string cadenaArticulo = "IDArticulo" + contador;
+                                }
+                                <input type="hidden" step="0.5" class="form-control" id="@cadenaArticulo" name="IDArticulo" value="@item.IDArticulo">
+                                @Html.DisplayFor(modelItem => item.Articulo)
+                            </td>
+                            <td>
+                                @{
+                                    string cadenaPresentacion = "IDCaracteristica" + contador;
+                                    string cadenaPresentacion1 = "Presentacion" + contador;
+                                }
+                                <input type="hidden" step="0.5" class="form-control" id="@cadenaPresentacion" name="IDCaracteristica" value="@item.IDCaracteristica">
+                                <input type="hidden" step="0.5" class="form-control" id="@cadenaPresentacion1" name="Presentacion" value="@item.Presentacion">
+
+                                @Html.DisplayFor(modelItem => item.Presentacion)
+                            </td>
+
+                            <td>
+                                @{
+                                    decimal exixtencialineales = item.Existencia / (Convert.ToDecimal(ancho) / 1000);
+                                    if (exixtencialineales < 0)
+                                    {
+                                        exixtencialineales = 0;
+                                    }
+                                    string cadenaex = "Existencia" + contador;
+                                }
+                                @Html.DisplayFor(modelItem => exixtencialineales, new { id = cadenaex, name = "Existencia", value = exixtencialineales })
+                                <input type="hidden" step="0.5" class="form-control" id="@cadenaex" name="Existencia" value="@exixtencialineales">
+
+                            </td>
+                            <td>
+                                @{
+                                    decimal apartadolineales = 0;
+                                    try
+                                    {
+
+                                        SIAAPI.Models.Comercial.ClsDatoDecimal APARTADO = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("SELECT SUM(CANTIDAD) as Dato FROM Vapartado where idarticulo=" + item.IDArticulo + " and idcaracteristica=" + item.IDCaracteristica + " and idalmacen=" + item.IDAlmacen).FirstOrDefault();
+
+                                        apartadolineales = Math.Round(APARTADO.Dato, 0);
+                                        <button onclick="PresentarApartados(@item.IDArticulo,@item.IDCaracteristica  ,@item.IDAlmacen,this)" class="btn btn-info">@apartadolineales</button>
+                                        try
+                                        {
+                                            decimal m2 = Math.Round((apartadolineales * decimal.Parse(ancho) * 0.001M), 4);
+
+                                            new SIAAPI.Models.Comercial.ArticuloContext().Database.ExecuteSqlCommand("inventarioalmacen set apartado=" + m2 + ", disponibilidad= existencia-" + m2 + " where idcaracteristica=" + item.IDCaracteristica + " and idarticulo=" + item.IDArticulo + " and idalmacen=" + item.IDAlmacen);
+
+                                        }
+                                        catch (Exception err2)
+                                        {
+
+                                        }
+
+
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        apartadolineales = 0;
+
+                                        <div>0</div>
+                                        try
+                                        {
+                                            new SIAAPI.Models.Comercial.ArticuloContext().Database.ExecuteSqlCommand("inventarioalmacen set apartado=0, disponibilidad= existencia where idcaracteristica=" + item.IDCaracteristica + " and idarticulo=" + item.IDArticulo + " and idalmacen=" + item.IDAlmacen);
+                                        }
+                                        catch(Exception err2)
+                                        {
+
+                                        }
+
+                                    }
+
+
+                                    string cadenaapa = "Apartado" + contador;
+                                }
+                                <input type="hidden" step="0.5" class="form-control" id="@cadenaapa" name="Apartado" value="@apartadolineales">
+
+                            </td>
+                            <td>
+                                @{
+                                    decimal disponiblelineales = exixtencialineales - apartadolineales;
+
+                                    string cadenadis = "Disponibilidad" + contador;
+                                }
+                                @Html.DisplayFor(modelItem => disponiblelineales, new { id = cadenadis, name = "Disponibilidad", value = disponiblelineales })
+                                <input type="hidden" step="0.5" class="form-control" id="@cadenadis" name="Disponibilidad" value="@disponiblelineales">
+
+                            </td>
+                            <td>
+
+                                @{
+                                    decimal mlineal = ViewBag.can / (Convert.ToDecimal(ancho) / 1000);
+                                    if (mlineal < 0)
+                                    {
+                                        mlineal = 0;
+                                    }
+                                    decimal metrolienal = Math.Round(mlineal, 3);
+                                    string cadenacan = "Cantidad" + contador;
+                                }
+
+                                <input type="number" step="0.5" class="form-control" id="@cadenacan" name="Cantidad" value="@metrolienalC">
+
+                            </td>
+
+                            <td>
+                                @{
+                                    string ocultar = "ocultar" + contador;
+                                }
+                                <input type="submit" value="Asignar" id="@ocultar" class="btn btn-success btn-xs" onclick="myFunction();CambiarMaterial(@item.IDInventarioAlmacen,@contador)" />
+
+                                @*}*@
+                            </td>
+                        </tr>
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    contador = contador + 1;
+
+                }
+
+            }
+            catch (Exception err)
+            {
+
+            }
+        }
+
+    </table>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="ModalEA" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="Ventana"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    function muestra_oculta(id) {
+        if (document.getElementById) { //se obtiene el id
+            var el = document.getElementById(id); //se define la variable "el" igual a nuestro div
+            el.style.display = (el.style.display == 'none') ? 'block' : 'none'; //damos un atributo display:none que oculta el div
+        }
+    }
+    window.onload = function () {/*hace que se cargue la función lo que predetermina que div estará oculto hasta llamar a la función nuevamente*/
+        muestra_oculta('contenido');/* "contenido_a_mostrar" es el nombre que le dimos al DIV */
+    }
+</script>
+
+
+<script>
+
+        var urledit = '@Url.Action("CambiarMaterial", "OrdenProduccion")';
+
+    function CambiarMaterial(id, numero) {
+        var idorden = document.getElementById("orden").value
+        var cara = document.getElementById("Presentacion" + numero).value
+        var cantidad = document.getElementById("Cantidad" + numero).value
+        var almacen = document.getElementById("IDAlmacen" + numero).value
+        var articulo = document.getElementById("IDArticulo" + numero).value
+       var presentacion = document.getElementById("IDCaracteristica" + numero).value
+        var ex = document.getElementById("Existencia" + numero).value
+        var IDArtProduc = document.getElementById("IDArtProduc").value
+
+
+        $.post(urledit, { id: id, IDArtProduc:IDArtProduc,cantidad: cantidad, almacen: almacen, articulo: articulo, presentacion: presentacion, idorden:idorden, cara:cara, ex:ex}, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+</script>
+<script>
+    function SolicitarR(id_, control) {
+
+        var can = document.getElementById("CantidadM" + control).value;
+        var idal = document.getElementById("IDAlmacenM" + control).value;
+        var articuloprod = document.getElementById("idarticulopro").value;
+
+
+        var url = "/OrdenProduccion/Solicitar/" + id_ + "?Cantidad=" + can + "&IDAlmacen=" + idal + "&idarticulopro=" + articuloprod;
+
+
+
+        window.location.href = url;
+    }
+</script>
+
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+        var url = '@Url.Action("DeleteMaterialAsignado", "OrdenProduccion")';
+        $('.delete').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>
+
+<script type="text/javascript" language="javascript">
+    function myFunction(con) {
+        var x = document.getElementById("ocultar" + con);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+
+
+</script>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script>
+    function PresentarApartados(idarticulo, idcaracteristica, idalmacen, control) {
+      
+        $("#Ventana").load("/OrdenProduccion/VerApartados?idarticulo=" + idarticulo + "&idcaracteristica=" + idcaracteristica + "&idalmacen=" + idalmacen, function () {
+            $('#ModalEA').modal('show')
+        });
+
+    }
+</script>

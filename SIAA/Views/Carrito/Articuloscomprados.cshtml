@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.ArticulosComprados>
+
+<h2>Articulos del cliente</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Foto")
+        </th>
+        <th>
+            @Html.Label("Ultima Fecha de Venta")
+        </th>
+        <th>
+            @Html.Label("Artículo")
+        </th>
+
+
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td class="col-lg-1"><img src="~/imagenes/Upload/@item.nameFoto" alt="" width="50" height="50"></td>
+            <td class="col-lg-1">
+                <div>@Html.DisplayFor(modelItem => item.Fecha)</div>
+                <div class="text-danger">@Html.DisplayFor(modelItem => item.Cref)</div>
+            </td>
+
+            <td class="col-lg-6">
+                <div>@Html.DisplayFor(modelItem => item.Descripcion)</div>
+                <div class="text-info" style="font-size:small">@Html.DisplayFor(modelItem => item.Presentacion)</div>
+            </td>
+            <td class="col-lg-4">
+                <form method="post" action='@Url.Action("AddCarritoGeneral", "Carrito", new { searchString = ViewBag.searchString })'>
+                    <div class="col-xs-6">
+
+                        <input class="form-control smallTxt" type="number" value="@item.Cantidad" min="0" step="any" data-number-to-fixed="3" data-number-stepfactor="100" name="Cantidad" id="Cantidad" required autofocus />
+                        <input type="hidden" class="form-control" name="id" id="id" placeholder="@item.IDCaracteristica " value="@item.IDCaracteristica ">
+                        <input type="hidden" class="form-control" name="IDCliente" id="IDCliente" placeholder="@item.IDCliente" value="@item.IDCliente ">
+                    </div>
+
+                    <button class="fa fa-cart-plus fa-2x" style="color:green" type="submit"></button>
+
+
+                </form>
+            </td>
+
+        </tr>
+    }
+
+</table>

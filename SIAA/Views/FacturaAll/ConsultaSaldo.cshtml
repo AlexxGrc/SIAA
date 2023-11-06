@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "ConsultaSaldo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Consulta Saldo de Timbres Fiscales </h2>
+
+@using (Html.BeginForm("ConsultaSaldo", "FacturaAllController", FormMethod.Post, new { enctype = "~/sdk2/timbrados/factura_respuesta.ini" }))
+{
+
+    string texto = string.Empty;
+    string archivoTXT = "";
+
+    try
+    {
+        archivoTXT = System.Web.HttpContext.Current.Server.MapPath("~/sdk2/timbrados/factura_respuesta.ini");
+    }
+    catch (Exception err)
+    {
+
+    }
+    string entrada = null;
+    try
+    {
+        StreamReader re = new StreamReader(archivoTXT);
+
+        while ((entrada = re.ReadLine()) != null)
+        {
+            texto = entrada;
+        }
+    }
+    catch (Exception err)
+    {
+
+    }
+
+
+
+    <table>
+
+        <tr>
+            <th><h4>@Html.Label(texto + "\n" + "timbres")</h4> </th>
+        </tr>
+        <tr></tr>
+    </table>
+
+}
+
+

@@ -1,0 +1,90 @@
+﻿@model SIAAPI.Models.Comercial.EncRecepcion
+
+@{
+    ViewBag.Title = "EditTicketR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Editar Ticket</h3>
+
+<div>
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <thead>
+                <tr>
+
+
+                    <th>Recepción</th>
+                    <th>Proveedor</th>
+                    <th>Ticket</th>
+                    <th>Documento Factura</th>
+                    <th></th>
+
+                </tr>
+            </thead>
+           
+           
+              @{  SIAAPI.Models.Comercial.Proveedor proveedor = new SIAAPI.Models.Comercial.ProveedorContext().Proveedores.Find(Model.IDProveedor); }
+
+                <tr>
+                    <td>@Model.IDRecepcion </td>
+                    <td>@proveedor.Empresa</td>
+                   
+                    <td width="400">
+
+
+                        <input type="text" class="form-control" id="Ticket" name="Ticket" value="@Model.Ticket">
+
+
+                    </td>
+
+                    <td width="400">
+                      
+                        
+                        <input type="text" class="form-control" id="DocumentoFactura" name="DocumentoFactura" value="@Model.DocumentoFactura">
+
+
+                    </td>
+                    <td>
+                        <input type="button" class="btn btn-succes" value="Guardar" onclick="ActualizarNota(@Model.IDRecepcion )">
+
+                    
+
+                    </td>
+                </tr>
+
+
+
+          
+        </table>
+    </div>
+
+
+
+
+    <p>
+        @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+        @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default" })
+    </p>
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script>
+
+        var urledit = '@Url.Action("EditarTicketRecepcion", "EncRecepcion")';
+
+        function ActualizarNota(id) {
+            var DocumentoFactura = document.getElementById("DocumentoFactura" ).value
+            var Ticket = document.getElementById("Ticket").value
+     
+            $.post(urledit, { id: id, DocumentoFactura: DocumentoFactura, Ticket:Ticket }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+    </script>

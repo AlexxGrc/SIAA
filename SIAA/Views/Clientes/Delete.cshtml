@@ -1,0 +1,259 @@
+﻿@model SIAAPI.Models.Comercial.Clientes
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Cliente: @Html.DisplayFor(model => model.Nombre)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.c_FormaPago.ClaveFormaPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_FormaPago.ClaveFormaPago)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.c_Grupo.ClaveGrupo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Grupo.ClaveGrupo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.c_MetodoPago.ClaveMetodoPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_MetodoPago.ClaveMetodoPago)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.c_Moneda.ClaveMoneda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Moneda.ClaveMoneda)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.c_RegimenFiscal.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_RegimenFiscal.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CondicionesPago.ClaveCondicionesPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CondicionesPago.ClaveCondicionesPago)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estados.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estados.Estado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.paises.Pais)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.paises.Pais)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Oficina.NombreOficina)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Oficina.NombreOficina)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vendedor.RFC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vendedor.RFC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Mayorista)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mayorista)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+       <dt>
+            @Html.DisplayNameFor(model => model.Correo)
+        </dt>
+
+        <dd>
+            <a href="mailto:#">@Html.DisplayFor(model => model.Correo)</a>  
+        </dd>
+
+        @*<dt>
+        @Html.DisplayNameFor(model => model.Password)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.Password)
+    </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumExt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumExt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumInt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumInt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Colonia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colonia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Municipio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Municipio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Curp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Curp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VentasAcu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VentasAcu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ultimaventa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ultimaventa)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FacturacionExacta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FacturacionExacta)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RFC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFC)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.IDUsoCFDI)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.c_UsoCFDI.ClaveCFDI)|@Html.DisplayFor(model => model.c_UsoCFDI.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CorreoCfdi)
+        </dt>
+
+        <dd>
+            <a href="mailto:#">@Html.DisplayFor(model => model.CorreoCfdi)</a>  
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Index", new { id = Model.IDCliente }, new { @class = "btn  btn-default btn-xs" })
+        </div>
+    }
+</div>

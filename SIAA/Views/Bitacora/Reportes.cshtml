@@ -1,0 +1,151 @@
+﻿
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.ReporteDesperfecto>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@*@model IEnumerable<SIAAPI.Models.Produccion.ReporteDesperfecto>*@
+
+@{
+    ViewBag.Title = "Reportes";
+    Layout = "~/Views/Shared/_LayoutBitacora.cshtml";
+}
+<h3>Lista de Reportes de Incidencia</h3>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                }
+                
+                    @Html.ActionLink("Crear nuevo reporte", "ReporteD", new { id = ViewBag.id }, new { @class = "btn btn-warning btn-xs" })
+                
+                Elementos por página: @Html.DropDownList("pageSize")  |
+                Escribe no. orden: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Escribe la orden:" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span>
+                    </p>
+                
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Bitacora")
+        </th>
+        <th>
+            @Html.Label("Orden")
+        </th>
+        <th>
+            @Html.Label("Artículo")
+        </th>
+        <th>
+            @Html.Label("Fecha inicio paro")
+        </th>
+        <th>
+            @Html.Label("Fecha terminación paro")
+        </th>
+        <th>
+            @Html.Label("Tipo falla")
+        </th>
+        <th>
+            @Html.Label("Falla")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+
+    //SIAAPI.Models.Produccion.BitacoraContext db = new SIAAPI.Models.Produccion.BitacoraContext();
+
+
+    //SIAAPI.Models.Produccion.EstadoOrden eso = new SIAAPI.Models.Produccion.EstadoOrdenContext().EstadoOrdenes.Find(elemento);
+
+    SIAAPI.Models.Produccion.BitacoraContext bi = new SIAAPI.Models.Produccion.BitacoraContext();
+   SIAAPI.Models.Produccion.Bitacora BITACORA = bi.Bitacoras.Find(item.IDBitacora);
+
+
+
+
+
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDBitacora)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => BITACORA.IDOrden)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Articulo.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaInicioParo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaTerminacionParo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TiempoFalla)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Falla)
+        </td>
+        <td>
+            @if (item.FechaTerminacionParo == null)
+            {
+
+                @Html.ActionLink("Finalizar Reporte", "FinalizaReporte", new { id = item.IDReporte }, new { @class = "btn btn-danger btn-xs" })
+            }
+        </td>
+    </tr>
+}
+
+</table>
+<p>
+   
+
+    @Html.ActionLink("Regresar a la lista", "Index", new { idorden =ViewBag.idorden, idproceso= ViewBag.idproceso}, new { @class = "btn btn-default btn-xs" })
+
+</p>
+
+@using (Html.BeginForm("Reportes", "Bitacora", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("Reportes", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize,
+       idorden = ViewBag.idorden,
+       idproceso = ViewBag.idproceso
+   }))
+
+
+    </div>
+}
+@*Paginación*@

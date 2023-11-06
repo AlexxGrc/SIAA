@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="urn:wservicewsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="urn:wservicewsdl" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="urn:wservicewsdl">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="datos">
+        <xsd:all>
+          <xsd:element name="usuario" type="xsd:string" />
+          <xsd:element name="pass" type="xsd:string" />
+          <xsd:element name="accion" type="xsd:string" />
+          <xsd:element name="produccion" type="xsd:string" />
+          <xsd:element name="uuid" type="xsd:string" />
+          <xsd:element name="rfc" type="xsd:string" />
+          <xsd:element name="password" type="xsd:string" />
+          <xsd:element name="motivo" type="xsd:string" />
+          <xsd:element name="folioSustitucion" type="xsd:string" />
+          <xsd:element name="b64Cer" type="xsd:string" />
+          <xsd:element name="b64Key" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuesta">
+        <xsd:all>
+          <xsd:element name="codigo_mf_numero" type="xsd:string" />
+          <xsd:element name="codigo_mf_texto" type="xsd:string" />
+          <xsd:element name="mensaje_original" type="xsd:string" />
+          <xsd:element name="acuse" type="xsd:string" />
+          <xsd:element name="status" type="xsd:string" />
+          <xsd:element name="uuid" type="xsd:string" />
+          <xsd:element name="codigo_respuesta_sat" type="xsd:string" />
+          <xsd:element name="codigo_respuesta_sat_texto" type="xsd:string" />
+          <xsd:element name="codigo_respuesta_sat_texto_descripcion" type="xsd:string" />
+          <xsd:element name="produccion" type="xsd:string" />
+          <xsd:element name="accion" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="datosRelacionados">
+        <xsd:all>
+          <xsd:element name="usuario" type="xsd:string" />
+          <xsd:element name="pass" type="xsd:string" />
+          <xsd:element name="accion" type="xsd:string" />
+          <xsd:element name="produccion" type="xsd:string" />
+          <xsd:element name="uuid" type="xsd:string" />
+          <xsd:element name="rfc_receptor" type="xsd:string" />
+          <xsd:element name="password" type="xsd:string" />
+          <xsd:element name="b64Cer_receptor" type="xsd:string" />
+          <xsd:element name="b64Key_receptor" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaCCancelar">
+        <xsd:all>
+          <xsd:element name="codigo_mf_numero" type="xsd:string" />
+          <xsd:element name="codigo_mf_texto" type="xsd:string" />
+          <xsd:element name="mensaje_original" type="xsd:string" />
+          <xsd:element name="status" type="xsd:string" />
+          <xsd:element name="json_uuids" type="xsd:string" />
+          <xsd:element name="codigo_respuesta_sat" type="xsd:string" />
+          <xsd:element name="codigo_respuesta_sat_texto" type="xsd:string" />
+          <xsd:element name="codigo_respuesta_sat_texto_descripcion" type="xsd:string" />
+          <xsd:element name="produccion" type="xsd:string" />
+          <xsd:element name="accion" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="cancelarCfdiRequest">
+    <wsdl:part name="datos" type="tns:datos" />
+  </wsdl:message>
+  <wsdl:message name="cancelarCfdiResponse">
+    <wsdl:part name="return" type="tns:respuesta" />
+  </wsdl:message>
+  <wsdl:message name="aceptarCancelarCfdiRequest">
+    <wsdl:part name="datos" type="tns:datos" />
+  </wsdl:message>
+  <wsdl:message name="aceptarCancelarCfdiResponse">
+    <wsdl:part name="return" type="tns:respuesta" />
+  </wsdl:message>
+  <wsdl:message name="rechazarCancelarCfdiRequest">
+    <wsdl:part name="datos" type="tns:datos" />
+  </wsdl:message>
+  <wsdl:message name="rechazarCancelarCfdiResponse">
+    <wsdl:part name="return" type="tns:respuesta" />
+  </wsdl:message>
+  <wsdl:message name="consultarCancelarCfdiRequest">
+    <wsdl:part name="datos" type="tns:datos" />
+  </wsdl:message>
+  <wsdl:message name="consultarCancelarCfdiResponse">
+    <wsdl:part name="return" type="tns:respuestaCCancelar" />
+  </wsdl:message>
+  <wsdl:message name="consultarCfdiRelacionadoRequest">
+    <wsdl:part name="datos" type="tns:datosRelacionados" />
+  </wsdl:message>
+  <wsdl:message name="consultarCfdiRelacionadoResponse">
+    <wsdl:part name="return" type="tns:respuesta" />
+  </wsdl:message>
+  <wsdl:portType name="Cancelar cfdi 4.0 SATPortType">
+    <wsdl:operation name="cancelarCfdi">
+      <documentation>Descripcion de uso de la funcion : cancelarCfdi</documentation>
+      <wsdl:input message="tns:cancelarCfdiRequest" />
+      <wsdl:output message="tns:cancelarCfdiResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="aceptarCancelarCfdi">
+      <documentation>Descripcion de uso de la funcion : aceptarCancelarCfdi</documentation>
+      <wsdl:input message="tns:aceptarCancelarCfdiRequest" />
+      <wsdl:output message="tns:aceptarCancelarCfdiResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="rechazarCancelarCfdi">
+      <documentation>Descripcion de uso de la funcion : rechazarCancelarCfdi</documentation>
+      <wsdl:input message="tns:rechazarCancelarCfdiRequest" />
+      <wsdl:output message="tns:rechazarCancelarCfdiResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="consultarCancelarCfdi">
+      <documentation>Descripcion de uso de la funcion : consultarCancelarCfdi</documentation>
+      <wsdl:input message="tns:consultarCancelarCfdiRequest" />
+      <wsdl:output message="tns:consultarCancelarCfdiResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="consultarCfdiRelacionado">
+      <documentation>Descripcion de uso de la funcion : consultarCfdiRelacionado</documentation>
+      <wsdl:input message="tns:consultarCfdiRelacionadoRequest" />
+      <wsdl:output message="tns:consultarCfdiRelacionadoResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="Cancelar cfdi 4.0 SATBinding" type="tns:Cancelar cfdi 4.0 SATPortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="cancelarCfdi">
+      <soap:operation soapAction="urn:wservicewsdl#cancelarCfdi" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="aceptarCancelarCfdi">
+      <soap:operation soapAction="urn:wservicewsdl#aceptarCancelarCfdi" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rechazarCancelarCfdi">
+      <soap:operation soapAction="urn:wservicewsdl#rechazarCancelarCfdi" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultarCancelarCfdi">
+      <soap:operation soapAction="urn:wservicewsdl#consultarCancelarCfdi" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="consultarCfdiRelacionado">
+      <soap:operation soapAction="urn:wservicewsdl#consultarCfdiRelacionado" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:wservicewsdl" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Cancelar cfdi 4.0 SAT">
+    <wsdl:port name="Cancelar cfdi 4.0 SATPort" binding="tns:Cancelar cfdi 4.0 SATBinding">
+      <soap:address location="http://pac1.multifacturas.com/cancelacion2022/index.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

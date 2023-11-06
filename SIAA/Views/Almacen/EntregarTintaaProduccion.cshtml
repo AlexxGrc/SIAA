@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "EntregarTintaaProduccion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Entregar Lote de tinta al Work in Process</h2>
+
+<h3 class="text-danger">@ViewBag.Error</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+    <div class="form-group">
+        @Html.Label("Escanea el Lote del Envase de tinta")
+        <div class="col-md-10">
+            <input name="Lote" id="Lote" type="text" autofocus/>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Entregar" class="btn btn-success btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+
+        </div>
+    </div>
+    </div>
+
+}

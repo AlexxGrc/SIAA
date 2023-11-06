@@ -1,0 +1,116 @@
+﻿@*@model IEnumerable<SIAAPI.ViewModels.Articulo.VPArticulo>*@
+
+@{
+    ViewBag.Title = "TiendaGeneral";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*Paginación*@
+@model PagedList.IPagedList<SIAAPI.ViewModels.Articulo.VPArticulo>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="http://ipwg.site90.net/jquery-1.2.3.min.js"></script>
+<script type="text/javascript" src="http://ipwg.site90.net/thickbox_compressed.js"></script>
+<link rel="stylesheet" href="http://ipwg.site90.net/thickbox.css" type="text/css" media="screen" />
+
+
+@*Paginación*@
+
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="form-group">
+            @{
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>  <h3>Productos a seleccionar</h3> </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SIAAPI_Compras_Productos_a_Seleccionar.pdf" })' target="_blank">
+                                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</nav>
+
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+
+        <div class="row">
+            @foreach (var m in Model)
+            {
+
+            <div class="col-md-4">
+                <div class="row">
+                    <h5><span id="mobilename" style="color:darkred">@m.Descripcion</span></h5>
+                    <p><span class="fa fa-bars" style="color:red">@m.Cref</span></p>
+
+                </div>
+                <a class="thickbox" href="">
+                    <img class="a.photo" src="~/imagenes/Upload/@m.nameFoto" style="overflow: hidden; position: relative; width:200px; height:200px; cursor:pointer" />
+                </a>
+                @{
+                    SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(m.IDArticulo);
+                }
+                @if (!articulo.obsoleto)
+                {
+                    <p><a class="btn btn-warning btn-xs" href="@Url.Action("GetPresentacionesTiendaC", "TiendaC", new { id = m.IDArticulo, SearchString = ViewBag.SearchString })">Ver presentaciones... &raquo;</a><p></p>
+                    @* <p><a class="btn btn-default" href="#" onclick="Verpresentaciones(@m.IDArticulo);">Ver presentaciones... &raquo;</a><p></p>*@
+                    </p>
+                }
+                else if (articulo.obsoleto)
+                {
+
+                    <h3 class="text-info"> Artículo Obsoleto</h3>
+                }
+            </div>
+
+            }
+        </div>
+       
+        
+        @*Paginación*@
+        <div class="pager">
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+            @Model.Count de @Model.TotalItemCount elementos
+            @Html.PagedListPager(Model, page => Url.Action("TiendaGeneralC",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+        </div>
+        @*Paginación*@
+
+

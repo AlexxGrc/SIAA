@@ -1,0 +1,160 @@
+﻿@model IEnumerable<SIAAPI.ViewModels.Comercial.VCarritoRequisicion>
+
+
+@{
+    ViewBag.Title = "Carritocpartial";
+
+}
+
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+
+            <th colspan="1">Requisición</th>
+            <th colspan="2">Unidad</th>
+            <th colspan="5">Articulo</th>
+            <th colspan="6">Presentacion</th>
+        </tr>
+        <tr>
+            <th>Compra Mínima</th>
+            <th></th>
+            <th>Cantidad</th>
+            <th>Costo</th>
+            <th>Importe</th>
+            <th>IVA</th>
+            <th>Total</th>
+            <th>Nota</th>
+            <th></th>
+        </tr>
+        @{ int contador = 1;
+            foreach (SIAAPI.ViewModels.Comercial.VCarritoRequisicion i in Model)
+            {
+
+                <tr>
+                    @{ string articulo = "IDArticulo" + contador;
+                        string Presentacion = "Presentacion" + contador;
+                        string IDCarrito = "IDCarrito" + contador;
+                        string cadenacosto = "costo" + contador;
+                        string Requisicion = "Requisicion" + contador;
+                        string Nota = "Nota" + contador;
+
+                    }
+
+                    @{
+                        SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                        SIAAPI.Models.Comercial.Articulo articulocompleto = db.Articulo.Find(i.IDArticulo);
+
+                        SIAAPI.Models.Comercial.ClsDatoDecimal costoart = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select [dbo].[GetCosto](0," + articulocompleto.IDArticulo + "," + i.Cantidad + ") as Dato").ToList().FirstOrDefault();
+
+                        string clavemoneda = db.Database.SqlQuery<SIAAPI.Models.Administracion.c_Moneda>("select * from c_Moneda WHERE IDMoneda='" + i.IDMoneda + "'").ToList().FirstOrDefault().ClaveMoneda;
+                    }
+                    <input name="@IDCarrito" value="@i.IDCarritoRequisicion" hidden />
+
+                    <input name="@Requisicion" value="@i.IDRequisicion" hidden />
+                    <input name="@articulo" value="@i.IDArticulo" hidden />
+                    <input name="@Presentacion" value="@i.IDCaracteristica" hidden />
+                    @*<input name="@Nota" value="@i.Nota" hidden />*@
+
+
+                    <td colspan="1" style="background-color:cornsilk">@i.IDRequisicion</td>
+                    <td colspan="2" style="background-color:cornsilk">@articulocompleto.c_ClaveUnidad.ClaveUnidad</td>
+
+                    <td colspan="5" style="background-color:cornsilk"><div>@*@i.Cref*@ </div><div>@i.Articulo</div></td>
+                    <td colspan="6" style="background-color:cornsilk">@i.Presentacion </td>
+                </tr>
+                <tr>
+
+                
+                    @if (i.Cantidad < i.MinimoCompra)
+                    {
+                        <td class="danger">@i.MinimoCompra</td>
+                    }
+                    else
+                    {
+                        <td>@i.MinimoCompra</td>
+                    }
+                    <td></td>
+                    <td width="200">
+                        @{string cadena = "Cantidad" + contador;
+                        }
+                        <input type="number" step="any" class="form-control" id="@cadena" name="@cadena" value="@i.Cantidad">
+
+
+                    </td>
+
+
+
+                    <td width="200"> <input type="number" value="@i.Costo" name="@cadenacosto" id="@cadenacosto" step="any" />  @clavemoneda  </td>
+
+                    <td>@i.Importe</td>
+                    <td>@i.ImporteIva</td>
+                    <td>@i.ImporteTotal</td>
+                    <td width="400">
+                        @*@{string cadenaa = "Nota" + contador;
+            }*@
+                        <input type="text" class="form-control" id="@Nota" name="@Nota" value="@i.Nota">
+
+
+                    </td>
+                    <td>
+
+                        @*<a class="edit" onclick="Actualizar(@i.IDCarritoRequisicion,@contador )">
+                <i class="tbl_del_btn fa fa-save"></i>
+            </a>*@
+                        <a class="delete" data-id="@i.IDCarritoRequisicion">
+                            <i class="tbl_del_btn fa fa-trash"></i>
+
+                        </a>
+
+                    </td>
+                </tr>
+                contador += 1;
+            }
+            contador -= 1;
+            <input name="Contador" value="@contador" hidden />
+        }
+    </table>
+</div>
+
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+        var url = '@Url.Action("DeleteitemCarrito", "EncOrdenCompra")';
+        $('.delete').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    //location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>
+
+<script>
+
+
+    function Actualizar(id, numero)
+    {
+                        var urledit = '@Url.Action("EdititemCarritoRequi", "EncOrdenCompra")';
+
+                        var cantidad = document.getElementById("Cantidad" + numero).value
+                        alert(cantidad);
+                        $.post(urledit, { id: id, cantidad: cantidad }, function (response) {
+                            if (response) {
+
+                                $("#partialcarrito").html(response);
+
+                    //location.reload();
+                    //row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+</script>

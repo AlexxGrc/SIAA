@@ -1,0 +1,225 @@
+﻿@model SIAAPI.Models.PlaneacionProduccion.HEspecificacion
+
+@{
+    ViewBag.Title = "HojaER";
+    Layout = "~/Views/Shared/_LayoutPlaneacion.cshtml";
+}
+
+<h3>Hoja de Especificación</h3>
+@ViewBag.Cadena
+@using (Html.BeginForm("InsertaHojaE", "PlanPlaneacionProduccion", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        Cliente: <input type="checkbox" name="cliente" id="cliente" onclick="myFunction()" value="true">
+
+        Cliente Prospecto: <input type="checkbox" name="clientep" id="clientep" onclick="myFunctionP()" value="true">
+
+       
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaEspecificacion, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.FechaEspecificacion, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FechaEspecificacion, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div id="uno" class="form-group" style="display:none">
+            @Html.LabelFor(model => model.IDCliente, "Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDCliente", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDCliente, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div id="dos" class="form-group" style="display:none">
+            @Html.LabelFor(model => model.IDClienteP, "Cliente Prospecto", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownList("IDClienteP", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDClienteP, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        Artículo: <input type="checkbox" name="artr" id="artr" onclick="myFunctionAR()" value="true">
+
+        Artículo no Registrado: <input type="checkbox" name="artnr" id="artnr" onclick="myFunctionANR()" value="true">
+        <div id="articulor" class="form-group" style="display:none">
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDArticulo, "Artículo", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDArticulo", ViewBag.proveedor as List<SelectListItem>, new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.IDArticulo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDCaracteristica, "Característica", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDCaracteristica", new SelectList(string.Empty, "Value", "Text"), "--Selecciona Característica--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDCaracteristica, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div id="articulonr" class="form-group" style="display:none">
+            <div class="form-group">
+                @Html.Label("Nombre de Artículo", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDFamilia, "Familia", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDFamilia", null, "--Selecciona una Familia--", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDFamilia, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Presentacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @*@Html.EditorFor(model => model.Presentacion, new { htmlAttributes = new { @class = "form-control" ,@value=ViewBag.Cadena} })*@
+                    <input type="text" name="Presentacion" id="Presentacion" class="form-control" />
+                    @Html.ValidationMessageFor(model => model.Presentacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+    
+        @*<button type="button" name="button" class="btn btn-sm btn-addon btn-info waves-effect" onclick="showCreateThanksYouForm(1)">
+            <i class="fa fa-thumbs-o-up">
+            </i>
+            Agradecer
+        </button>*@
+        <h3 class="text-danger">@ViewBag.Mensaje</h3>
+
+        <div class="form-group">
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> @*| @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })*@
+            </div>
+
+
+        </div>
+    </div>
+}
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="teste"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+function myFunction() {
+    var checkBox = document.getElementById("cliente");
+    var text = document.getElementById("uno");
+    if (checkBox.checked == true) {
+        text.style.display = "block";
+        document.getElementById("clientep").disabled = true;
+       
+    } else {
+        text.style.display = "none";
+        document.getElementById("clientep").disabled =false;
+    }
+}
+</script>
+
+<script>
+function myFunctionP() {
+    var checkBox = document.getElementById("clientep");
+    var text = document.getElementById("dos");
+    if (checkBox.checked == true) {
+        text.style.display = "block";
+
+        document.getElementById("cliente").disabled = true;
+
+    } else {
+        text.style.display = "none";
+        document.getElementById("cliente").disabled = false;
+    }
+}
+</script>
+
+<script>
+
+        $(document).ready(function () {
+
+            $("#IDFamilia").change(function () {
+                var id = $("#IDFamilia").val();
+
+                $("#teste").load("/PlanPlaneacionProduccion/Presentacion/" + id, function () {
+                    $('#myModal').modal("show");
+                });
+               
+            })
+        });
+
+    
+    </script>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDArticulo").change(function () {
+            $("#IDCaracteristica").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getcaracteristica")',
+                dataType: 'json',
+                data: { id: $("#IDArticulo").val()},
+                success: function (metodos) {
+                $.each(metodos, function (i, metodo) {
+                    $("#IDCaracteristica").append('<option value="' + metodo.Value + '">' +
+                 metodo.Text + '</option>');
+                });
+                },
+                error: function (ex) {
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+<script>
+function myFunctionAR() {
+    var checkBox = document.getElementById("artr");
+    var text = document.getElementById("articulor");
+    if (checkBox.checked == true) {
+        text.style.display = "block";
+        document.getElementById("artnr").disabled = true;
+    } else {
+        text.style.display = "none";
+        document.getElementById("artnr").disabled = false;
+    }
+}
+</script>
+
+<script>
+function myFunctionANR() {
+    var checkBox = document.getElementById("artnr");
+    var text = document.getElementById("articulonr");
+    if (checkBox.checked == true) {
+        text.style.display = "block";
+
+        document.getElementById("artr").disabled = true;
+    } else {
+        text.style.display = "none";
+        document.getElementById("artr").disabled = false;
+    }
+}
+</script>

@@ -1,0 +1,122 @@
+﻿
+@model IEnumerable<SIAAPI.Models.PlaneacionProduccion.VRangoPlaneacionCosto>
+
+@{
+    ViewBag.Title = "Ver Precios";
+    Layout = "~/Views/Shared/_LayoutPlaneacionE.cshtml";
+}
+<h3>Precio Planeado de @ViewBag.Articulo por Rangos y Niveles de ganancia</h3>
+<h4>@ViewBag.Presentacion</h4>
+<h3>Matriz de Precio</h3>
+<hr />
+<h2 class="text-primary" align="right">Moneda de Precio Sugerido: @ViewBag.monedapsugerido</h2>
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+           
+            <th>Rango Inferior </th>
+            <th>Rango Superior </th>
+            <th>
+                <div>
+                    Precio sugerido
+                   
+                </div>
+                <div>
+                     @Html.ActionLink("Asignar Precio Cliente", "InsertarSugerido", new { Rango = 1, id = ViewBag.idhe }, new { @class = "tbl_del_btn fa fa-plus" })
+                </div>
+                <div>@Html.ActionLink("Asignar Precio Articulo", "InsertarSugeridoA", new { Rango = 1, id = ViewBag.idhe }, new { @class = "tbl_del_btn fa fa-plus" })</div>
+            </th>
+            <th>
+            <div>
+                Precio recomendado
+
+            </div>
+            <div>
+                @Html.ActionLink("Asignar Precio Cliente", "InsertarSugerido", new { Rango = 2, id = ViewBag.idhe }, new { @class = "tbl_del_btn fa fa-plus" })
+            </div>
+            <div>@Html.ActionLink("Asignar Precio Articulo", "InsertarSugeridoA", new { Rango = 2, id = ViewBag.idhe }, new { @class = "tbl_del_btn fa fa-plus" })
+                </div></th>
+            <th>
+
+                <div>
+                    Precio aceptable
+
+                </div>
+                <div>
+                    @Html.ActionLink("Asignar Precio Cliente", "InsertarSugerido", new { Rango = 3, id = ViewBag.idhe }, new { @class = "tbl_del_btn fa fa-plus" })
+                </div>
+                <div>
+                    @Html.ActionLink("Asignar Precio Articulo", "InsertarSugeridoA", new { Rango = 3, id = ViewBag.idhe }, new { @class = "tbl_del_btn fa fa-plus" })
+            </div>
+        </th>
+            <th>
+                <div>
+                    Precio bajo
+
+                </div>
+                <div>
+                    @Html.ActionLink("Asignar Precio Cliente", "InsertarSugerido", new { Rango = 4, id = ViewBag.idhe }, new { @class = "tbl_del_btn fa fa-plus" })
+                </div>
+                <div>
+                    @Html.ActionLink("Asignar Precio Articulo", "InsertarSugeridoA", new { Rango = 4, id = ViewBag.idhe }, new { @class = "tbl_del_btn fa fa-plus" })
+                </div>
+            </th>
+           
+        </tr>
+        
+            @{
+                bool pasa = true;
+                decimal tempinf = 0M;
+                decimal temsup = 0M;
+                foreach (var item in ViewBag.rangoniveles)
+                {
+
+                    if (pasa)
+                    {
+                         tempinf = item.RangoInf;
+                         temsup = item.RangoSup;
+                            <tr>
+                            <td><h2>@item.RangoInf</h2></td>
+                            <td><h2>@item.RangoSup</h2></td>
+                             @{
+                            int idhe = ViewBag.idhe;
+                            decimal inferior = item.RangoInf;
+                            decimal superior = item.RangoSup;
+                            SIAAPI.Models.Comercial.ClsDatoDecimal nivel1 = new SIAAPI.Models.Comercial.FamiliaContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select RPN.precio as Dato from RangoPlaneacionNiveles as RPN where IDHE=" + idhe + " and RangoInf=" + inferior + " and RangoSup=" + superior + " and Nivel=1").ToList()[0];
+                            SIAAPI.Models.Comercial.ClsDatoDecimal nivel2 = new SIAAPI.Models.Comercial.FamiliaContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select RPN.precio as Dato from RangoPlaneacionNiveles as RPN where IDHE=" + idhe + " and RangoInf=" + inferior + " and RangoSup=" + superior + " and Nivel=2").ToList()[0];
+                            SIAAPI.Models.Comercial.ClsDatoDecimal nivel3 = new SIAAPI.Models.Comercial.FamiliaContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select RPN.precio as Dato from RangoPlaneacionNiveles as RPN where IDHE=" + idhe + " and RangoInf=" + inferior + " and RangoSup=" + superior + " and Nivel=3").ToList()[0];
+                            SIAAPI.Models.Comercial.ClsDatoDecimal nivel4 = new SIAAPI.Models.Comercial.FamiliaContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select RPN.precio as Dato from RangoPlaneacionNiveles as RPN where IDHE=" + idhe + " and RangoInf=" + inferior + " and RangoSup=" + superior + " and Nivel=4").ToList()[0];
+                            <td><h2 class="text-success">@nivel1.Dato</h2></td>
+                            <td><h3 class="text-primary">@nivel2.Dato</h3></td>
+                            <td><h4 class="text-info">@nivel3.Dato</h4></td>
+                            <td><h5 class="text-danger">@nivel4.Dato</h5></td>
+
+
+                                 }
+                                 </tr>
+                                         pasa = false;
+
+                      }
+                    else
+                    {
+
+                        if ((item.RangoInf!=tempinf) && (item.RangoSup != temsup))
+                        {
+                            pasa = true;
+                        }
+                    }
+                 }
+
+
+                    @*<td>
+                        @Html.ActionLink(" ", "InsertarSugerido", new { id = item.IDRPN, idcarrito = ViewBag.id }, new { @class = "tbl_del_btn fa fa-plus" })
+
+
+                    </td>*@
+             
+
+                      
+            }
+</table>
+  
+</div>

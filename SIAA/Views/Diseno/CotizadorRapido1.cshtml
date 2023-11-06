@@ -1,0 +1,707 @@
+﻿@model SIAAPI.ClasesProduccion.ClsCotizador
+
+@{
+    ViewBag.Title = "Cotizador";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+
+
+@using (Html.BeginForm())
+{
+    SIAAPI.Models.Comercial.EntregaContext db = new SIAAPI.Models.Comercial.EntregaContext();
+
+    SIAAPI.ClasesProduccion.Cotizaciones Cot = db.Database.SqlQuery<SIAAPI.ClasesProduccion.Cotizaciones>("select * from Cotizaciones where ID=" + Model.IDCotizacion + "").FirstOrDefault();
+
+    <div>
+        <h3>Detalle de Cotización</h3>
+        <hr />
+        <table>
+            <tr style="background-color:lavender">
+                <td>@Html.Label("No.Cotización")</td>
+                <td>@Html.Label("Fecha")</td>
+                <td>@Html.Label("Descripción")</td>
+                <td>@Html.Label("Ruta")</td>
+                <td>@Html.Label("Nombre del archivo")</td>
+                <td>@Html.Label("Usuario")</td>
+            </tr>
+            <tr>
+                <td>@Html.DisplayFor(model => model.IDCotizacion)</td>
+                <td>@ViewBag.fecha</td>
+                <td>@Html.Label(Cot.Descripcion)</td>
+                <td>@Html.Label(Cot.Ruta)</td>
+                <td>@Html.Label(Cot.NombreArchivo)</td>
+                <td>@Html.Label(Cot.Usuario)</td>
+            </tr>
+
+        </table>
+    </div>
+
+    @Html.Label("")
+
+
+    @Html.HiddenFor(model => model.IDCotizacion, null)
+
+
+
+    <table class="table-responsive col-12">
+        <tr>
+            <table>
+                <tr>
+
+                    @if (Model.SuajeNuevo != true)
+                    {
+                        <td>
+                            <h6 style="font-size: small">Suaje 1 </h6>
+
+                            @{
+                                try
+                                {
+                                    //SIAAPI.Models.Comercial.ArticuloContext db1 = new SIAAPI.Models.Comercial.ArticuloContext();
+                                    string cadenaid = "select articulo_idarticulo  as dato from caracteristica where id=" + ViewBag.nombresuaje;
+                                    SIAAPI.Models.Comercial.ClsDatoEntero idarticulo = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>
+                                        (cadenaid).ToList().FirstOrDefault();
+                                    string cadenacref = "select cref  as dato from articulo where idarticulo=" + idarticulo.Dato;
+
+                                    SIAAPI.Models.Comercial.ClsDatoString CLAVE = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>
+                                        (cadenacref).ToList().FirstOrDefault();
+                                    ViewBag.clave = CLAVE.Dato;
+
+                                    string cadenades = "select descripcion  as dato from Articulo where idarticulo=" + idarticulo.Dato;
+
+                                    SIAAPI.Models.Comercial.ClsDatoString descripcioartn = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>
+                                        (cadenades).ToList().FirstOrDefault();
+                                    ViewBag.descripcion = descripcioartn.Dato;
+
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+
+                                try
+                                {
+
+                                    <h3>@ViewBag.clave |  @ViewBag.descripcion</h3>
+
+
+                                }
+                                catch (Exception err)
+                                {
+
+                                }
+                            }
+
+                            <h6 style="font-size: small">Suaje 2 </h6>
+                            <br />
+
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.IDSuaje2, ViewBag.IDSuaje2 as List<SelectListItem>, new { @class = "form-control", id = "IDSuaje2", name = "IDSuaje2", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.IDSuaje2, "", new { @class = "text-danger" })
+                            </div>
+                        </td>
+
+
+                    }
+                    else
+                    {
+                        <td>
+                            <h6 style="font-size: small">Pleca</h6>
+                            <br />
+
+                            <div class="col-md-29">
+                                @Html.DropDownListFor(model => model.IDSuaje2, ViewBag.IDSuaje2 as List<SelectListItem>, new { @class = "form-control", id = "IDSuaje2", name = "IDSuaje2", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.IDSuaje2, "", new { @class = "text-danger" })
+                            </div>
+                        </td>
+
+
+
+
+                    }
+
+
+
+
+
+                </tr>
+            </table>
+
+
+            @if (Model.SuajeNuevo == true)
+            {
+                <br />
+                <table>
+                    <tr>
+                        <td>
+                            <div class="col-md-12">
+                                <h6 style="font-size: small">Tipo de Suaje: </h6>
+                                @Html.DropDownList("Tsuaje", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.TipoSuaje, "", new { @class = "text-danger" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-12">
+                                <h6 style="font-size: small">Figura Suaje: </h6>
+                                @Html.DropDownList("TSuajeFi", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.TipoSuajeFigura, "", new { @class = "text-danger" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-12">
+                                <h6 style="font-size: small">Tipo Corte Suaje: </h6>
+                                @Html.DropDownList("TSuajeCorte", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.TipoCorte, "", new { @class = "text-danger" })
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-md-12">
+                                <h6 style="font-size: small">Esquinas: </h6>
+                                @Html.DropDownList("EsquinasSuaje", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                                @Html.ValidationMessageFor(model => model.Esquinas, "", new { @class = "text-danger" })
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            }
+
+
+            <br />
+            <table style="background-color:#c2996b" class="table-responsive col-12">
+                <tr>
+                    <td>
+
+
+                        <div class="form-group">
+                            <h6>Eje  en mm</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.anchoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Anchomm", name = "Anchomm", onkeyup = "actualizasuaje(event)", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.anchoproductomm, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <h6>Avance  en mm</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.largoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Largomm", name = "Largomm", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.largoproductomm, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <h6>Cav Eje</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.cavidadesdesuajeEje, new { htmlAttributes = new { @class = "form-control", id = "Cavidades", name = "Cavidades", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.cavidadesdesuajeEje, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <h6>Cav Avance </h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.cavidadesdesuajeAvance, new { htmlAttributes = new { @class = "form-control", id = "CavidadesdeSuajeAvance", @disabled = "disabled", name = "CavidadesdeSuajeAvance", onchange = "CalculaDientes()" } })
+                                @Html.ValidationMessageFor(model => model.cavidadesdesuajeAvance, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+
+                        <div class="form-group">
+                            <h6>Gap al eje en mm</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.gapeje, new { htmlAttributes = new { @class = "form-control", id = "Gapeje", name = "Gapeje", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.gapeje, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </td>
+
+                    <td>
+                        <div class="form-group">
+                            <h6>Gap al Avance en mm</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.gapavance, new { htmlAttributes = new { @class = "form-control", id = "Gapavance", name = "Gapavance", onchange = "CalculaDientes()", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.gapavance, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+
+
+
+                    <td>
+                        <div class="form-group">
+                            <h6>TH</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.TH, new { htmlAttributes = new { @class = "form-control", id = "Dientes", name = "Dientes", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.TH, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="form-group">
+                            <h6>Cantidad de etiquetas al paso</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.productosalpaso, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.productosalpaso, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <h6>Número de Tintas</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Numerodetintas, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.Numerodetintas, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <h6>Cantidad de etiquetas x rollo o paquete</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Cantidadxrollo, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.Cantidadxrollo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <h6>Cantidad  a cotizar en Millares</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                            </div>
+                            <br />
+                    </td>
+                </tr>
+                <br />
+            </table>
+
+
+        </tr>
+        <br />
+        <tr>
+            <table>
+
+                <tr>
+                    <td>
+                        @*<h6 style="font-size: small">Ancho de master en mm</h6>*@
+                    </td>
+                    <td>
+                        <div class="form-group">
+
+                            <div class="col-md-2">
+                                @Html.HiddenFor(model => model.CobrarMaster, new { htmlAttributes = new { @class = "form-control", id = "CobrarMaster", name = "CobrarMaster", @disabled = "disabled" } })
+                            </div>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                @Html.HiddenFor(model => model.anchommmaster, new { htmlAttributes = new { @class = "form-control", id = "AnchoMaster", name = "AnchoMaster", @disabled = "disabled" } })
+                                @Html.ValidationMessageFor(model => model.anchommmaster, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </td>
+
+
+                </tr>
+
+                <tr>
+                    <td>
+                        <h6 style="font-size: small">Largo de la cinta a considerar</h6>
+                    </td>
+                    <td>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.LargoCinta, new { htmlAttributes = new { @class = "form-control", id = "LargoCinta", name = "LargoCinta", @disabled = "disabled" } })
+                            @Html.ValidationMessageFor(model => model.LargoCinta, "", new { @class = "text-danger" })
+                        </div>
+                    </td>
+
+                </tr>
+
+            </table>
+        </tr>
+    </table>
+    @*/////////////////////////////////*@
+    if (ViewBag.suajeseleccionado != 0)
+    {
+        <h2>SUAJE</h2>
+
+        <div class="table-responsive">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.Label("Descripción")
+                </dt>
+
+                @try
+                {
+
+                    int idcara = ViewBag.suajeseleccionado;
+                    SIAAPI.Models.Comercial.ClsDatoEntero idarticulo = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select Articulo_IdArticulo as Dato from Caracteristica where ID=" + idcara + "").ToList()[0];
+                    SIAAPI.Models.Comercial.ClsDatoString suaje = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select descripcion as Dato from Articulo where IDArticulo=" + idarticulo.Dato + "").ToList()[0];
+                    //string nombresuaje = @suaje.Dato;
+                    SIAAPI.Models.Comercial.ClsDatoString presentacion = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select presentacion as Dato from Caracteristica where ID=" + idcara + "").ToList()[0];
+
+                    ViewBag.presentacion = presentacion.Dato;
+                    <dd>
+                        @Html.DisplayFor(model => @suaje.Dato)
+                    </dd>
+
+
+                }
+                catch (Exception err)
+                {
+                    string mensajederror1 = err.Message;
+                }
+            </dl>
+
+
+        </div>
+        <table>
+            @{try
+                {
+                    string[] atributos = ViewBag.presentacion.ToString().Split(',');
+                    <tr>
+                        @foreach (var atri in atributos)
+                        {
+                            string[] valor = atri.Split((char)58);
+                            string Atri = valor[0];
+                            string Val = valor[1];
+                            <td style="background-color:burlywood" class="col-md-1">
+                                <label style="color:black;">@Atri</label>
+                            </td>
+                        }
+                    </tr>
+                    <tr>
+                        @foreach (var atri in atributos)
+                        {
+                            string[] valor = atri.Split((char)58);
+                            string Atri = valor[0];
+                            string Val = valor[1];
+                            <td class="col-md-1">
+                                <label>@Val</label>
+                            </td>
+                        }
+                    </tr>
+
+                }
+                catch (Exception err)
+                {
+
+                }
+
+            }
+        </table>
+
+
+
+
+
+    }
+    else
+    {
+        if (Model.IDSuaje == 0)
+        {
+            <p style="color:#FF0000" ;>SIN SUAJE</p>
+        }
+        if (Model.IDSuaje2 == 0)
+        {
+            <p style="color:#FF0000" ;>SIN PLECA</p>
+        }
+
+    }
+
+
+    @*@Html.Label("TINTAS")*@
+    if (ViewBag.tintas != 0)
+    {
+        <h2>TINTAS</h2>
+
+        <div class="table-responsive">
+            <table class="table table-striped" width="50">
+                <tr>
+                    <th>
+                        @Html.Label("CREF")
+                    </th>
+                    <th>
+                        @Html.Label("Descripción")
+                    </th>
+                    <th>
+                        @Html.Label("Área")
+                    </th>
+
+                </tr>
+                @try
+                {
+                    int c = 0;
+                    foreach (SIAAPI.ClasesProduccion.Tinta tinta in ViewBag.tintasselec)
+                    {
+                        SIAAPI.Models.Comercial.Articulo artinta = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(tinta.IDTinta);
+
+                        string cref = artinta.Cref;
+                        string descripcionar = artinta.Descripcion;
+                        decimal area = tinta.Area;
+
+
+                        <tr>
+                            <td>
+                                @Html.Label(cref)
+                            </td>
+                            <td>
+                                @Html.Label(descripcionar)
+                            </td>
+                            <td>
+                                @Html.Label(area + "%")
+                            </td>
+
+
+                        </tr>
+
+                    }
+                }
+                catch (Exception err)
+                {
+                    string mensajederror1 = err.Message;
+                }
+
+
+
+            </table>
+        </div>
+    }
+    else
+    {
+        <p style="color:#FF0000" ;>SIN TINTAS</p>
+    }
+
+
+    ////////////////Cintas
+    ///
+    if (Model.IDMaterial != 0)
+    {
+        <h2>Cinta</h2>
+
+        <div class="table-responsive">
+            <table class="table table-striped" width="50">
+                <tr>
+                    <th>
+                        @Html.Label("Clave")
+                    </th>
+                    <th>
+                        @Html.Label("Descripción")
+                    </th>
+
+
+                </tr>
+                @try
+                {
+
+                    SIAAPI.Models.Comercial.ClsDatoString cref = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Clave as Dato from Materiales where id=" + Model.IDMaterial + "").ToList().FirstOrDefault();
+                    SIAAPI.Models.Comercial.ClsDatoString descripcioncinta = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Descripcion as Dato from Materiales where id=" + Model.IDMaterial + "").ToList().FirstOrDefault();
+
+                    <tr>
+                        <td>
+                            @Html.Label(cref.Dato)
+                        </td>
+                        <td>
+                            @Html.Label(descripcioncinta.Dato)
+                        </td>
+
+                    </tr>
+                    if (Model.IDMaterial2 != 0)
+                    {
+                        <h2>Adicional</h2>
+                        SIAAPI.Models.Comercial.ClsDatoString cref2 = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select clave as Dato from Materiales where id=" + Model.IDMaterial2 + "").ToList().FirstOrDefault();
+                        SIAAPI.Models.Comercial.ClsDatoString descripcioncinta2 = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Descripcion as Dato from Materiales where id=" + Model.IDMaterial2 + "").ToList().FirstOrDefault();
+
+                        <tr>
+                            <td>
+                                @Html.Label(cref2.Dato)
+                            </td>
+                            <td>
+                                @Html.Label(descripcioncinta2.Dato)
+                            </td>
+
+                        </tr>
+                    }
+                    else
+                    {
+
+                    }
+
+
+                }
+                catch (Exception err)
+                {
+                    string mensajederror1 = err.Message;
+                }
+
+
+
+            </table>
+        </div>
+    }
+    else
+    {
+        <p style="color:#FF0000" ;>SIN CINTAS</p>
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ////////////////////////////
+    ///
+    @*@Html.Label("Suaje")*@
+
+
+
+
+
+
+
+
+
+}
+
+
+<div>
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</div>
+
+
+
+<script>
+    function Suaje() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getSuaje")',
+            dataType: 'json',
+            data: { IDSuaje: $("#IDSuaje").val() },
+            success: function (suaje) {
+                $("#Anchomm").val(suaje.Eje);
+                $("#Largomm").val(suaje.Avance);
+                $("#Cavidades").val(suaje.Cavidades);
+                $("#Gapeje").val(suaje.Gapeje);
+                $("#Gapavance").val(suaje.Gapavance);
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+    function getMP() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getMP")',
+            dataType: 'json',
+            data: { IDMp: $("#IDMp").val() },
+            success: function (Cinta) {
+                $("#AnchoMaster").val(Cinta.Ancho);
+                $("#LargoCinta").val(Cinta.Largo);
+                $("#Precio").val(Cinta.Costo);
+                if(Cinta.CobrarMaster==true)
+                {
+                    elemento = $("#CobrarMaster");
+                    elemento.prop("checked", true);
+
+                }
+                else {
+                    elemento = $("#CobrarMaster");
+                    elemento.prop("checked", false);
+
+                }
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+    function getMP2() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getMP")',
+            dataType: 'json',
+            data: { IDMp: $("#IDMp2").val() },
+            success: function (Cinta) {
+
+                $("#Precio2").val(Cinta.Costo);
+
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+
+    function actualizasuaje(e) {
+
+
+
+
+        if (e.keyCode === 81) {
+            var control = "#Anchomm";
+            var selectcontrol = "#IDSuaje" ;
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getsuajesblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+                    }
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+</script>

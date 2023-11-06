@@ -1,0 +1,171 @@
+﻿@model SIAAPI.ClasesProduccion.ClsCambioPlaneacion
+
+@{
+    ViewBag.Title = "CambioPlaneacion";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<h3>Cambio de Maquinas de Planeacion @ViewBag.Articulo.Cref @ViewBag.Articulo.Descripcion</h3>
+
+<div>Numero de Presentacion @ViewBag.Presentacion.IDPresentacion</div>
+<div>
+    <table>
+        @{
+            string[] atributos = ViewBag.Presentacion.Presentacion.ToString().Split(',');
+                                            <tr>
+                                                @foreach (var atri in atributos)
+                                                {
+                                                    string[] valor = atri.Split((char)58);
+                                                    string Atri = valor[0];
+                                                    string Val = valor[1];
+                                                    <td style="background-color:burlywood; font-size:xx-small" class="col-md-1">
+                                                        <label style="color:white;">@Atri</label>
+                                                    </td>
+                                                }
+                                            </tr>
+                                                <tr>
+                                                    @foreach (var atri in atributos)
+                                                    {
+                                                        string[] valor = atri.Split((char)58);
+                                                        try
+                                                        {
+                                                            string Val = valor[1];
+                                                            <td class="col-md-1" style=" font-size:xx-small">
+                                                                <label>@Val</label>
+                                                            </td>
+                                                        }
+                                                        catch (Exception err)
+                                                        {
+                                                            <td class="col-md-1">
+                                                                <label> </label>
+                                                            </td>
+                                                        }
+
+
+                                                    }
+                                                </tr>
+        }
+    </table>
+</div>
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.IDCotizacion)
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDMaquinaPrensa, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDMaquinaPrensa, ViewBag.IDMaquinaPrensa as List<SelectListItem>, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDMaquinaPrensa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDMaquinaEmbobinado, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.IDMaquinaEmbobinado,ViewBag.IDMaquinaEmbobinado as List<SelectListItem> , new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDMaquinaEmbobinado, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+
+
+            <div class="form-group">
+                Escibe el ancho o el avance  => Escribe  y presiona "Alt Gr" <input id="claves" name="claves" onkeyup="actualizacomboArticuloSuaje(event)" />
+            </div>
+
+            </div>
+            <div class="form-group">
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDSuaje1, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => model.IDSuaje1, ViewBag.IDSuaje1 as List<SelectListItem>, new { @class = "form-control" })
+
+                        @Html.ValidationMessageFor(model => model.IDSuaje1, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDSuaje2, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDSuaje2, ViewBag.IDSuaje2 as List<SelectListItem>, new { @class = "form-control", id = "IDSuaje2", name = "IDSuaje2" })
+                    @Html.ValidationMessageFor(model => model.IDSuaje2, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+        @*<div class="form-group">
+        @Html.LabelFor(model => model.cyrel, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.cyrel)
+            @Html.ValidationMessageFor(model => model.cyrel, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Grabar" class="btn btn-success" />
+                </div>
+            </div>
+        </div>
+}
+
+<div>
+    @Html.ActionLink("Volver a la Lista", "Prioridad")
+</div>
+<br />
+<br />
+<h6>@ViewBag.NombreArchivo</h6>
+<script>
+
+
+
+    function actualizacomboArticuloSuaje(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#claves";
+            var selectcontrol = "#IDSuaje1";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getsuajesblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un suaje";
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+</script>

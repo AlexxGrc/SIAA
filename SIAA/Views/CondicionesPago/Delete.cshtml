@@ -1,0 +1,48 @@
+﻿@model SIAAPI.Models.Administracion.CondicionesPago
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<h4>Eliminar Condición de Pago</h4>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveCondicionesPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveCondicionesPago)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiasCredito)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiasCredito)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+        <hr />
+    }
+</div>

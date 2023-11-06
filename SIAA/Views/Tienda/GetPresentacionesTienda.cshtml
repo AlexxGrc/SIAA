@@ -1,0 +1,118 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Caracteristica>
+
+@{
+    ViewBag.Title = "GetPresentacionesTienda";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Listado de Presentaciones de Articulo<br /></h3>
+<h3 class="text-info"> @ViewBag.Descripcion </h3>
+<h4 class="text-success">@ViewBag.Cref</h4>
+
+
+<table class="table table-striped" id="TablaPresentaciones">
+ 
+
+@{foreach (var item in Model)
+    {
+        SIAAPI.Models.Comercial.Articulo arti = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.Articulo_IDArticulo);
+
+        <tr>
+            <td class="col-lg-1 col-md-1">
+                @item.IDPresentacion
+            </td>
+        <td class="col-lg-7 col-md-7">
+            @{
+                        <table>
+                            @{
+                                string[] atributos = item.Presentacion.ToString().Split(',');
+                                <tr>
+                                    @foreach (var atri in atributos)
+                                    {
+                                        string[] valor = atri.Split((char)58);
+                                        try
+                                        {
+                                            string Atri = valor[0];
+                                            string Val = valor[1];
+                                            <td style="background-color:darkblue; font-size:xx-small" class="col-md-1">
+                                                <label style="color:white;">@Atri</label>
+                                            </td>
+                                        }
+                                        catch (Exception err)
+                                        {
+                                            <td class="col-md-1">
+                                                <label> </label>
+                                            </td>
+                                        }
+
+                                    }
+                                </tr>
+                                <tr>
+                                    @foreach (var atri in atributos)
+                                    {
+                                        string[] valor = atri.Split((char)58);
+                                        try
+                                        {
+                                            string Val = valor[1];
+                                            <td class="col-md-1" style=" font-size:xx-small">
+                                                <label>@Val</label>
+                                            </td>
+                                        }
+                                        catch (Exception err)
+                                        {
+                                            <td class="col-md-1">
+                                                <label> </label>
+                                            </td>
+                                        }
+
+
+                                    }
+                                </tr>
+                            }
+                        </table>
+            }
+        </td>
+          
+        <td class="col-lg-4 col-md-4" colspan="4">
+            @if (arti.GeneraOrden == true && item.IDCotizacion == 0 && !arti.esKit)
+            {
+                   
+                <div class="col-lg-3">
+                    <label>No se puede agergar al pedido sin cotización</label>
+                </div>
+            }
+            else
+            {
+                <form method="post" action='@Url.Action("AddCarritoGeneral", "Tienda", new { searchString = ViewBag.searchString })'>
+                    <div class="col-lg-3">
+                        <label for="cantidad">Cantidad</label>
+                    </div>
+                    <div>
+                        <input class="form-control smallTxt" type="number" value="1" min="0" step="any" data-number-to-fixed="3" data-number-stepfactor="100" name="Cantidad" id="Cantidad" required autofocus />
+                    </div>
+                    <div>
+                        <input type="hidden" class="form-control" name="id" id="id" placeholder="@item.ID " value="@item.ID ">
+                    </div>
+
+                    <button class="fa fa-cart-plus fa-2x col-lg-2" style="color:green" type="submit"></button>
+                </form>
+
+            }
+
+            @if (arti.GeneraOrden == true && item.IDCotizacion == 0)
+            {
+                <a href="@Url.Action("addCotizacion", "Tienda", new { id = item.ID })" class="btn btn-success">
+                    Agregar Cotizacion
+                </a>
+            }
+        </td>
+        </tr>
+    }
+ 
+    }
+</table>
+<div>
+    @Html.ActionLink("Agregar Presentacion", "AgregarPresentacion2", "Tienda",   new { id=@ViewBag.IDArticulo }, new { @class= "btn btn-primary active" } ) 
+</div>
+
+

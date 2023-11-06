@@ -1,0 +1,250 @@
+﻿@model SIAAPI.Models.Comercial.EncRecepcion
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles de la Recepción no. @Html.DisplayFor(model => model.IDRecepcion) </h3>
+<h4>Recepciona los lotes de la mp y/o tintas</h4>
+
+<div>
+    <hr />
+    @*<dl class="dl-horizontal">*@
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDProveedor)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Proveedor.Empresa)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Fecha)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Observacion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Observacion)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDUsoCFDI)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_UsoCFDI.Descripcion)
+                </dd>
+               
+
+            </dl>
+            </dl>
+        </div>
+
+
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDFormapago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_FormaPago.ClaveFormaPago)|@Html.DisplayFor(model => model.c_FormaPago.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDMetodoPago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_MetodoPago.ClaveMetodoPago)|@Html.DisplayFor(model => model.c_MetodoPago.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDMoneda)
+                </dt>
+
+                <dd>
+
+                    @Html.DisplayFor(model => model.c_Moneda.ClaveMoneda)|@Html.DisplayFor(model => model.c_Moneda.Descripcion)
+
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.TipoCambio)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TipoCambio)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDCondicionesPago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CondicionesPago.ClaveCondicionesPago)|@Html.DisplayFor(model => model.CondicionesPago.Descripcion)
+                </dd>
+
+        </div>
+    </div>
+
+
+
+</div>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+
+                <th>Orden de Compra</th>
+                <th>Clave</th>
+                <th>Artículo</th>
+                
+                <th>Nota</th>
+                <th>Compra Mínima</th>
+                <th>Cantidad</th>
+                <th>Devolución</th>
+                <th>Precio</th>
+                <th>Importe</th>
+                <th>IVA</th>
+                <th>Total</th>
+
+            </tr>
+        </thead>
+
+        @foreach (SIAAPI.ViewModels.Comercial.VDetRecepcion item in ViewBag.req)
+        {
+            SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+            SIAAPI.Models.Comercial.Caracteristica articuloc = db.Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where ID=" + item.Caracteristica_ID).ToList().FirstOrDefault();
+
+            SIAAPI.Models.Comercial.Articulo articuloo = db.Articulo.Find(articuloc.Articulo_IDArticulo);
+
+            if (item.Status.Equals("Cancelado"))
+            {
+                <tr class="danger">
+
+                    <td>@item.IDExterna</td>
+                    <td>Clave</td>
+                    <td>@item.Articulo</td>
+                    
+                    <td>@item.Nota</td>
+                    <td>@item.MinimoCompra</td>
+                    <td>@item.Cantidad</td>
+                    <td>@string.Format("{0:C}", @item.Costo)</td>
+                    <td>@string.Format("{0:C}", @item.Importe)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+                </tr>
+            }
+            else
+            {
+
+                <tr>
+                    <td>@item.IDExterna</td>
+                    <td>
+                        <Div>@articuloo.Cref</Div>
+                        @if (articuloo.IDTipoArticulo == 6)
+                        {
+                            <div>@Html.ActionLink("Cargar Lotes", "Cargarcintas", new { ID = item.IDDetRecepcion }, new { @class = "btn btn-warning" })</div>
+                            <div>@Html.ActionLink("Imprimir Etiquetas", "ImprimirEtiquetas", new { IDDetRecepcion = item.IDDetRecepcion }, new { @class = "btn btn-info" })</div>
+                        }
+                        @if (articuloo.IDTipoArticulo == 7)
+                        {
+                            <div>@Html.ActionLink("Cargar Lotes", "Cargartintas", new { ID = item.IDDetRecepcion }, new { @class = "btn btn-warning" })</div>
+                            <div>@Html.ActionLink("Imprimir Etiquetas", "ImprimirEtiqtint", new { IDDetRecepcion = item.IDDetRecepcion }, new { @class = "btn btn-info" })</div>
+                        }
+                    </td>
+                    @if (item.Status.Equals("Devuelto"))
+                    {
+                <td class="warning">
+                    @item.Articulo
+                    <div><h5>Número de Presentación @articuloc.IDPresentacion</h5><h6> @item.Presentacion</h6></div>
+                </td>
+                    }
+                    else if (item.Status.Equals("Activo"))
+                    {
+                <td class="success">
+                    @item.Articulo
+                    <div><h5>Número de Presentación @articuloc.IDPresentacion</h5><h6> @item.Presentacion</h6></div>
+                </td>
+                    }
+                    else if (item.Status.Equals("Finalizado"))
+                    {
+                <td>
+                    @item.Articulo
+                    <div><h5>Número de Presentación @articuloc.IDPresentacion</h5><h6> @item.Presentacion</h6></div>
+                </td>
+                    }
+                   
+                    <td>@item.Nota</td>
+                    <td>@item.MinimoCompra</td>
+                    <td>@item.Cantidad</td>
+                    <td>@item.Devolucion</td>
+                    <td>@string.Format("{0:C}", @item.Costo)</td>
+                    <td>@string.Format("{0:C}", @item.Importe)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <tr>
+            <th class="col-lg-1">
+                Moneda Origen
+            </th>
+            <th class="col-lg-1">
+                Subtotal
+            </th>
+            <th class="col-lg-1">
+                IVA
+            </th>
+            <th class="col-lg-1">
+                Total
+            </th>
+            <th class="col-lg-1">
+                Total en Pesos Mexicanos
+            </th>
+        </tr>
+        @foreach (var itemresumen in ViewBag.sumatoria)
+        {
+
+            <tr>
+                <td class="col-lg-1">
+                    @itemresumen.MonedaOrigen
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Subtotal)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.IVA)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Total)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.TotalenPesos)
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+
+<h5 align="right">Elaboró: @Html.DisplayFor(model => model.User.Username)</h5>
+<p>
+    @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>
+

@@ -1,0 +1,194 @@
+﻿@model List<SIAAPI.Models.Comercial.VInventarioAlmacen>
+@{
+    ViewBag.Title = "ValeSalida";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("ValeSalida", "AjustesAlmacen", FormMethod.Get))
+{
+
+    <input id="IDFamilia" name="IDFamilia" type="hidden" value="@ViewBag.Familia" />
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Vale de Salida</h3>
+
+        </div>
+        <div class="panel-body">
+
+            Ver Stock: @Html.DropDownList("Almacen", "Todos")
+
+
+            <button type="submit" class="btn btn-primary btn-xs">Buscar</button>
+
+
+
+
+        </div>
+    </div>
+}
+
+@{
+    if (ViewBag.Registros != 0 && ViewBag.Registros != null)
+    {
+
+        @*Busqueda*@
+
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        @using (Html.BeginForm())
+                        {
+                            <input type="hidden" name="Almacen" id="Almacen" value="@ViewBag.IDAlmacen" />
+                            <div class="col-xs-30">
+                                Clave: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+
+                                @*Familia: @Html.DropDownList("IDFamilia", "Todos")*@
+                                @*Familia: @Html.DropDownList("IDFamilia", "Todos")*@
+                                <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                            </div>
+
+
+                        }
+
+
+                    </div>
+
+
+                </form>
+            </div>
+        </nav>
+        <nav class="navbar navbar-default">
+            <div class="form-group">
+                <div class="col-xs-30">
+                    <form method="get" class="navbar-form navbar-left" action='@Url.Action("CrearValeSalida", "AjustesAlmacen", new { IDAlmacen = ViewBag.IDAlmacen })'>
+
+                        <input type="hidden" name="IDAlmacen" id="IDAlmacen" value="@ViewBag.IDAlmacen" />
+                        @*<input class="form-control smallTxt" type="number" value="1" min="0" step="any" data-number-to-fixed="3" data-number-stepfactor="100" name="Cantidad" id="Cantidad" required autofocus />*@
+
+
+                        <button class="btn btn-info btn-xs" value="Crear" type="submit">Crear Vale</button>
+                    </form>
+                </div>
+            </div>
+
+
+        </nav>
+        <br>
+       
+            if (ViewBag.Mensaje != "")
+            {
+                <div class="alert alert-danger"><h2>@ViewBag.Mensaje</h2></div>
+            }
+        
+            <br />
+        @*Busqueda*@
+        <div class="table-responsive">
+            <table class="table table-striped" width="50">
+                <tr>
+
+                    <th>
+                        @Html.Label("Clave")
+                    </th>
+                    @*<th>
+                            @Html.Label("Artículo")
+                        </th>*@
+
+                    <th>
+                        @Html.Label("Presentación")
+                    </th>
+
+
+                    <th>
+                        @Html.Label("Existencia")
+                    </th>
+
+
+                    <th>
+                        @Html.Label("Cantidad")
+                    </th>
+                    <th>
+
+                    </th>
+
+                </tr>
+                @{
+                    SIAAPI.Models.Comercial.RemisionContext db = new SIAAPI.Models.Comercial.RemisionContext();
+                    int j = 0;
+                    foreach (var item in Model)
+                    {
+                        SIAAPI.Models.Comercial.Articulo articulo = db.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>("select * from  [Articulo] where [IDArticulo]=" + item.IDArticulo + "").ToList().FirstOrDefault();
+
+                        SIAAPI.Models.Comercial.Caracteristica caracteristica = db.Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from  [Caracteristica] where [ID]=" + item.IDCaracteristica + "").ToList().FirstOrDefault();
+
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cref)
+                            </td>
+                            @*<td>
+                                    @Html.DisplayFor(modelItem => item.Articulo)
+                                </td>*@
+                            <td>
+                                NP: @caracteristica.IDPresentacion @caracteristica.Presentacion
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Existencia)
+                            </td>
+                            <td>
+                                <form method="post" action='@Url.Action("AddCarritoGeneral", "AjustesAlmacen", new { searchString = ViewBag.searchString })'>
+
+                                    <input type="hidden" name="Almacen" id="Almacen" value="@ViewBag.IDAlmacen" />
+                                    <input class="form-control smallTxt" type="number" value="1" min="0" step="any" data-number-to-fixed="3" data-number-stepfactor="100" name="Cantidad" id="Cantidad" required autofocus />
+
+                                    <input type="hidden" class="form-control" name="id" id="id" value="@item.IDCaracteristica">
+
+                                    <button class="fa fa-cart-plus fa-2x col-lg-2" style="color:blue" type="submit"></button>
+                                </form>
+                            </td>
+                            <th></th>
+                        </tr>
+
+
+
+
+
+
+
+                        j++;
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+            </table>
+        </div>
+
+
+        <p>
+            @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </p>
+
+    }
+}
+
+@*<script type="text/javascript" language="javascript">
+        function ConfirmOnDelete() {
+            if (confirm("Artículo agregado al vale") == true)
+                return true;
+            else
+                return false;
+        }
+    </script>*@

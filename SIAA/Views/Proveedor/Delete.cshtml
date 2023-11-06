@@ -1,0 +1,211 @@
+﻿@model SIAAPI.Models.Comercial.Proveedor
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Proveedor @Html.DisplayFor(model => model.Empresa)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefonouno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefonouno)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefonodos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefonodos)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Producto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Producto)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RFC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFC)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IDRegimenFiscal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RegimenFiscal.ClaveRegimenFiscal)|@Html.DisplayFor(model => model.RegimenFiscal.Descripcion)
+        </dd>
+        <dt>
+
+            IVA
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_TiposIVA.Tasa)|@Html.DisplayFor(model => model.c_TiposIVA.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IDFormaPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FormaPago.ClaveFormaPago)|@Html.DisplayFor(model => model.FormaPago.Descripcion)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDMetodoPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MetodoPago.ClaveMetodoPago)|@Html.DisplayFor(model => model.MetodoPago.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.IDCondicionesPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CondicionesPago.ClaveCondicionesPago)|@Html.DisplayFor(model => model.CondicionesPago.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDMoneda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Moneda.ClaveMoneda)|@Html.DisplayFor(model => model.Moneda.Descripcion)
+        </dd>
+
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Empresa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Empresa)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoExt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoExt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoInt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoInt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Colonia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Colonia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Municipio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Municipio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CP)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estados.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estados.Estado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.paises.Pais)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.paises.Pais)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Confianza)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Confianza)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Servicio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Servicio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tentrego)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tentrego)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calidad)
+        </dd>
+
+
+    </dl>
+    <div><h3 class="text-danger">@ViewBag.Mensaje</h3></div>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString }, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

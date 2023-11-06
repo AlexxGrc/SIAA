@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SIAAPI.Models.CartaPorte.c_ClaveProdServCP>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PalabrasS)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaterialP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FIVigencia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FFVigencia)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PalabrasS)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaterialP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FIVigencia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FFVigencia)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ClaveP }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ClaveP }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ClaveP })
+        </td>
+    </tr>
+}
+
+</table>

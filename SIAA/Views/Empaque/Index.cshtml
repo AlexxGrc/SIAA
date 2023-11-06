@@ -1,0 +1,132 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.EncPack>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Solicitudes de envío</h2>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+
+                    <table>
+                        <tr>
+                            <td class="col-lg-3">
+                                Elementos por página: @Html.DropDownList("pageSize")
+
+                            </td>
+
+
+                            <td class="col-lg-3">
+                                Estado: @Html.DropDownList("Estado")
+                            </td>
+                            <td class="col-lg-3">Pedido: @Html.TextBox("Numero")</td>
+                        </tr>
+
+                    </table>
+                    <table>
+                        <tr>
+                            <td class="col-lg-3">
+                                Fecha inicio: @Html.TextBox("Fechainicio", ViewBag.Fechainicio as string, new { type = "date" })
+
+                            </td>
+                            <td class="col-lg-3">
+                                Fecha final:  @Html.TextBox("Fechafinal", ViewBag.Fechafinal as string, new { type = "date" })
+                            </td>
+
+                            <td class="col-lg-3">Cliente: @Html.DropDownList("ClieFac", "Todos") </td>
+                        </tr>
+
+                        <tr></tr>
+                    </table>
+                    <div class="col-xs-3">
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+                        <span class="sr-only">(current)</span>
+
+
+                    </div>
+                    @*<div class="col-xs-3">
+                        <a class="btn btn-info btn-xs" href="@Url.Action("EntreFechasEmpaque")">Exportar a Excel</a>
+                    </div>*@
+
+                }
+
+            </div>
+
+        </form>
+    </div>
+</nav>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("Pedido")
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Version)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cliente)
+        </th>
+        <th>
+            @Html.Label("Status")
+        </th>
+        <th>
+            @Html.Label("Fecha Empacado")
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.idPedido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Version)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaEmpacada)
+            </td>
+            <td>
+
+
+                @Html.ActionLink("Detalles", "Details", new { id = item.idencpack }, new { @class = "btn btn-default btn-xs" })
+                @{
+                    if (item.status == "SOLICITADO" || item.status == "Solicitado")
+                    {
+                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Compras"))
+
+                        {
+                            @Html.ActionLink("Empacar", "Empacar", new { id = item.idencpack }, new { @class = "btn btn-success btn-xs" })
+                        }
+                        @Html.ActionLink("Cancelar", "Cancelar", new { id = item.idencpack }, new { @class = "btn btn-danger btn-xs" })
+                    }
+                }
+                @Html.ActionLink("PDF", "PdfEmpaque", new { id = item.idencpack }, new { @class = "btn btn-info btn-xs" })
+
+            </td>
+        </tr>
+    }
+
+</table>

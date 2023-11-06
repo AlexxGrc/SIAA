@@ -1,0 +1,947 @@
+﻿@model SIAAPI.Models.Comercial.Articulo
+
+@{
+    ViewBag.Title = "Detalles de Artículo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="row">
+        <a href="~/Views/Articulos/Details.cshtml"></a>
+        <div class="columna col-md-6 col-sm-2">
+            <dl>
+                <dt class="justify-content-md-center">
+                    <h4> Referencia: @ViewBag.cref</h4>
+                </dt>
+
+                <dt>
+                    <h4> Artículo: @ViewBag.articulo</h4>
+
+                </dt>
+            </dl>
+        </div>
+        <div class="columna col-md-2 col-sm-1">
+            <dl>
+                <dt class="justify-content-md-center">
+                    @if (Model.obsoleto == true)
+                    {
+                        <h4 class="alert-danger">Artículo obsoleto</h4>
+                    }
+                    else
+                    {
+                        <h4 class="alert-success">Artículo activo</h4>
+                    }
+                </dt>
+
+                <dt>
+                    @if (Model.esKit == true)
+                    {
+                        <i class="fa fa-cubes fa-3x" aria-hidden="true"> es kit</i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-cube fa-3x" aria-hidden="true"></i>
+                    }
+
+                </dt>
+
+            </dl>
+        </div>
+
+
+
+        <div class="columna col-md-2 col-sm-1">
+            <dl>
+                <dt class="justify-content-md-center">
+                    <div>
+                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SiaapiArticulos.pdf" })' target="_blank">
+                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                        </form>
+                    </div>
+                </dt>
+            </dl>
+        </div>
+
+    </div>
+
+
+    <br />
+@*menu Tab Content*@
+<div class="tabs-container">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <!--Tabulador detalles-->
+        <li role="tab">
+            <a class="nav-linkactive" id="Detalle-tab"  href="#Detalle" data-toggle="tab" role="tab" aria-controls="Detalle" aria-selected="true" aria-expanded="true">Detalles</a>
+        </li>
+       
+        <li class="nav-item">
+            <a class="nav-link" id="Presenta-tab" data-toggle="tab" href="#Presenta" role="tab" aria-controls="Presenta" aria-selected="false">Presentación</a>
+        </li>
+        
+        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial")  || @Roles.IsUserInRole("GerenteVentas"))
+        {
+        <li class="nav-item">
+            <a class="nav-link" id="MatrizP-tab" data-toggle="tab" href="#MatrizP" role="tab" aria-controls="MatrizP" aria-selected="false">Matriz Precio</a>
+        </li>
+        }
+        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Facturacion")  || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("GestionCalidad"))
+        {
+        <li class="nav-item">
+            <a class="nav-link" id="MatrizC-tab" data-toggle="tab" href="#MatrizC" role="tab" aria-controls="MatrizC" aria-selected="false">Matriz Costo</a>
+        </li>
+        }
+        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras"))
+        {
+        <li class="nav-item">
+            <a class="nav-link" id="PrecioP-tab" data-toggle="tab" href="#PrecioP" role="tab" aria-controls="PrecioP" aria-selected="false">Precio Proveedor</a>
+        </li>
+        }
+
+        @if (Model.esKit == true)
+        {
+            if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="kit-tab" data-toggle="tab" href="#kit" role="tab" aria-controls="kit" aria-selected="false">Kit</a>
+                </li>
+            }
+        }
+
+        
+    </ul>
+</div>
+    <div class="tab-content" id="tabs">
+        <div class="tab-pane active" id="Detalle" role="tabpanel" aria-labelledby="Detalle1-tab" aria-expanded="true">
+
+            <div><br></div>
+
+            <table class="table table-striped">
+                <row>
+                    <td>
+                        Familia
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Familia.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayNameFor(model => model.IDTipoArticulo)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(model => model.TipoArticulo.Descripcion)
+                    </td>
+                </row>
+            </table>
+            <div class="row">
+                <div class="columna col-md-3 col-sm-2">
+                    <dl>
+                        <dt>
+                            Unidad de Medida
+                        </dt>
+
+                        <dt>
+                            Moneda
+                        </dt>
+                        <dt>
+                            Precio Unico
+                        </dt>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.CtrlStock)
+                        </dt>
+                        <dt>
+                            Maneja más de una Presentación
+                        </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.bCodigodebarra)
+                        </dt>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Codigodebarras)
+                        </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Obscalidad)
+                        </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.ExistenDev)
+                        </dt>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.MinimoVenta)
+                        </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.MinimoCompra)
+                        </dt>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.StockMin)
+                        </dt>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.StockMax)
+                        </dt>
+                    </dl>
+                </div>
+                <div class="columna col-md-3 col-sm-1">
+                    <dl>
+                        <dd>
+                            @Html.DisplayFor(model => model.c_ClaveUnidad.Nombre)
+                            <br />
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.c_Moneda.ClaveMoneda) @Html.DisplayFor(model => model.c_Moneda.Descripcion)
+                            <br />
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.Preciounico)
+                            <br />
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.CtrlStock)
+                            <br />
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.ManejoCar)
+                            <br />
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.bCodigodebarra)
+                            <br />
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.Codigodebarras)
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.Obscalidad)
+                            <br />
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.ExistenDev)
+                            <br />
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.MinimoVenta)
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.MinimoCompra)
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.StockMin)
+                        </dd>
+                        <dd>
+                            @Html.DisplayFor(model => model.StockMax)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="columna col-md-4 col-sm-1">
+                    <dl>
+                        <dt class="justify-content-md-center">
+                            Imagen
+                        </dt>
+
+                        <dd>
+                            <a href="~/imagenes/Upload/@Model.nameFoto" class="w3-hover-opacity"><img src="~/imagenes/Upload/@Model.nameFoto" width="300" height="240"></a>
+                            <br />
+                            <a href="~/imagenes/Upload/@Model.nameFoto"  download="~/imagenes/Upload/@Model.nameFoto"  class="w3-hover-opacity">Descargar</a>
+
+                            @*<img src="~/imagenes/Upload/@Model.nameFoto" alt="" width="300" height="240">*@
+                        </dd>
+                    </dl>
+                </div>
+
+            </div>
+
+
+            <table class="table table-striped">
+                <row>
+                    <div><h3>Producción</h3></div>
+                </row>
+                <row>
+                    <td>
+                        @Html.DisplayNameFor(model => model.GeneraOrden)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.GeneraOrden)
+                    </td>
+                </row>
+            </table>
+            <h5> Calidad </h5>
+            <table class="table table-striped">
+
+                <row>
+                    <td> Inspeccion</td>
+                    <td class="text">@Html.DisplayFor(model => model.Inspeccion.Descripcion)</td>
+                    <td> Muestreo</td>
+                    <td>@Html.DisplayFor(model => model.Muestreo.Descripcion)</td>
+                    <td> AQL Calidad</td>
+                    <td>@Html.DisplayFor(model => model.AQLCalidad.Descripcion)</td>
+                </row>
+            </table>
+
+
+
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Compras")  || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("AdminArticulos"))
+            {
+                <p>
+                    <button type="button" name="button" class="btn btn-success btn-xs " onclick=Vermodaleditar(@Model.IDArticulo)>Editar</button>
+                    @*@Html.ActionLink("Editar", "Vermodaleditar", new { id = @Model.IDArticulo }, new { @class = "btn btn-default btn-xs" })*@
+                </p>
+             }
+                @*Inicia Modal Editar*@
+                <div class="modal fade" id="ProcesoArticulo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div id="testeProcesoArticulo"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="ModalAA" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div id="teste"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="ModalEA" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div id="testee"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*Finaliza Modal Editar*@
+            </div> @*Fin de Tab Detalles*@
+    <br />
+
+
+
+
+    @*Tab Presenta*@
+    <div class="tab-pane fade" id="Presenta" role="tabpanel" aria-labelledby="Presenta-tab">
+
+
+        @{
+            SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(Model.IDArticulo);
+            SIAAPI.ViewModels.Articulo.LPresentacionSchema dat = new SIAAPI.ViewModels.Articulo.LPresentacionSchema();
+            List<SIAAPI.ViewModels.Articulo.LPresentacion> listado = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.ViewModels.Articulo.LPresentacion>("Select [ID] ,[IDPresentacion],[Cotizacion] ,[version] ,[Presentacion] ,[jsonPresentacion] ,[Articulo_IDArticulo] ,[obsoleto],IDCotizacion, StockMin, StockMax from Caracteristica where Articulo_IDArticulo = " + Model.IDArticulo + " order by IDPresentacion").ToList();
+            ViewBag.IDFamilia = articulo.IDFamilia;
+            ViewBag.nombrearticulo = articulo.Descripcion;
+            ViewBag.idarticulo = articulo.IDArticulo;
+            Html.RenderPartial("ListadoPresentaciones", listado);
+        }<SIAAPI.ViewModels.Articulo.LPresentacion>
+            <SIAAPI.ViewModels.Articulo.LPresentacion>
+                @*@Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" })*@
+
+
+                @*Modal edita Presentación*@
+                @*<div class="modal-footer">
+                        <div class="row center-block">
+
+                            <button type="button" name="button" class="btn btn-success btn-xs" onclick=ModalAP(@ViewBag.idfamilia)>Agregar Presentación</button>
+                        </div>
+                    </div>*@
+                <div class="modal-footer">
+                    <div class="row center-block">
+
+                        <button type="button" name="button" class="btn btn-success btn-xs" onclick=ModalAP(@ViewBag.idfamilia)></button>
+                    </div>
+                </div>
+
+
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="ModalAP" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div id="testeAP"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="EditaP" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div id="testeEditaP"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+    </div> @*Fin Tab Presenta*@
+
+
+
+    @*Tab MatrizP*@
+    <div class="tab-pane fade" id="MatrizP" role="tabpanel" aria-labelledby="MatrizP-tab">
+
+        @{
+            SIAAPI.Models.Comercial.MatrizPrecioProvContext matpre = new SIAAPI.Models.Comercial.MatrizPrecioProvContext();
+            IEnumerable<SIAAPI.Models.Comercial.MatrizPrecio> elementos = matpre.Database.SqlQuery<SIAAPI.Models.Comercial.MatrizPrecio>("select * from [dbo].[MatrizPrecio] where IDArticulo =" + Model.IDArticulo + "").ToList();
+
+            SIAAPI.Models.Comercial.Articulo articulos = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(Model.IDArticulo);
+            ViewBag.id = articulos.IDArticulo;
+            ViewBag.nombrearticulo = articulos.Descripcion;
+
+            ViewBag.rangoinferiormp = .01;
+            ViewBag.rangosuperiormp = 999.99;
+
+            SIAAPI.Models.Comercial.ClsDatoEntero countRangoP = matpre.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(idMatrizPrecio) as Dato from MatrizPrecio where IDArticulo =" + Model.IDArticulo + "").ToList()[0];
+            if (countRangoP.Dato != 0)
+            {
+                List<SIAAPI.Models.Comercial.MatrizPrecio> rangoP = matpre.Database.SqlQuery<SIAAPI.Models.Comercial.MatrizPrecio>("select * from [dbo].[MatrizPrecio] where idMatrizPrecio=(SELECT MAX(idMatrizPrecio) from MatrizPrecio where IDArticulo=" + Model.IDArticulo + ") and IDArticulo =" + Model.IDArticulo + "").ToList();
+                decimal num = rangoP.Select(s => s.RangSup).FirstOrDefault();
+                decimal rangocorrecto = num + .01M;
+                ViewBag.rangoinferiormp = rangocorrecto;
+                ViewBag.rangosuperiormp = rangocorrecto + .01M;
+            }
+            ViewBag.countRangoP = countRangoP.Dato;
+
+            Html.RenderPartial("MatrizPrecio", elementos);
+        }<SIAAPI.Models.Comercial.MatrizPrecio>
+            <SIAAPI.Models.Comercial.MatrizPrecio>
+                <SIAAPI.Models.Comercial.ClsDatoEntero>
+                    <SIAAPI.Models.Comercial.MatrizPrecio>
+                        <SIAAPI.Models.Comercial.MatrizPrecio>
+
+
+    </div> @*Fin Tab MatrizP*@
+
+    @*Tab MatrizCosto*@
+    <div class="tab-pane fade" id="MatrizC" role="tabpanel" aria-labelledby="MatrizC-tab">
+
+        @{
+            SIAAPI.Models.Comercial.ArticuloContext matcos = new SIAAPI.Models.Comercial.ArticuloContext();
+
+            List<SIAAPI.Models.Comercial.MatrizCosto> elementoc = matcos.Database.SqlQuery<SIAAPI.Models.Comercial.MatrizCosto>("select * from [dbo].[MatrizCosto] where IDArticulo =" + Model.IDArticulo + "").ToList();
+
+            ViewBag.id = articulos.IDArticulo;
+            ViewBag.nombrearticulo = articulos.Descripcion;
+
+            ViewBag.rangoinferior = .01;
+            ViewBag.rangosuperior = 999.99;
+            SIAAPI.Models.Comercial.ClsDatoEntero countRangoc = matcos.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(idMatrizCosto) as Dato from MatrizCosto where IDArticulo =" + Model.IDArticulo + "").ToList()[0];
+
+            if (countRangoc.Dato != 0)
+            {
+                List<SIAAPI.Models.Comercial.MatrizCosto> rango = matcos.Database.SqlQuery<SIAAPI.Models.Comercial.MatrizCosto>("select * from [dbo].[MatrizCosto] where idMatrizCosto=(SELECT MAX(idMatrizCosto) from MatrizCosto where IDArticulo=" + Model.IDArticulo + ") and IDArticulo =" + Model.IDArticulo + "").ToList();
+                decimal num = rango.Select(s => s.RangSup).FirstOrDefault();
+                decimal rangocorrecto = num + .01M;
+                ViewBag.rangoinferior = rangocorrecto;
+                ViewBag.rangosuperior = rangocorrecto + .01M;
+            }
+
+            Html.RenderPartial("MatrizCosto", elementoc);
+        }
+
+    </div> @*Fin Tab MatrizC*@
+
+
+    @*Tab PrecioProveedor*@
+    <div class="tab-pane fade" id="PrecioP" role="tabpanel" aria-labelledby="PrecioP-tab">
+
+
+        @{
+            SIAAPI.Models.Comercial.VMatrizPrecioProvContext matprep = new SIAAPI.Models.Comercial.VMatrizPrecioProvContext();
+            SIAAPI.Models.Administracion.c_MonedaContext moneda = new SIAAPI.Models.Administracion.c_MonedaContext();
+            SIAAPI.Models.Comercial.ProveedorContext prov = new SIAAPI.Models.Comercial.ProveedorContext();
+            
+            List<SIAAPI.Models.Comercial.VMatrizPrecioProv> elementosp = matprep.Database.SqlQuery<SIAAPI.Models.Comercial.VMatrizPrecioProv>("select IDMatrizPrecio, IDProveedor, Empresa, IDArticulo, Descripcion, RangInf, RangSup, Precio, IDMoneda, Moneda, cref, observacion from [dbo].[VMatrizPrecioProv] where IDArticulo = " + Model.IDArticulo + "").ToList();
+            ViewBag.id = articulos.IDArticulo;
+            ViewBag.nombrearticulo = articulos.Descripcion;
+            ViewBag.rangoinferior = .01;
+            ViewBag.rangosuperior = 999.99;
+
+            ViewBag.IDMoneda = new SIAAPI.Models.Administracion.MonedaRepository().GetMoneda();
+            ViewBag.IDProveedor = new SIAAPI.Models.Cfdi.ProveedorAllRepository().GetProveedor();
+            SIAAPI.Models.Comercial.ClsDatoEntero countRangop = matprep.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(idMatrizPrecio) as Dato from VMatrizPrecioProv where IDArticulo =" + Model.IDArticulo + "").ToList()[0];
+
+            if (countRangop.Dato != 0)
+            {
+                List<SIAAPI.Models.Comercial.VMatrizPrecioProv> rango = matprep.Database.SqlQuery<SIAAPI.Models.Comercial.VMatrizPrecioProv>("select * from [dbo].[VMatrizPrecioProv] where idMatrizPrecio=(SELECT MAX(idMatrizPrecio) from VMatrizPrecioProv where IDArticulo=" + Model.IDArticulo + ") and IDArticulo =" + Model.IDArticulo + "").ToList();
+                decimal num = rango.Select(s => s.RangSup).FirstOrDefault();
+                decimal rangocorrecto = num + .01M;
+                ViewBag.rangoinferior = rangocorrecto;
+                ViewBag.rangosuperior = rangocorrecto + .01M;
+            }
+
+            Html.RenderPartial("VMatrizPrecioProv", elementosp);
+        }<SIAAPI.Models.Comercial.VMatrizPrecioProv>
+            <SIAAPI.Models.Comercial.VMatrizPrecioProv>
+                <SIAAPI.Models.Comercial.ClsDatoEntero>
+                    <SIAAPI.Models.Comercial.VMatrizPrecioProv>
+                        <SIAAPI.Models.Comercial.VMatrizPrecioProv>
+
+    </div> @* Fin Tab PrecioProveedor *@
+
+    @* Tab kit*@
+    <div class="tab-pane fade" id="kit" role="tabpanel" aria-labelledby="kit-tab">
+
+
+        @{
+            List<SIAAPI.Models.Comercial.Kit> mikit = new SIAAPI.Models.Comercial.KitContext().Database.SqlQuery<SIAAPI.Models.Comercial.Kit>("SELECT * FROM DBO.kIT WHERE IDArticulo = " + Model.IDArticulo + "").ToList();
+        }
+        
+                               <div class="table-responsive">
+                                    <table class="table table-striped" width="50">
+                                        <tr>
+                                            <th>Imagen</th>
+                                            <th>Cref</th>
+                                            <th>Descripción</th>
+                                            <th>Presentación</th>
+
+                                            <th>Cantidad</th>
+
+                                            <th>Compuesto por</th>
+                                            <th>Almacén</th>
+                                            <th>Precio Unitario</th>
+                                            <th></th>
+                                            <th></th>
+
+
+                                        </tr>
+                                        @{ int c = 0;}
+                                        @foreach (SIAAPI.Models.Comercial.Kit elemento in mikit)
+                                        {
+                                            SIAAPI.Models.Comercial.Articulo articulocomp = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(elemento.IDArticuloComp);
+                                            SIAAPI.Models.Comercial.Caracteristica caracteristica = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select*from caracteristica where id="+elemento.IDCaracteristica).FirstOrDefault();
+                                            <tr>
+                                                <td>
+
+                                                    <img src="~/imagenes/Upload/@articulocomp.nameFoto" alt="" width="50" height="50"><img />
+
+                                                </td>
+                                                @*<td>@articulocomp.nameFoto</td>*@
+                                                
+                                                <td>@articulocomp.Cref</td>
+                                                <td>@articulocomp.Descripcion</td>
+                                                 <td>NP: @caracteristica.IDPresentacion @caracteristica.Presentacion</td>
+                                                <td>
+                                                    @{string cadenaC = "Cantidad" + c;
+                                                    }
+                                                    <input type="number" step="0.5" class="form-control" id="@cadenaC" name="Cantidad" value="@elemento.Cantidad">
+
+
+                                                </td>
+                                                <td>
+                                                    @if (elemento.porcantidad == true)
+                                                    {
+                                                        <p>Por cantidad</p>
+                                                    }
+                                                    else if (elemento.porporcentaje == true)
+                                                    {
+                                                        <p>Por porcentaje</p>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    @{
+
+                                                        SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                                                        SIAAPI.Models.Comercial.Articulo articuloA = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(articulocomp.IDArticulo);
+                                                        string cadenaal = "IDAlmacen" + c;
+                                                        //var ALMACENES = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.OrderBy(S => S.CodAlm);
+                                                        var ALMACENES = db.Database.SqlQuery<SIAAPI.Models.Comercial.Almacen>("select distinct(f.idalmacen) , a.*  from Almacen as a inner join FamAlm as f on f.idalmacen=a.idalmacen where f.idfamilia=" + articuloA.IDFamilia).ToList();
+
+                                                        int almacenValor = 0;
+
+
+                                    <select name="@cadenaal" id="@cadenaal">
+                                        @{ foreach (SIAAPI.Models.Comercial.Almacen almacen in ALMACENES)
+                                            {
+                                                if (almacen.IDAlmacen != elemento.IDAlmacen) // SI NO ES EL MODELO SOLO LO AÑADE AL COMBO
+                                                {
+                                                    <option value="@almacen.IDAlmacen">@almacen.CodAlm</option>
+                                                }
+                                                else // SI ES IGUAL AL MODELO LO CREA Y LO SELECCIONA
+                                                {
+                                                    <option value="@almacen.IDAlmacen" selected>@almacen.CodAlm</option>
+                                                }
+                                            }
+                                        }
+                                    </select>
+
+
+                                                      }
+                                                <td>
+                                                    @{string cadena = "Precio" + c;
+                                                    }
+                                                    <input type="number" step="0.5" class="form-control" id="@cadena" name="Precio" value="@elemento.Precio">
+
+                                                </td>
+                                                <td>
+                                                    <a class="edit" onclick="ActualizarK(@elemento.IDKit,@c )">
+                                                        <i class="tbl_del_btn fa fa-save"></i>
+
+                                                    </a>
+                                                    <a class="delete" onclick="EliminarComponenteKit(@elemento.IDKit,@c )">
+                                                        <i class="tbl_del_btn fa fa-trash"></i>
+
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                                            c++;
+                                                        }
+
+                                    </table>
+
+                                         
+                                    @Html.ActionLink("Agregar Componente", "InsertarComponenteKit", new { idarticulo = Model.IDArticulo }, new { @class = "btn btn-success btn-xs" })
+                                
+                                
+                                
+                                 </div>
+                                @*fin tab kit*@
+
+    </div>@*Fin Div Tab Content*@
+
+
+
+@*Modal agregar kit*@
+       <div class="modal" id="btn_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title"><strong>Agregar componente: @Model.Cref </strong></h4>
+
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        @{ 
+                            //string cadena1 = "select * from dbo.Articulo where Cref <> '" + Model.Cref+"' order by cref";
+                            //SIAAPI.Models.Comercial.ArticuloContext dbart = new SIAAPI.Models.Comercial.ArticuloContext();
+                            //List<SIAAPI.Models.Comercial.Articulo> articuloc = dbart.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo> (cadena1).ToList();
+                            //List<SelectListItem> listaarticulo = new List<SelectListItem>();
+                            //listaarticulo.Add(new SelectListItem { Text = "--Selecciona componente--", Value = "0" });
+
+                            //foreach (var m in articuloc)
+                            //{
+                            //    listaarticulo.Add(new SelectListItem { Text = m.Cref + " | " + m.Descripcion, Value = m.IDArticulo.ToString() });
+                            //}
+
+                            //ViewBag.articuloc = listaarticulo;
+                            SIAAPI.Models.Comercial.ArticuloContext dbart = new SIAAPI.Models.Comercial.ArticuloContext();
+                            var datosArticulo = dbart.Articulo.OrderBy(i => i.Cref).ToList();
+                            List<SelectListItem> liAC = new List<SelectListItem>();
+                            liAC.Add(new SelectListItem { Text = "--Selecciona un Articulo--", Value = "0" });
+                            foreach (var a in datosArticulo)
+                            {
+                                liAC.Add(new SelectListItem { Text = a.Cref + " | " + a.Descripcion, Value = a.IDArticulo.ToString() });
+
+                            }
+                            ViewBag.IDArticulo = liAC;
+                            
+
+                        }
+
+                         @using (Html.BeginForm("InsertarComponente", "Articulos", FormMethod.Post))
+                        {
+                            <div class="form-horizontal" name="formulario" id="formulario">
+                                <input type="hidden" name="id" class="form-control" value="@ViewBag.id" />
+   
+                                <div class="form-group">
+                                    @Html.Label("Artículo Complemento", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-8">
+                                        @Html.DropDownList("IDArticuloComp", ViewBag.IDArticulo as List<SelectListItem>, new { @class = "form-control" })<SelectListItem>
+                                            @Html.ValidationMessageFor(model => model.IDArticulo, "", new { @class = "text-danger" })
+                            </div>
+                                </div>
+
+                                
+
+                               
+
+
+                                <div class="form-group">
+                                    @Html.Label("Cantidad", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-8">
+                                        <input type="text" name="cantidad" id="cantidad" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Tipo", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-8">
+                                        <select name="tipo" id="tipo" class="form-control">
+                                            <option value="C">Por Cantidad</option>
+                                            <option value="P">Por Porcentaje</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+
+                                     <input type="submit" value="Agregar" class="btn btn-success" />
+
+                                    <button type="button" class="btn btn-danger" onclick=Eliminar() data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                            
+                         }
+
+                        </div>
+
+                   
+
+                </div>
+            </div>
+        </div>
+
+        @*fin modal kit*@
+
+
+
+
+
+    <p>
+        @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDArticulo }) |*@
+
+        @Html.ActionLink("Regresar a la lista", "Index", new { page = @ViewBag.pagina, searchString = @ViewBag.searchString, Familia = @ViewBag.Familia }, new { @class = "btn btn-default btn-xs" })
+
+    </p>
+
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+
+    <script>
+        function activaTab(tab){
+            $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+        };
+    </script>
+
+
+    <script>
+        function Vermodal() {
+
+            $("#teste").load("/Articulos/AgregaArticulo/", function () {
+                $('#ModalAA').modal("show");
+            });
+
+        }
+    </script>
+
+
+    <script>
+        function Vermodaleditar(valor) {
+
+            $("#testee").load("/Articulos/EditaArticulo/" + valor, function () {
+                $('#ModalEA').modal("show");
+            });
+
+        }
+    </script>
+
+    <script>
+        function ADDProceso(id) {
+            $("#testeProcesoArticulo").load("/Articulos/AgregarProceso/" + id, function () {
+                $('#ProcesoArticulo').modal("show");
+            });
+        }
+    </script>
+
+
+    <script>
+        $('#Familia').on('change', function () {
+
+            @ViewBag.Familia= $(this).text;
+        });
+
+    </script>
+
+    <script>
+
+    </script>
+
+    @* ListadoPresentacionesModal*@
+    <script>
+
+
+
+        function Eliminar(id) {
+            var url = '@Url.Action("Deleteitempres", "Articulos")';
+            async: true;
+            var row = $(this).closest('tr');
+            $.post(url, { id: id}, function (response) {
+                if (response) {
+
+                    location.reload();
+                    row.remove();
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+    </script>
+    <script>
+
+        function myFunction(id,numero) {
+            var url = '@Url.Action("Obsoleto", "Articulos")';
+            var checkBox = document.getElementById("obsoleto"+numero);
+            var obsoleto=0;
+            if(checkBox.checked == true){
+                obsoleto=1;
+            }
+            $.post(url, { id: id,obsoleto:obsoleto}, function (response) {
+                if (response) {
+
+                    location.reload();
+                }
+            }).fail(function (response) {
+            });
+
+
+
+        }
+    </script>
+    <script>
+        function Actualizar(id) {
+            async: true;
+            $("#testeEditaP").load("/Articulos/EditaPresentacion/" + id, function () {
+                $('#EditaP').modal("show");
+            });
+
+        }
+    </script>
+    <script>
+        function ModalAP(id) {
+            async: true;
+            var url = '@Url.Action("Presentacion", "Articulos")';
+            $("#testeAP").load("/Articulos/Presentacion/"+id, function () {
+                $('#ModalAP').modal("show");
+            });
+
+        }
+    </script>
+    @* Fin ListadoPresentacionesModal*@
+
+
+
+
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script>
+        $('.delete').click(function () {
+            var url = '@Url.Action("DeleteitemMatrizPrecio", "Articulos")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+    </script>
+
+    <script>
+
+        function ActualizarP(id, numero) {
+            var urledit = '@Url.Action("EdititemMatrizPrecio", "Articulos")';
+            var rangi = document.getElementById("RangoI" + numero).value
+            var rangs = document.getElementById("RangoS" + numero).value
+            var precio = document.getElementById("Precio" + numero).value
+         
+            $.post(urledit, { id: id, rangi: rangi, rangs: rangs, precio: precio }, function (response) {
+                if (response) {
+                    location.reload();
+                    //  row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+    </script>
+
+    <script>
+        function ModalAP(id) {
+            async: true;
+            var url = '@Url.Action("Presentacion", "Articulos")';
+            $("#testeAP").load("/Articulos/Presentacion/"+id, function () {
+                $('#ModalAP').modal("show");
+            });
+
+        }
+    </script>
+<script>
+
+                var url = '@Url.Action("Deleteitem", "Kit")';
+                $('.delete').click(function () {
+                    var row = $(this).closest('tr');
+                    $.post(url, { id: $(this).data('id')}, function (response) {
+                        if (response) {
+                            location.reload();
+                            row.remove();
+
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                });
+</script>
+
+
+        <script>
+        (function Eliminar(){
+
+            $('#btn_modal').on('hidden.bs.modal', function () {
+                $(this).find('form').trigger('reset');
+
+        });
+        });</script>
+
+        <script>
+
+                function EliminarComponenteKit(id) {
+                    var urledit = '@Url.Action("Deleteitem", "Kit")';
+                   
+                        $.post(urledit, { id: id}, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+        </script>
+
+    <script>
+
+
+
+                    function ActualizarK(id, numero) {
+                        var urledit = '@Url.Action("EdititemKit", "Articulos")';
+                        var precio = document.getElementById("Precio" + numero).value
+                        var cantidad = document.getElementById("Cantidad" + numero).value
+                        var idalmacen = document.getElementById("IDAlmacen" + numero).value
+                        $.post(urledit, { id: id, cantidad: cantidad, precio: precio, idalmacen:idalmacen }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+    </script>
+

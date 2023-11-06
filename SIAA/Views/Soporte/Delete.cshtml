@@ -1,0 +1,61 @@
+﻿@model SIAAPI.Models.Soporte.MensajesSoporte
+
+<h3>¿Está seguro de borrar este mensaje?</h3>
+<div>
+    <h4>Eliminar Ticket</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.Label("Ticket");
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id_Ticket)
+        </dd>
+
+        <dt>
+            @Html.Label("Fecha");
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Hora)
+        </dd>
+
+        <dt>
+            @Html.Label("Mensaje");
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mensaje)
+        </dd>
+
+        <dt>
+            @Html.Label("Área");
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Rol)
+        </dd>
+
+
+        <dd>
+            @Html.Label("Usuario");
+        </dd>
+
+        <dd>
+            @Html.DisplayFor(model => model.Users.Username)
+        </dd>
+
+
+
+    </dl>
+    @using (Html.BeginForm())
+    {
+
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

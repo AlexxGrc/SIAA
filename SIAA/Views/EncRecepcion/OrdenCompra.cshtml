@@ -1,0 +1,464 @@
+﻿@model List<SIAAPI.ViewModels.Comercial.VCarritoRecepcion>
+@*@model List<SIAAPI.Models.Comercial.CarRec>*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDCliente").change(function () {
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ActualizarMoneda")',
+                dataType: 'json',
+                data: { id: $("#id").val() },
+                success: function () {
+                    alert("Entro");
+                },
+                error: function (ex) {
+                alert('Failed to retrieve.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+<script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            $("#IDMoneda").change(function () {
+                var idorden = document.getElementById("idorden").value
+                var id = document.getElementById("id").value
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("MonedaC")',
+                    dataType: 'json',
+                    data: {id:id,idmoneda:$("#IDMoneda").val(), idorden:idorden},
+                    success: function (metodos) {
+                        location.reload();
+                    },
+                    error: function (ex) {
+                    alert('Failed to retrieve.' + ex);
+                    }
+                });
+                return false;
+            })
+        });
+
+</script>
+
+@*@{ int cont = 0;
+          if (cont == 0) {
+            foreach (var item in ViewBag.datos)
+            {
+    <input type="text" class="form-control" name="id" id="id" value="@item.IDCarritoRecepcion">
+                cont = 1;
+            }
+              }
+          }*@
+@if (ViewBag.otro != 0)
+{
+    <h2>Detalles</h2>
+
+    foreach (var item in ViewBag.data)
+    {
+        <table>
+            <tr>
+                <B>Proveedor: </B>
+                @item.Proveedor
+                <br />
+                <B>Fecha: </B>
+                @item.Fecha
+                <B><br />Fecha Requerida: </B>
+                @item.FechaRequiere
+            </tr>
+        </table>
+    }
+
+
+
+
+
+}
+
+<h2>Recepción de la orden de compra @ViewBag.orden</h2>
+
+
+@using (Html.BeginForm("update", "EncRecepcion", FormMethod.Post))
+{
+    <input type="hidden" class="form-control" name="idorden" id="idorden" value="@ViewBag.id">
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col col-md-4 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Fecha", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @{
+                            string fecha = DateTime.Now.Year + "/" + DateTime.Now.Month + "/" + DateTime.Now.Day;
+                        }
+                        <input type="text" name="Fecha" class="form-control" value="@fecha" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+            <div class="col col-md-4 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Ticket #", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <input type="text" name="Ticket" class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="col col-md-4 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Factura #", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <input type="text" name="DocumentoFactura" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+
+            @if (ViewBag.proveedor != null)
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Proveedor", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDProveedor", ViewBag.proveedor as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Proveedor", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDProveedor", new SelectList(string.Empty, "Value", "Text"), "--Selecciona Proveedor--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (ViewBag.metodo != null)
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Método de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDMetodoPago", ViewBag.metodo as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Método de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDMetodoPago", new SelectList(string.Empty, "Value", "Text"), "--Selecciona Método Pago--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row">
+            @if (ViewBag.forma != null)
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Forma de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDFormapago", ViewBag.forma as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Forma de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDFormapago", new SelectList(string.Empty, "Value", "Text"), "--Selecciona Forma Pago--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (ViewBag.moneda != null)
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Divisa", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDMoneda", ViewBag.moneda as List<SelectListItem>, new { @class = "form-control", @onchange = "Fill()" })
+                        </div>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Divisa", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDMoneda", new SelectList(string.Empty, "Value", "Text"), "--Selecciona Divisa--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <div class="row">
+            @if (ViewBag.condiciones != null)
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Condiciones de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDCondicionesPago", ViewBag.condiciones as List<SelectListItem>, new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.Label("Condiciones de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.DropDownList("IDCondicionesPago", new SelectList(string.Empty, "Value", "Text"), "--Selecciona Condición Pago--", new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Uso CFDI", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("IDUsoCFDI", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Almacén", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("IDAlmacen", null, htmlAttributes: new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Observación", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <input type="text" name="Observacion" class="form-control" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                @*<th> </th>*@
+                <th>No. Orden Compra </th>
+                <th>Artículo</th>
+                <th>Presentacion</th>
+                <th>Almacen</th>
+                <th>Lote</th>
+                <th>Cantidad</th>
+                <th>Suministro</th>
+                <th>Costo</th>
+                <th>Importe</th>
+                <th>IVA</th>
+                <th>Total</th>
+                <th>Nota</th>
+                <th></th>
+            </tr>
+            @if (Model != null && Model.Count > 0)
+            {
+                int j = 0;
+                foreach (var i in Model)
+                {
+                    <tr>
+                        @Html.TextBoxFor(a => a[j].IDDetExterna, new { @class = "form-control", @Value = i.IDDetExterna, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].IDOrdenCompra, new { @class = "form-control", @Value = i.IDOrdenCompra, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].IDCarritoRecepcion, new { @class = "form-control", @Value = i.IDCarritoRecepcion, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].Cantidad, new { @class = "form-control", @Value = i.CantidadPedida, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].IDCaracteristica, new { @class = "form-control", @Value = i.IDCaracteristica, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].Nota, new { @class = "form-control", @Value = i.Nota, @type = "hidden" })
+
+
+                        @*<td>@Html.ActionLink("Cargar lotes","Cargarcintas", new { id = i.IDCarritoRecepcion, IDOrdenCompra = i.IDOrdenCompra }, new { @class = "classname" }) </td>*@
+
+
+                        <td>@Html.DisplayFor(modelItem => i.IDOrdenCompra)</td>
+                        <td>@i.Cref</td>
+                        <td>
+                            <div>@Html.DisplayFor(modelItem => i.Articulo)</div>
+                            <div>@Html.DisplayFor(modelItem => i.Presentacion) </div>
+                        </td>
+
+                        @{ string valor = i.IDAlmacen.ToString();
+                        }
+                        @try
+                        {
+                            <td>@Html.DropDownListFor(a => a[j].IDAlmacen, new SelectList(ViewBag.IDAlmacenP, "IDAlmacen", "CodAlm", valor), new { @class = "form-control" })</td>
+                        }
+                        catch (Exception err)
+                        {
+                            <td>@Html.DropDownListFor(a => a[j].IDAlmacen, new SelectList(ViewBag.IDAlmacenP, "IDAlmacen", "CodAlm"), new { @class = "form-control" })</td>
+                        }
+
+
+                        <td>@Html.TextBoxFor(a => a[j].Lote, new { @class = "form-control", style = "width:80px;" })</td>
+                        <td>@Html.DisplayFor(modelItem => i.CantidadPedida)</td>
+                        <td>@Html.TextBoxFor(a => a[j].Suministro, new { @class = "form-control", style = "width:80px;", @Value = i.CantidadPedida })</td>
+                        <td>@Html.TextBoxFor(a => a[j].Costo, new { @class = "form-control", style = "width:80px;", @Value = i.Costo })</td>
+                        <td>@Html.DisplayFor(modelItem => i.Importe)</td>
+                        <td>@Html.DisplayFor(modelItem => i.ImporteIva)</td>
+                        <td>@Html.DisplayFor(modelItem => i.ImporteTotal)</td>
+                        <td>@Html.DisplayFor(modelItem => i.Nota) </td>
+                        <td>
+                            @*<a class="delete" data-id="@i.IDCarritoRecepcion">
+                                    <i class="tbl_del_btn fa fa-trash"></i>
+
+                                </a>*@
+                            @Html.ActionLink(" ", "delete", new { id = i.IDCarritoRecepcion }, new { @class = "tbl_del_btn fa fa-trash" })
+
+                        </td>
+                    </tr>
+                    j++;
+                }
+            }
+        </table>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+                <th class="col-lg-1">
+                    Moneda Origen
+                </th>
+                <th class="col-lg-1">
+                    Subtotal
+                </th>
+                <th class="col-lg-1">
+                    IVA
+                </th>
+                <th class="col-lg-1">
+                    Total
+                </th>
+                <th class="col-lg-1">
+                    Total en Pesos Mexicanos
+                </th>
+            </tr>
+            @foreach (var itemresumen in ViewBag.sumatoria)
+            {
+
+                <tr>
+                    <td class="col-lg-1">
+                        @itemresumen.MonedaOrigen
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.Subtotal)
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.IVA)
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.Total)
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.TotalenPesos)
+                    </td>
+
+                </tr>
+            }
+        </table>
+    </div>
+    <input type="submit" value="Aceptar" class="btn btn-success btn-xs" id="ocultar" onclick="myFunction()" />
+  
+}
+
+
+
+@{
+    SIAAPI.Models.Comercial.AlmacenContext dba = new SIAAPI.Models.Comercial.AlmacenContext();
+    var almacenes = dba.Almacenes.ToList();
+    <div class="text-info"><h3>Almacenes</h3></div>
+    <table class="table-responsive">
+        <thead>Codigo</thead>
+        <thead>Descripcion</thead>
+
+        @foreach (SIAAPI.Models.Comercial.Almacen ALMACEN in almacenes)
+        {
+            <tr>
+                <td class="col-md-2">@ALMACEN.CodAlm</td>
+                <td class="col-md-6">@ALMACEN.Descripcion</td>
+            </tr>
+
+        }
+    </table>
+}
+
+
+
+@*<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script>
+
+            var url = '@Url.Action("Deleteitem", "EncRecepcion")';
+            $('.delete').click(function () {
+                var row = $(this).closest('tr');
+                $.post(url, { id: $(this).data('id') }, function (response) {
+                    if (response) {
+                        location.reload();
+                        row.remove();
+
+                    }
+                }).fail(function (response) {
+                    // display error message?
+                });
+            });
+    </script>*@
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript" language="javascript">
+    function myFunction() {
+        var x = document.getElementById("ocultar");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
+</script>

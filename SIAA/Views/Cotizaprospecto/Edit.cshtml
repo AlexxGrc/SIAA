@@ -1,0 +1,189 @@
+﻿@model SIAAPI.Models.Comercial.Enccotizapros
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar cotización @Model.id</h2>
+@using (Html.BeginForm())
+{
+    <div>
+        @Html.HiddenFor(model => model.id)
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Fecha)
+            </dd>
+            <dt>
+                @Html.Label("Cliente")
+            </dt>
+
+            <dd>
+                @ViewBag.Prospecto.Nombre
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.idcondiciones)
+            </dt>
+
+            <dd>
+                @Html.DropDownList("idcondiciones", ViewBag.condiciones as List<SelectListItem>, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.idcondiciones, "", new { @class = "text-danger" })
+            </dd>
+            @*<dt>
+                @Html.Label("Estado")
+            </dt>*@
+
+            @*<dd>
+                @Html.DropDownList("Estados", null, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Estado, "", new { @class = "text-danger" })
+
+            </dd>*@
+            <dt>
+                @Html.DisplayNameFor(model => model.atencion)
+            </dt>
+
+            <dd>
+                <input class="form-control" name="Atencion" id="Atencion" value="@Model.atencion" type="text" />
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Vigencia)
+            </dt>
+
+            <dd>
+                <input  name="Vigencia" id="Vigencia" value="@Model.Vigencia" type="number" /> Dias
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.idMoneda)
+            </dt>
+
+            <dd>
+                @Html.DropDownList("idMoneda", ViewBag.moneda as List<SelectListItem>, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.idMoneda, "", new { @class = "text-danger" })
+            </dd>
+
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.idvendedor)
+            </dt>
+
+            <dd>
+                @ViewBag.Vendedor.Nombre
+            </dd>
+
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Observacion)
+            </dt>
+
+            <dd>
+                <input class="form-control" name="Observacion" id="Observacion" value="@Model.Observacion" type="text" />
+            </dd>
+
+        </dl>
+    </div>
+    <div>
+        <table class="table"></table>
+    </div>
+    <div id="divConceptos">
+        <table class="table" id="tablaconceptos" name="tablaconceptos" style="width:100">
+            <tr bgcolor="#0080ff">
+                <td>
+                    Cantidad
+                </td>
+                <td>
+                    Unidad
+                </td>
+                <td>
+                    Descripcion
+                </td>
+                <td>
+                    Precio
+                </td>
+
+                <td>
+                    Importe
+                </td>
+            </tr>
+            @{ int contador = 1;}
+
+            @foreach (SIAAPI.Models.Comercial.detcotizapro detalle in ViewBag.cotizacion)
+            {
+                string cantidad = "cantidad" + contador.ToString();
+                string concepto = "concepto" + contador.ToString();
+                string precio = "Precio" + contador.ToString();
+                string id = "id" + contador.ToString();
+
+                <tr>
+
+                    <input type="hidden" name="@id" value="@detalle.id" />
+
+                    <td>
+                        <input type="number" step="any" name="@cantidad" value="@detalle.cantidad" />
+                    </td>
+                    <td>
+                        @detalle.Unidad
+                    </td>
+                    <td>
+                        <input  class="form-control" type="text" name="@concepto" value="@detalle.Concepto" style="width:400px" />
+
+                    </td>
+                    <td align="right">
+                        <input type="number" step="any" name="@precio" value="@detalle.Precio" />
+
+                    </td>
+
+                    <td align="right">
+                        @detalle.Importe.ToString("C")
+                    </td>
+                </tr>
+                contador++;
+            }
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Subtotal</td>
+                <td name="Subtotal" align="right">@Model.Subtotal.ToString("C")</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>IVA</td>
+                <td align="right">@Model.iva.ToString("C")</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>Total</td>
+                <td align="right">@Model.Total.ToString("C")</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Grabar" class="btn btn-success" />
+        </div>
+    </div>
+
+}
+
+
+<dd>
+    Realizó  @Html.DisplayFor(model => model.username)
+</dd>
+</div>
+<p>
+
+    @Html.ActionLink("Volver a la lista", "Index")
+</p>
+

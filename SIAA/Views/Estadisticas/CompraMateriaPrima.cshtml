@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "CompraMateriaPrima";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Compra de Materia Prima</h3>
+
+
+
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    @using (Html.BeginForm())
+                    {
+                        <table>
+                            <tr>
+                                <td class="col-lg-3">
+                                    Fecha inicio: <input type="date" id="fechaInicio" nombre="fechaInicio" />
+
+                                </td>
+                                <td class="col-lg-3">
+                                    Fecha final:  <input type="date" id="fechaFinal" nombre="fechaFinal" />
+                                </td>
+                                <td class="col-lg-3">
+                                    Clave:  <input type="text" id="Clave" nombre="Clave" />
+                                </td>
+
+                            </tr>
+
+                            <tr></tr>
+
+                        </table>
+                        <div class="col-xs-3">
+                            <input type="button" id="enviar" value="Buscar" class="btn btn-primary btn-xs" />
+                        </div>
+
+                    }
+
+                </div>
+            </form>
+        </div>
+    </nav>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script type="text/javascript">
+        $(function () {
+            $("#enviar").click(function () {
+
+                //alert("Entra");
+
+                var fechainicio = $("#fechaInicio").val();
+                var fechafin = $("#fechaFinal").val();
+                var clave = $("#Clave").val();
+
+                $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getCompramateriaPrima")',
+                    dataType: 'json',
+                    data: { buscar: (clave), fechaInicio: (fechainicio), fechaFinal: (fechafin) },
+                success: function (numero) {
+
+                    swal(numero + "", "Metros Cuadrados", "info");
+
+                    },
+                error: function (ex) {
+                    alert('No pudo traer acumulado' + ex.data);
+                }
+
+            });
+
+            });
+        });
+</script>
+

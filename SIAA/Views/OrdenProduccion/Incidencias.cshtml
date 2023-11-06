@@ -1,0 +1,62 @@
+﻿@model IEnumerable<SIAAPI.ViewModels.produccion.V_Incidencias>
+
+@{
+    ViewBag.Title = "Incidencias";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<h2>Incidencias</h2>
+
+@*<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create")
+</p>*@
+<table class="table">
+    <tr>
+               
+        <th>
+            @Html.DisplayNameFor(model => model.Proceso)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaInicioParo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaTerminacionParo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TiempoFalla)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Falla)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td class="hidden " >
+            @Html.DisplayFor(modelItem => item.IDReportes)
+            @Html.DisplayFor(modelItem => item.IDBitacora)
+            @Html.DisplayFor(modelItem => item.IDOrden)
+            @Html.DisplayFor(modelItem => item.IDProceso)
+        </td>  
+        <td>
+            @Html.DisplayFor(modelItem => item.Proceso)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaInicioParo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaTerminacionParo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TiempoFalla)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Falla)
+        </td>
+
+    </tr>
+}
+
+</table>
+@Html.ActionLink("Regresar a la lista", "Prioridad", null, new { @class = "btn btn-default btn-xs" })

@@ -1,0 +1,437 @@
+﻿@*@{
+        Layout = "~/Views/Shared/_LayoutCopy.cshtml";
+    }*@
+@{
+    var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"].ToString();
+    string cLayout = "";
+    System.Diagnostics.Debug.WriteLine("Controlador " + controller);
+    ///////////////Acceso///////////////
+    if (controller == "Home")
+    {
+        cLayout = null;
+    }
+    if (controller == "MyAccount")
+    {
+        cLayout = null;
+    }
+    else if (controller == "Account")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Roles")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "UserRole")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Usuario")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    ///////////////Login///////////////
+    else if (controller == "UserRole")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Roles")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Usuario")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    ///////////////Administración///////////////
+    else if (controller == "Chofer")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Ruta")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_TipoCadenaPago")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_TipoCadenaPago")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "BancoEmpresa")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    else if (controller == "c_Banco")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_ClaveProductoServicio")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_ClaveUnidad")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_FormaPago")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_Grupo")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_Impuesto")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_MetodoPago")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_Moneda")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_RegimenFiscal")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_TipoComprobante")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_TipoContrato")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_TipoJornada")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_tiporelacion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_UsoCFDI")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "CondicionesPago")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "TipoCambio")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "TipoVendedor")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "VObtenerMoneda")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "c_TipoIVA")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    ///////////////Cfdi///////////////
+
+    else if (controller == "Certificados")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "EjemploFactura")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "FacturaAll")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "FacturaComplemento")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "FacturaProv")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Folio")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "FolioVentas")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "PagoFactura")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "PagoFacturaProveedor")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    ///////////////Comercial///////////////
+    else if (controller == "Almacen")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "AQLCalidads")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Articulo")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    else if (controller == "c_PeriocidadPago")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "CarritoC")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Carrito")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Clientes")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "ClientesP")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Empresa")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "EncCotizacion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "EncOrdenCompra")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "EncPedido")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "EncRecepcion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "EncRemision")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "EncRequisiones")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Familia")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Inspeccions")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "InventarioAlmacen")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Inventario")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Kit")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "MatrizPrecioCliente")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Movimientos")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Muestreos")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Oficina")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Prefactura")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Proveedor")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "TiendaC")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Tienda")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "TipoArticulo")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Vendedor")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    ///////////////Cotizador///////////////
+    else if (controller == "PlaneArti")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    ///////////////Inventarios///////////////
+    else if (controller == "MovInterAlmacen")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "VArticuloAlmacen")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "VMovArticulo")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "VMovimientoAlmacen")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    ///////////////Producción///////////////
+    else if (controller == "Bitacora")
+    {
+        cLayout = "~/Views/Shared/_LayoutBitacora.cshtml";
+    }
+    else if (controller == "EjemploPlaneacion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "EstadoOrden")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "ModeloProceso")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "ModelosDeProduccion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "OrdendeProduccion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Planeacion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Proceso")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Produccion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Trabajador")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "TrabajadorProceso")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    ///////////////Planeación///////////////
+    else if (controller == "PlanPlaneacionProduccion")
+    {
+        cLayout = "~/Views/Shared/_LayoutPlaneacion.cshtml";
+    }
+    else if (controller == "PlanPlaneacionProduccionE")
+    {
+        cLayout = "~/Views/Shared/_LayoutPlaneacionE.cshtml";
+    }
+    else if (controller == "HojaEspec")
+    {
+        cLayout = "~/Views/Shared/_LayoutPlaneacionE.cshtml";
+    }
+    else if (controller == "Cotizador")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    // else if (controller == "Diseno")
+    //{
+    //    cLayout = "~/Views/Shared/_Layout.cshtml";
+    //}
+    else if (controller == "OrdenProduccion")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "AjustesAlmacen")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "PlaneacionClass")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Almacenista")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Digital")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Soporte")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    ///////////////CartaPorte///////////////
+    else if (controller == "ParqueVehicular")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Propietario")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else if (controller == "Arrendatario")
+    {
+        cLayout = "~/Views/Shared/_Layout.cshtml";
+    }
+    ///////////////Principal///////////////
+    else
+    {
+        cLayout = "~/Views/Shared/Error.cshtml";
+    }
+    Layout = cLayout;
+}

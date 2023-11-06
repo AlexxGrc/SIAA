@@ -1,0 +1,50 @@
+﻿@model SIAAPI.Models.Login.User
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{ if (ViewBag.Mensaje != "")
+    {
+        <div class="alert alert-info">
+            <h2>@ViewBag.Mensaje</h2>
+        </div>
+    }
+}
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Usuario</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+
+        <dt>
+            @*  @Html.DisplayNameFor(model => model.EmailID)*@
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailID)
+        </dd>
+
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+    }
+</div>

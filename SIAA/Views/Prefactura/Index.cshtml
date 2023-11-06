@@ -1,0 +1,397 @@
+﻿@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.EncPrefactura>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Lista de Prefactura</h3>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <div>
+                        Elementos por página: @Html.DropDownList("pageSize")
+                        Divisa: @Html.DropDownList("Divisa")
+                        Serie: @Html.DropDownList("SerieFac")
+                        Cliente: @Html.DropDownList("ClieFac")
+                        Estatus: @Html.DropDownList("Status")
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                        <a class="btn btn-info btn-xs" href="@Url.Action("Reporte")">Descargar Catálogo</a>
+                    </div>
+
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+
+                @Html.ActionLink("Prefactura", "Index", new { sortOrder = ViewBag.PrefacturaSortParm, currentFilter = ViewBag.CurrentFilter })
+
+            </th>
+            <th>
+                @Html.Label("Fecha")
+            </th>
+
+            <th>
+
+                @Html.ActionLink("Cliente", "Index", new { sortOrder = ViewBag.ClienteSortParm, currentFilter = ViewBag.CurrentFilter })
+
+            </th>
+
+
+            <th>
+                @Html.Label("Doc. Anterior")
+            </th>
+
+            <th>
+                @Html.Label("Doc. Siguiente")
+            </th>
+
+
+            <th>
+                @Html.Label("Tipo de Cambio")
+            </th>
+
+            <th>
+                @Html.Label("Subtotal")
+            </th>
+            <th>
+                @Html.Label("Descuento")
+            </th>
+            <th>
+                @Html.Label("IVA")
+            </th>
+            <th>
+                @Html.Label("Total")
+            </th>
+            <th>
+                @Html.Label("Divisa")
+            </th>
+
+            <th></th>
+        </tr>
+
+
+        @foreach (var item in Model)
+                    {
+                        SIAAPI.Models.Comercial.Clientes clientes = new SIAAPI.Models.Comercial.ClientesContext().Clientes.Find(item.IDCliente);
+                        string ClienteNombre = clientes.Nombre;
+                        if (item.Status.Equals("Cancelado"))
+                        {
+                <tr class="danger">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Serie)  @Html.DisplayFor(modelItem => item.Numero)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => ClienteNombre)
+                    </td>
+
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoCambio)
+                    </td>
+
+                    <td align="right">
+                        @String.Format("{0:C}", item.Subtotal)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.IVA)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.Descuento)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.Total)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.c_Moneda.Descripcion)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Detalles", "Details", new { id = item.IDPrefactura }, new { @class = "btn btn-default btn-xs" })
+
+                    </td>
+                </tr>
+            }
+            else
+        {
+                <tr>
+                    @if (item.Status.Equals("Activo"))
+                    {
+                        <td class="success">
+                            @Html.DisplayFor(modelItem => item.Serie)  @Html.DisplayFor(modelItem => item.Numero)
+                        </td>
+                    }
+                    else if (item.Status.Equals("Devuelto"))
+        {
+                        <td class="warning">
+                            @Html.DisplayFor(modelItem => item.Serie)  @Html.DisplayFor(modelItem => item.Numero)
+                        </td>
+                    }
+                    else if (item.Status.Equals("Finalizado"))
+        {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Serie)  @Html.DisplayFor(modelItem => item.Numero)
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fecha)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => ClienteNombre)
+                    </td>
+                    <td>
+                        @{
+            SIAAPI.clasescfdi.ClsRastreaDA rastrea = new SIAAPI.clasescfdi.ClsRastreaDA();
+            List<SIAAPI.clasescfdi.NodoTrazo> nodos = rastrea.getDocumentoAnterior("Prefactura", item.IDPrefactura, "Encabezado");
+                            <table>
+                                @foreach (SIAAPI.clasescfdi.NodoTrazo nodo in nodos)
+                                {
+                                    <td style="font-size:x-small">
+                                        @nodo.Descripcion
+                                    </td>
+                                }
+                            </table>
+                        }
+
+                    </td>
+                    <td>
+                        @{
+            SIAAPI.clasescfdi.ClsRastreaDA rastreas = new SIAAPI.clasescfdi.ClsRastreaDA();
+            List<SIAAPI.clasescfdi.NodoTrazo> nodoss = rastrea.getDocumentoSiguiente("Prefactura", item.IDPrefactura, "Encabezado");
+                            <table>
+                                @foreach (SIAAPI.clasescfdi.NodoTrazo nodosi in nodoss)
+                                {
+                                    <td style="font-size:x-small">
+                                        @nodosi.Descripcion
+                                    </td>
+                                }
+                            </table>
+                        }
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoCambio)
+                    </td>
+
+                    <td align="right">
+                        @String.Format("{0:C}", item.Subtotal)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.Descuento)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.IVA)
+                    </td>
+
+                    <td align="right">
+                        @String.Format("{0:C}", item.Total)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.c_Moneda.Descripcion)
+                    </td>
+
+                    <td>
+
+                        @Html.ActionLink("Detalles", "Details", new { id = item.IDPrefactura }, new { @class = "btn btn-default btn-xs" })
+                        @if ((item.Status.Equals("Activo")) && (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Facturacion")))
+                        {
+
+                            @Html.ActionLink("Cancelar", "Cancelar", new { id = item.IDPrefactura }, new { @class = "btn btn-danger btn-xs" })
+                        }
+
+
+                        @Html.ActionLink("Cambiar Forma Pago", "CambiarFormaPago", new { id = item.IDPrefactura }, new { @class = "btn btn-primary btn-xs" })
+
+
+                        @Html.ActionLink("Cambiar Uso CFDI", "CambiarUsoCFDI", new { id = item.IDPrefactura }, new { @class = "btn btn-primary btn-xs" })
+                        @{
+                            bool pasa = false;
+                            if (item.IDTipoRelacion == 7)
+                            {
+                                List<SIAAPI.ViewModels.Cfdi.AplicacionAnticipos> Prefacturaanticipos = new SIAAPI.ViewModels.Cfdi.AplicacionAnticiposContext().AplicacionAnticiposs.Where(s => s.IDPREFACTURAAPLICADA == item.IDPrefactura).ToList();
+                                decimal suma = 0;
+                                foreach (SIAAPI.ViewModels.Cfdi.AplicacionAnticipos anticipos in Prefacturaanticipos)
+                                {
+                                    suma = suma + anticipos.Total;
+                                }
+                                if (suma == 0)
+                                {
+                                    pasa = true;
+                                }
+
+                            }
+                        }
+                        @if (item.IDTipoRelacion == 7 && (item.Descuento == 0) && pasa)
+                        {
+                            @Html.ActionLink("Aplicar Anticipo", "Aplicaranticipo", new { id = item.IDPrefactura, searchString = ViewBag.searchString }, new { @class = "btn btn-warning btn-xs" })
+                        }
+                        @if ((item.IDTipoRelacion == 7 && (item.Descuento > 0) && !pasa) || ((item.IDTipoRelacion == 7 && (item.Descuento == 0) && !pasa)))
+                        {
+                            if (item.IDFacturaDigital == 0)
+                            {
+                                @Html.ActionLink("Timbrar", "timbrarprefactura", new { id = item.IDPrefactura }, new { @class = "btn btn-warning btn-xs" })
+                            }
+                        }
+                        @if (item.IDTipoRelacion != 7 && (item.Descuento == 0))
+                        {
+                            if (item.IDFacturaDigital == 0)
+                            {
+                                @Html.ActionLink("Timbrar", "timbrarprefactura", new { id = item.IDPrefactura }, new { @class = "btn btn-warning btn-xs" })
+                            }
+                        }
+                        @Html.ActionLink("Cambiar Moneda", "CambiarMoneda", new { id = item.IDPrefactura }, new { @class = "btn btn-info btn-xs" })
+                        @Html.ActionLink("PDF", "PDFPrefactura", new { id = item.IDPrefactura }, new { @class = "btn btn-success btn-xs" })
+
+
+                    </td>
+
+
+</tr>
+            }
+        }
+
+    </table>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th class="col-lg-1">
+                Moneda Origen
+            </th>
+            <th class="col-lg-1">
+                Subtotal
+            </th>
+            <th class="col-lg-1">
+                IVA
+            </th>
+            <th class="col-lg-1">
+                Total
+            </th>
+            <th class="col-lg-1">
+                Total en Pesos Mexicanos
+            </th>
+        </tr>
+        @foreach (var itemresumen in ViewBag.sumatoria)
+        {
+
+            <tr>
+                <td class="col-lg-1">
+                    @itemresumen.MonedaOrigen
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Subtotal)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.IVA)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Total)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.TotalenPesos)
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+<br />
+@*Paginación*@
+@using (Html.BeginForm("Index", "Prefactura", FormMethod.Get, new { id = "pageSizeForm" }))
+{
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.searchString,
+       cliefac = ViewBag.Clienteseleccionado,
+       SerieFac = ViewBag.SerieFacseleccionado,
+       Estado = ViewBag.Estadoseleccionado,
+       pageSize = ViewBag.psize
+   }))
+
+    </div>
+}
+@*Paginación*@
+<script>
+
+        $(function(){
+            $("#SerieFac").on("change", function() {
+             @ViewBag.SerieFacseleccionado=  $('[id$=SerieFac] option:selected').text();
+
+            });
+        });
+
+        $(function(){
+            $("#ClieFac").on("change", function() {
+             @ViewBag.Clienteseleccionado=  $('[id$=ClieFac] option:selected').text();
+
+            });
+        });
+
+        $(function(){
+            $("#Estado").on("change", function() {
+             @ViewBag.Estadoseleccionado=  $('[id$=Estado] option:selected').text();
+
+            });
+        });
+
+
+        $(function(){
+            $("#pageSize").on("change", function() {
+             @ViewBag.pzise=  $('[id$=pageSize] option:selected').text();
+
+            });
+        });
+
+
+
+</script>
+
+

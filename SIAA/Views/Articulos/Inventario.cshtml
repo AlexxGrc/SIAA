@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.InventarioAlmacen>
+
+@{
+    ViewBag.Title = "Inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Inventario @ViewBag.Articulo.Cref</h2>
+<h4>@ViewBag.Articulo.Descripcion</h4>
+<h5>@ViewBag.Presentacion.Presentacion</h5>
+
+<table class="table">
+    <tr>
+        <th>
+           Almacen
+        </th>
+     
+        <th>
+            @Html.DisplayNameFor(model => model.Existencia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PorLlegar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Apartado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Disponibilidad)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+       
+         @{  SIAAPI.Models.Comercial.Almacen almacen = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.Find(item.IDAlmacen);
+
+         }
+        <td>
+            @almacen.Descripcion;
+        </td>
+      
+        <td>
+            @Html.DisplayFor(modelItem => item.Existencia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PorLlegar)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Apartado)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Disponibilidad)
+        </td>
+        <td>
+            @Html.ActionLink("Kardex", "Kardex", new { IDAlmacen = item.IDAlmacen, IDArticulo= ViewBag.Articulo.IDArticulo, IDCaracteristica = item.IDCaracteristica}, new { @class = "btn btn-primary" }) 
+            @Html.ActionLink("Regresar a la lista", "Details", new { IDArticulo = ViewBag.Articulo.IDArticulo }, new { @class = "btn btn-default btn-xs" })
+           @* @Html.ActionLink("Detalles", "Details", new { id=item.IDInventarioAlmacen }) |
+    @Html.ActionLink("Eliminar", "Delete", new { id=item.IDInventarioAlmacen })*@
+        </td>
+    </tr>
+}
+
+</table>

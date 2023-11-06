@@ -1,0 +1,33 @@
+﻿@model SIAAPI.Models.Cfdi.Folio
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <h3>Detalles del Folio: @Html.DisplayFor(model => model.Serie) </h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Folio:
+        </dt>
+
+        <dd>
+          @Html.DisplayFor(model => Model.Numero) 
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.c_TipoComprobante.ClaveTipoComprobante)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_TipoComprobante.ClaveTipoComprobante)|@Html.DisplayFor(model => model.c_TipoComprobante.Descripcion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDFolio },new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

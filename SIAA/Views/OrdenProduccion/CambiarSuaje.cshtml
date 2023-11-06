@@ -1,0 +1,178 @@
+﻿@model SIAAPI.Models.Produccion.ArticuloProduccion
+
+@{
+    ViewBag.Title = "CambiarSuaje";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+    var idcaracteristica = ViewBag.PresentacionList as List<SelectListItem>;
+    var idarticulo = ViewBag.idarticulo as List<SelectListItem>;
+
+}
+
+<h2>Cambiar Suaje</h2>
+
+
+<div class="form-horizontal">
+    <h4>@ViewBag.DescripcionArt</h4>
+    @{ 
+        SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+        SIAAPI.Models.Comercial.ClsDatoEntero idcaracteristicaprod = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select idcaracteristica as Dato from  [ArticuloProduccion] where [idarticulo]=" + Model.IDArticulo + " and idartprod=" + Model.IDArtProd).ToList().FirstOrDefault();
+        SIAAPI.Models.Comercial.ClsDatoString caracteristicaProd = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select presentacion as Dato from  [Caracteristica] where [id]=" + idcaracteristicaprod.Dato).ToList().FirstOrDefault();
+
+    }
+
+    <table>
+        @{
+            string[] atributos = caracteristicaProd.Dato.ToString().Split(',');
+            <tr>
+                @foreach (var atri in atributos)
+                {
+                    string[] valor = atri.Split((char)58);
+                    string Atri = valor[0];
+                    string Val = valor[1];
+                    <td style="background-color:darkblue" class="col-md-1">
+                        <label style="color:white;">@Atri</label>
+                    </td>
+                }
+            </tr>
+                <tr>
+                    @foreach (var atri in atributos)
+                    {
+                        string[] valor = atri.Split((char)58);
+                        string Atri = valor[0];
+                        string Val = valor[1];
+                        <td class="col-md-1">
+                            <label>@Val</label>
+                        </td>
+                    }
+                </tr>
+        }
+    </table>
+ </div>
+
+    @using (Html.BeginForm())
+    {
+      
+        @Html.AntiForgeryToken()
+
+
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IDArtProd)
+
+        <table class="table">
+            <tr>
+                <td><div>Selecciona el nuevo suaje o herramienta</div></td>
+                <td>
+                    <div>
+                        <div class="form-group">
+                           
+                            <div class="col-md-7">
+                                @Html.DropDownListFor(model => model.IDArticulo, idarticulo, new
+                       {
+                           @class = "form-control",
+                           @name = "IDArticulo",
+                           @id = "IDArticulo",
+                           data_cascade_combo = "#IDCaracteristica",
+                           data_cascade_combo_source = Url.Action("getJsonCaracteristicaArticuloMaterial", "OrdenProduccion"),
+                           data_cascade_combo_param_name = "idc",
+
+
+                       })
+                                @Html.ValidationMessageFor(model => model.IDArticulo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        </td>
+                <td>
+                    </tr>
+                <tr>
+                       <td>
+                            <div>Presentación</div>
+                            </td>
+                        <td>
+                        @Html.HiddenFor(model => model.IDTipoArticulo, new { htmlAttributes = new { @class = "form-control" } })
+
+
+                        <div class="form-group">
+                           
+                            <div class="col-md-7">
+                                @Html.DropDownListFor(model => model.IDCaracteristica, idcaracteristica, new { @class = "form-control", idc = "IDCaracteristica", onchange = "Suaje()", name = "IDCaracteristica", id = "IDCaracteristica" })
+                                @Html.ValidationMessageFor(model => model.IDCaracteristica, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        @Html.HiddenFor(model => model.IDProceso, new { htmlAttributes = new { @class = "form-control" } })
+
+
+                        @Html.HiddenFor(model => model.IDOrden, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.HiddenFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.HiddenFor(model => model.IDClaveUnidad, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.HiddenFor(model => model.Indicaciones, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.HiddenFor(model => model.CostoPlaneado, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.HiddenFor(model => model.CostoReal, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.HiddenFor(model => model.Existe)
+
+                        @Html.HiddenFor(model => model.IDHE, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.HiddenFor(model => model.TC, new { htmlAttributes = new { @class = "form-control" } })
+
+                        @Html.HiddenFor(model => model.TCR, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <tr>
+                        <td>
+                        <div class="form-group">
+                            <div>
+                                Cavidades al eje 
+                            </div>
+                        </div>
+                            </td>
+                        <td><input type="number" id="Cavidades" name="Cavidades" value="@ViewBag.Ceje" />
+                        </td>
+                        </tr>
+             <tr>
+                 <td></td>
+                 <td>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Grabar" class="btn btn-default" />
+                            </div>
+                        </div>
+                    
+        
+                </td>
+            </tr>
+        </table>
+    }
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+<script defer src="~/Scripts/cascade.combo.js"></script>
+
+<script>
+
+    function Suaje() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getSuaje")',
+            dataType: 'json',
+            data: { IDSuaje: $("#IDCaracteristica").val() },
+            success: function (suaje) {
+              
+                $("#Cavidades").val(suaje.Cavidades);
+             
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+</script>

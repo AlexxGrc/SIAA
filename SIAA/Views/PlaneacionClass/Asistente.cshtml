@@ -1,0 +1,578 @@
+﻿@model SIAAPI.ClasesProduccion.ClsCotizador
+@{
+    ViewBag.Title = "Asistente";
+    Layout = "~/Views/Shared/_LayoutPlaneacionE.cshtml";
+    var idcaracteristica = ViewBag.PresentacionList as List<SelectListItem>;
+    var idmateria = ViewBag.MaterialList as List<SelectListItem>;
+    var idfamilia = ViewBag.IDFamilia as List<SelectListItem>;
+    var idfamilia2 = ViewBag.IDFamilia2 as List<SelectListItem>;
+}
+
+@{
+    int IDPedido = Convert.ToInt32(Session["IDPedido"]);
+    if (IDPedido > 0)
+    {
+        <h6>Planeacion para el pedido @IDPedido</h6>
+        }
+    }
+
+@using (Html.BeginForm())
+{
+    <h4>Etiqueta</h4>
+    <h2>@ViewBag.Etiqueta</h2>
+    <h4>@ViewBag.Presentacion</h4>
+  
+     // @Html.HiddenFor(model => model.Cantidad)
+      <input hidden type ="number" id="Cantidad" name="Cantidad" value="@Model.Cantidad" />
+    
+    
+       <table>
+    @{ 
+        string[] atributos = ViewBag.Presentacion2.ToString().Split(',');
+        <tr>
+            @foreach (var atri in atributos)
+            {
+                string[] valor = atri.Split((char)58);
+                string Atri = valor[0];
+                string Val = valor[1];
+                <td style="background-color:darkblue" class="col-md-1">
+                    <label style="color:white;">@Atri</label>
+                </td>
+            }
+        </tr>
+        <tr>
+            @foreach (var atri in atributos)
+            {
+                string[] valor = atri.Split((char)58);
+                string Atri = valor[0];
+                string Val = valor[1];
+                <td class="col-md-1">
+                    <label>@Val</label>
+                </td>
+            }
+        </tr>
+    }
+    </table>
+
+    <h3>Prensa</h3>
+
+    <table class="table-responsive col-12">
+        <tr>
+            <td >
+                <h6 style="font-size: small">Suaje </h6>
+            </td>
+            </tr>
+        <tr>
+            <td class="col-md-11">
+               
+
+                @Html.HiddenFor(model => model.IDSuaje, new { id = "IDSuaje" })
+
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.IDSuaje, ViewBag.IDSuaje as List<SelectListItem>, new { @class = "form-control", id = "IDSuaje", name = "IDSuaje", disabled = "true" })
+                    @Html.ValidationMessageFor(model => model.IDSuaje, "", new { @class = "text-danger" })
+                </div>
+               
+            </td>
+            </tr>
+        </table>
+   <table>        
+       
+       
+          
+                @{
+                    string[] atributoss = ViewBag.DescripcionSuaje.ToString().Split(',');
+                    <tr>
+                       @foreach (var atri in atributoss)
+                       {
+                           string[] valor = atri.Split((char)58);
+                           string Atri = valor[0];
+                           string Val = valor[1];
+                        <td style="background-color:darkblue" class="col-md-1">
+                            <label style="color:white;">@Atri</label>
+                        </td>
+                       }
+                    </tr>
+                    <tr>
+                        @foreach (var atri in atributoss)
+                        {
+                            string[] valor = atri.Split((char)58);
+                            string Atri = valor[0];
+                            string Val = valor[1];
+                            <td class="col-md-1">
+                                <label >@Val</label>
+                            </td>
+                        }
+                    </tr>
+                }
+
+       </table>
+       <table>            
+        <tr>
+            <td>
+                Herramienta Secundaria
+            </td>
+            </tr>
+        <tr>
+            <td>
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.IDSuaje2, ViewBag.IDSuaje as List<SelectListItem>, new { @class = "form-control", id = "IDSuaje2", name = "IDSuaje2" })
+                    @Html.ValidationMessageFor(model => model.IDSuaje2, "", new { @class = "text-danger" })
+                </div>
+            </td>
+        </tr>
+        </table>
+
+        <br />
+
+    <table style="background-color:#4040ff; Color:azure" class="table-responsive col-12">
+                <tr>
+                    <td>
+
+                        <div class="form-group">
+                            <h6>Eje  en mm</h6>
+                            <div class="col-md-10">
+                              
+                                @Model.anchoproductomm
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <h6>Avance  en mm</h6>
+                            <div class="col-md-10">
+                               
+                                @Model.largoproductomm
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+
+                        <div class="form-group">
+                            <h6>Gap al eje en mm</h6>
+                            <div class="col-md-10">
+                               
+                                @Model.gapeje
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <h6>Gap al Avance en mm</h6>
+                            <div class="col-md-10">
+                             
+                               @Model.gapavance
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <h6 style="font-size: small">Cavidades al eje del suaje</h6>
+
+                        <div class="col-md-10">
+                           
+                            @Model.cavidadesdesuaje
+                        </div>
+                    </td>
+                    <td>
+                        <h6 style="font-size: small" >Ancho de cinta  necesitado </h6>
+
+                        <div class="col-md-10 ">
+                           
+                            @{int anchomaterialenmm = Model.anchomaterialenmm;}
+
+                            @anchomaterialenmm mm
+                        </div>
+                    </td>
+                   
+                    
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <h6>Cantidad de etiquetas al paso</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.productosalpaso, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <h6>Número de Tintas</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Numerodetintas, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <h6>Cantidad de etiquetas x rollo o paquete</h6>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Cantidadxrollo, new { htmlAttributes = new { @class = "form-control" } })
+
+                            </div>
+                        </div>
+                    </td>
+
+                   
+                </tr>
+               
+
+      
+       
+        <tr>
+          <td><br /></td>  
+            </tr>
+</table>
+
+<table>
+    <thead class="thead-dark">
+        <tr>
+            <th><div class="col-md-12">Cintas</div></th>
+
+
+
+        </tr>
+
+        <tr>
+            <td>
+                <h6 style="font-size: medium">Cinta Existente</h6>
+            </td>
+            <td>
+
+
+                @*<div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDMaterial, ViewBag.IDMaterial as List<SelectListItem>, new { @class = "form-control", id = "IDMp", onchange = "getMP()" })
+                    @Html.ValidationMessageFor(model => model.IDMaterial, "", new { @class = "text-danger" })
+                </div>*@
+
+
+                <div class="col-md-12">
+
+                    <input id="AnchoCinta" name="AnchoCinta" value="0" hidden />
+
+                    @Html.DropDownListFor(model => model.IDFamilia, idfamilia, new
+                   {
+                       @class = "form-control",
+                       @name = "IDFamilia",
+                       @id = "IDFamilia",
+                       data_cascade_combo = "#IDMaterial",
+                       data_cascade_combo_source = Url.Action("getJsonFamiliArticulo", "PlaneacionClass"),
+                       data_cascade_combo_param_name = "id"
+
+
+                   })
+                </div>
+
+            </td>
+            <td>
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.IDMaterial, idmateria, new
+                   {
+                       @class = "form-control",
+                       @name = "IDMaterial",
+                       @id = "IDMaterial",
+                       data_cascade_combo = "#IDCaracteristica",
+                       data_cascade_combo_source = Url.Action("getJsonCaracteristicaArticuloMaterial", "PlaneacionClass"),
+                       data_cascade_combo_param_name = "idc",
+
+
+                   })
+                </div>
+            </td>
+
+            <td>
+
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.IDCaracteristica, idcaracteristica, new { @class = "form-control", idc = "IDCaracteristica" })
+
+
+
+                </div>
+
+            </td>
+
+
+
+        </tr>
+
+        <tr>
+            <td>
+                <h6 style="font-size: medium">Adicional</h6>
+            </td>
+            <td>
+
+
+                <div class="col-md-12">
+                    @*@Html.DropDownListFor(model => model.IDMaterial2, ViewBag.IDMaterial as List<SelectListItem>, new { @class = "form-control", id = "IDMp2", onchange = "getMP2()" })
+                    @Html.ValidationMessageFor(model => model.IDMaterial2, "", new { @class = "text-danger" })*@
+                    <input id="AnchoCinta" name="AnchoCinta" value="0" hidden />
+
+
+
+
+                    @Html.DropDownListFor(model => model.IDFamilia2, idfamilia2, new
+                   {
+                       @class = "form-control",
+                       @name = "IDFamilia2",
+                       @id = "IDFamilia2",
+                       data_cascade_combo = "#IDMaterial2",
+                       data_cascade_combo_source = Url.Action("getJsonFamiliArticulo", "PlaneacionClass"),
+                       data_cascade_combo_param_name = "id2"
+
+
+                   })
+                </div>
+
+            </td>
+            <td>
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.IDMaterial2, idmateria, new
+                   {
+                       @class = "form-control",
+                       @name = "IDMaterial2",
+                       @id = "IDMaterial2",
+                       data_cascade_combo = "#IDCaracteristica2",
+                       data_cascade_combo_source = Url.Action("getJsonCaracteristicaArticuloMaterial", "PlaneacionClass"),
+                       data_cascade_combo_param_name = "idc2",
+
+
+                   })
+                </div>
+            </td>
+
+            <td>
+
+                <div class="col-md-12">
+                    @Html.DropDownListFor(model => model.IDCaracteristica2, idcaracteristica, new { @class = "form-control", idc2 = "IDCaracteristica2" })
+
+
+
+                </div>
+
+            </td>
+        </tr>
+
+</table>
+
+<table>
+    <tr>
+        <td>
+
+            <div class="form-group">
+                <h2>Minimo de Millares a Producir</h2>
+                <div class="col-md-10">
+                    @{decimal Minimo = Math.Round(Model.Minimoproducir, 2);}
+                    <h3 class="text-capitalize">  @Minimo Millares</h3>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+ <table>
+               
+                @* ////////////////////////////hablitar cuando esten los roles /////////////////////*@
+
+
+             
+                    <tr>
+
+
+
+                        <td>
+                            <h6 style="font-size: small" class="text-black-50">Minutos en prensa x  millar</h6>
+
+                            <div class="col-md-10 text-primary">
+                                @{ decimal hrprensa = Math.Round((Model.HrPrensa * 60), 0); }
+                                @hrprensa Minutos
+                            </div>
+                        </td>
+
+
+                    </tr>
+
+
+                                   
+
+            </table>
+
+
+
+
+
+
+             @Html.HiddenFor(model => model.TCcotizado)
+            @Html.HiddenFor(model => model.IDMonedapreciosconvenidos)
+         
+            @Html.HiddenFor(model => model.Minimoproducir)
+            @Html.HiddenFor(model => Model.anchomaterialenmm)
+            @Html.HiddenFor(model => Model.HrPrensa)
+
+
+                                    try
+                                    {
+                                        if (Model.Numerodetintas > 0)
+                                        {
+                                            Html.RenderPartial("Tintas", ViewData["Tintas"]);
+                                        }
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        string mensajederror1 = err.Message;
+                                    }
+
+
+
+
+
+
+
+<h3>Maquinas</h3>
+<div class="col-md-12">
+    <div>Maquina de Prensa</div>
+    @Html.DropDownListFor(model => model.IDMaquinaPrensa, ViewBag.IDMaquinaPrensa as List<SelectListItem>, new { @class = "form-control", id = "IDCentro", })
+   
+    @Html.ValidationMessageFor(model => model.IDMaquinaPrensa, "", new { @class = "text-danger" })
+</div>
+<div class="col-md-12">
+    <div>Maquina de embobinado</div>
+    @Html.DropDownListFor(model => model.IDMaquinaEmbobinado, ViewBag.IDMaquinaEmbobinado as List<SelectListItem>, new { @class = "form-control", id = "IDCentro", })
+    @Html.ValidationMessageFor(model => model.IDMaquinaEmbobinado, "", new { @class = "text-danger" })
+</div>
+<h4>Centros </h4>
+<div class="col-md-12">
+    @Html.DropDownListFor(model => model.IDCentro, ViewBag.IDCentro as List<SelectListItem>, new { @class = "form-control", id = "IDCentro", })
+    @Html.ValidationMessageFor(model => model.IDCentro, "", new { @class = "text-danger" })
+</div>
+
+<h4>Cajas </h4>
+    <div class="col-md-12">
+        @Html.DropDownListFor(model => model.IDCaja, ViewBag.IDCaja as List<SelectListItem>, new { @class = "form-control", id = "IDCentro", })
+        @Html.ValidationMessageFor(model => model.IDCaja, "", new { @class = "text-danger" })
+    </div>
+
+
+
+<div class="text-danger"><h5>@ViewBag.Mensajedeerror</h5></div>
+
+           
+
+
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+
+        <input type="submit" id="btnSiguiente" name="btnSiguiente" value="Siguiente" class="btn btn-dark" />
+           
+            @if (Model.Valido)
+            {
+               
+               
+                    <input type="submit" id="btnSiguiente" name="btnSiguiente" value="Crea Planeacion" class="btn btn-info  btn-xs" />
+               
+            }
+      
+    </div>
+</div>
+ }
+
+
+<div>
+    @Html.ActionLink("ir  a la lista", "Index","PlaneacionProduccionE")
+</div>
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+<script>
+    
+
+    function getMP() {
+        getValidaMP();
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getMP")',
+            dataType: 'json',
+            data: { IDMp: $("#IDMp").val() },
+            success: function (Cinta) {
+               
+                $("#LargoCinta").val(Cinta.Largo);
+               
+               
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+           
+        });
+    }
+
+    function getValidaMP() {
+        valor1 = $("#IDMp").val();
+       
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("Valida")',
+            dataType: 'json',
+            
+            data: { idmaterial: valor1 , anchomaterial: @Model.anchomaterialenmm },
+            success: function (matval) {
+              
+                if(matval.valido == true)
+                {
+                    swal("Material registrado en el sistema " + matval.clave, "", "success")
+                  
+                }
+                else
+                {
+                    swal("No hay Material registrado en el sistema \n"+matval.clave, "", "warning")
+                     
+                }
+
+            },
+            error: function (ex) {
+              // alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+
+    function actualizasuaje(e) {
+
+
+
+
+        if (e.keyCode === 18) {
+            var control = "#Anchomm";
+            var selectcontrol = "#IDSuaje" ;
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getsuajesblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+                    }
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+</script>
+<script defer src="~/Scripts/cascade.combo.js"></script>
+

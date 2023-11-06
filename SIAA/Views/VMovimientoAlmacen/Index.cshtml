@@ -1,0 +1,92 @@
+﻿@model IEnumerable<SIAAPI.Models.Inventarios.VMovimientoAlmacen>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" })
+</p>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FechaMovimiento)
+            </th>
+
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.Lote)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Accion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Documento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoOperacion)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Acumulado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observacion)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    <div>@Html.DisplayFor(modelItem => item.FechaMovimiento)</div>
+                    <div>@Html.DisplayFor(modelItem => item.Hora)</div>
+                </td>
+
+
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lote)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Accion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Documento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoDocumento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoOperacion)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Acumulado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Observacion)
+                </td>
+
+            </tr>
+        }
+
+    </table>
+</div>

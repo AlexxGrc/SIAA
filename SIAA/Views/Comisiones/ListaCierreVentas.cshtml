@@ -1,0 +1,105 @@
+﻿@model IEnumerable<SIAAPI.Models.Comisiones.CierreVentas>
+@{
+    ViewBag.Title = "ListaCierreVentas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<h4>Cierre de Ventas :</h4>     
+@using (Html.BeginForm("ListaCierreVentas", "Comisiones", FormMethod.Get ))
+{
+        @Html.DropDownList("IDMes", null, htmlAttributes: new { })    
+        @Html.DropDownList("ANIO", null, htmlAttributes: new { })
+
+        <input type="submit" value="Aplicar" class="btn btn-success btn-xs" />
+}
+<div class="table-responsive">
+
+    <table class="table table-striped">
+        <tr>
+            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.IDMes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ano)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IDVendedor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumPedidos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VentasMXN)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VentasUSD)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cuota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CuotaAlcanzada)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IDMonedaCA)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comision)
+            </th>
+
+            <th></th>
+            @{
+               
+                foreach (SIAAPI.Models.Comisiones.CierreVentas item in Model)
+                {
+                    SIAAPI.Models.Comercial.ClsDatoString vendedor = new SIAAPI.Models.Comercial.VendedorContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Nombre as Dato from Vendedor where IDVendedor = " + @item.IDVendedor).ToList()[0];
+                    SIAAPI.Models.Comercial.ClsDatoString monedacu = new SIAAPI.Models.Comercial.VendedorContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select ClaveMoneda as Dato from c_Moneda where IDMoneda = " + @item.IDMonedaCA).ToList()[0];
+                    SIAAPI.Models.Comercial.ClsDatoString mescu = new SIAAPI.Models.Comercial.VendedorContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Mes as Dato from c_Meses where IDMes = " + @item.IDMes).ToList()[0];
+
+                <tr>
+                    <td></td>
+                    <td>
+                        @mescu.Dato
+                    </td>
+                    <td>
+                        @item.Ano
+                    </td>
+                    <td>
+                        @vendedor.Dato
+                    </td>
+                    <td>
+                        @item.NumPedidos
+                    </td>
+                    <td>
+                        @item.VentasMXN.ToString("C")
+                    </td>
+                    <td>
+                        @item.VentasUSD.ToString("C")
+                    </td>
+                    <td>
+                        @item.Cuota.ToString("C")
+                    </td>
+                    <td>
+                        @item.CuotaAlcanzada.ToString("C")
+                    </td>
+                    <td>
+                        @monedacu.Dato
+                    </td>
+                    <td>
+                        @item.Comision %
+                    </td>
+                    <td>
+                        <a class="deleteCM" data-id="@item.IDCierreVentas">
+                            <i class="tbl_del_btn fa fa-trash"></i>
+                        </a>
+                    </td>
+                    <td></td>
+                </tr>
+                }
+            }
+        </table>
+    </div>

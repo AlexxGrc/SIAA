@@ -1,0 +1,191 @@
+﻿@model SIAAPI.Models.Comercial.Enccotizapros
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="form-group">
+            @{
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>  <h3>Cotizaciones Prospecto:   @ViewBag.Prospecto.Nombre</h3> </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SIAAPI_CotizacionesProspecto_C.pdf" })' target="_blank">
+                                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</nav>
+<br />
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.idprospecto)
+        </dt>
+
+        <dd>
+            @ViewBag.Prospecto.Nombre
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.idcondiciones)
+        </dt>
+
+        <dd>
+            @ViewBag.Condiciones.Descripcion
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.atencion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.atencion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Vigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Vigencia) Dias
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.idMoneda)
+        </dt>
+
+        <dd>
+            @ViewBag.Moneda.ClaveMoneda
+        </dd>
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.idvendedor)
+        </dt>
+
+        <dd>
+            @ViewBag.Vendedor.Nombre
+        </dd>
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacion)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <table class="table">
+    </table>
+</div>
+<div id="divConceptos">
+    <table class="table" id="tablaconceptos" name="tablaconceptos" style="width:100">
+        <tr bgcolor="#0080ff">
+            <td>
+                Cantidad
+            </td>
+            <td>
+                Unidad
+            </td>
+            <td>
+                Descripcion
+            </td>
+            <td>
+                Precio
+            </td>
+
+            <td>
+                Importe
+            </td>
+        </tr>
+
+
+        @foreach (SIAAPI.Models.Comercial.detcotizapro detalle in ViewBag.cotizacion)
+        {
+            <tr>
+                <td>
+                    @detalle.cantidad
+                </td>
+                <td>
+                    @detalle.Unidad
+                </td>
+                <td>
+                    @detalle.Concepto
+                </td>
+                <td align="right">
+                    @detalle.Precio.ToString("C")
+                </td>
+
+                <td align="right">
+                    @detalle.Importe.ToString("C")
+                </td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Subtotal</td>
+            <td name="Subtotal" align="right">@Model.Subtotal.ToString("C")</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>IVA</td>
+            <td align="right">@Model.iva.ToString("C")</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td align="right">@Model.Total.ToString("C")</td>
+        </tr>
+    </table>
+</div>
+
+<div>
+
+
+
+    <dd>
+        Realizó  @Html.DisplayFor(model => model.username)
+    </dd>
+</div>
+<p>
+
+    @Html.ActionLink("Volver a la lista", "Index")
+</p>

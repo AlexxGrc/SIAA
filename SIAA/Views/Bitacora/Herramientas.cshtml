@@ -1,0 +1,131 @@
+﻿
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.VOrdenProduccion>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+
+@{
+    ViewBag.Title = "Herramientas";
+    Layout = "~/Views/Shared/_LayoutBitacora.cshtml";
+}
+
+<h2>Herramientas</h2>
+
+
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <div>
+                        <table><tr><td> Elementos por página: @Html.DropDownList("pageSize") | Escribe parte del Articulo o de la referencia : @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" }) | <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span></td></tr></table>
+                    </div>
+
+                    <div></div>
+
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+
+@*Busqueda*@
+
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.Label("Orden")
+
+        </th>
+        <th>
+            @Html.Label("Prioridad")
+
+        </th>
+        <th>
+            @Html.Label("Cliente")
+
+        </th>
+        <th>
+            @Html.Label("Clave")
+
+        </th>
+        <th>
+            @Html.Label("Descripción del prducto")
+        </th>
+        @*<th>@Html.Label("Precio Unitario")</th>
+            <th>@Html.Label("Moneda")</th>
+            <th>@Html.Label("Unidad de Medida")</th>
+            <th>
+                @Html.ActionLink("Familia", "Index", new { sortOrder = ViewBag.CSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>*@
+        @*<th>@Html.Label("Tipo de Articulo")</th>*@
+        <th></th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+        <tr>
+
+            <td>
+
+                @*<img src="~/imagenes/Upload/@item.nameFoto" alt="" width="70" height="70">*@
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IDOrden)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Prioridad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente)
+            </td>
+            <td>
+                @articulo.Cref
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+
+        </tr>
+    }
+
+
+</table>
+
+@*Paginación*@
+@using (Html.BeginForm("Herramientas", "Bitacora", FormMethod.Get, new { id = "pageSizeForm" }))
+{
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+
+        @Html.PagedListPager(Model, page => Url.Action("Herramientas", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize,
+       Familia = ViewBag.Familia
+   }))
+
+
+    </div>
+}
+@*Paginación*@
+
+

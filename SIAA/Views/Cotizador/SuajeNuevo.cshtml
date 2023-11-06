@@ -1,0 +1,1727 @@
+﻿@model SIAAPI.ClasesProduccion.ClsCotizador
+
+@{
+    ViewBag.Title = "Suaje Nuevo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<head>
+
+    <title></title>
+    <style type="text/css">
+        .auto-style1 {
+            width: 76px;
+        }
+
+        .auto-style6 {
+            width: 554px;
+            text-align: center;
+        }
+
+        .auto-style7 {
+            width: 353px;
+            text-align: center;
+        }
+
+        .auto-style8 {
+            width: 316px;
+            text-align: center;
+        }
+
+        .auto-style9 {
+            width: 215px;
+            text-align: center;
+        }
+
+        .auto-style10 {
+            width: 275px;
+            text-align: center;
+            color: black;
+            background-color: #d9ccb3;
+        }
+
+        .auto-style11 {
+            width: 275px;
+            text-align: center;
+            color: black;
+            background-color: #e1e0d6;
+        }
+
+        .Pagina {
+            width: 275px;
+            text-align: center;
+            background-color: white;
+            color: gray;
+        }
+
+        .Texto {
+            width: 275px;
+            text-align: center;
+            color: black;
+            background-color: white;
+        }
+
+        .auto-style12 {
+            width: 275px;
+            text-align: center;
+            color: black;
+            background-color: antiquewhite;
+            margin-left: 40px;
+        }
+
+        .auto-style13 {
+            width: 276px;
+        }
+
+        .auto-style14 {
+            text-align: center;
+        }
+
+        .auto-style15 {
+            width: 688px;
+        }
+    </style>
+</head>
+
+
+
+
+@*<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>*@
+<script type="text/javascript">
+    //$(function () {
+    //    $("#Tsuaje").change(function () {
+    function ocultarA() {
+        var tps = document.getElementById("TipoDSuaje").value;
+        //alert(tps)
+        if (tps == "F") {
+            $("#showStateLga").show();
+            //$('#edCuota').removeAttr("disabled");
+        }
+        else {
+            $("#showStateLga").hide();
+            //$('#edCuota').attr("disabled", true);
+        }
+
+    }
+
+    function MostrarBoton() {
+        var valors = document.getElementById("Largomm").value;
+        var valor = parseInt(valors, 10)
+
+
+        var tps = document.getElementById("TipoDSuaje").value;
+        if (tps == "F") {
+            if (valor > 0) {
+                valor = valor + 3;
+                var almas = [88, 98, 104, 108, 116, 122, 126];
+                //  var columna2 = [Math.round10((88 * 3.175 / valor), -3), Math.round10((98 * 3.175 / valor), -3), Math.round10((104 * 3.175 / valor), -3), Math.round10((108 * 3.175 / valor), -3), Math.round10((116 * 3.175 / valor), -3), Math.round10((122 * 3.175 / valor), -3), Math.round10((126 * 3.175 / valor), -3)];
+                var columna2 = [(88 * 3.175) / valor, (98 * 3.175) / valor, (104 * 3.175) / valor, (108 * 3.175) / valor, (116 * 3.175) / valor, (122 * 3.175) / valor, (126 * 3.175) / valor];
+
+                var table_body = '<table border="1" class="table">';
+                table_body += '<tr>';
+                table_body += '<th>';
+                table_body += 'Almas';
+                table_body += '</th>';
+                table_body += '<th>';
+                table_body += 'Cavidades';
+                table_body += '</th>';
+                table_body += '</tr>';
+                for (var i = 0; i < 7; i++) {
+                    table_body += '<tr>';
+                    table_body += '<td>';
+                    table_body += almas[i]
+                    table_body += '</td>';
+                    table_body += '<td>';
+                    table_body += columna2[i]
+                    table_body += '</td>';
+                    table_body += '</tr>';
+                }
+                table_body += '</table>';
+                $('#tableDiv').html(table_body);
+
+                $("#showCalculos").show();
+                //$('#edCuota').removeAttr("disabled");
+            }
+            else {
+
+                $("#showCalculos").hide();
+                //$('#edCuota').attr("disabled", true);
+            }
+        }
+    }
+
+</script>
+
+
+
+
+<div>
+    @Html.ActionLink("Consultar Materiales", "Index", "Materiales", null, new { @target = "_blank", @class = "btn btn-warning btn-xs" }) |
+    @Html.ActionLink("Consultar Tintas", "TipoArticulo", "Cotizador", null, new { @target = "_blank", @class = "btn btn-info btn-xs" })
+    @Html.ActionLink("Inventario de Rodillos", "ConsultaRodillo", "Articulos", null, new { @target = "_blank", @class = "btn btn-success btn-xs" })
+</div>
+
+
+<table>
+
+    @if (Model.SuajeNuevo == true)
+    {
+
+        <tr>
+            <td>
+                <h3>Cotización de etiqueta con suaje Nuevo </h3>    <div class="text-danger"><h2>@ViewBag.Mensajedeerror</h2></div>
+            </td>
+        </tr>
+
+
+
+    }
+
+    <tr>
+        <td class="col-lg-8">
+            <h4>Ingresa los siguientes datos</h4>
+        </td>
+        <td class="col-lg-4">
+            Tipo de Cambio @Model.TCcotizado
+        </td>
+    </tr>
+    <tr>
+        <td class="col-lg-8 text-info" style="font-size:x-large">
+            @*<h4>Cuando estes en el eje de Etiqueta presiona la tecla arroba para reducir la busqueda de suaje</h4>*@
+            <br />
+        </td>
+
+    </tr>
+</table>
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.IDCotizacion, null)
+
+    @Html.HiddenFor(model => model.TipoCorte, null)
+    @Html.HiddenFor(model => model.Esquinas, null)
+    @Html.HiddenFor(model => model.TipoSuaje, null)
+    @Html.HiddenFor(model => model.TipoSuajeFigura, null)
+    @Html.HiddenFor(model => model.SuajeNuevo, null)
+
+
+    <input value="@Model.Esquinas" id="EsquinaSuaje" name="EsquinaSuaje" type="hidden" />
+
+
+    <table class="table-responsive col-12">
+
+
+
+        <tr>
+
+            <td>
+                <div class="col-md-12">
+                    <h6 style="font-size: small">Tipo de Suaje: </h6>
+                    @Html.DropDownList("Tsuaje", null, Model.TipoSuaje, htmlAttributes: new { @class = "form-control", onchange = "ocultarA()", id = "TipoDSuaje", name = "TipoDSuaje" })
+                    @Html.ValidationMessageFor(model => model.TipoSuaje, "", new { @class = "text-danger" })
+                </div>
+            </td>
+            <td>
+                @{
+                    if (Model.TipoSuaje == "F")
+                    {
+                        <div id="showStateLga">
+                            <div class="col-md-12">
+                                <h6 style="font-size: small">Almas: </h6>
+                                @Html.DropDownList("Almas", null, Model.TH.ToString(), htmlAttributes: new { @class = "form-control", id = "AlmasD", name = "AlmasD" })
+                                @Html.ValidationMessageFor(model => model.TH, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="showStateLga" style="display: none">
+                            <div class="col-md-12">
+                                <h6 style="font-size: small">Almas: </h6>
+                                @Html.DropDownList("Almas", null, Model.TH.ToString(), htmlAttributes: new { @class = "form-control", id = "AlmasD", name = "AlmasD" })
+                                @Html.ValidationMessageFor(model => model.TH, "", new { @class = "text-danger" })
+                            </div>
+
+                        </div>
+                    }
+
+                }
+
+
+            </td>
+
+
+
+
+
+            <td>
+                <div class="col-md-12">
+                    <h6 style="font-size: small">Figura Suaje: </h6>
+                    @Html.DropDownList("TSuajeFi", null, Model.TipoSuajeFigura, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TipoSuajeFigura, "", new { @class = "text-danger" })
+                </div>
+            </td>
+            <td>
+                <div class="col-md-12">
+                    <h6 style="font-size: small">Tipo Corte Suaje: </h6>
+                    @Html.DropDownList("TSuajeCorte", null, Model.TipoCorte, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TipoCorte, "", new { @class = "text-danger" })
+                </div>
+            </td>
+            <td>
+                <div class="col-md-12">
+                    <h6 style="font-size: small">Esquinas: </h6>
+                    @Html.DropDownList("EsquinaSuaje", null, Model.Esquinas, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Esquinas, "", new { @class = "text-danger" })
+                </div>
+            </td>
+
+            <td>
+
+
+                <div class="col-md-12">
+                    <h6 style="font-size: small">Pleca: </h6>
+                    @Html.DropDownListFor(model => model.IDSuaje2, ViewBag.IDSuaje2 as List<SelectListItem>, new { @class = "form-control", id = "IDSuaje2", name = "IDSuaje2" })
+                    @Html.ValidationMessageFor(model => model.IDSuaje2, "", new { @class = "text-danger" })
+                </div>
+
+            </td>
+
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <div id="showCalculos" style="display: none">
+                    <div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCoupon">Visualizar</button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+
+    </table>
+    <h3>No te desplazes con enter, por favor desplazate con la tecla "tab"</h3>
+    <table class="table-responsive col-12">
+        <tr>
+            <td class="auto-style10">MAQUINA</td>
+            <td class="auto-style10">EJE EN MM</td>
+            <td class="auto-style10">AVANCE EN MM</td>
+            <td class="auto-style10">CAVIDADES EJE</td>
+            <td class="auto-style10">CAVIDADES AVANCE</td>
+
+        </tr>
+        <tr>
+            @{
+                if (Model.EjeMaquina == 10)
+                {
+                    <td class="auto-style1">
+                        <SELECT ID="EjeMaquina" name="EjeMaquina" onchange="CalculaDientes()">
+                            <option Selected="selected" Value="10">MAQUINA CON EJE DE 10 PULGADAS</option>
+                            <option Value="7">MAQUINA CON EJE DE 7 PULGADAS</option>
+                            <OPTION Value="13">MAQUINA CON EJE DE 13 PULGADAS</OPTION>
+                        </SELECT>
+                    </td>
+                }
+                else if (Model.EjeMaquina == 7)
+                {
+                    <td class="auto-style1">
+                        <SELECT ID="EjeMaquina" name="EjeMaquina" onchange="CalculaDientes()">
+                            <option Value="10">MAQUINA CON EJE DE 10 PULGADAS</option>
+                            <option Selected="selected" Value="7">MAQUINA CON EJE DE 7 PULGADAS</option>
+                            <OPTION Value="13">MAQUINA CON EJE DE 13 PULGADAS</OPTION>
+                        </SELECT>
+                    </td>
+                }
+                else if (Model.EjeMaquina == 13)
+                {
+                    <td class="auto-style1">
+                        <SELECT ID="EjeMaquina" name="EjeMaquina" onchange="CalculaDientes()">
+                            <option Value="10">MAQUINA CON EJE DE 10 PULGADAS</option>
+                            <option Value="7">MAQUINA CON EJE DE 7 PULGADAS</option>
+                            <OPTION Selected="selected" Value="13">MAQUINA CON EJE DE 13 PULGADAS</OPTION>
+                        </SELECT>
+                    </td>
+                }
+                else
+                {
+                    <td class="auto-style1">
+                        <SELECT ID="EjeMaquina" name="EjeMaquina" onchange="CalculaDientes()">
+                            <option Selected="selected" Value="10">MAQUINA CON EJE DE 10 PULGADAS</option>
+                            <option Value="7">MAQUINA CON EJE DE 7 PULGADAS</option>
+                            <OPTION Value="13">MAQUINA CON EJE DE 13 PULGADAS</OPTION>
+                        </SELECT>
+                    </td>
+                }
+
+            }
+
+            <td>
+
+
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.anchoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Anchomm", name = "Anchomm", onkeyup = "actualizasuaje(event)" } })
+                        @Html.ValidationMessageFor(model => model.anchoproductomm, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.largoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Largomm", name = "Largomm", onkeyup = "MostrarBoton()" } })
+                        @Html.ValidationMessageFor(model => model.largoproductomm, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.cavidadesdesuajeEje, new { htmlAttributes = new { @class = "form-control", id = "Cavidades", name = "Cavidades", onkeyup = "CalculaDientes()" } })
+                        @Html.ValidationMessageFor(model => model.cavidadesdesuajeEje, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.cavidadesdesuajeAvance, new { htmlAttributes = new { @class = "form-control", id = "CavidadesdeSuajeAvance", name = "CavidadesdeSuajeAvance", onkeyup = "CalculaDientes()" } })
+                        @Html.ValidationMessageFor(model => model.cavidadesdesuajeAvance, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+
+
+        </tr>
+        <tr>
+            <td class="auto-style11">GAP EJE EN MM</td>
+            <td class="auto-style11">GAP AVANCE EN MM</td>
+            <td class="auto-style11">DIENTES (TH)</td>
+            <td class="auto-style11">ETIQ. AL PASO</td>
+            <td class="auto-style11">NUM PLECAS</td>
+
+        </tr>
+        <tr>
+            <td>
+
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.gapeje, new { htmlAttributes = new { @class = "form-control", id = "Gapeje", name = "Gapeje", onkeyup = "CalculaDientes()" } })
+                        @Html.ValidationMessageFor(model => model.gapeje, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </td>
+
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.gapavance, new { htmlAttributes = new { @class = "form-control", id = "Gapavance", name = "Gapavance", onkeyup = "CalculaDientes()" } })
+                        @Html.ValidationMessageFor(model => model.gapavance, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+
+
+
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.TH, new { htmlAttributes = new { @class = "form-control", id = "Dientes", name = "Dientes" } })
+                        @Html.ValidationMessageFor(model => model.TH, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.productosalpaso, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.productosalpaso, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td class="auto-style6">
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CuantasPlecas, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CuantasPlecas, "", new { @class = "text-danger" })
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="auto-style12">Numero de tintas</td>
+            <td class="auto-style12">Etiquetas x rollo</td>
+            <td class="auto-style12">Millares a cotizar</td>
+            <td class="auto-style12">Acabado</td>
+
+
+        </tr>
+
+        <tr>
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Numerodetintas, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Numerodetintas, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Cantidadxrollo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cantidadxrollo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+            </td>
+
+            <td>
+
+                <div class="form-group">
+
+                    <div class="col-md-12">
+
+                        @Html.DropDownList("ACABADO", null, Model.ACABADO, htmlAttributes: new { @class = "form-control", id = "ACABADO", name = "ACABADO" })
+                        @Html.ValidationMessageFor(model => model.ACABADO, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <td colspan="4">.</td>
+        </tr>
+    </table>
+
+    <br />
+
+
+    <table>
+        <tr>
+            @*<td>
+                    <h6 style="font-size: small">Ancho de master en cm</h6>
+                </td>*@
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-2">
+                        @Html.HiddenFor(model => model.CobrarMaster, new { htmlAttributes = new { @class = "form-control", id = "CobrarMaster", name = "CobrarMaster" } })
+
+                    </div>
+                </div>
+
+            </td>
+
+
+
+        </tr>
+
+        <tr>
+            @*<td>
+                    <h6 style="font-size: small">Largo de la cinta a considerar</h6>
+                </td>*@
+            <td>
+                <div class="col-md-10">
+                    @Html.HiddenFor(model => model.LargoCinta, new { htmlAttributes = new { @class = "form-control", id = "LargoCinta", name = "LargoCinta" } })
+                    @Html.ValidationMessageFor(model => model.LargoCinta, "", new { @class = "text-danger" })
+                </div>
+            </td>
+
+        </tr>
+
+
+    </table>
+
+
+
+
+    <table>
+        <tr>
+            <td>
+                <div class="form-group">
+                    <h2>Minimo de Millares a Producir</h2>
+                    <div class="col-md-10">
+                        @{decimal Minimo = Math.Round(Model.Minimoproducir, 4);}
+                        <h3 class="text-capitalize">  @Minimo Millares</h3>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <br />
+
+    <table>
+        @*<tr>
+
+            </tr>*@
+        <tr>
+
+            <div class="alert alert-warning">Si el material no aparece en el combo, probablemnte esté obsoleto, revisarlo con el departamento correspondiente.</div>
+
+        </tr>
+        <tr>
+            <th><div class="col-md-5"></div></th>
+            <th><div class="col-md-1"><h4>Cintas</h4></div></th>
+
+            <th><div class="col-md-5"></div></th>
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas"))
+            {
+                <th><div class="col-md-5"></div></th>
+                <th><div class="col-md-1">Costo</div></th>
+                <th><div class="col-md-5"></div></th>
+            }
+        </tr>
+
+        <tr>
+            <td>
+                <h6 style="font-size: small">Cinta Existente</h6>
+            </td>
+            <td class="col-lg-3">
+                Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                <br /><input id="clave" name="clave" onkeyup="actualizacomboArticulo(event)" />
+            </td>
+            <td>
+
+
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDMaterial, ViewBag.IDMaterial as List<SelectListItem>, new { @class = "form-control", id = "IDMp", onchange = "getMP()" })
+                    @Html.ValidationMessageFor(model => model.IDMaterial, "", new { @class = "text-danger" })
+                </div>
+                <input id="AnchoCinta" name="AnchoCinta" value="0" hidden />
+
+            </td>
+
+            @{if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas"))
+                {
+                    <td>
+                        <h6 style="font-size: small">Costo en USD de M2 </h6>
+                    </td>
+                    <td>
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.CostoM2Cinta, new { htmlAttributes = new { @class = "form-control", id = "Precio", name = "Precio" } })
+                                @Html.ValidationMessageFor(model => model.CostoM2Cinta, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <div class="form-group">
+
+                            <div class="col-md-10">
+                                @Html.HiddenFor(model => model.CostoM2Cinta, new { htmlAttributes = new { @class = "form-control", id = "Precio", name = "Precio" } })
+                                @Html.ValidationMessageFor(model => model.CostoM2Cinta, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </td>
+                }
+            }
+        </tr>
+
+        <tr>
+            <td>
+                <h6 style="font-size: small">Adicional</h6>
+            </td>
+            <td class="col-lg-3">
+                Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                <br /><input id="clave1" name="clave1" onkeyup="actualizacomboArticulo1(event)" />
+            </td>
+            <td>
+
+
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDMaterial2, ViewBag.IDMaterial as List<SelectListItem>, new { @class = "form-control", id = "IDMp2", onchange = "getMP2()" })
+                    @Html.ValidationMessageFor(model => model.IDMaterial2, "", new { @class = "text-danger" })
+                </div>
+                <input id="AnchoCinta" name="AnchoCinta" value="0" hidden />
+
+            </td>
+
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas"))
+            {
+                <td>
+                    <h6 style="font-size: small">Costo en USD de M2 Adicional</h6>
+                </td>
+                <td>
+                    <div class="form-group">
+
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CostoM2Cinta2, new { htmlAttributes = new { @class = "form-control", id = "Precio2", name = "Precio2" } })
+                            @Html.ValidationMessageFor(model => model.CostoM2Cinta2, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </td>
+            }
+            else
+
+            {
+                <td>
+                    <div class="form-group">
+
+                        <div class="col-md-10">
+                            @Html.HiddenFor(model => model.CostoM2Cinta2, new { htmlAttributes = new { @class = "form-control", id = "Precio2", name = "Precio2" } })
+                            @Html.ValidationMessageFor(model => model.CostoM2Cinta2, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </td>
+            }
+        </tr>
+
+        <tr>
+            <td>
+                <h6 style="font-size: small">Adicional 2</h6>
+            </td>
+            <td class="col-lg-3">
+                Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                <br /><input id="clave3" name="clave3" onkeyup="actualizacomboArticulo3(event)" />
+            </td>
+
+            <td>
+
+
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDMaterial3, ViewBag.IDMaterial as List<SelectListItem>, new { @class = "form-control", id = "IDMp3", onchange = "getMP3()" })
+                    @Html.ValidationMessageFor(model => model.IDMaterial3, "", new { @class = "text-danger" })
+                </div>
+                <input id="AnchoCinta3" name="AnchoCinta3" value="0" hidden />
+
+            </td>
+
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas"))
+            {
+                <td>
+                    <h6 style="font-size: small">Costo en USD de M2 Adicional 2</h6>
+                </td>
+                <td>
+                    <div class="form-group">
+
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CostoM2Cinta3, new { htmlAttributes = new { @class = "form-control", id = "Precio3", name = "Precio3" } })
+                            @Html.ValidationMessageFor(model => model.CostoM2Cinta3, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </td>
+            }
+            else
+            {
+
+                <td>
+                    @Html.HiddenFor(model => model.CostoM2Cinta3, new { htmlAttributes = new { @class = "form-control", id = "Precio3", name = "Precio3" } })
+                </td>
+
+            }
+
+        </tr>
+
+    </table>
+
+    <h4>Centros </h4>
+    <div class="col-md-12">
+        @Html.DropDownListFor(model => model.IDCentro, ViewBag.IDCentro as List<SelectListItem>, new { @class = "form-control", id = "IDCentro", })
+        @Html.ValidationMessageFor(model => model.IDCentro, "", new { @class = "text-danger" })
+    </div>
+
+    <h4>Cajas </h4>
+    <div class="col-md-12">
+        @Html.DropDownListFor(model => model.IDCaja, ViewBag.IDCaja as List<SelectListItem>, new { @class = "form-control", id = "IDCentro", })
+        @Html.ValidationMessageFor(model => model.IDCaja, "", new { @class = "text-danger" })
+    </div>
+
+
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+    <table>
+        <tr>
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Ancho de cinta minimo necesitado |</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.anchomaterialenmm, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.anchomaterialenmm, "", new { @class = "text-danger" })*@
+                    @{int anchomaterialenmm = Model.anchomaterialenmm;}
+                    @anchomaterialenmm mm
+                </div>
+            </td>
+
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Largo de Cinta necesitada |</h6>
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.largomaterialenMts, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.largomaterialenMts, "", new { @class = "text-danger" })*@
+                    @{decimal largomaterialenMts = Model.largomaterialenMts;}
+                    @largomaterialenMts Mts
+                </div>
+            </td>
+
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Mts necesarios de preparacion y cambios |</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.MtsdeMerma, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MtsdeMerma, "", new { @class = "text-danger" })*@
+                    @{decimal MtsdeMerma = Model.MtsdeMerma;}
+                    @MtsdeMerma Mts
+
+                </div>
+
+            </td>
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Material total necesitado |</h6>
+                <div class="col-md-10 text-primary">
+                    @{decimal MaterialNecesitado = Math.Round(Model.MaterialNecesitado, 4);}
+                    @MaterialNecesitado Mts
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Cantidad de Mts2 de MP |</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.CantidadMPMts2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CantidadMPMts2, "", new { @class = "text-danger" })*@
+                    @{decimal CantidadMPMts2 = Math.Round(Model.CantidadMPMts2, 4);}
+                    @CantidadMPMts2 Mts2
+                </div>
+            </td>
+
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Número de Cintas |</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.Numerodecintas, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Numerodecintas, "", new { @class = "text-danger" })*@
+                    @{decimal Numerodecintas = Math.Round(Model.Numerodecintas, 4);}
+                    @Numerodecintas Piezas
+                </div>
+            </td>
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Ancho de Master|</h6>
+
+                <div class="col-md-10 text-primary">
+                    @{decimal AnchoMaster = Model.anchommmaster;}
+                    @AnchoMaster mm
+                </div>
+
+
+            </td>
+
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Número de Cintas  en el Master|</h6>
+
+                <div class="col-md-10 text-primary">
+
+                    @{decimal CintasMaster = Model.CintasMaster;}
+                    @CintasMaster Piezas
+                </div>
+            </td>
+
+
+
+        </tr>
+        @* ////////////////////////////hablitar cuando esten los roles /////////////////////*@
+
+
+        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas"))
+        {
+            <tr>
+
+
+                <td>
+                    <h6 style="font-size: small" class="text-black-50">Costo Total Cinta</h6>
+
+                    <div class="col-md-10 text-primary">
+                        @{decimal CostototalMP = Math.Round(Model.CostototalMP, 4);}
+                        @CostototalMP  USD
+                    </div>
+                </td>
+
+                <td>
+                    <h6 style="font-size: small" class="text-black-50">Minutos en prensa</h6>
+
+                    <div class="col-md-10 text-primary">
+                        @{ decimal hrprensa = Math.Round((Model.HrPrensa * 60), 0); }
+                        @hrprensa Minutos
+                    </div>
+                </td>
+
+
+            </tr>
+
+
+        }
+
+    </table>
+
+    <div><h2>Datos del Suaje</h2></div>
+    <table class="table-responsive col-12">
+        <tr>
+            <td class="auto-style10">LARGO PLACA</td>
+            <td class="auto-style10">AVANCE REAL</td>
+            <td class="auto-style10">PULGADAS LINEALES</td>
+            <td class="auto-style10">LARGO SUAJE PULGADAS</td>
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas"))
+            {
+                <td class="auto-style10">COSTO</td>
+            }
+            <td class="auto-style10">PRECIO USD</td>
+
+        </tr>
+        <tr>
+            <td>
+                <div>
+                    @Html.EditorFor(model => model.LargoPlaca, new { htmlAttributes = new { @class = "form-control", id = "LargoPlaca", name = "LargoPlaca" } })
+                    @Html.ValidationMessageFor(model => model.LargoPlaca, "", new { @class = "text-danger" })
+                </div>
+            </td>
+            <td>
+                <div>
+                    @Html.EditorFor(model => model.AvanceReal, new { htmlAttributes = new { @class = "form-control", id = "AvanceReal", name = "AvanceReal" } })
+                    @Html.ValidationMessageFor(model => model.AvanceReal, "", new { @class = "text-danger" })
+                </div>
+            </td>
+            <td>
+                <div>
+                    @Html.EditorFor(model => model.PulgadasLineales, new { htmlAttributes = new { @class = "form-control", id = "PulgadasLineales", name = "PulgadasLineales" } })
+                    @Html.ValidationMessageFor(model => model.PulgadasLineales, "", new { @class = "text-danger" })
+                </div>
+            </td>
+            <td>
+                <div>
+                    @Html.EditorFor(model => model.LargoSuaje, new { htmlAttributes = new { @class = "form-control", id = "LargoSuaje", name = "LargoSuaje" } })
+                    @Html.ValidationMessageFor(model => model.LargoSuaje, "", new { @class = "text-danger" })
+                </div>
+            </td>
+
+          
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas"))
+            {
+            <td>
+                <div>
+                    @Html.EditorFor(model => model.CostoSuaje, new { htmlAttributes = new { @class = "form-control", id = "CostoSuaje", name = "CostoSuaje" } })
+                    @Html.ValidationMessageFor(model => model.CostoSuaje, "", new { @class = "text-danger" })
+                </div>
+
+            </td>
+            }
+            <td>
+                <div>
+                    @Html.EditorFor(model => model.PrecioSuaje, new { htmlAttributes = new { @class = "form-control", id = "PrecioSuaje", name = "PrecioSuaje" } })
+                    @Html.ValidationMessageFor(model => model.PrecioSuaje, "", new { @class = "text-danger" })
+                </div>
+
+            </td>
+        </tr>
+
+    </table>
+    <div>
+        <br />
+        <br />
+    </div>
+
+
+    @Html.HiddenFor(model => model.TCcotizado)
+    @Html.HiddenFor(model => model.IDMonedapreciosconvenidos)
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.Cantidaderollos, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cantidaderollos, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Cantidaderollos, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+
+
+
+
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.VelocidaddePrensaPies, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.VelocidaddePrensaPies, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VelocidaddePrensaPies, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+    @*<div class="form-group">
+            @Html.LabelFor(model => model.VelocidaddePrensaMts, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.VelocidaddePrensaMts, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.VelocidaddePrensaMts, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+
+
+
+
+
+    @*</div> @*fin de div general*@
+
+
+
+
+    try
+    {
+        //if ((ViewBag.EnqueEstoy == 2) && ( Model.Numerodetintas> 0))
+        //{
+        Html.RenderPartial("Tintas", ViewData["Tintas"]);
+        //}
+    }
+    catch (Exception err)
+    {
+        string mensajederror1 = err.Message;
+    }
+
+    if (ViewBag.Mensajedeerror == "")
+    {
+        try
+        {
+            //if ((ViewBag.EnqueEstoy == 2) && ( Model.Numerodetintas> 0))
+            //{
+            Html.RenderPartial("Rango", Model);
+            //}
+        }
+        catch (Exception err2)
+        {
+            string mensajederror2 = err2.Message;
+        }
+    }
+    if (Model.Yatienematriz)
+    {
+        try
+        {
+            //if ((ViewBag.EnqueEstoy == 2) && ( Model.Numerodetintas> 0))
+            //{
+            ViewBag.Cantidad1 = Model.Rango1;
+            ViewBag.Cantidad2 = Model.Rango2;
+            ViewBag.Cantidad3 = Model.Rango3;
+            ViewBag.Cantidad4 = Model.Rango4;
+            if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas"))
+            {
+
+                Html.RenderPartial("MatrizCosto", Model);
+            }
+            Html.RenderPartial("Matriz", Model.MatrizPrecio);
+            ViewBag.TC = Model.TCcotizado;
+            ViewBag.idMonedaconvenida = Model.IDMonedapreciosconvenidos;
+            Html.RenderPartial("Precioconv", Model);
+            //}
+        }
+        catch (Exception err2)
+        {
+            string mensajederror2 = err2.Message;
+        }
+    }
+
+    string cadena = "Siguiente";
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+
+            <input type="submit" id="btnSiguiente" name="Enviar" value="@cadena" class="btn btn-dark" />
+            @if (Model.Yatienematriz)
+            {
+                <input type="submit" id="btnSiguiente" name="Enviar" value="Grabar Archivo" class="btn btn-info  " />
+                if (Model.IDCotizacion > 0)
+                {
+                    <input type="submit" id="btnSiguiente" name="Enviar" value="Sobreescribir" class="btn btn-warning  btn-xs" />
+
+                    <input type="submit" id="btnSiguiente" name="Enviar" value="Crear Articulo" class="btn btn-warning  btn-xs" />
+                    <input type="submit" id="btnSiguiente" name="Enviar" value="Asignar Articulo" class="btn btn-warning  btn-xs" />
+                    <input type="submit" id="btnSiguiente" name="Enviar" value="Crear PDF" class="btn btn-warning  btn-xs" />
+
+                    SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                    if (Model.SuajeNuevo == true)
+                    {
+
+                        string cadenaid = "select count(id) as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Suaje'";
+                        SIAAPI.Models.Comercial.ClsDatoEntero cuenta = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(cadenaid).ToList().FirstOrDefault();
+                        try
+                        {
+                            string cadenaidsoli = "select id as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Suaje'";
+                            SIAAPI.Models.Comercial.ClsDatoEntero idsolicitud = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(cadenaidsoli).ToList().FirstOrDefault();
+                            ViewBag.solicitud = idsolicitud.Dato;
+
+                            string cadenaestado = "select estadodeSolicitud as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Suaje'";
+                            SIAAPI.Models.Comercial.ClsDatoString estado = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenaestado).ToList().FirstOrDefault();
+                            ViewBag.estadoSolicitud = estado.Dato;
+
+                            string cadenasolicitud = "select TipodeSolicitud as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "";
+                            SIAAPI.Models.Comercial.ClsDatoString Solicitud = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenasolicitud).ToList().FirstOrDefault();
+                            ViewBag.SolicitudS = Solicitud.Dato;
+
+                            string cadenasolicitudD = "select TipodeDiseno as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "";
+                            SIAAPI.Models.Comercial.ClsDatoString SolicitudT = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenasolicitudD).ToList().FirstOrDefault();
+                            ViewBag.SolicitudT = SolicitudT.Dato;
+
+                        }
+                        catch (Exception err)
+                        {
+
+                        }
+
+
+                        if (cuenta.Dato == null || cuenta.Dato == 0)
+                        {
+                            @Html.ActionLink("Solicitud Diseño Suaje", "CreateDisenoSuaje", "Diseno", new { IDCotizacion = Model.IDCotizacion, Monto = Model.Cantidad }, new { @class = "btn btn-warning btn-xs" })
+
+                        }
+                        else
+                        {
+                            try
+                            {
+                                <div> Solicitud Diseño @ViewBag.SolicitudS : @ViewBag.solicitud (@ViewBag.estadoSolicitud) </div>
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+
+                        }
+
+                        string cadenacount = "select count(id) as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Diseño'";
+                        SIAAPI.Models.Comercial.ClsDatoEntero cuentaD = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(cadenacount).ToList().FirstOrDefault();
+
+                        try
+                        {
+                            string cadenaidsoliD = "select id as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Diseño'";
+                            SIAAPI.Models.Comercial.ClsDatoEntero idsolicitudD = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(cadenaidsoliD).ToList().FirstOrDefault();
+                            ViewBag.solicitudDiseño = idsolicitudD.Dato;
+
+                            string cadenaestadoD = "select estadodeSolicitud as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Diseño'";
+                            SIAAPI.Models.Comercial.ClsDatoString estadoD = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenaestadoD).ToList().FirstOrDefault();
+                            ViewBag.estadoSolicitudD = estadoD.Dato;
+
+                            string cadenasolicitud = "select TipodeSolicitud as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "";
+                            SIAAPI.Models.Comercial.ClsDatoString Solicitud = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenasolicitud).ToList().FirstOrDefault();
+                            ViewBag.SolicitudS = Solicitud.Dato;
+
+                            string cadenasolicitudD = "select TipodeDiseno as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "";
+                            SIAAPI.Models.Comercial.ClsDatoString SolicitudT = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenasolicitudD).ToList().FirstOrDefault();
+                            ViewBag.SolicitudT = SolicitudT.Dato;
+
+                        }
+                        catch (Exception err)
+                        {
+
+                        }
+                        if (cuentaD.Dato == null || cuentaD.Dato == 0)
+                        {
+                            @Html.ActionLink("Solicitud Diseño", "Create", "Diseno", new { IDCotizacion = Model.IDCotizacion, Monto = Model.Cantidad }, new { @class = "btn btn-warning btn-xs" })
+
+                        }
+                        else
+                        {
+                            try
+                            {
+                                <div> Solicitud @ViewBag.SolicitudS : @ViewBag.solicitudDiseño (@ViewBag.estadoSolicitudD) </div>
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+
+                        }
+
+
+
+                    }
+                    else
+                    {
+
+                        string cadenacount = "select count(id) as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Diseño'";
+                        SIAAPI.Models.Comercial.ClsDatoEntero cuentaD = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(cadenacount).ToList().FirstOrDefault();
+
+                        try
+                        {
+                            string cadenaidsoliD = "select id as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Diseño'";
+                            SIAAPI.Models.Comercial.ClsDatoEntero idsolicitudD = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(cadenaidsoliD).ToList().FirstOrDefault();
+                            ViewBag.solicitudDiseño = idsolicitudD.Dato;
+
+                            string cadenaestadoD = "select estadodeSolicitud as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "and TipodeSolicitud='Diseño'";
+                            SIAAPI.Models.Comercial.ClsDatoString estadoD = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenaestadoD).ToList().FirstOrDefault();
+                            ViewBag.estadoSolicitudD = estadoD.Dato;
+
+                            string cadenasolicitud = "select TipodeSolicitud as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "";
+                            SIAAPI.Models.Comercial.ClsDatoString Solicitud = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenasolicitud).ToList().FirstOrDefault();
+                            ViewBag.SolicitudS = Solicitud.Dato;
+
+                            string cadenasolicitudD = "select TipodeDiseno as dato from [SolicitudDiseno] where idcotizacion=" + Model.IDCotizacion + "";
+                            SIAAPI.Models.Comercial.ClsDatoString SolicitudT = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenasolicitudD).ToList().FirstOrDefault();
+                            ViewBag.SolicitudT = SolicitudT.Dato;
+
+                        }
+                        catch (Exception err)
+                        {
+
+                        }
+                        if (cuentaD.Dato == null || cuentaD.Dato == 0)
+                        {
+                            @Html.ActionLink("Solicitud Diseño", "Create", "Diseno", new { IDCotizacion = Model.IDCotizacion, Monto = Model.Cantidad }, new { @class = "btn btn-warning btn-xs" })
+
+                        }
+                        else
+                        {
+                            try
+                            {
+                                <div> Solicitud @ViewBag.SolicitudS : @ViewBag.solicitudDiseño (@ViewBag.estadoSolicitudD) </div>
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+
+                        }
+                    }
+                }
+            }
+
+        </div>
+    </div>
+
+}
+
+<div class="modal fade top" id="modalCoupon" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true" data-backdrop="true">
+    <div class="modal-dialog modal-frame modal-top modal-notify modal-success" role="document">
+        <!--Content-->
+        <div class="modal-content">
+            <!--Body-->
+            <div class="modal-body">
+                <div id="tableDiv" class="row d-flex justify-content-center align-items-center">
+
+
+
+
+
+                </div>
+                <a type="button" class="btn btn-success waves-effect" data-dismiss="modal">Visualizado</a>
+            </div>
+        </div>
+        <!--/.Content-->
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("ir  a la lista", "Index")
+</div>
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+<script>
+
+
+                    function getMP() {
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '@Url.Action("getMP")',
+                            dataType: 'json',
+                            data: { IDMp: $("#IDMp").val() },
+                            success: function (Cinta) {
+                                $("#AnchoMaster").val(Cinta.Ancho);
+                                //              $("#LargoCinta").val(Cinta.Largo);
+                                $("#Precio").val(Cinta.Costo);
+                                if (Cinta.CobrarMaster == true) {
+                                    elemento = $("#CobrarMaster");
+                                    elemento.prop("checked", true);
+
+                                }
+                                else {
+                                    elemento = $("#CobrarMaster");
+                                    elemento.prop("checked", false);
+
+                                }
+
+                            },
+                            error: function (ex) {
+                                //alert('Falle.' + ex.data);
+                            }
+
+                        });
+                    }
+
+                    function getMP2() {
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '@Url.Action("getMP")',
+                            dataType: 'json',
+                            data: { IDMp: $("#IDMp2").val() },
+                            success: function (Cinta) {
+
+                                $("#Precio2").val(Cinta.Costo);
+
+
+                            },
+                            error: function (ex) {
+
+                            }
+
+                        });
+                    }
+
+                    function getMP3() {
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '@Url.Action("getMP")',
+                            dataType: 'json',
+                            data: { IDMp: $("#IDMp3").val() },
+                            success: function (Cinta) {
+
+                                $("#Precio3").val(Cinta.Costo);
+                                $("#CostoM2Cinta3").val(Cinta.Costo);
+
+
+                            },
+                            error: function (ex) {
+                                //alert('Falle.' + ex.data);
+                            }
+
+                        });
+                    }
+
+
+    function CalculaDientes() {
+
+                         var costoflete = @ViewBag.Paramsuajes.fletesua;
+
+                        var almas = document.getElementById("AlmasD").value;
+
+
+                        var avance = document.getElementById("Largomm").value;
+                        var ancho = document.getElementById("Anchomm").value;
+                        // alert('avance.' + avance);
+                        var gapAv = document.getElementById("Gapavance").value;
+                        var gapEje = document.getElementById("Gapeje").value;
+                        //alert('gavava.' + gapAv);
+                        var cavAvan = document.getElementById("CavidadesdeSuajeAvance").value;
+                        //alert('cav.' + cavAvan);
+
+                        var cavEje = document.getElementById("Cavidades").value;
+
+                        if (cavAvan < 1)
+                        {
+                            cavAvan = 1;
+
+                        }
+
+                        var Eje = document.getElementById("EjeMaquina").value;
+
+
+                        var anchote = parseFloat((parseFloat(ancho) + parseFloat(gapEje)) * cavEje);
+
+
+
+
+                        var mmEje =parseFloat(Eje) * 25.4;
+                        var mensaje = "Eje " + mmEje + " Ancho " + anchote;
+
+
+                        if (parseFloat(mmEje) < parseFloat(anchote)) {
+                            var mensaje = "Tu etiqueta no cabe con estas repeticiones al eje, exede del eje de tu maquina de " + Eje + " Pulgadas";
+                            alert(mensaje);
+
+                        }
+
+
+
+                        // es flexible
+
+                        if (almas > 0) {
+                            var factor = (parseFloat(almas) * 3.175);
+                            var factor2 = parseFloat(factor) / parseFloat(cavAvan);
+                            var resultado = parseFloat(parseFloat(factor2) - parseFloat(avance));
+                            resultado = Math.ceil10(resultado, -5);
+                            $("#Gapavance").val(resultado);
+                            $("#AvanceReal").val(resultado);
+
+
+
+                            $("#Dientes").val(almas);
+
+                            var Dientes = document.getElementById("Dientes").value;
+                            var GapAvance = document.getElementById("Gapavance").value;
+
+                            var mvarLargosuaje = Math.ceil10(((avance + GapAvance) * cavAvan) / 25.4,-2);
+                            var mvarCorreccionlargo = Math.ceil10(parseFloat(((3.175 * parseFloat(Dientes)) / parseFloat(cavAvan)) - resultado), -2);
+
+                            $("#LargoSuaje").val(mvarLargosuaje);
+
+
+
+                            var mvarPorDist = 100 - ((0.3895 / (6.2832 * (((0.125 * Dientes) / 3.1416) / 2))) * 100);
+                            var mvarLargoplaca = Math.ceil10((mvarLargosuaje * mvarPorDist) / 100, -2);
+                            $("#LargoPlaca").val(mvarLargoplaca);
+                            var comboTipo = document.getElementById("TSuajeFi");
+
+                            var Tipo = comboTipo.options[comboTipo.selectedIndex].text;
+                            var Pulgadaslineales = 0;
+
+                            if (Tipo != "Circulo") {
+
+                                Pulgadaslineales = (((Eje * 2) + (avance * 2)) * cavEje * cavAvan) / 25.4;
+                            }
+                            else {
+                                Pulgadaslineales = ((Eje * 3.1459) * (cavEje * cavAvan) / 25.4);
+                            }
+
+                            $("#PulgadasLineales").val(Pulgadaslineales);
+                            var costop =@ViewBag.Paramsuajes.PulgadaFlex ;
+
+                            var costod = 1.25;
+
+                            if (Eje = 7) {
+                                costod= @ViewBag.Paramsuajes.Diente7Flex ;
+                            }
+                            if (Eje >= 10) {
+                                costod= @ViewBag.Paramsuajes.Diente10Flex ;
+                            }
+
+                            var costo = Math.ceil10( (Pulgadaslineales * costop) + (Dientes*costod),-2) ;
+
+                            $("#CostoSuaje").val(costo);
+                            var factorg = @ViewBag.Paramsuajes.FactorG;
+
+                            var factorg1 = 1 + (factorg / 100);
+
+                            var precio = Math.ceil10( (costo * factorg1) + costoflete ,-2); // redondeado a 2 decimales
+                            $("#PrecioSuaje").val(precio);
+                        }
+
+                        else {
+
+
+
+
+
+
+                            var suma = parseFloat(avance) + parseFloat(gapAv);
+                            //alert('suma.' + suma);
+                            var multi = parseFloat(suma) * parseFloat(cavAvan);
+                            //alert('multi.' + multi);
+                            var div = parseFloat(multi) / 3.175;
+                            //alert('div.' + div);
+
+                            var dientes = div;
+                            var deci = parseFloat(dientes) - Math.floor(dientes)
+                            //alert('dientes.' + dientes);
+                            var suma = 0;
+
+                            if (deci > 0) {
+                                suma = 1;
+
+
+                            }
+                            var dientesReal = Math.floor(dientes) + suma;
+
+
+
+
+                            $("#Dientes").val(dientesReal);
+
+                            var factor = (parseFloat(dientesReal) * 3.175);
+
+                            var factor2 = parseFloat(factor) / parseFloat(cavAvan);
+
+                            var resultado = parseFloat(parseFloat(factor2) - parseFloat(avance));
+                            resultado = Math.ceil10(resultado,-5);
+                            $("#Gapavance").val(resultado);
+                            $("#AvanceReal").val(resultado);
+
+
+
+
+                            var Dientes = document.getElementById("Dientes").value;
+                            var GapAvance = document.getElementById("Gapavance").value;
+
+                            var mvarLargosuaje = Math.ceil10(((parseFloat(avance) + parseFloat(GapAvance)) * parseFloat(cavAvan)) / 25.4, -2);
+                            var mvarCorreccionlargo = Math.ceil10(parseFloat(((3.175 * parseFloat(Dientes)) / cavAvan) - resultado), -2);
+
+                            $("#LargoSuaje").val(mvarLargosuaje);
+
+
+                            var mvarPorDist = 100 - ((0.3895 / (6.2832 * (((0.125 * Dientes) / 3.1416) / 2))) * 100);
+                            var mvarLargoplaca =  Math.ceil10((mvarCorreccionlargo * mvarPorDist) / 100,-2);
+                            $("#LargoPlaca").val(0);
+
+                            var comboTipo = document.getElementById("TSuajeFi");
+
+                            var Tipo = comboTipo.options[comboTipo.selectedIndex].text;
+                            var Pulgadaslineales = 0;
+
+                            if (Tipo != "Circulo") {
+
+                                Pulgadaslineales = Math.ceil10( (((Eje * 2) + (avance * 2)) * cavEje * cavAvan) / 25.4,-2);
+                            }
+                            else {
+                                Pulgadaslineales = Math.ceil10(((Eje * 3.1459) * (cavEje * cavAvan) / 25.4),-2);
+                            }
+
+                            $("#PulgadasLineales").val(Pulgadaslineales);
+
+                            var costop =@ViewBag.Paramsuajes.costopulgada ;
+                            var costod = 4.4;
+
+
+                            if (Eje = 7) {
+                                costod= @ViewBag.Paramsuajes.costodiente7 ;
+                            }
+                            if (Eje >= 10) {
+                                costod= @ViewBag.Paramsuajes.costodiente10 ;
+                            }
+
+                            var costo = Math.ceil10((Pulgadaslineales * costop) + (Dientes * costod), -2);
+
+                            $("#CostoSuaje").val(costo);
+                            var factorg = @ViewBag.Paramsuajes.FactorG;
+
+                            var factorg1 = 1 + (factorg / 100);
+
+                            var precio = Math.ceil10((costo * factorg1) + costoflete , -2); // redondeado a 2 decimales
+                            $("#PrecioSuaje").val(precio);
+
+                        }
+
+                        if ((Eje == 7) && (Dientes < 48) && (cavEje>0)) {
+                            var mensaje = "Incrementa tus repeticiones al Avance";
+                            alert(mensaje);
+
+                        }
+                        if ((Eje == 10) && (Dientes < 56) && (cavEje > 0)) {
+                            var mensaje = "Incrementa tus repeticiones al Avance";
+                            alert(mensaje);
+
+                        }
+
+                        return dientesReal;
+
+                    }
+
+
+
+
+
+
+
+
+                    function actualizasuaje(e) {
+
+
+
+
+                        if (e.keyCode === 18) {
+                            var control = "#Anchomm";
+                            var selectcontrol = "#IDSuaje";
+                            $(selectcontrol).empty();
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '@Url.Action("getsuajesblando")',
+                                dataType: 'json',
+                                data: { buscar: $(control).val() },
+                                success: function (articulos) {
+
+                                    for (i = 0; i < articulos.length; i++) {
+                                        var Value = articulos[i].Value;
+
+                                        var Text = articulos[i].Text;
+                                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+                                    }
+                                },
+                                error: function (ex) {
+                                    //alert('Falle.' + ex.data);
+                                }
+
+                            });
+                        }
+                    }
+
+
+                    function actualizacomboArticulo(e) {
+
+
+
+                        if (e.keyCode === 18) {
+
+                            var control = "#clave";
+                            var selectcontrol = "#IDMp";
+                            $(selectcontrol).empty();
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '@Url.Action("getarticulosblando")',
+                                dataType: 'json',
+                                data: { buscar: $(control).val() },
+                                success: function (articulos) {
+
+                                    for (i = 0; i < articulos.length; i++) {
+                                        var Value = articulos[i].Value;
+
+                                        var Text = articulos[i].Text;
+                                        var select = "Selecciona un articulo";
+                                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                                    }
+                                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                                },
+                                error: function (ex) {
+                                    //alert('Falle.' + ex.data);
+                                }
+
+                            });
+                        }
+                    }
+
+
+                    function actualizacomboArticulo1(e) {
+
+
+
+                        if (e.keyCode === 18) {
+
+                            var control = "#clave1";
+                            var selectcontrol = "#IDMp2";
+                            $(selectcontrol).empty();
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '@Url.Action("getarticulosblando")',
+                                dataType: 'json',
+                                data: { buscar: $(control).val() },
+                                success: function (articulos) {
+
+                                    for (i = 0; i < articulos.length; i++) {
+                                        var Value = articulos[i].Value;
+
+                                        var Text = articulos[i].Text;
+                                        var select = "Selecciona un articulo";
+                                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                                    }
+                                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                                },
+                                error: function (ex) {
+                                    //alert('Falle.' + ex.data);
+                                }
+
+                            });
+                        }
+                    }
+
+                    function actualizacomboArticulo3(e) {
+
+
+
+                        if (e.keyCode === 18) {
+
+                            var control = "#clave3";
+                            var selectcontrol = "#IDMp3";
+                            $(selectcontrol).empty();
+
+                            $.ajax({
+                                type: 'GET',
+                                url: '@Url.Action("getarticulosblando")',
+                                dataType: 'json',
+                                data: { buscar: $(control).val() },
+                                success: function (articulos) {
+
+                                    for (i = 0; i < articulos.length; i++) {
+                                        var Value = articulos[i].Value;
+
+                                        var Text = articulos[i].Text;
+                                        var select = "Selecciona un articulo";
+                                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                                    }
+                                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                                },
+                                error: function (ex) {
+                                    //alert('Falle.' + ex.data);
+                                }
+
+                            });
+                        }
+                    }
+
+                    (function () {
+
+                        function decimalAdjust(type, value, exp) {
+                            // Si el exp no está definido o es cero...
+                            if (typeof exp === 'undefined' || +exp === 0) {
+                                return Math[type](value);
+                            }
+                            value = +value;
+                            exp = +exp;
+                            // Si el valor no es un número o el exp no es un entero...
+                            if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+                                return NaN;
+                            }
+                            // Shift
+                            value = value.toString().split('e');
+                            value = Math[type](+(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp)));
+                            // Shift back
+                            value = value.toString().split('e');
+                            return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+                        }
+
+                        // Decimal round
+                        if (!Math.round10) {
+                            Math.round10 = function (value, exp) {
+                                return decimalAdjust('round', value, exp);
+                            };
+                        }
+                        // Decimal floor
+                        if (!Math.floor10) {
+                            Math.floor10 = function (value, exp) {
+                                return decimalAdjust('floor', value, exp);
+                            };
+                        }
+                        // Decimal ceil
+                        if (!Math.ceil10) {
+                            Math.ceil10 = function (value, exp) {
+                                return decimalAdjust('ceil', value, exp);
+                            };
+                        }
+                    })();
+
+</script>
+
+

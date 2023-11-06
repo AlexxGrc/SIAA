@@ -1,0 +1,122 @@
+﻿@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.MatrizPrecioCliente>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Matriz Precio Cliente</h3>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <div>
+                        @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-primary navbar-btn btn-xs" })|
+                        Elementos por página: @Html.DropDownList("pageSize")
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <input type="submit" value="Aplicar" class="btn btn-default navbar-btn" /> <span class="sr-only">(current)</span>
+                    </div>
+
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @Html.ActionLink("Cliente", "Index", new { sortOrder = ViewBag.ASortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.ActionLink("Artículo", "Index", new { sortOrder = ViewBag.BSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @Html.Label("Rango Inferior")
+                @*@Html.DisplayNameFor(model => model.RangInf)*@
+            </th>
+            <th>
+                @Html.Label("Rango Superior")
+                @*@Html.DisplayNameFor(model => model.RangSup)*@
+            </th>
+            <th>
+                @Html.Label("Precio")
+                @*  @Html.DisplayNameFor(model => model.Precio)*@
+            </th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clientes.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Articulo.Descripcion)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RangInf)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RangSup)
+                </td>
+                <td>
+
+                    @String.Format("{0:C}", item.Precio)
+                </td>
+
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IDMatrizPrecio }, new { @class = "btn btn-default btn-xs" })
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IDMatrizPrecio }, new { @class = "btn btn-default btn-xs" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.IDMatrizPrecio }, new { @class = "btn btn-danger btn-xs" })
+
+                </td>
+            </tr>
+        }
+
+    </table>
+    </div>
+    @*Paginación*@
+    @using (Html.BeginForm("Index", "MatrizPrecioCliente", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+        <div class="pager">
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+            @Model.Count de @Model.TotalItemCount elementos
+
+            @Html.PagedListPager(Model, page => Url.Action("Index", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize
+   }))
+
+
+        </div>
+    }
+    @*Paginación*@

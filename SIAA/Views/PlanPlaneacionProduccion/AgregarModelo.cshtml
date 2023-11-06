@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "AgregarModelo";
+}
+
+
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">@ViewBag.titulo</h3>
+</div>
+
+<h4><label> </label>Hoja de Especificación No. <label >@ViewBag.id</label></h4>
+<input type="hidden" class="form-control" name="mensaje" id="mensaje" value="@ViewBag.id">
+
+    <div class="form-group">
+        @Html.Label("Modelo de Producción", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownList("IDModeloProduccion", ViewBag.IDModeloProduccion as List<SelectListItem>, new { @class = "form-control" })
+        </div>
+    </div>
+
+
+<br />
+<br />
+<br />
+<br />
+
+<!-- Modal Actions -->
+<div class="modal-footer">
+    @*<a class="addModelo"> <span class="btn btn-success btn-xs">Guardar</span> </a>*@
+    <button type="button" class="btn btn-success btn-xs" onclick="Actualizar()">Guardar</button>
+
+    <button type="button" class="btn btn-warning btn-xs" data-dismiss="modal">Cerrar</button>
+</div>
+
+
+<script>
+
+                var url = '@Url.Action("addmodelop", "PlanPlaneacionProduccion")';
+    function Actualizar() {
+                    $.post(url, { id: document.getElementById("mensaje").value, idmodelo: $("#IDModeloProduccion").val() }, function (response) {
+                        if (response) {
+                            location.reload();
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                }
+
+
+</script>
+

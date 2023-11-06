@@ -1,0 +1,47 @@
+﻿@model SIAAPI.Models.Comercial.AtributosdeHE
+
+<h3>¿Está seguro de borrar este registro?, el borrado de un atributo puede causar que las ordenes de produccion futuras carezcan de este atributo</h3>
+<div>
+    <h4>Eliminar Atributo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Valores)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Valores)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+
+    }
+</div>

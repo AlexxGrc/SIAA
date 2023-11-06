@@ -1,0 +1,52 @@
+﻿@model SIAAPI.ViewModels.Cfdi.aplicaranticipo
+
+@{
+    ViewBag.Title = "Aplicaranticipo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Aplicar anticipo a la prefactura @Model.Prefactura </h2>
+<h3>Con un total de @ViewBag.Total</h3>
+
+<br />
+<h4 class="text-danger"> @ViewBag.Mensajedeerror</h4>
+
+@using (Html.BeginForm("aplicaranticipo","Prefactura", new { searchString = ViewBag.searchString }, FormMethod.Post) ) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+      
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.UUID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UUID,  new { htmlAttributes = new { @class = "form-control" } , @Readonly= "Readonly" })
+                @Html.ValidationMessageFor(model => model.UUID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Monto, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Monto, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Monto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+       
+            @Html.HiddenFor(model => model.Prefactura, htmlAttributes: new { @class = "control-label col-md-2" })
+           
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index", new { searchString = ViewBag.searchString })
+</div>

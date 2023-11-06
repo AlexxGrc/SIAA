@@ -1,0 +1,66 @@
+﻿@model SIAAPI.Models.Administracion.VObtenerMoneda
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles Tipo de Cambio</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaTC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaTC)
+        </dd>
+
+        @*<dt>
+        @Html.DisplayNameFor(model => model.IDMonedaOrigen)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.IDMonedaOrigen)
+    </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MonedaOrigen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDMonedaOrigen) | @Html.DisplayFor(model => model.MonedaOrigen)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.IDMonedaDestino)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDMonedaDestino)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MonedaDestino)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDMonedaDestino) | @Html.DisplayFor(model => model.MonedaDestino)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TC)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDTipoCambio }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

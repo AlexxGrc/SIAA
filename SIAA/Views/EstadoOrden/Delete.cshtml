@@ -1,0 +1,50 @@
+﻿@model SIAAPI.Models.Produccion.EstadoOrden
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eliminar</h2>
+
+<h3>Esta seguro de borrar este registro?</h3>
+<div>
+   
+    <hr />
+    <dl class="dl-horizontal">
+        @Html.HiddenFor(model => model.IDEstadoOrden)
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+        @if (Model.Tipo == "G")
+            {
+            <dd>
+                Estado General de la Orden
+            </dd>
+        }
+        else
+        {
+            <dd>
+                Estado del Proceso
+            </dd>
+
+        }
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Volver a la lista", "Index", new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

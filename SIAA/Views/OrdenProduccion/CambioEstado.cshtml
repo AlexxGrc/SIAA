@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "CambioEstado";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+    <table class="table table-striped" width="50">
+        <tr>
+            <td class="col-lg-1">
+                Fecha:  @ViewBag.FecCambio || Hora: @ViewBag.HorCambio
+            </td>
+        </tr>
+        <tr>
+           
+            <td class="col-lg-1">
+             <h3>Orden:  @ViewBag.OrdenP.IDOrden</h3>  
+            </td>
+            <td class="col-lg-1">
+                <h3> Estado:  @ViewBag.descripcion ||  @ViewBag.tipo</h3>
+            </td>
+            <td class="col-lg-4">
+              <h3> Descripción:  @ViewBag.OrdenP.Descripcion</h3> 
+            </td>
+           
+            
+            
+        </tr>
+        </table>
+    
+
+@model SIAAPI.Models.Produccion.CambioEstado
+@using (Html.BeginForm("CambioEstado", "OrdenProduccion", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+    @Html.AntiForgeryToken()
+    <h4>Cambio de estado de la orden<br /></h4>
+    <hr />
+    <div class="hidden">
+       
+        <input type="hidden" id="idorden" name="idorden" value="@ViewBag.IDOrden" />
+        <input type="hidden" id="Fecha" name="idorden" value="@ViewBag.FecCambio" />
+        <input type="hidden" id="Hora" name="idorden" value="@ViewBag.HorCambio" />
+        <input type="hidden" id="IDEstadoAnterior" name="idorden" value="@ViewBag.idestadoanterior" />
+        <input type="hidden" id="IDTrabajador" name="idorden" value="@ViewBag.IDTrabajador" />
+        <input value="@ViewBag.descripcion" type="hidden" id="EstadoA" name="EstadoA" />
+    </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.EstadoActual, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.DropDownList("EstadoActual", ViewBag.IDEstadoActual as List<SelectListItem>, new { @class = "form-control", name ="EstadoActual" ,@required = "required" })
+                @Html.ValidationMessageFor(model => model.EstadoActual, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.motivo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.motivo, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                @Html.ValidationMessageFor(model => model.motivo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Prioridad", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+        }
+
+

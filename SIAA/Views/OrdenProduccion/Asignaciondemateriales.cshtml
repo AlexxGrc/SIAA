@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Asignacion de materiales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Asignacion de Materiales  al Work in Process</h2>
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.OrdenProduccion>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@*Paginación*@
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+
+
+<div class="row">
+    @foreach (var m in Model)
+    {
+
+        <div class="col-md-4" >
+            <div class="row">
+                <div class="input-group" style="color:darkseagreen"><span class="input-group-addon" id="mobilename" style="color:darkred" ><h4>Orden @m.IDOrden</h4></span></div>
+                <h5><span id="mobilename" style="color:darkred">Fecha @m.FechaCreacion.ToShortDateString() Compromiso @m.FechaCompromiso.ToShortDateString()</span></h5>
+               @if (m.Cliente.Nombre.Length < 40)
+               {
+                                <p><span class="fa fa-bars" style="color:red">@m.Cliente.Nombre</span></p>
+               }
+               else
+               {
+                <p><span class="fa fa-bars" style="color:red">@m.Cliente.Nombre.Substring(0,40) </span></p>
+               }
+
+            </div>
+            <a href="">
+                <img class="a.photo" src="~/imagenes/Upload/@m.Articulo.nameFoto" style="overflow: hidden; position: relative; width:200px; height:200px; cursor:pointer" />
+            </a>
+
+
+
+            <p><a class="btn btn-warning btn-xs" href="@Url.Action("AsignaciondemateOrden", "OrdenProduccion", new { IDOrden = m.IDOrden, searchString=ViewBag.searchString }   )">Asignar Materiales... &raquo;</a><p></p>
+
+            </p>
+        </div>
+
+
+    }
+</div>

@@ -1,0 +1,289 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.inventariotintaxcb>
+
+@{
+    ViewBag.Title = "IIporloteTintas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Inventario Inicial por Lote interno</h2>
+
+@*<div>@Html.ActionLink("Eliminar todo", "Deleteloteall", null, new { @class = "btn btn-danger" })</div>*@
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        Almacenes
+        <select name="Almacen" id="Almacen">
+            @if (ViewBag.Almacen == "1")
+            {
+                <option value="1" selected>TINTAS TULTITLAN</option>
+            }
+            else
+            {
+                <option value="1">TINTAS TULTITLAN</option>
+            }
+            @if (ViewBag.Almacen == "4")
+            {
+                <option value="4" selected>TINTAS LEON</option>
+            }
+            else
+            {
+                <option value="4">TINTAS LEON</option>
+            }
+            @if (ViewBag.Almacen == "17")
+            {
+                <option value="17" selected>TINTAS A CONSIGNA LEON</option>
+            }
+            else
+            {
+                <option value="17">TINTAS A CONSIGNA LEON</option>
+            }
+            @if (ViewBag.Almacen == "18")
+            {
+                <option value="18" selected>TINTAS A CONSIGNA TULTITLAN</option>
+            }
+            else
+            {
+                <option value="18">TINTAS A CONSIGNA TULTITLAN</option>
+            }
+        </select>
+        <br />
+        <br />
+    </div>
+
+    <div class="form-group col-md-12">
+        <div class="col-md-2"> Cargar Lote</div>
+        <div class="col-md-10">
+            <input name="Lote" id="Lote" type="text" autofocus />
+        </div>
+    </div>
+
+}
+<div class="form-group col-md-12">
+
+    @*<input type="button" value="Verificar existencias" name="Verificar existencias" class="btn btn-success" onclick="verificarT()" />*@
+    <input type="button" value="Eliminar todo" name="Eliminar todo" class="btn btn-danger" onclick="eliminarT()" />
+</div>
+
+<table class="table">
+    <tr>
+        <th>Lote Interno</th>
+        <th>Clave</th>
+        <th>Consecutivo</th>
+
+        <th>M2</th>
+        <th>Estado</th>
+        <th></th>
+        <th></th>
+        <th></th>
+
+    </tr>
+    @{
+        int contador = 0;
+    }
+    @foreach (SIAAPI.Models.Comercial.inventariotintaxcb item in Model)
+    {
+        <tr>
+            <td>
+                @item.Lote
+            </td>
+            <td>
+                @item.clave
+            </td>
+            <td>
+                @item.consecutivo
+            </td>
+
+            <td>
+                @item.cantidad
+            </td>
+            <td>
+                @item.Estado
+            </td>
+
+
+            @if (item.Existencia == true)
+            {
+
+
+                <td>
+                    <i class="fa fa-check-square-o fa-3x" aria-hidden="true"></i>
+                </td>
+                if (item.Estado == "Entregado")
+                {
+
+                    <td>
+                        @Html.Label("DEVOLUCIÓN")
+                        <input class="edit" type="checkbox" onclick="ActualizarEstado( @item.id,@contador )" />
+                    </td>
+
+                }
+                else
+                {
+                    <td>
+                    </td>
+                }
+
+            }
+            else
+            {
+                <td>
+                    <i class="fa fa-check-square fa-3x" aria-hidden="true"></i>
+
+                </td>
+                <td>
+
+                    <a href="@Url.Action("AgregarTinta", "InventarioAlmacen", new { id= item.id})" class="btn btn-warning">
+                        <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+                    </a>
+                </td>
+
+
+            }
+            <td>
+                <a class="delete" data-id="@item.id">
+                    <i class="tbl_del_btn fa fa-trash fa-3x"></i>
+
+                </a>
+            </td>
+
+        </tr>
+    }
+
+</table>
+<div>
+    Elementos incorporados @ViewBag.Conteo
+</div>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+        var urledit = '@Url.Action("ActualizarLoteTinta", "InventarioAlmacen")';
+
+    function ActualizarEstado(id, numero) {
+                $.post(urledit, { id: id}, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+</script>
+<script>
+
+
+
+    function Agregar(id) {
+            var urledit = '@Url.Action("AgregarLoteTinta", "InventarioAlmacen")';
+            $.post(urledit, { id: id}, function (response) {
+                    if (response) {
+                        location.reload();
+                        row.change;
+
+                    }
+                }).fail(function (response) {
+                    // display error message?
+                });
+    }
+
+
+
+</script>
+
+
+@*<script>
+            function eliminar() {
+                var urledit = '@Url.Action("DeleteLoteIntemTinta", "InventarioAlmacen")';
+                $.post(urledit, null, function (response) {
+                    if (response) {
+                        location.reload();
+                        row.change;
+
+                    }
+                }).fail(function (response) {
+                    // display error message?
+                });
+            }
+
+    </script>
+
+
+
+    <script>
+            function verificar() {
+                var urledit = '@Url.Action("VerificarExistencias", "InventarioAlmacen")';
+                $.post(urledit, null, function (response) {
+                    if (response) {
+                        location.reload();
+                        row.change;
+
+                    }
+                }).fail(function (response) {
+                    // display error message?
+                });
+            }
+
+        $("#Almacen").change(function () {
+            this.form.submit();
+        });
+
+    </script>*@
+
+
+<script>
+
+
+      $('.delete').click(function () {
+            var url = '@Url.Action("DeleteLoteIntemTinta", "InventarioAlmacen")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+      });
+
+    $("#Almacen").change(function () {
+        this.form.submit();
+    });
+</script>
+
+<script>
+      function verificarT() {
+            var urledit = '@Url.Action("VerificarExistenciasTintas", "InventarioAlmacen")';
+            $.post(urledit, null, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+</script>
+<script>
+        function eliminarT() {
+            var urledit = '@Url.Action("DeleteloteT", "InventarioAlmacen")';
+            $.post(urledit, null, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+</script>

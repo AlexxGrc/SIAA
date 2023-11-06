@@ -1,0 +1,398 @@
+﻿@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.Caracteristica>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+
+@*@model IEnumerable<SIAAPI.ClasesProduccion.Cotizaciones>*@
+
+@{
+    ViewBag.Title = "Suaje existente";
+   
+}
+@using (Html.BeginForm())
+{
+
+    <h3>Etiqueta: </h3> @ViewBag.Articulo
+    <h3>Presentación: @ViewBag.IDPresentacion</h3>
+
+
+    <table>
+        @{
+            string[] atributos = ViewBag.Caracteristica.ToString().Split(',');
+            <tr>
+                @foreach (var atri in atributos)
+                {
+                    string[] valor = atri.Split((char)58);
+                    string Atri = valor[0];
+                    string Val = valor[1];
+                    <td style="background-color:darkblue" class="col-md-1">
+                        <label style="color:white;">@Atri</label>
+                    </td>
+                }
+            </tr>
+            <tr>
+                @foreach (var atri in atributos)
+                {
+                    string[] valor = atri.Split((char)58);
+                    string Atri = valor[0];
+                    string Val = valor[1];
+                    <td class="col-md-1">
+                        <label>@Val</label>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+
+
+
+<h2>Suajes Existentes</h2>
+
+<p>
+
+</p>
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+             
+                    <p>
+                        @*@Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" }) |*@
+                        <div>
+                            Elementos por página: @Html.DropDownList("pageSize") |
+
+                            @*Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })*@
+
+                            @*<a class="btn btn-info btn-xs" href="@Url.Action("Reporte")">Descargar Catalogo</a>*@
+
+                            EJE: @Html.TextBox("eje", ViewBag.eje as string, new { type = "number" })
+                            AVANCE:  @Html.TextBox("avance", ViewBag.avance as string, new { type = "number" }) |
+                            <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                        </div>
+
+                    </p>
+              
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.Label("CLAVE")
+        </th>
+        <th>
+            @Html.Label("EJE")
+        </th>
+        <th>
+            @Html.Label("AVANCE")
+        </th>
+        <th>
+            @Html.Label("GAPEJE")
+        </th>
+
+        <th>
+            @Html.Label("GAPAVANCE")
+        </th>
+        <th>
+            @Html.Label("TH / ALMA")
+        </th>
+        <th>
+            @Html.Label("CAVEJE")
+        </th>
+        <th>
+            @Html.Label("CAVAVANCE")
+        </th>
+        <th>
+            @Html.Label("EJE MÁQUINA")
+        </th>
+        <th>
+            @Html.Label("FAMILIA")
+        </th>
+        <th>
+
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        FormulaSiaapi.Formulas FORMULA = new FormulaSiaapi.Formulas();
+        FORMULA.cadenadepresentacion = item.Presentacion;
+
+        double eje = 0;
+        double avance = 0;
+        double gapeje = 0;
+        double gapavance = 0;
+        double repeje = 0;
+        double repavance = 0;
+        double th = 0;
+        string alma = "";
+        double ejemaq = 0;
+
+
+        try
+        {
+            eje = FORMULA.getvalor("EJE", item.Presentacion);
+
+
+        }
+        catch
+        {
+
+        }
+        try
+        {
+
+            avance = FORMULA.getvalor("AVANCE", item.Presentacion);
+
+        }
+        catch
+        {
+
+        }
+        try
+        {
+            ejemaq = FORMULA.getvalor("EJE SUAJE", item.Presentacion);
+
+
+        }
+        catch
+        {
+
+        }
+        try
+        {
+            alma = FORMULA.getValorCadena("ALMA", item.Presentacion);
+
+
+        }
+        catch
+        {
+
+        }
+        try
+        {
+            th = FORMULA.getvalor("DIENTES_TH", item.Presentacion);
+
+
+        }
+        catch
+        {
+
+        }
+        try
+        {
+            repavance = FORMULA.getvalor("CAVIDADES DESARROLLO", item.Presentacion);
+
+
+        }
+        catch
+        {
+
+        }
+        try
+        {
+            repeje = FORMULA.getvalor("CAVIDADES EJE", item.Presentacion);
+
+
+        }
+        catch
+        {
+
+        }
+        try
+        {
+            gapavance = FORMULA.getvalor("GAP AVANCE", item.Presentacion);
+
+
+        }
+        catch
+        {
+
+        }
+
+        try
+        {
+            gapeje = FORMULA.getvalor("GAP EJE", item.Presentacion);
+
+
+        }
+        catch
+        {
+
+        }
+
+
+        <tr>
+            <td>
+                @{
+                    SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                    string cadenacref = "select CREF  as dato from Articulo where idarticulo=" + item.Articulo_IDArticulo;
+
+                    SIAAPI.Models.Comercial.ClsDatoString CLAVE = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenacref).ToList().FirstOrDefault();
+
+                }
+                @Html.DisplayFor(modelItem => CLAVE.Dato)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => eje)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => avance)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => gapeje)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => gapavance)
+            </td>
+            <td>
+                @{
+                    string dientes = "";
+                    if (th == 0)
+                    {
+                        dientes = alma;
+                    }
+                    else
+                    {
+                        dientes = Convert.ToString(th);
+                    }
+                }
+                @Html.DisplayFor(modelItem => dientes)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => repeje)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => repavance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => ejemaq)
+            </td>
+            <td>
+                @{
+
+                    string cadena = "select idfamilia  as dato from Articulo where idarticulo=" + item.Articulo_IDArticulo;
+                    SIAAPI.Models.Comercial.ClsDatoEntero idfamilia = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(cadena).ToList().FirstOrDefault();
+                    string cadenaes = "select descripcion as dato from familia where idfamilia=" + idfamilia.Dato;
+                    SIAAPI.Models.Comercial.ClsDatoString familia = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadenaes).ToList().FirstOrDefault();
+
+                }
+                @Html.DisplayFor(modelItem => familia.Dato)
+            </td>
+
+            <td>
+                @Html.ActionLink("Seleccionar", "Asistente", "PlaneacionClass", new { idsuaje = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+            </td>
+        </tr>
+                    }
+
+</table>
+
+
+@Html.ActionLink("Regresar", "BuscaEtiqueta", null, new { @class = "btn btn-default btn-xs" })
+
+@*Paginación*@
+@using (Html.BeginForm("SuajeExistentePla", "PlaneacionClass", FormMethod.Get, new { id = "pageSizeForm" }))
+{
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("SuajeExistentePla", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.searchString,
+       Fechainicio = ViewBag.Fechainicio,
+       FechaFinal = ViewBag.Fechafinal,
+       eje = ViewBag.eje,
+       avance = ViewBag.avance,
+       pageSize = ViewBag.psize
+   }))
+
+
+    </div>
+}
+
+
+<script>
+
+    function traeunidad(val) {
+        $.get('/Inventario/GetUnidad', { 'id': val }, function (response) {
+            //you just need to get the response so $.get is enough to manipulate
+            //this will be called once you get the response from controller, typically a callback
+            if (response.result) //same result variable we are returning from controller.
+            {
+
+                document.getElementById('unidad').innerHTML = response.result;
+            } else {
+
+            }
+        })
+
+    }
+
+    function actualizacomboArticuloPlaneacion(e) {
+
+
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clave";
+            var selectcontrol = "#IDArticulo2";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getarticulosblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un articulo";
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+</script>
+
+@*Paginación*@
+
+

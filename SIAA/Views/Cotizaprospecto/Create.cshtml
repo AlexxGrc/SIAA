@@ -1,0 +1,316 @@
+﻿@model SIAAPI.Models.Comercial.Enccotizapros
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Crear una Cotizacion de un prospecto</h2>
+
+@using (Html.BeginForm("Create","Cotizaprospecto",FormMethod.Post)) 
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Fecha, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.HiddenFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+
+    <table class="table" >
+        <tr>
+            <td colspan="1">
+                <h6 style="font-size: small">Prospecto</h6>
+            </td>
+            <td class="col-lg-3">
+                Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                <br /><input id="clave" name="clave" onkeyup="actualizacomboA(event)" />
+            </td>
+            <td colspan="8">
+                <div class="form-group">
+                  
+                    <div class="col-md-10">
+                        @Html.DropDownList("idprospecto", null, new { @class = "form-control" })
+                        @*@Html.DropDownList("idprospecto", ViewBag.prospectos as List<SelectListItem>, new { htmlAttributes = new { @class = "form-control", id = "idprospecto", name = "idprospecto" } })*@
+                        @Html.ValidationMessageFor(model => model.idprospecto, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+             </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                @Html.Label("Vendedor", htmlAttributes: new { @class = "control-label col-md-2" })
+            </td>
+            <td colspan="11">
+                @Html.DropDownList("IDVendedor", ViewBag.vendedor as List<SelectListItem>, new { @class = "form-control" })
+            </td>
+        </tr>
+     <tr>
+         <td colspan="1">
+            @Html.Label("Condiciones", htmlAttributes: new { @class = "control-label col-md-2" })
+         </td>
+         <td colspan="11">
+             @Html.DropDownList("idcondiciones", ViewBag.condiciones as List<SelectListItem>, new { @class = "form-control" })
+             @Html.ValidationMessageFor(model => model.idcondiciones, "", new { @class = "text-danger" })
+         </td>
+     </tr>
+    <tr>
+        <td colspan="1">
+            @Html.Label("  En Atencion de:")
+        </td>
+        <td colspan="11">
+            @Html.EditorFor(model => model.atencion, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.atencion, "", new { @class = "text-danger" })
+        </td>
+    </tr>
+        <tr>
+            <td colspan="1">
+                @Html.LabelFor(model => model.Vigencia, htmlAttributes: new { @class = "control-label col-md-2" })
+            </td>
+            <td colspan="2">
+                @Html.EditorFor(model => model.Vigencia, new { htmlAttributes = new { @class = "form-control", type = "number" } })
+                @Html.ValidationMessageFor(model => model.Vigencia, "", new { @class = "text-danger" })
+            </td>
+            <td colspan="2">
+                Dias
+            </td>
+            <td colspan="7">
+
+            </td>
+      </tr>
+        <tr>
+            <td colspan="1">
+                @Html.Label( "Divisa", htmlAttributes: new { @class = "control-label col-md-2" })
+            </td>
+            <td colspan="2">
+                @Html.DropDownList("idMoneda", ViewBag.moneda as List<SelectListItem>, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.idMoneda, "", new { @class = "text-danger" })
+            </td>
+            <td colspan="9">
+            </td>
+        </tr>
+
+      
+    
+        <tr>
+            <td>@Html.Label("Observacion", htmlAttributes: new { @class = "control-label col-md-2" })</td>
+            <td colspan="11">
+                @Html.EditorFor(model => model.Observacion, new { htmlAttributes = new { @class = "form-control", type = "text" } })
+                @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+            </td>
+        </tr>
+       
+    </table>
+
+   
+    <h4 class="text-info">Añade el concepto</h4>
+    <div class="navbar-form navbar-left" style="width:600px">
+        <table style="background:#acfab7;width:auto ">
+            <tr >
+                <td  style="width:60px"> Cantidad</td>
+                <td style="width:60px"> Unidad</td>
+                <td  style="width:500px">Concepto</td>
+                
+                <td  style="width:100px">Precio</td>
+                <td colspan="1">IVA</td>
+                <td colspan="1">Accion</td>
+            </tr>
+            <tr>
+
+                <td style="width:auto"><div><input type="number" id="cantidad" style="width:60px"/> </div></td>
+                <td style="width:60px">
+                    <select name="Unidad" id="Unidad">
+                        <option value="MIL" selected>MIL</option>
+                        <option value="PZA">PZA</option>
+                        <option value="MT2">MT2</option>
+                        <option value="KG">KG</option>
+                    </select>
+                </td>
+                <td style="width:auto"><input type="text" id="Concepto" style="width:500px" /></td>
+                <td style="width:100px"><div><input type="number" id="Precio" /></div></td>
+                <td colspan="1"><div> Iva <input type="checkbox" id="IVA" checked /></div></td>
+                <td><div><input value="Agregar" type="button" onclick="AgregaConcepto(); return false;" /></div></td>
+            </tr>
+
+        </table>
+        </div>
+        <div id="divConceptos">
+            <table class="table" id="tablaconceptos" name="tablaconceptos" style="width:100">
+                <tr bgcolor="#0080ff">
+                    <td>
+                        Cantidad
+                    </td>
+                    <td>
+                        Unidad
+                    </td>
+                    <td>
+                        Descripcion
+                    </td>
+                    <td>
+                        Precio
+                    </td>
+
+                    <td>
+                        Importe
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success" />
+            </div>
+        </div>
+}
+
+
+        <div>
+            @Html.ActionLink("Volver a la lista", "Index")
+        </div>
+        <script>
+            var num = 0;
+            function AgregaConcepto() {
+                let cantidad = document.getElementById("cantidad").value;
+                let conceptoX = document.getElementById("Concepto").value;
+                let precio = document.getElementById("Precio").value;
+                let Unidad = document.getElementById("Unidad").value;
+                let tabla = document.getElementById("tablaconceptos");
+                let TR = document.createElement("tr");
+                let TDCantidad = document.createElement("td");
+                let TDUnidad = document.createElement("td");
+                let TDConcepto = document.createElement("td");
+                let TDPrecio = document.createElement("td");
+                let TDImporte = document.createElement("td");
+                TDImporte.align = "right";
+                TDPrecio.align = "right";
+
+                let DivConceptoss = document.getElementById("divConceptos");
+                let hiddenindex = document.createElement("input");
+                let hiddenCantidad = document.createElement("input");
+                let hiddenUnidad = document.createElement("input");
+                let hiddenConcepto = document.createElement("input");
+                let hiddenPrecio = document.createElement("input");
+
+                hiddenindex.name = "conceptos.index";
+                hiddenindex.value = num;
+                hiddenindex.type = "hidden";
+
+                hiddenCantidad.name = "conceptos[" + num + "].cantidad";
+                hiddenCantidad.value = cantidad;
+                hiddenCantidad.type = "hidden";
+
+                hiddenUnidad.name = "conceptos[" + num + "].Unidad";
+                hiddenUnidad.value = Unidad;
+                hiddenUnidad.type = "hidden";
+
+
+                hiddenConcepto.name = "conceptos[" + num + "].Concepto";
+                hiddenConcepto.value = conceptoX;
+                hiddenConcepto.type = "hidden";
+
+                hiddenPrecio.name = "conceptos[" + num + "].Precio";
+                hiddenPrecio.value = precio;
+                hiddenPrecio.type = "hidden";
+
+                DivConceptoss.appendChild(hiddenCantidad);
+                DivConceptoss.appendChild(hiddenUnidad);
+                DivConceptoss.appendChild(hiddenConcepto);
+                DivConceptoss.appendChild(hiddenPrecio);
+                DivConceptoss.appendChild(hiddenindex);
+
+
+
+                TR.appendChild(TDCantidad);
+                TR.appendChild(TDUnidad);
+                TR.appendChild(TDConcepto);
+                TR.appendChild(TDPrecio);
+                TR.appendChild(TDImporte);
+
+                TDCantidad.innerHTML = cantidad;
+                TDUnidad.innerHTML = Unidad;
+                TDConcepto.innerHTML = conceptoX;
+                TDPrecio.innerHTML = precio;
+                TDImporte.innerHTML = monedaChange(3, 2, parseFloat(cantidad) * parseFloat(precio));
+
+                tabla.appendChild(TR);
+                
+                document.getElementById("cantidad").value = "";
+                document.getElementById("Concepto").value = "";
+                document.getElementById("Precio").value = "";
+
+                num++;
+
+            }
+
+            function monedaChange(cif, dec, valor) {
+                // tomamos el valor que tiene el input
+                let inputNum = valor
+                // Lo convertimos en texto
+                inputNum = inputNum.toString()
+                // separamos en un array los valores antes y después del punto
+                inputNum = inputNum.split('.')
+                // evaluamos si existen decimales
+                if (!inputNum[1]) {
+                    inputNum[1] = '00'
+                }
+
+                let separados
+                // se calcula la longitud de la cadena
+                if (inputNum[0].length > cif) {
+                    let uno = inputNum[0].length % cif
+                    if (uno === 0) {
+                        separados = []
+                    } else {
+                        separados = [inputNum[0].substring(0, uno)]
+                    }
+                    let posiciones = parseInt(inputNum[0].length / cif)
+                    for (let i = 0; i < posiciones; i++) {
+                        let pos = ((i * cif) + uno)
+                        console.log(uno, pos)
+                        separados.push(inputNum[0].substring(pos, (pos + 3)))
+                    }
+                } else {
+                    separados = [inputNum[0]]
+                }
+
+                return '$' + separados.join(',') + '.' + inputNum[1]
+            };
+
+
+
+
+            function actualizacomboA(e) {
+
+
+
+                if (e.keyCode === 18) {
+
+                    var control = "#clave";
+                    var selectcontrol = "#idprospecto";
+                    $(selectcontrol).empty();
+
+                    $.ajax({
+                        type: 'GET',
+                        url: '@Url.Action("getprospectoblando")',
+                        dataType: 'json',
+                        data: { buscar: $(control).val() },
+                        success: function (articulos) {
+
+                            for (i = 0; i < articulos.length; i++) {
+                                var Value = articulos[i].Value;
+
+                                var Text = articulos[i].Text;
+                                var select = "Selecciona un Prospecto";
+                                $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                            }
+                            $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                        },
+                        error: function (ex) {
+                            //alert('Falle.' + ex.data);
+                        }
+
+                    });
+                }
+            }
+        </script>

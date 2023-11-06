@@ -1,0 +1,139 @@
+﻿@model SIAAPI.ViewModels.CartaPorte.VArrendatario
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalle</h2>
+
+<div>
+    <h4>Arrendatario de Transporte</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RFCArrendatario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFCArrendatario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreArrendatario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreArrendatario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumRegIdTribArrendatario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumRegIdTribArrendatario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumExt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumExt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumInt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumInt)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.ResidenciaFiscal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ResidenciaFiscal)
+        </dd>*@
+        <dt>
+            @Html.DisplayNameFor(model => model.Pais) 
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Pais)  |  @Html.DisplayFor(model => model.Pais)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Estado)  |  @Html.DisplayFor(model => model.Estado)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Municipio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Municipio) | @Html.DisplayFor(model => model.Municipio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Localidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Localidad) | @Html.DisplayFor(model => model.Localidad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Colonia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Colonia) | @Html.DisplayFor(model => model.Colonia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Referencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Referencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDArrendatario }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

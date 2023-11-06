@@ -1,0 +1,42 @@
+﻿@model SIAAPI.Models.CartaPorte.c_Localidad
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles Localidad</h2>
+
+<div>
+   
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.C_Localidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.C_Localidad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.C_Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.C_Estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDLocalidad }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

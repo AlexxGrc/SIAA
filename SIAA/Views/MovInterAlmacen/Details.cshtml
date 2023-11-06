@@ -1,0 +1,148 @@
+﻿@model SIAAPI.Models.Inventarios.VMovInterAlmacen
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Movimiento entre Almacenes</title>
+</head>
+<body>
+    <div>
+        <h3>Detalles del Movimiento entre Almacenes</h3>
+        <hr />
+        <div class="container-fluid">
+            <dl >
+                <dd style="display:none;">
+                    @Html.HiddenFor(model => model.IDAlmacenS)
+                    @Html.HiddenFor(model => model.IDArticulo)
+                    @Html.HiddenFor(model => model.IDCaracteristica)
+                    @Html.HiddenFor(model => model.IDTrabajadorS)
+                    @Html.HiddenFor(model => model.IDTrabajadorE)
+                    @Html.HiddenFor(model => model.IDAlmacenE)
+                    @Html.HiddenFor(model => model.IDAlmacenS)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.FechaMovimiento)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.FechaMovimiento)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Entrego)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Entrego)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Recibio)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Recibio)
+                </dd>
+            </dl>
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Observacion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Observacion)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <br />
+    @if (@ViewBag.movimiento != null)
+    {
+        <div class="table table-responsive-sm ">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Clave del movimiento
+                        </th>
+
+                        <th scope="col">
+                            Almacen de Salida
+                        </th>
+                        <th scope="col">
+                            Código Articulo
+                        </th>
+                        <th scope="col">
+                            Descripción
+                        </th>
+                        <th scope="col">
+                            Presentación
+                        </th>
+                        <th scope="col">
+                            Lote
+                        </th>
+                        <th scope="col">
+                            Cantidad
+                        </th>
+                        <th scope="col">
+                            Almacen de entrada
+                        </th>
+
+                </thead>
+
+                @foreach (SIAAPI.Models.Inventarios.VMovInterAlmacen item in ViewBag.movimiento)
+                {
+                    <tbody>
+                        <tr>
+                            <td>
+                                @item.IDMovimiento
+                            </td>
+                            <td>
+                                @item.AlmacenSalida
+                            </td>
+                            <td>
+                                @item.Cref
+                            </td>
+                            <td>
+                                @item.Descripcion
+                            </td>
+                            <td>
+                                @item.Presentacion
+                            </td>
+                            <td>
+                                @item.Lote
+                            </td>
+                            <td>
+                                @item.Cantidad
+                            </td>
+                            <td>
+                                @item.AlmacenEntrada
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                }
+
+            </table>
+
+        </div>
+        <br /><br />
+        <div>
+
+               @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+
+        </div>
+    }
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+﻿@model SIAAPI.Models.Cfdi.FolioVentas
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Folio de Ventas @Html.DisplayFor(model => model.Numero)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Serie)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Serie)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.c_TipoComprobante.ClaveTipoComprobante)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_TipoComprobante.ClaveTipoComprobante)|@Html.DisplayFor(model => model.c_TipoComprobante.Descripcion)
+        </dd>
+
+
+        @*<dt>
+                @Html.DisplayNameFor(model => model.folio)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.folio)
+            </dd>*@
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

@@ -1,0 +1,508 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.ArticuloProduccion>
+
+@{
+    ViewBag.Title = "AsignaraOrden";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Entregar Material a Orden @ViewBag.ordenproduccion.IDOrden</h2>
+<h4>@ViewBag.ordenproduccion.Cliente.Nombre</h4>
+<h3 class="text-info">@ViewBag.ordenproduccion.Articulo.Cref</h3>
+<h4> @ViewBag.ordenproduccion.Cantidad @ViewBag.ordenproduccion.Articulo.c_ClaveUnidad.Nombre</h4>
+
+
+<h2>
+    Material Asignado @*orden no. @ViewBag.ordenproduccion.IDOrden*@
+</h2>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+
+            <th>
+                @Html.Label("Clave")
+            </th>
+            <th>
+                @Html.Label("Descripción")
+            </th>
+            <th>
+                @Html.Label("Ancho")
+            </th>
+            <th>
+                @Html.Label("Largo")
+            </th>
+            <th>
+                @Html.Label("Metros lineales")
+            </th>
+            <th>
+                @Html.Label("Lote")
+            </th>
+            <th>
+                @Html.Label("Entregado")
+            </th>
+        </tr>
+
+        @{
+            string cadena = "select * from MaterialAsignado where orden=" + ViewBag.ordenproduccion.IDOrden;
+
+            List<SIAAPI.Models.Comercial.MaterialAsignado> ele = new SIAAPI.Models.Comercial.InventarioAlmacenContext().Database.SqlQuery<SIAAPI.Models.Comercial.MaterialAsignado>(cadena).ToList();
+            int Alamcen = 0;
+
+        }
+        @foreach (SIAAPI.Models.Comercial.MaterialAsignado item in ele)
+        {
+            SIAAPI.Models.Produccion.OrdenProduccion produccion = new SIAAPI.Models.Produccion.OrdenProduccionContext().OrdenesProduccion.Find(item.orden);
+
+            SIAAPI.Models.Comercial.EncPedido detPedido = new SIAAPI.Models.Comercial.PedidoContext().EncPedidos.Find(produccion.IDPedido);
+
+            SIAAPI.Models.Comercial.Clientes cliente = new SIAAPI.Models.Comercial.ClientesContext().Clientes.Find(detPedido.IDCliente);
+
+            SIAAPI.Models.Comercial.Oficina oficina = new SIAAPI.Models.Comercial.OficinaContext().Oficinas.Find(cliente.IDOficina);
+
+
+            try
+            {
+                if (oficina.IDOficina==1)
+                {
+                    Alamcen = 6;
+                }
+                else
+                {
+                    Alamcen = 11;
+                }
+            }
+            catch (Exception err)
+            {
+
+            }
+
+            SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+            string cantidad = "select cantidad as Dato from  [ArticuloProduccion] as ap where ap.idtipoarticulo=6  and ap.idorden=" + item.orden;
+            SIAAPI.Models.Comercial.ClsDatoDecimal canArt = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>(cantidad).ToList().FirstOrDefault();
+            SIAAPI.Models.Comercial.ClsDatoString caracteristicaProd = dd.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select presentacion as Dato from  [Caracteristica] where [id]=" + item.idcaracteristica).ToList().FirstOrDefault();
+
+
+            FormulaSiaapi.Formulas formula = new FormulaSiaapi.Formulas();
+
+            string anchoR = formula.getValorCadena("ANCHO",caracteristicaProd.Dato);
+            //string[] arraydatosc;
+            //arraydatosc = caracteristicaProd.Dato.Split(',');
+            //string metroLineasc = arraydatosc[0];
+            //string[] arraydatos1c;
+            //arraydatos1c = metroLineasc.Split(':');
+
+
+
+            decimal mlinealC = canArt.Dato / (Convert.ToDecimal(anchoR) / 1000);
+            decimal metrolienalC = Math.Round(mlinealC, 3);
+
+
+
+
+
+
+
+            SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.idmapri);
+            <tr>
+                <td>
+                    @Html.Label(articulo.Cref)
+                </td>
+                <td>
+                    @Html.Label(articulo.Descripcion)
+                </td>
+                <td>
+                    @{
+                        int ancho = Convert.ToInt32(item.ancho);
+                    }
+                    @ancho
+
+                </td>
+                <td>
+                    @{
+                        int largo = Convert.ToInt32(item.largo);
+                    }
+                    @largo
+                </td>
+                <td>
+                    @Math.Round(item.cantidad, 3)
+                </td>
+                <td>
+                    @item.lote
+                </td>
+                <td>
+                   @Math.Round( item.entregado,0)
+                </td>
+            </tr>
+                        }
+    </table>
+</div>
+<br />
+
+
+
+<h2>
+    Work in Process
+</h2>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+
+            <th>
+                @Html.Label("Orden")
+            </th>
+            <th>
+                @Html.Label("Almacen")
+            </th>
+            <th>
+                @Html.Label("Clave")
+            </th>
+            <th>
+                @Html.Label("Articulo")
+            </th>
+
+            <th>
+                @Html.Label("Cantidad")
+            </th>
+            <th>
+                @Html.Label("Lote Prov")
+            </th>
+            <th>
+                @Html.Label("Lote")
+            </th>
+            <th>
+                @Html.Label("Recepcion")
+            </th>
+            <th>
+                @Html.Label("Factura")
+            </th>
+        </tr>
+
+        @{
+            string cadenaw = "  select * from [WorkinProcess] as w inner join articulo as a on w.idarticulo=a.idarticulo where a.idtipoarticulo=6 and orden=" + ViewBag.ordenproduccion.IDOrden;
+
+            List<SIAAPI.Models.Produccion.WorkinProcess> elementosw = new SIAAPI.Models.Produccion.WorkinProcessContext().Database.SqlQuery<SIAAPI.Models.Produccion.WorkinProcess>(cadenaw).ToList();
+
+        }
+        @foreach (SIAAPI.Models.Produccion.WorkinProcess item in elementosw)
+        {
+            SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+            SIAAPI.Models.Comercial.Articulo articulo = dd.Articulo.Find(item.IDArticulo);
+            SIAAPI.Models.Comercial.Almacen almacen = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.Find(item.IDAlmacen);
+            SIAAPI.Models.Inventarios.Clslotemp loteinterno = dd.Database.SqlQuery<SIAAPI.Models.Inventarios.Clslotemp>("SELECT * from clslotemp   where id=" + item.IDlotemp).ToList().FirstOrDefault();
+
+
+
+    <tr>
+        <td>
+            @item.Orden
+        </td>
+        <td>
+            @Html.Label(almacen.Descripcion)
+        </td>
+        <td>
+            @Html.Label(articulo.Cref)
+        </td>
+        <td>
+            @Html.Label(articulo.Descripcion)
+        </td>
+
+        <td>
+            @item.Cantidad
+        </td>
+        <td class="text-info">
+            @{
+                try
+                {
+                    @loteinterno.Lote
+                }
+                catch (Exception err)
+                {
+
+                }
+            }
+
+        </td>
+        <td>
+            @item.loteinterno
+        </td>
+        <td>
+            @{
+                try
+                {
+                    @loteinterno.IDRecepcion
+                }
+                catch (Exception err)
+                {
+
+                }
+            }
+
+        </td>
+        <td>
+            @try
+            {
+                SIAAPI.Models.Comercial.EncRecepcion rece = new SIAAPI.Models.Comercial.RecepcionContext().EncRecepciones.Find(loteinterno.IDRecepcion);
+                @rece.DocumentoFactura
+            }
+            catch (Exception err)
+            {
+
+            }
+
+        </td>
+        <td>
+            <a class="delete" data-id="@item.IDWorkingProcess">
+                <i class="tbl_del_btn fa fa-trash"></i>
+
+            </a>
+        </td>
+    </tr>
+        }
+    </table>
+</div>
+<br />
+<div>
+    @Html.ActionLink("Crear Etiquetas", "ImprimeEtiqProd", "Almacen", new { idorden = ViewBag.ordenproduccion.IDOrden }, new { @class = "btn btn-primary btn-large" })
+
+
+</div>
+@{int proceso = 5;}
+@foreach (SIAAPI.Models.Produccion.WorkinProcess itemp in elementosw)
+{
+    proceso = itemp.IDproceso;
+}
+
+<table class="table">
+
+    @{ if (ViewBag.Mensaje != "")
+        {
+            <div class="alert alert-info">
+                <h2>
+                    @ViewBag.Mensaje
+                </h2>
+            </div>
+        }
+    }
+
+    <tr>
+
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                @Html.Label("Codigo de Lote", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="text" id="loteI" name="loteI" onkeyup="asignar(event,@proceso)" autofocus />
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+
+            <div class="form-group">
+                @Html.Label("Entregar", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <form name="formulario">
+                        <input type="number" id="entregarnum" value="0" name="entregarnum" disabled="disabled" @*onkeyup="asignar(event,@item.IDProceso)"*@ />
+                        <input type="checkbox" onchange="habilitar(this.checked);" id="metrosseleccionados" name="metrosseleccionados" value="1"> <label for="metrosseleccionados">Entregar solo los metros seleccionados</label>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        @{ var listado = ViewBag.listado;
+        }
+
+
+
+    </tr>
+
+</table>
+
+
+
+
+<table class="table">
+
+
+    @*@foreach (SIAAPI.Models.Produccion.ArticuloProduccion item in Model)
+        {*@
+    @foreach (SIAAPI.Models.Comercial.MaterialAsignado itemp in ele)
+    {
+        List<SIAAPI.Models.Comercial.Almacen> almacenes = new SIAAPI.Models.Inventarios.AjustesAlmacenContext().Database.SqlQuery<SIAAPI.Models.Comercial.Almacen>("Select * from Almacen").ToList();
+
+        foreach (SIAAPI.Models.Comercial.Almacen aaaa in almacenes)
+        {
+
+            List<SIAAPI.Models.Inventarios.Clslotemp> lotes = new SIAAPI.Models.Inventarios.AjustesAlmacenContext().Database.SqlQuery<SIAAPI.Models.Inventarios.Clslotemp>("Select * from clslotemp where idalmacen=" + aaaa.IDAlmacen + " and idCaracteristica =" + itemp.idcaracteristica + " and metrosdisponibles>0").ToList();
+
+            if (lotes.Count() > 0)
+            {
+                SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+                SIAAPI.Models.Comercial.Caracteristica cara = dd.Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select* from [Caracteristica] where [id]=" + itemp.idcaracteristica).ToList().FirstOrDefault();
+
+                SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(cara.Articulo_IDArticulo);
+
+                <tr>
+                    <table class="table">
+                        <tr>
+                            <td>
+                                <h2>
+                                    Existencias para @articulo.Cref en @aaaa.Descripcion
+
+                                </h2>
+                            </td>
+
+                        </tr>
+
+                    </table>
+                </tr>
+
+
+
+                <tr>
+                    <h6>Lotes disponibles</h6>
+                    <table class="table" style="color:blue">
+
+                        <tr>
+                            <th>
+                                No de cinta
+                            </th>
+                            <th>
+                                Lote
+                            </th>
+                            <th>
+                                Lote interno
+                            </th>
+                            <th>
+                                Mts2 Disponibles
+                            </th>
+                            <th>
+                                Mts Lineales Disponibles
+                            </th>
+                        </tr>
+                        @foreach (SIAAPI.Models.Inventarios.Clslotemp lote in lotes)
+                        {
+                            string[] separado;
+                            separado = lote.LoteInterno.Split('/');
+                            int ancho = 0;
+                            int largo = 0;
+                            try
+                            {
+                                 ancho = int.Parse(separado[1].ToString());
+                                 largo = int.Parse(separado[2].ToString());
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+
+                            <tr>
+                                <td>
+                                    @Html.Label(lote.NoCinta.ToString())
+                                </td>
+                                <td>
+                                    @try
+                                    {
+                                        @Html.Label(lote.Lote)
+                                    }
+                                    catch (Exception err)
+                                    {
+
+                                    }
+                                </td>
+                                <td>
+                                    @Html.Label(lote.LoteInterno)
+                                </td>
+                                <td>
+                                    @lote.MetrosDisponibles
+                                </td>
+                                <td>
+                                    @{
+                                        decimal metrosdisponibleslineales = 0;
+                            try
+                            {
+                                metrosdisponibleslineales=lote.MetrosDisponibles / decimal.Parse((ancho * 0.001M).ToString());
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+                                    }
+                                    @Math.Round(metrosdisponibleslineales, 0)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+
+                </tr>
+
+            }
+
+        }
+
+
+
+    }
+
+
+
+
+
+</table>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+        var url = '@Url.Action("Deleteidwork", "Almacen")';
+        $('.delete').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>
+
+
+
+<script>
+    function asignar(e,IDproceso) {
+
+        var lote = document.getElementById("loteI").value;
+        var valorinputentregar = document.getElementById("entregarnum").value;
+        var valorcheck = 0;
+
+        if (document.getElementById("metrosseleccionados").checked == true)
+        {
+            valorcheck = 1;
+        }
+
+
+        var orden=@ViewBag.ordenproduccion.IDOrden;
+        var url = "/Almacen/descontarlote";
+        if (e.keyCode === 13) {
+            e.preventDefault();
+
+            $.post(url, { orden: orden, loteinterno: lote, IDProceso: IDproceso, valorcheck: valorcheck, valorinputentregar: valorinputentregar  } ,function (response) {
+
+                window.location.reload(true);
+
+            })
+        }
+    }
+</script>
+<script>
+        function habilitar(value) {
+            if (value == true) {
+                // habilitamos
+                document.getElementById("entregarnum").disabled = false;
+            } else if (value == false) {
+                // deshabilitamos
+                document.getElementById("entregarnum").disabled = true;
+            }
+        }
+</script>

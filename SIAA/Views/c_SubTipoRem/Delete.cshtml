@@ -1,0 +1,56 @@
+﻿@model SIAAPI.Models.CartaPorte.c_SubTipoRem
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Eliminar Tipo Remolque</h3>
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+   
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveTipoRemolque)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveTipoRemolque)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RemoSemi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RemoSemi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FIVigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FIVigencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FFVigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FFVigencia)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

@@ -1,0 +1,130 @@
+﻿@model IEnumerable<SIAAPI.Models.Inventarios.Clslotemp>
+
+@{
+    ViewBag.Title = "Lotes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Lotes</h2>
+
+
+<table class="table">
+    <tr>
+      
+        <th>
+            @Html.DisplayNameFor(model => model.Largo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoteInterno)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoCinta)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrdenCompra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MetrosCuadrados)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Metrosutilizados)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MetrosDisponibles)
+        </th>
+    
+        <th>
+            @Html.DisplayNameFor(model => model.IDRecepcion)
+        </th>
+        <th>
+           ELiminar
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+      
+       
+        <td>
+            @{
+                decimal metrosdisponibleslineales = item.MetrosDisponibles / decimal.Parse((item.Ancho * 0.001M).ToString());
+            }
+            @Math.Round(metrosdisponibleslineales, 0)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lote)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoteInterno)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoCinta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Fecha)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrdenCompra)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MetrosCuadrados)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Metrosutilizados)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MetrosDisponibles)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.IDRecepcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDRecepcion)
+        </td>
+        <td>
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Almacenista") )
+                {
+            <form action="DeleteLote" method="post" >
+                <input name="id" id="id" value="@item.ID" type="hidden"/>
+               
+                <input name="Observacion" id="Observacion" type="text" />
+
+                <button type="submit"  class="btn btn-danger"><i class="tbl_del_btn fa fa-trash"></i></button>
+            </form>
+            }
+</td>
+    </tr>   
+}
+
+</table>
+
+
+<script>
+    function EliminarPres(id) {
+        var url = '@Url.Action("DeleteLote", "VMovimientoAlmacen")';
+        async: true;
+       
+        var obse = "Observacion" + id;
+        var observacion = $(obse).val();
+        alert(observacion);
+        var row = $(this).closest('tr');
+        $.post(url, { id: id, motivo: observacion }, function (response) {
+            if (response) {
+
+                location.reload();
+                row.remove();
+            }
+        }).fail(function (response) {
+            // display error message?
+        });
+    }
+</script>

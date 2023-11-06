@@ -1,0 +1,61 @@
+﻿@model SIAAPI.Models.Cfdi.PagoFacturaProv
+
+@{
+    ViewBag.Title = "Registrar pago desde archivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (@ViewBag.Proveedor != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <h3>
+                        Carga el pago de una factura del proveedor desde un XML
+                    </h3>
+                <tr>
+                    <th>RFC</th>
+                    <th>Proveedor</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.Proveedor)
+            {
+                <tr>
+                    <td>@item.RFC</td>
+                    <td>@item.Empresa </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+
+<br />
+
+@using (Html.BeginForm("CargarPagosP", "PagoFacturaProveedor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Para registrar el pago desde un archivo, indica el archivo XML a subir</h4>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="file" id="Imag1" name="Imag1" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "IndexP", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+    </div>
+}
+
+

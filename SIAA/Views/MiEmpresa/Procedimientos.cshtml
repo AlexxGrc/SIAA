@@ -1,0 +1,1287 @@
+﻿@model IEnumerable<SIAAPI.Models.miempresa.SGC>
+
+@{
+    ViewBag.Title = "Procedimientos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ if (ViewBag.Viene == "")
+    {
+        <div>
+            <div class="row">
+                <div class="col-lg-8 col-md-12">
+                    <div class="col-xs-4 col-md-3">
+                        <img src="~/imagenes/logoclass.jpg" width="200" height="100" />
+                    </div>
+                    <div class="col-xs-8 col-md-9">
+                        <p style="font-size: xx-large" class="text-left">Class Labels S. de R.L. de C.V.</p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+
+            <div class="container">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-industry fa-5x fa-fw"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"> <p class="text-left">@ViewBag.Departamento</p></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="panel-body">
+                            <p style="font-size: x-large" class="text-justify">
+                               ...
+                            </p>
+                        </div>*@
+                </div>
+            </div>
+            @using (Html.BeginForm())
+            {
+                <div class="col-xs-20">
+
+                    Filtro: @Html.TextBox("Filtro", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+
+                    <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                </div>
+
+
+
+            }
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+            {
+                <p>
+                    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" })
+                </p>
+            }
+            @*menu Tab Content*@
+            <div class="tabs-container">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <!--Tabulador detalles-->
+                    <li role="tab">
+                        <a class="nav-linkactive" id="Procedimiento-tab" href="#Procedimiento" data-toggle="tab" role="tab" aria-controls="Procedimiento" aria-selected="true" aria-expanded="true">Procedimientos</a>
+                    </li>
+                    <li role="tab">
+                        <a class="nav-linkactive" id="Formato-tab" href="#Formato" data-toggle="tab" role="tab" aria-controls="Formato" aria-selected="true" aria-expanded="true">Formatos</a>
+                    </li>
+                    <li role="tab">
+                        <a class="nav-linkactive" id="Instrucciones-tab" href="#Instrucciones" data-toggle="tab" role="tab" aria-controls="Instrucciones" aria-selected="true" aria-expanded="true">Instrucciones</a>
+                    </li>
+                    <li role="tab">
+                        <a class="nav-linkactive" id="Carta-tab" href="#Carta" data-toggle="tab" role="tab" aria-controls="Carta" aria-selected="true" aria-expanded="true">Carta de Proceso</a>
+                    </li>
+                    <li role="tab">
+                        <a class="nav-linkactive" id="MatrizP-tab" href="#MatrizP" data-toggle="tab" role="tab" aria-controls="MatrizP" aria-selected="true" aria-expanded="true">Mapa de Procesos</a>
+                    </li>
+                    <li role="tab">
+                        <a class="nav-linkactive" id="MRiesgo-tab" href="#MRiesgo" data-toggle="tab" role="tab" aria-controls="MRiesgo" aria-selected="true" aria-expanded="true">Matriz de Riesgos</a>
+                    </li>
+                    <li role="tab">
+                        <a class="nav-linkactive" id="DescripcionP-tab" href="#DescripcionP" data-toggle="tab" role="tab" aria-controls="DescripcionP" aria-selected="true" aria-expanded="true">Descripción de Puestos</a>
+                    </li>
+                    @*<li role="tab">
+                            <a class="nav-linkactive" id="MComunicacion-tab" href="#MComunicacion" data-toggle="tab" role="tab" aria-controls="MComunicacion" aria-selected="true" aria-expanded="true">Matriz de Comunicación</a>
+                        </li>*@
+                    @*<li role="tab">
+                            <a class="nav-linkactive" id="Indicadores-tab" href="#Indicadores" data-toggle="tab" role="tab" aria-controls="Indicadores" aria-selected="true" aria-expanded="true">Indicadores</a>
+                        </li>*@
+                    <li role="tab">
+                        <a class="nav-linkactive" id="Documentos-tab" href="#Documentos" data-toggle="tab" role="tab" aria-controls="Documentos" aria-selected="true" aria-expanded="true">Documentos</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="tab-content" id="tabs">
+            <div class="tab-pane active" id="Procedimiento" role="tabpanel" aria-labelledby="Procedimiento-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in ViewBag.listapro)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </div>
+            <div class="tab-pane" id="Formato" role="tabpanel" aria-labelledby="Formato-tab" aria-expanded="true">
+
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+
+                        <th>
+                            @Html.Label("Departamento")
+                        </th>
+
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in ViewBag.listafto)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @{
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+
+                            }
+                            <th>
+                                @Html.DisplayFor(modelItem => departamentos.Nombre)
+                            </th>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+            <div class="tab-pane" id="Instrucciones" role="tabpanel" aria-labelledby="Instrucciones-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in ViewBag.listains)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+            <div class="tab-pane" id="Carta" role="tabpanel" aria-labelledby="Carta-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in @ViewBag.listacar)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+
+            <div class="tab-pane" id="MatrizP" role="tabpanel" aria-labelledby="MatrizP-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in @ViewBag.listaMP)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+
+            <div class="tab-pane" id="MRiesgo" role="tabpanel" aria-labelledby="MRiesgo-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in @ViewBag.listamri)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+            <div class="tab-pane" id="MComunicacion" role="tabpanel" aria-labelledby="MComunicacion-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in @ViewBag.listamco)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+            <div class="tab-pane" id="Indicadores" role="tabpanel" aria-labelledby="Indicadores-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in @ViewBag.listaind)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NoVersion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+
+            </div>
+            <div class="tab-pane" id="Documentos" role="tabpanel" aria-labelledby="Documentos-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in ViewBag.listadoc)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+
+
+
+                </table>
+
+            </div>
+            <div class="tab-pane" id="DescripcionP" role="tabpanel" aria-labelledby="DescrpcionP-tab" aria-expanded="true">
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Codigo)
+                        </th>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            <th>
+                                @Html.Label("Departamento")
+                            </th>
+                        }
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NoVersion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FechaHora)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Documento)
+                        </th>
+                        <th></th>
+                    </tr>
+                    @foreach (SIAAPI.Models.miempresa.SGC item in ViewBag.listadesP)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Codigo)
+                            </td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                                <th>
+                                    @Html.DisplayFor(modelItem => departamentos.Nombre)
+                                </th>
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.NoVersion)*@
+                                @item.NoVersion
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaHora)
+                            </td>
+                            <td>
+                                @{
+                                    if (item.Documento != "" && item.Documento != null)
+                                    {
+                                        @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                        if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                        {
+
+                                            @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        @Html.DisplayFor(modelItem => item.Documento)
+                                    }
+                                }
+                            </td>
+
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                {
+                                    @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                    @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                    if (item.Documento == "" || item.Documento == null)
+                                    {
+                                        @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+
+
+
+
+                </table>
+
+            </div>
+        </div>
+
+    }
+    else if (ViewBag.Viene == "Matriz")
+    {
+        <div>
+            <div class="row">
+                <div class="col-lg-8 col-md-12">
+                    <div class="col-xs-4 col-md-3">
+                        <img src="~/imagenes/logoclass.jpg" width="200" height="100" />
+                    </div>
+                    <div class="col-xs-8 col-md-9">
+                        <p style="font-size: xx-large" class="text-left">Class Labels S. de R.L. de C.V.</p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+
+            <div class="container">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-industry fa-5x fa-fw"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"> <p class="text-left">@ViewBag.Departamento</p></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+            {
+                <p>
+                    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" })
+                </p>
+            }
+
+            @*menu Tab Content*@
+            <!--<div class="tabs-container">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">-->
+            <!--Tabulador detalles-->
+            <!--<li role="tab" >
+                            <a class="nav-linkactive" id="Indicadores-tab" href="#Indicadores" data-toggle="tab" role="tab" aria-controls="Indicadores" aria-selected="true" aria-expanded="true" >Indicadores</a>
+                        </li>
+
+                </ul>
+            </div>-->
+
+        </div>
+
+        <div class="tab-content" id="tabs">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Codigo)
+                    </th>
+                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                    {
+                        <th>
+                            @Html.Label("Departamento")
+                        </th>
+                    }
+                    <th>
+                        @Html.DisplayNameFor(model => model.Descripcion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NoVersion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaHora)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Documento)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (SIAAPI.Models.miempresa.SGC item in ViewBag.listamco)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Codigo)
+                        </td>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                            <th>
+                                @Html.DisplayFor(modelItem => departamentos.Nombre)
+                            </th>
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descripcion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoVersion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaHora)
+                        </td>
+                        <td>
+                            @{
+                                if (item.Documento != "" && item.Documento != null)
+                                {
+                                    @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                    if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                    {
+
+                                        @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                    }
+
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Documento)
+                                }
+                            }
+                        </td>
+
+                        <td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                if (item.Documento == "" || item.Documento == null)
+                                {
+                                    @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+
+
+        </div>
+
+    }
+    else
+    {
+        <div>
+            <div class="row">
+                <div class="col-lg-8 col-md-12">
+                    <div class="col-xs-4 col-md-3">
+                        <img src="~/imagenes/logoclass.jpg" width="200" height="100" />
+                    </div>
+                    <div class="col-xs-8 col-md-9">
+                        <p style="font-size: xx-large" class="text-left">Class Labels S. de R.L. de C.V.</p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+
+            <div class="container">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-industry fa-5x fa-fw"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge"> <p class="text-left">@ViewBag.Departamento</p></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <p>
+                @Html.ActionLink("Crea un nuevo registro", "CrearIndicadores", null, new { @class = "btn btn-warning btn-xs" })
+            </p>
+
+            @*menu Tab Content*@
+            <!--<div class="tabs-container">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">-->
+            <!--Tabulador detalles-->
+            <!--<li role="tab" >
+                            <a class="nav-linkactive" id="Indicadores-tab" href="#Indicadores" data-toggle="tab" role="tab" aria-controls="Indicadores" aria-selected="true" aria-expanded="true" >Indicadores</a>
+                        </li>
+
+                </ul>
+            </div>-->
+
+        </div>
+
+        <div class="tab-content" id="tabs">
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Codigo)
+                    </th>
+                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                    {
+                        <th>
+                            @Html.Label("Departamento")
+                        </th>
+                    }
+                    <th>
+                        @Html.DisplayNameFor(model => model.Descripcion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NoVersion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaHora)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Documento)
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (SIAAPI.Models.miempresa.SGC item in @ViewBag.listaind)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Codigo)
+                        </td>
+                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                        {
+                            SIAAPI.Models.miempresa.Departamentos departamentos = new SIAAPI.Models.miempresa.DepartamentosContext().Departamentos.Find(item.IDDepartamento);
+                            <th>
+                                @Html.DisplayFor(modelItem => departamentos.Nombre)
+                            </th>
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Descripcion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoVersion)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaHora)
+                        </td>
+                        <td>
+                            @{
+                                if (item.Documento != "" && item.Documento != null)
+                                {
+                                    @Html.ActionLink(item.Documento, "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+
+                                    if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                                    {
+
+                                        @Html.ActionLink(".", "EliminarArchivo", new { id = item.ID }, new { @class = "fa fa-times-circle", style = "font-size:20px;color:red" })
+                                    }
+
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Documento)
+                                }
+                            }
+                        </td>
+
+                        <td>
+                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
+                            {
+                                @Html.ActionLink("Editar", "Edit", new { id = item.ID }, new { @class = "btn btn-success btn-xs" })
+                                @Html.ActionLink("Detalles", "Details", new { id = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                @Html.ActionLink("Eliminar", "Delete", new { id = item.ID }, new { @class = "btn btn-danger btn-xs" })
+                                if (item.Documento == "" || item.Documento == null)
+                                {
+                                    @Html.ActionLink("SubirArchivo", "SubirArchivo", new { id = item.ID }, new { @class = "btn btn-info btn-xs" })
+
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+
+
+        </div>
+    }
+
+}
+<script>
+    $(function () {
+        $('#myTab li:last-child a').tab('show')
+    })
+</script>

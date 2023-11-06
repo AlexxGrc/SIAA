@@ -1,0 +1,157 @@
+﻿@model IEnumerable<SIAAPI.Models.Produccion.Proceso>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<h2>Mapeo de Procesos</h2>
+
+<hr />
+@{
+    int numero = 1;
+
+    foreach (var itemProc in ViewBag.DatosProceso)
+    {
+        //col - lg - 3 col - md - 6
+                    <!-- panel-->
+        <div style="display: inline-block;width: 300px;height:300px;">
+            @{
+                var color = "panel panel-primary";
+
+                if (numero == 1)
+                {
+                    color = "panel panel-primary";
+                }
+                if (numero == 2)
+                {
+                    color = "panel panel-green";
+                }
+                if (numero == 3)
+                {
+                    color = "panel panel-yellow";
+                }
+
+                if (numero == 4)
+                {
+                    color = "panel panel-red";
+                    numero = 0;
+
+                }
+                numero = numero + 1;
+            }
+
+            <div class="@color" style="width:300px;height:80px;background:red">
+
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <i class="fa fa-gears fa-4x"></i>
+                        </div>
+                        <div class="col-xs-10 text-right">
+                            <div class="huge">
+                                <h4>@itemProc.NombreProceso </h4>
+                            </div>
+                            <div>Proceso</div>
+                        </div>
+                    </div>
+                </div>
+ 
+                    <div class="panel-footer">
+
+                            <div class="table-responsive">
+                                <table class="table table-responsive">
+                                        @{
+                                            SIAAPI.Models.Produccion.BitacoraContext db = new SIAAPI.Models.Produccion.BitacoraContext();
+
+                                            int proceso = itemProc.IDProceso;
+
+                                            SIAAPI.Models.Comercial.ClsDatoEntero dato = db.Database.SqlQuery
+                                            <SIAAPI.Models.Comercial.ClsDatoEntero>
+                                                ("select count(IDProceso) as Dato from dbo.OrdenProduccionDetalle where IDProceso=" + proceso + " and EstadoProceso = 'Iniciado'").ToList()[0];
+                                        }
+
+                                        <tr>
+                                            <th><h3>No. de Ordenes</h3></th>
+                                            <td class="hidden">@itemProc.IDProceso</td>
+
+                                            @{
+                                                try
+                                                {
+                                                    //SIAAPI.Models.Produccion.BitacoraContext db = new SIAAPI.Models.Produccion.BitacoraContext();
+
+                                                    //int proceso = itemProc.IDProceso;
+
+                                                    //SIAAPI.Models.Comercial.ClsDatoEntero dato = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDProceso) as Dato from dbo.Bitacora where IDProceso=" + proceso + " and IDEStadoOrden <>(Select IDEstadoOrden from dbo.EstadoOrden where Descripcion = 'Terminado')").ToList()[0];
+
+
+                                                    <td><h3 class="center">@dato.Dato</h3></td>
+                                                }
+                                                catch (Exception err)
+                                                {
+                                                    string mensaje = err.Message;
+                                                    <td><h3 class="center">0</h3></td>
+                                                }
+
+
+                                            }
+
+
+
+                                        </tr>
+                                        <tr>
+                                            @if (@dato.Dato != 0)
+                                            {
+                                                <td>
+                                                    @Html.ActionLink("VerOrden", "Index", "OrdenProduccion", new { idproceso = itemProc.IDProceso }, new { @class = "btn btn-primary btn-xs" })
+
+                                                    @if (@itemProc.UsaBitacoraDeTrabajo.Equals(true))
+                                                    {
+                                                        @Html.ActionLink("VerBitacora", "Index", "Bitacora", new { idproceso = itemProc.IDProceso }, new { @class = "btn btn-success btn-xs" })
+                                                    }
+                                                    @if (@itemProc.UsaMaquina.Equals(true))
+                                                    {
+                                                        @Html.ActionLink("VerMaquina", "VerMaquina", new { idproceso = itemProc.IDProceso }, new { @class = "btn btn-warning btn-xs" })
+                                                    }
+
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td><br /></td>
+                                            }
+                                        </tr>
+
+                            </table>
+                           </div>  @*div table*@
+
+
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div> @*div panel footer*@
+
+            </div>
+
+
+
+        </div>
+        
+
+    }
+
+}
+
+          <script>
+$(document).ready(function(){//ACCION CUANDO CARGUE LA PAGINA
+
+  var altura_arr = [];//CREAMOS UN ARREGLO VACIO
+  $('.col-lg-3 col-md-6').each(function () {//RECORREMOS TODOS LOS CONTENEDORES DE LAS IMAGENES, DEBEN TENER LA MISMA CLASE
+    var altura = $(this).height(); //LES SACAMOS LA ALTURA
+    altura_arr.push(altura);//METEMOS LA ALTURA AL ARREGLO
+  });
+  altura_arr.sort(function(a, b){return b-a}); //ACOMODAMOS EL ARREGLO EN ORDEN DESCENDENTE
+  $('.col-lg-3 col-md-6').each(function () {//RECORREMOS DE NUEVO LOS CONTENEDORES
+    $(this).css('height',altura_arr[0]);//LES PONEMOS A TODOS LOS CONTENEDORES EL PRIMERO ELEMENTO DE ALTURA DEL ARREGLO, QUE ES EL MAS GRANDE.
+  });
+});
+</script>

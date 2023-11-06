@@ -1,0 +1,67 @@
+﻿@model IEnumerable<SIAAPI.Models.Cfdi.Certificados>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-primary navbar-btn btn-xs" })
+</p>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PassCertificado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombredelcertificado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombredelkey)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioMultifacturas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PassMultifacturas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaVigenciaCertificado)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PassCertificado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombredelcertificado)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombredelkey)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UsuarioMultifacturas)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PassMultifacturas)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaVigenciaCertificado)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IDCertificado }) |
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IDCertificado }) |
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.IDCertificado })
+                </td>
+            </tr>
+        }
+
+    </table>
+    </div>

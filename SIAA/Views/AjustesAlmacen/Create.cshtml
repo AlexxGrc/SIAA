@@ -1,0 +1,173 @@
+﻿@model SIAAPI.Models.Inventarios.AjustesAlmacen
+
+@{
+    ViewBag.Title = "Create";
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var inventarioalmacenes = ViewBag.InventarioList as List<SelectListItem>;
+    var almacenes = ViewBag.datosAlmacenS as List<SelectListItem>;
+    var caracteristicas = ViewBag.Caracacteristicas as List<SelectListItem>;
+
+}
+<script defer src="~/Scripts/cascade.combo.js"></script>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h3>Ajustes de Almacen</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaAjuste, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @{
+                    string fecha = DateTime.Now.ToLongDateString();
+                }
+                @fecha
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDAlmacen, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(model => model.IDAlmacen, almacenes, new
+               {
+                   @class = "form-control",
+                   data_cascade_combo = "#IDArticulo",
+                   data_cascade_combo_source = Url.Action("getJsonProductoAlmacen", "AjustesAlmacen"),
+                   data_cascade_combo_param_name = "id"
+               })
+
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Busca una clave  => Escribe parte de ella y presiona 'Alt Gr'", htmlAttributes: new { @class = "control-label col-md-2" })
+           
+            <div class="col-md-8">
+                <input id="clave" name="clave" onkeyup="actualizacomboA(event)" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group">
+                @Html.Label("Articulo A", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+
+                    @*@Html.DropDownListFor(model => model.IDArticulo, ViewBag.IDCaracteristica as List<SelectListItem>, new { @class = "form-control" })*@
+                    @Html.DropDownListFor(model => model.IDArticulo, inventarioalmacenes, new
+               {
+                   @class = "form-control",
+                   @name = "IDArticulo",
+                   @id = "IDArticulo",
+                   data_cascade_combo = "#IDCaracteristica",
+                   data_cascade_combo_source = Url.Action("getJsonCaracteristicaPorArticulo", "AjustesAlmacen"),
+                   data_cascade_combo_param_name = "id"
+
+
+
+
+               })
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+
+                    @Html.DropDownListFor(model => model.ID, caracteristicas, new { @class = "form-control", id = "IDCaracteristica" })
+
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Lote, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Lote, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Lote, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TipoOperacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EnumDropDownListFor(model => model.TipoOperacion, htmlAttributes:
+                      new
+                      {
+                          @class = "form-control"
+                      })
+
+                    @Html.ValidationMessageFor(model => model.TipoOperacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Observacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Observacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Grabar" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+}
+<div>
+    @Html.ActionLink("Volver a la lista", "Index")
+</div>
+<script defer src="~/Scripts/cascade.combo.js"></script>
+
+<script>
+    function actualizacomboA(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clave";
+            var selectcontrol = "#IDArticulo";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getarticulosblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un articulo";
+                          $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                       $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+</script>

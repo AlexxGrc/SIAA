@@ -1,0 +1,328 @@
+﻿@model List<SIAAPI.Models.Comercial.VStockvsAlmacen>
+@{
+    ViewBag.Title = "InventarioStock";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    Stock Inventario
+</h2>
+
+
+
+
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    @*<input id="IDAlmacen" name="IDAlmacen" type="hidden" value="@ViewBag.IDAlmacen" />*@
+                    <div class="col-xs-10">
+                        Almacén: @Html.DropDownList("IDAlmacen", "Todos")
+                        <br />
+                        Familia: @Html.DropDownList("IDFamilia", "Todos")
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                    </div>
+
+
+                }
+
+            </div>
+
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+
+            <th>
+                @Html.Label("Clave")
+            </th>
+
+            <th>
+                @Html.Label("Presentación")
+            </th>
+            <th>
+                @Html.Label("Stock Min")
+            </th>
+            <th>
+                @Html.Label("Stock Max")
+            </th>
+
+            <th>
+                <table class="table">
+                    <tr>
+
+                        <th>
+                            @Html.Label("Existencia")
+                        </th>
+                        <th>
+                            @Html.Label("Por llegar")
+                        </th>
+                        <th>
+                            @Html.Label("Apartado")
+                        </th>
+                        <th>
+                            @Html.Label("Disponibilidad")
+                        </th>
+                    </tr>
+                </table>
+            </th>
+
+            <th>
+                @Html.Label("Consumo últimos 3 meses")
+            </th>
+            <th>
+                @Html.Label("Cliente")
+            </th>
+            <th>
+                @Html.Label("Cantidad")
+            </th>
+            <th>
+
+            </th>
+
+        </tr>
+        @{
+            SIAAPI.Models.Comercial.RemisionContext db = new SIAAPI.Models.Comercial.RemisionContext();
+            int j = 0;
+            foreach (var item in Model)
+            {
+                decimal consumoMes = 0;
+                decimal DatoConsumo = 0;
+                SIAAPI.Models.Comercial.Articulo articulo = db.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>("select * from  [Articulo] where [idarticulo]=" + item.IDArticulo + "").ToList().FirstOrDefault();
+                SIAAPI.Models.Comercial.Caracteristica caracteristica = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where id=" + item.IDCaracteristica).FirstOrDefault();
+                SIAAPI.Models.Comercial.StockVSAlmacen stock = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.StockVSAlmacen>("select * from StockVSAlmacen where idcaracteristica=" + item.IDCaracteristica + " and idalmacen=" + item.IDAlmacen).FirstOrDefault();
+
+                string c = "select avg(d.cantidad) as Dato from detpedido as d inner join encpedido as e on d.idpedido=e.idpedido where d.caracteristica_id=" + caracteristica.ID + " and e.status <>'Cancelado' and e.fecha<'" + DateTime.Now.AddDays(-90).Year + "-" + DateTime.Now.AddDays(-90).Month + "-" + DateTime.Now.AddDays(-90).Day + "'";
+                try
+                {
+                    SIAAPI.Models.Comercial.ClsDatoDecimal consumo = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>(c).ToList().FirstOrDefault();
+                    DatoConsumo = consumo.Dato;
+                }
+                catch
+                (Exception err)
+                {
+                    consumoMes = 0;
+                }
+
+
+                try
+                {
+                    consumoMes = DatoConsumo;
+                }
+                catch (Exception err)
+                {
+
+                }
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cref)
+                    </td>
+
+                    <td>
+                        NP: @caracteristica.IDPresentacion @caracteristica.Presentacion
+                    </td>
+                    @{
+                        decimal stockmnin = 0;
+                        decimal stockmax = 0;
+                        try
+                        {
+                            stockmnin = stock.StockMin;
+                            stockmax = stock.StockMax;
+                        }
+                        catch (Exception err)
+                        {
+                        }
+                    }
+
+                    <td class="danger">
+                        @Html.DisplayFor(modelItem => stockmnin)
+                    </td>
+
+
+
+                    <td>
+                        <input type="hidden" value="@stockmax" id="ValorStock" name="ValorStock" />
+                        @Html.DisplayFor(modelItem => stockmax)
+                    </td>
+                    @{
+                        SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+                        //SIAAPI.Models.Comercial.InventarioAlmacen inventario = dd.Database.SqlQuery<SIAAPI.Models.Comercial.InventarioAlmacen>("select* from InventarioAlmacen where idalmacen=" + item.IDAlmacen + " and idcaracteristica=" + item.Caracteristica_ID).ToList().FirstOrDefault();
+                        var almacenesP = dd.Database.SqlQuery<SIAAPI.Models.Comercial.InventarioAlmacen>("select*  from InventarioAlmacen where idalmacen=" + item.IDAlmacen + "and idcaracteristica=" + item.IDCaracteristica + "").ToList();
+
+                    }
+                    <td>
+                        <table class="table">
+                            @foreach (SIAAPI.Models.Comercial.InventarioAlmacen co in almacenesP)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => co.Existencia)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => co.PorLlegar)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => co.Apartado)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => co.Disponibilidad)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+
+                    </td>
+
+                    <td>
+                        @Math.Round(consumoMes, 2)
+                    </td>
+                    @{
+
+                        if (articulo.GeneraOrden) //genera orden
+                        {
+                            SIAAPI.Models.Comercial.Caracteristica cara = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where id=" + item.IDCaracteristica).FirstOrDefault();
+
+
+                            using (Html.BeginForm("GeneraOrden", "InventarioAlmacen", FormMethod.Post))
+                            {
+                                <input type="hidden" name="IDAlmacen" id="IDAlmacen" value="@item.IDAlmacen" />
+
+                                <input type="hidden" name="IDArticulo" id="IDArticulo" value="@item.IDArticulo" />
+                                <input type="hidden" name="IDCaracteristica" id="IDCaracteristica" value="@item.IDCaracteristica" />
+                                <input type="hidden" name="idcotizacionarticulo" id="idcotizacionarticulo" value="@cara.IDCotizacion" />
+                                <td>
+
+                                    @Html.DropDownList("idcliente", ViewBag.clientes as List<SelectListItem>, new { htmlAttributes = new { @class = "form-control", id = "idcliente", name = "idcliente" } })
+
+                                </td>
+                                <td>
+
+                                    @{
+                                        string cadenacan = "Cantidad" + j;
+                                    }
+                                    <input type="number" step="any" class="form-control" onchange="validar(@j);" id="@cadenacan" name="Cantidad" value="@stockmax">
+                                    @*<input type="number" step="any" class="form-control" pattern="[0-" @stockmax "]" id="@cadenacan" name="Cantidad" value="0">*@
+
+                                </td>
+
+
+                                <td>
+
+                                    <input type="submit" onchange="validar(@j);" value="Generar Orden" class="btn btn-success" />
+
+                                </td>
+
+
+                            }
+                        }
+                        else
+                        {
+                            using (Html.BeginForm("Solicitar", "InventarioAlmacen", FormMethod.Post))
+                            {
+                                <input type="hidden" name="IDAlmacen" id="IDAlmacen" value="@item.IDAlmacen" />
+
+                                <input type="hidden" name="IDArticulo" id="IDArticulo" value="@item.IDArticulo" />
+                                <input type="hidden" name="IDCaracteristica" id="IDCaracteristica" value="@item.IDCaracteristica" />
+                                <td>
+                                </td>
+                                <td>
+
+                                    @{
+                                        string cadenacan = "Cantidad" + j;
+                                    }
+
+                                    <input type="number" step="any" class="form-control" onchange="validar(@j);" id="@cadenacan" name="Cantidad" value="@stockmax">
+
+                                </td>
+                                <td>
+
+
+                                    <input type="submit" onchange="validar(@j);" value="Requerir" class="btn btn-info" />
+
+                                </td>
+                            }
+
+                        }
+                    }
+
+                </tr>
+
+
+
+
+
+
+
+                j++;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+    </table>
+</div>
+
+<p>
+    @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+<script type="text/javascript">
+    function validar(con) {
+        //alert('entra')
+        var stockM = document.getElementById("ValorStock" + con).value;
+        var stockMax = document.getElementById("Cantidad" + con).value;
+        var cantidad = 0;
+        var concatenacion = "#Cantidad" + con;
+
+        //alert(concatenacion)
+        //alert(stockMax)
+        if (stockMax == stockM) { //si el texo es menor a 2
+            alert('Continuar');
+        }
+        else if (stockMax < stockM) { //si el texo es mayor a 8
+            alert('Continuar');
+        }
+        else if (stockMax > stockM) { //si el texo es mayor a 8
+            alert('La cantidad no puede ser mayor que el stock máximo');
+            cantidad = stockM;
+            $(concatenacion).val(cantidad);
+        }
+       
+
+
+    }
+</script>
+
+@if (ViewBag.Message != "")
+{
+    <script>
+
+    $(document).ready(function(){
+
+    alert('@ViewBag.Message');
+
+    });
+
+    </script>
+
+}

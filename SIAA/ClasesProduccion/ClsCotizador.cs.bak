@@ -1,0 +1,633 @@
+﻿using SIAAPI.Models.Comercial;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SIAAPI.ClasesProduccion
+{
+    public class ClsCotizador
+    {
+
+        public int IDCotizacion { get; set; }
+
+        [DisplayName("Adhesivo")]
+        public bool conadhesivo { get; set; }
+
+        [DisplayName("Hotstamping")]
+        public bool hotstamping { get; set; }
+
+        [DisplayName("TermoEncogible")]
+        public bool mangatermo { get; set; }
+
+        [DisplayName("Numero de tintas")]
+        [Required]
+        [Range(0, 7, ErrorMessage = "Numero de tintas debe ser entre 0 y 7")]
+        public int Numerodetintas { get; set; }
+
+        [BrowsableAttribute(true)]
+        [Description("Cantidad a producir")]
+        [DisplayName("Cantidad a producir")]
+        [Required(ErrorMessage = "Por favor ingresa la cantidad")]
+        public decimal Cantidad { get; set; }
+
+        [DisplayName("Cantidad por paquete o rollo")]
+        public int Cantidadxrollo { get; set; }
+
+        [DisplayName("Largo Material mts sin Merma")]
+        public int largomaterialenMts { get; set; }
+
+        [DisplayName("Ancho minimo de material")]
+        public int anchomaterialenmm { get; set; }
+
+        [DisplayName("Avance del producto en mm")]
+        public decimal largoproductomm { get; set; }
+
+        [DisplayName("Largo Material Mts necesitados")]
+        public decimal MaterialNecesitado { get; set; }
+
+
+        [DisplayName("Cantidad de cinta necesitada en Mts2")]
+        public decimal CantidadMPMts2 { get; set; }
+
+
+
+        private int alpaso = 1;
+
+        public decimal Cantidaderollos { get; set; }
+
+
+
+        [DisplayName("Cantidad al paso")]
+        public int productosalpaso
+        {
+            get
+            {
+                if (alpaso == 0)
+                { return 1; }
+
+                else
+                {
+                    return alpaso;
+                }
+            }
+            set
+            {
+                if ((value == 0))
+                {
+                    alpaso = 1;
+                }
+                else
+                {
+                    alpaso = value;
+                }
+            }
+        }
+
+        [DisplayName("Eje del producto en mm")]
+        [Required]
+        public int anchoproductomm { get; set; }
+
+        [DisplayName("Gap al Eje en mm")]
+        [Required]
+        public decimal gapeje { get; set; }
+
+        [DisplayName("Gap al Avance en mm")]
+        [Required]
+        public decimal gapavance { get; set; }
+
+        private int cavidad { get; set; }
+
+        [DisplayName("Cavidades del suaje")]
+        public int cavidadesdesuaje
+        {
+            get
+            {
+                if (cavidad == 0)
+                { return 1; }
+
+                else
+                {
+                    return cavidad;
+                }
+            }
+            set
+            {
+                if ((value == 0))
+                {
+                    cavidad = 1;
+                }
+                else
+                {
+                    cavidad = value;
+                }
+            }
+        }
+
+
+        [DisplayName("Numero de Cintas")]
+        public decimal Numerodecintas { get; set; }
+
+        [DisplayName("Mts Lineales de Merma")]
+        public int MtsdeMerma { get; set; }
+
+
+        [DisplayName("Horas de Inspeccion")]
+        public decimal HrInspeccion { get; set; }
+
+        [DisplayName("Horas Prensa")]
+        public decimal HrPrensa { get; set; }
+
+        [DisplayName("Horas Embobinado")]
+        public decimal HrEmbobinado { get; set; }
+
+        [DisplayName("Hora Corte")]
+        public decimal HrCorte { get; set; }
+
+        [DisplayName("Hora de sellado")]
+        public decimal HrSellado { get; set; }
+
+        private int largoc;
+
+        [DisplayName("largo de la cinta en Mts")]
+
+        public int LargoCinta
+        {
+            get
+            {
+                if (largoc == 0)
+                { return 1524; }
+
+                else
+                {
+                    return largoc;
+                }
+            }
+            set
+            {
+                if ((value == 0))
+                {
+                    largoc = 1524;
+                }
+                else
+                {
+                    largoc = value;
+                }
+            }
+        }
+        [DisplayName("Velocidad de prensa en Pies por Hora")]
+        public int VelocidaddePrensaPies { get; set; }
+
+        [DisplayName("Velocidad de prensa en Mts por Hora")]
+        public int VelocidaddePrensaMts { get; set; }
+
+
+        [DisplayName("Minimo a producir")]
+        public decimal Minimoproducir { get; set; }
+
+
+        private int _anchommmaster;
+
+        [DisplayName("Ancho Master en mm")]
+
+        public int anchommmaster
+        {
+            get
+            {
+                if (_anchommmaster == 0)
+                { return 1524; }
+
+                else
+                {
+                    return _anchommmaster;
+                }
+            }
+            set
+            {
+                if ((value == 0))
+                {
+                    _anchommmaster = 1524;
+                }
+                else
+                {
+                    _anchommmaster = value;
+                }
+            }
+        }
+        [DisplayName("Cintas en el Master")]
+        public int CintasMaster { get; set; }
+
+        public bool CobrarMaster { get; set; }
+
+        private decimal _coste;
+
+        [Range(0, 100,
+        ErrorMessage = "El valor para {0} debe ser entre {1} y {2}.")]
+        public decimal CostoM2Cinta
+        {
+            get
+            {
+                if (_coste <= 0)
+                { return 1; }
+
+                else
+                {
+                    return _coste;
+                }
+            }
+            set
+            {
+                if ((value <= 0))
+                {
+                    _coste = 1;
+                }
+                else
+                {
+                    _coste = value;
+                }
+            }
+        }
+
+
+        private decimal _coste2;
+
+        [Range(0, 1000,
+        ErrorMessage = "El valor para {0} debe ser entre {1} y {2}.")]
+        public decimal CostoM2Cinta2
+        {
+            get { return _coste2; }
+
+            set
+            {
+                if ((value < 0))
+                {
+                    _coste2 = 0;
+                }
+                else
+                {
+                    _coste2 = value;
+                }
+            }
+        }
+
+        public int IDMaterial { get; set; }
+
+        public int IDMaterial2 { get; set; }
+
+
+        public int IDSuaje { get; set; }
+
+        public decimal CostototalMP { get; set; }
+
+        public string Enviar { get; set; }
+
+        [DisplayName("Suaje en Existencia")]
+        public int Suaje { get; set; }
+
+        public int Pleca { get; set; }
+
+        public decimal Rango1 { get; set; }
+
+        public decimal Rango2 { get; set; }
+
+        public decimal Rango3 { get; set; }
+
+        public decimal Rango4 { get; set; }
+
+        public decimal Rango1gain { get; set; }
+
+        public decimal Rango2gain { get; set; }
+
+        public decimal Rango3gain { get; set; }
+
+        public decimal Rango4gain { get; set; }
+
+        public bool Yatienematriz { get; set; }
+
+        public MatrizPrecioCotiza MatrizPrecio = new MatrizPrecioCotiza();
+
+        public int DiluirSuajeEnPedidos { get; set; }
+
+        public List<Tinta> Tintas = new List<Tinta>();
+
+        public decimal Costo1 { get; set; }
+        public decimal Costo2 { get; set; }
+        public decimal Costo3 { get; set; }
+        public decimal Costo4 { get; set; }
+
+        public decimal Costo1mxn { get; set; }
+        public decimal Costo2mxn { get; set; }
+        public decimal Costo3mxn { get; set; }
+        public decimal Costo4mxn { get; set; }
+
+
+        public PrecioConvenido precioconvenidos = new PrecioConvenido();
+        public PrecioConvenido precioconvenidosmxn = new PrecioConvenido();
+
+        public int IDMonedapreciosconvenidos { get; set; }
+
+        public decimal TCcotizado { get; set; }
+        public ClsCotizador()
+        {
+            Rango1gain = SIAAPI.Properties.Settings.Default.Rango1gain;
+            Rango2gain = SIAAPI.Properties.Settings.Default.Rango2gain;
+            Rango3gain = SIAAPI.Properties.Settings.Default.Rango3gain;
+            Rango4gain = SIAAPI.Properties.Settings.Default.Rango4gain;
+        }
+
+
+        public bool Materialnecesitarefile { get; set; }
+    }
+
+
+
+    public class suajeC
+    {
+
+        public int IDCaracteristica { get; set; }
+
+        public string Descripcion { get; set; }
+
+        public string Cref { get; set; }
+
+    }
+
+    public class SuajeCaracteristicas
+    {
+        public decimal Eje { get; set; }
+
+        public decimal Avance { get; set; }
+
+        public decimal Gapeje { get; set; }
+
+        public decimal Gapavance { get; set; }
+
+        public int Cavidades { get; set; }
+
+    }
+
+
+    public class Tinta
+    {
+        public int IDTinta { get; set; }
+        public decimal Area { get; set; }
+        public decimal kg { get; set; }
+        public decimal Costo { get; set; }
+
+        public string Cref { get; set; }
+
+        public string Descripcion { get; set; }
+        public Tinta()
+        {
+
+        }
+
+        public Tinta(int pan, int Ar)
+        {
+            IDTinta = pan;
+            Area = Ar;
+        }
+    }
+
+    public class Celda
+    {
+        public decimal Valor { get; set; }
+
+        public string Color { get; set; }
+
+        public Celda()
+        {
+            Valor = 0M;
+        }
+
+    }
+
+    public class Fila
+    {
+        public Celda Celda1 { get; set; }
+        public Celda Celda2 { get; set; }
+        public Celda Celda3 { get; set; }
+        public Celda Celda4 { get; set; }
+
+        public Fila()
+        {
+            Celda1 = new Celda();
+            Celda2 = new Celda();
+            Celda3 = new Celda();
+            Celda4 = new Celda();
+        }
+    }
+
+    public class MatrizPrecioCotiza
+    {
+        public Fila Fila1 { get; set; }
+        public Fila Fila2 { get; set; }
+
+        public Fila Fila3 { get; set; }
+
+        public Fila Fila4 { get; set; }
+
+        public MatrizPrecioCotiza()
+        {
+            Fila1 = new Fila();
+            Fila2 = new Fila();
+            Fila3 = new Fila();
+            Fila4 = new Fila();
+
+        }
+    }
+
+
+    public class PrecioConvenido
+    {
+
+
+      public  decimal precio1 { get; set; }
+
+        public decimal precio2 { get; set; }
+
+        public decimal precio3 { get; set; }
+
+        public decimal precio4 { get; set; }
+
+    }
+
+
+    public class Repository
+    {
+        public IEnumerable<SelectListItem> GetTintas()
+        {
+            using (var context = new ArticuloContext())
+            {
+                List<SelectListItem> listaPeriocidadPago = context.Articulo.AsNoTracking().Where(s => (s.IDTipoArticulo == 7 && s.obsoleto == false))
+                    .OrderBy(n => n.Descripcion)
+                        .Select(n =>
+                        new SelectListItem
+                        {
+                            Value = n.IDArticulo.ToString(),
+                            Text = n.Descripcion
+                        }).ToList();
+                var descripciontip = new SelectListItem()
+                {
+                    Value = "0",
+                    Text = "--- Selecciona una Tinta ---"
+                };
+                listaPeriocidadPago.Insert(0, descripciontip);
+                return new SelectList(listaPeriocidadPago, "Value", "Text");
+            }
+        }
+
+        public IEnumerable<SelectListItem> GetSuajes()
+        {
+            using (var context = new ArticuloContext())
+            {
+                string cadena = "select C.ID as IDCaracteristica, A.Cref,A.Descripcion from Articulo as A inner join Caracteristica as C on A.IDArticulo=C.Articulo_IDArticulo where A.IDTipoArticulo=2 and A.obsoleto='0' and C.obsoleto='0' and A.descripcion Like 'SUAJE%' order by A.descripcion";
+                List<suajeC> listadesuaje = context.Database.SqlQuery<suajeC>(cadena).ToList();
+
+                List<SelectListItem> listadesuajes = new List<SelectListItem>();
+                foreach (suajeC item in listadesuaje)
+                {
+                    SelectListItem art = new SelectListItem { Text = item.Cref +"  |   "+ item.Descripcion, Value = item.IDCaracteristica.ToString() };
+
+                    listadesuajes.Add(art);
+                }
+
+                var descripciontip = new SelectListItem()
+                {
+                    Value = "0",
+                    Text = "--- Selecciona una Suaje ---"
+                };
+                listadesuajes.Insert(0, descripciontip);
+                return new SelectList(listadesuajes, "Value", "Text");
+            }
+        }
+
+
+
+        public IEnumerable<SelectListItem> GetCintas()
+        {
+            using (var context = new ArticuloContext())
+            {
+                string cadena = "select * From Materiales where Obsoleto='0' order by clave";
+                List<FormulaEspecializada.Materiales> listadecintas = context.Database.SqlQuery<FormulaEspecializada.Materiales>(cadena).ToList();
+
+                List<SelectListItem> listadecintacombo = new List<SelectListItem>();
+                foreach (FormulaEspecializada.Materiales item in listadecintas)
+                {
+                    SelectListItem art = new SelectListItem { Text =  item.CLAVE  + "   |   " + item.Descripcion , Value =  item.Id.ToString() };
+
+                    listadecintacombo.Add(art);
+                }
+
+                var descripciontip = new SelectListItem()
+                {
+                    Value = "0",
+                    Text = "--- Selecciona una Cinta  ---"
+                };
+                listadecintacombo.Insert(0, descripciontip);
+                return new SelectList(listadecintacombo, "Value", "Text");
+            }
+        }
+
+
+
+        public IEnumerable<SelectListItem> GetCintasbyClave(int Seleccionado)
+        {
+            using (var context = new ArticuloContext())
+            {
+                string cadena = "select * From Materiales where Obsoleto='0' order by clave";
+                List<FormulaEspecializada.Materiales> listadecintas = context.Database.SqlQuery<FormulaEspecializada.Materiales>(cadena).ToList();
+
+                List<SelectListItem> listadecintacombo = new List<SelectListItem>();
+                foreach (FormulaEspecializada.Materiales item in listadecintas)
+                {
+                    SelectListItem art = new SelectListItem { Text =item.CLAVE + " | "+item.Descripcion, Value =   item.Id.ToString() };
+                    if (item.Id == Seleccionado)
+                    {
+                        art.Selected = true;
+                    }
+                    listadecintacombo.Add(art);
+                }
+
+                var descripciontip = new SelectListItem()
+                {
+                    Value = "0",
+                    Text = "--- Selecciona una Cinta  ---"
+                };
+                listadecintacombo.Insert(0, descripciontip);
+                return new SelectList(listadecintacombo, "Value", "Text");
+            }
+
+        }
+        public IEnumerable<SelectListItem> GetSuajes(int Seleccionado)
+        {
+            using (var context = new ArticuloContext())
+            {
+                string cadena = "select C.ID as IDCaracteristica, A.Cref,A.Descripcion from Articulo as A inner join Caracteristica as C on A.IDArticulo=C.Articulo_IDArticulo where A.IDTipoArticulo=2 and A.obsoleto='0' and C.obsoleto='0' and A.descripcion Like 'SUAJE%' order by A.descripcion";
+                List<suajeC> listadesuaje = context.Database.SqlQuery<suajeC>(cadena).ToList();
+
+                List<SelectListItem> listadesuajes = new List<SelectListItem>();
+                foreach (suajeC item in listadesuaje)
+                {
+                    SelectListItem art = new SelectListItem { Text = item.Cref + " | " + item.Descripcion, Value = item.IDCaracteristica.ToString() };
+                    if (item.IDCaracteristica == Seleccionado)
+                    {
+                        art.Selected = true;
+                    }
+                    listadesuajes.Add(art);
+                }
+
+                var descripciontip = new SelectListItem()
+                {
+                    Value = "0",
+                    Text = "--- Selecciona una Suaje ---"
+                };
+                listadesuajes.Insert(0, descripciontip);
+                return new SelectList(listadesuajes, "Value", "Text");
+            }
+        }
+    }
+
+
+    [Table("Cotizaciones")]
+    public class Cotizaciones
+    {
+        [Key]
+        public int ID { get; set; }
+        [DisplayName("Fecha")]
+        public DateTime Fecha { get; set; }
+
+        [DisplayName("Descripcion")]
+        [StringLength(100)]
+        [Required]
+        public string Descripcion { get; set; }
+
+        [DisplayName("Ruta")]
+        [StringLength(100)]
+        public string Ruta { get; set; }
+        [DisplayName("Archivo")]
+        [StringLength(100)]
+        public string NombreArchivo { get; set; }
+        [DisplayName("Usuario")]
+        [StringLength(100)]
+        public string Usuario { get; set; }
+    }
+
+
+
+    public class ArchivoCotizadorContext : DbContext
+    {
+        public ArchivoCotizadorContext() : base("name=DefaultConnection")
+        {
+
+        }
+        public DbSet<Cotizaciones> cotizaciones { get; set; }
+
+    }
+
+}

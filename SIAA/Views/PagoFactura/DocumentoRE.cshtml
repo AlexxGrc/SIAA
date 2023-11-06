@@ -1,0 +1,204 @@
+﻿@*@model SIAAPI.Models.Cfdi.DocumentoRelacionado*@
+
+@model List<SIAAPI.Models.Cfdi.VEncFactura>
+
+
+<h2>Documentos relacionados</h2><br>
+<h4>Cliente: @ViewBag.nombrec</h4>
+<h4>Monto a pagar: @ViewBag.monto</h4>
+<h4>Tipo de cambio: @ViewBag.TC</h4>
+@if (ViewBag.mensaje != null)
+{
+    <h2 class="warning">Error: @ViewBag.mensaje</h2>
+}
+
+@using (Html.BeginForm("EjecutarRE", "PagoFactura", FormMethod.Post))
+{
+
+    <div class="table-responsive">
+        <table id=mainT class="table">
+            <tr>
+
+                @*<th>ID</th>*@
+                <th>Serie</th>
+                <th>Numero</th>
+                <th>TC</th>
+                <th>Moneda</th>
+                <th>MetodoPago</th>
+                <th>Total</th>
+                <th>ImporteSaldoInsoluto</th>
+                @*<th>No de Parcialidad</th>*@
+                <th>ImportePagado</th>
+                <th></th>
+
+            </tr>
+            @if (Model != null && Model.Count > 0)
+                {
+                    int j = 0;
+                    foreach (var i in Model)
+                    {
+                    <tr>
+                        @Html.TextBoxFor(a => a[j].ID, new { @class = "form-control", @Value = i.ID, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].Serie, new { @class = "form-control", @Value = i.Serie, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].Numero, new { @class = "form-control", @Value = i.Numero, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].TC, new { @class = "form-control", @Value = i.TC, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].IDMoneda, new { @class = "form-control", @Value = i.IDMoneda, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].IDMetododepago, new { @class = "form-control", @Value = i.IDMetododepago, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].ImporteSaldoAnterior, new { @class = "form-control", @Value = i.ImporteSaldoAnterior, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].Total, new { @class = "form-control", @Value = i.Total, @type = "hidden" })
+                        @Html.TextBoxFor(a => a[j].ImporteSaldoInsoluto, new { @class = "form-control", @Value = i.ImporteSaldoInsoluto, @type = "hidden" })  @Html.HiddenFor(modelItem => i.ID)
+                        <td>@Html.DisplayFor(modelItem => i.Serie)</td>
+                        <td>@Html.DisplayFor(modelItem => i.Numero) </td>
+                        <td>@Html.DisplayFor(modelItem => i.TC) </td>
+                        <td>@Html.DisplayFor(modelItem => i.Moneda) </td>
+                        <td>@Html.DisplayFor(modelItem => i.IDMetododepago) </td>
+
+                        @* <td>@Html.DisplayFor(modelItem => i.Total) </td>*@
+                        <td>@string.Format("{0:C}", @i.Total) </td>
+                        @if (i.ImporteSaldoInsoluto.Equals(0))
+                        {
+                            <td>@Html.DisplayFor(modelItem => i.Total) </td>
+                        }
+                        else
+                        {
+                            <td>@Html.DisplayFor(modelItem => i.ImporteSaldoInsoluto) </td>
+                        }
+
+                        @*<td>@Html.DisplayFor(modelItem => i.NoParcialidad) </td>*@
+
+                        <td>@Html.TextBoxFor(a => a[j].ImportePagado, new { @class = "importepagado", @onchange = "calculateSum()", style = "width:80px;", @Value = 0 })</td>
+                        @*  <td> <input id="importepagado" name="importepagado" onchange ="calculateSum()" class="importepagado2" /></td>*@
+
+
+                        <td>
+
+                            @*@Html.ActionLink(" ", "delete", new { id = i.IDCarritoRecepcion }, new { @class = "tbl_del_btn fa fa-trash" })*@
+
+                        </td>
+                    </tr>
+                    j++;
+                }
+            }
+        </table>
+    </div>
+        <div class="table-responsive">
+            <table class="table table-striped" width="50">
+                <tr>
+                    <th class="col-lg-1">
+                        Moneda Origen
+                    </th>
+                    <th class="col-lg-1">
+                        Subtotal
+                    </th>
+                    <th class="col-lg-1">
+                        IVA
+                    </th>
+                    <th class="col-lg-1">
+                        Total
+                    </th>
+                    <th class="col-lg-1">
+                        Total en Pesos Mexicanos
+                    </th>
+                </tr>
+                @foreach (var itemresumen in ViewBag.sumatoria)
+                {
+
+                    <tr>
+                        <td class="col-lg-1">
+                            @itemresumen.MonedaOrigen
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.Subtotal)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.IVA)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.Total)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.TotalenPesos)
+                        </td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+
+        <input type="hidden" name="idpf" value="@ViewBag.idpf" />
+        <input type="hidden" name="idc" value="@ViewBag.idc" />
+        <input type="hidden" name="nombrec" value="@ViewBag.nombrec" />
+        <input type="hidden" name="monto" value="@ViewBag.monto" />
+        <div id="resultpesos"> </div>
+        <div id="resultdolares"> </div>
+        <div id="resulttotalpesos"> </div>
+        <input class="btn btn-success btn-xs" type="submit" value="Aceptar" />
+}
+
+
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script>
+
+
+    function calculateSum() {
+        var sum = 0;
+        var sumpesos = 0;
+        var sumdolares = 0;
+        var sumtotalpesos = 0;
+        var TC = '@ViewBag.TC';
+
+        $("#mainT tbody tr").each(function (index) {
+
+             var Moneda = 'MXN';
+             var cantidad = 0;
+             var maximo = 0;
+            $(this).children("td").each(function (index2) {
+
+                switch (index2) {
+                    case index2 = 3:
+                        Moneda = $(this).text();
+
+                        break;
+                    case index2 = 6:
+                        maximo = $(this).text();
+
+                        break;
+                    case index2 = 7:
+                        cantidad = parseFloat($(this).children("input")[0].value);
+                        if (cantidad > maximo) {
+                            //cantidad = maximo;
+                            $(this).children("input")[0].value = maximo;
+
+                            cantidad = parseFloat(maximo);
+
+                        }
+
+                        break;
+                }
+
+
+
+
+
+            });
+
+            if (Moneda.trim() == "MXN") {
+                sumpesos = sumpesos + cantidad;
+                sumtotalpesos = sumtotalpesos + cantidad;
+            }
+            if (Moneda.trim() == "USD") {
+                sumdolares = sumdolares + (cantidad);
+                sumtotalpesos = sumtotalpesos + (cantidad*TC);
+            }
+            console.info(Moneda.trim() + "" + cantidad + " aculuado" + sumdolares);
+        });
+
+        $('#resultpesos').text('Total  en Pesos: ' + sumpesos);
+        $('#resultdolares').text('Total  en Dolares: ' + sumdolares);
+        $('#resulttotalpesos').text('Total  en Acumulado es pesos: ' + sumtotalpesos);
+
+    };
+
+</script>
+   

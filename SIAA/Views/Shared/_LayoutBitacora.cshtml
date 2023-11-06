@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>SIAAPI Bitacora</title>
+    @Styles.Render("~/bundles/css")
+</head>
+
+
+<div id="wrapper">
+    <!-- Navigation navbar-default-->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <!-- .navbar-header -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+
+
+
+            <img src="~/imagenes/logoclass.jpg" width="120" height="105" class="navbar-brand" />
+            <a class="navbar-brand" href="~/Home/MyProfile">SIAAPI</a>
+        </div>
+        <!-- /.navbar-header -->
+        <!-- .navbar-top-links -->
+        <ul class="nav navbar-top-links navbar-right">
+
+            @*<li class="text-capitalize">
+
+
+
+
+                </li>*@
+
+
+
+            <!-- /.dropdown -->
+            <!-- /.dropdown -->
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+
+                    <li>
+                        @{
+                            if (Request.IsAuthenticated)
+                            {
+                                using (Html.BeginForm("Logout", "MyAccount", FormMethod.Post, new { id = "logoutForm" }))
+                                {
+
+
+                                    <a href=javascript:document.getElementById('logoutForm').submit()><i class="fa fa-sign-out fa-fw"></i>Salir</a>
+
+                                }
+                            }
+                            else
+                            {
+
+                                <a href="MyAccount/Logout"><i class="fa fa-user fa-fw"></i>Ingresar</a>
+
+                            }
+                        }
+                    </li>
+
+
+
+                </ul>
+                <!-- /.dropdown-user -->
+            </li>
+            <!-- /.dropdown -->
+        </ul>
+        @Html.Partial("_LoginPartial")
+    </nav>
+
+</div>
+<table class="table-responsive">
+
+    <td>
+        <table>
+            <tr>
+                <td></td>
+
+                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Ver Bitacora", "Index", "Bitacora", null, new { @class = "btn btn-warning btn-xs" })
+                </td>
+
+                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Ver ordenes programadas", "OrdenesProgramadas", "Bitacora", null, new { @class = "btn btn-warning btn-xs" })
+                </td>
+                <td style="border-width:5px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Todas las Ordenes", "Prioridad", "OrdenProduccion", null, new { @class = "btn btn-warning btn-xs" })
+                </td>
+
+                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Iniciar Lote de Trabajo", "Create", "Bitacora", new { idorden = ViewBag.idorden, idproceso = ViewBag.idproceso }, new { @class = "btn btn-warning btn-xs" })
+                </td>
+                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Ver programa de tintas", "ListaTintas", "Bitacora", new { idorden = ViewBag.idorden, idproceso = ViewBag.idproceso }, new { @class = "btn btn-warning btn-xs" })
+                </td>
+
+                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Ver programa de cintas", "Cintas", "Bitacora", new { idorden = ViewBag.idorden, idproceso = ViewBag.idproceso }, new { @class = "btn btn-warning btn-xs" })
+                </td>
+
+                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Ver programa de herramientas", "Herramientas", "Bitacora", new { idorden = ViewBag.idorden, idproceso = ViewBag.idproceso }, new { @class = "btn btn-warning btn-xs" })
+                </td>
+
+                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("programa Suaje", "ImpHerramientas", "Bitacora", new { idorden = ViewBag.idorden, idproceso = ViewBag.idproceso }, new { @class = "btn btn-info btn-xs" })
+                </td>
+                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Progama Tin", "ImpTintas", "Bitacora", new { idorden = ViewBag.idorden, idproceso = ViewBag.idproceso }, new { @class = "btn btn-info btn-xs" })
+                </td>
+                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Reporte incidencias", "Reportes", "Bitacora", new { idorden = ViewBag.idorden, idproceso = ViewBag.idproceso }, new { @class = "btn btn-info btn-xs" })
+                </td>
+                <td style="border-width:3px; border-right-style:solid; border-left-style:solid; color:white">
+                    @Html.ActionLink("Excel", "EntreFechasBP", "Bitacora", null, new { @class = "btn btn-info btn-xs" })
+
+                </td>
+            </tr>
+        </table>
+    </td>
+   
+
+</table>
+
+
+
+
+<body>
+    <div id="content" style="background-color:#ffffff" class="clear_fix">
+        @RenderBody()
+    </div>
+
+
+
+    <div class="text-center">
+        <img src="~/imagenes/aguilan.png" width="120" height="60" />
+    </div>
+
+
+    @Scripts.Render("~/bundles/js")
+</body>
+</html>
+

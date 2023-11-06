@@ -1,0 +1,320 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.VCarritoV>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $("#IDCliente").change(function () {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("getPrecio")',
+                    dataType: 'json',
+                    data: { id: $("#IDCliente").val() },
+                    success: function () {
+                        location.replace("Carrito" + "?IDCliente=" + $("#IDCliente").val());
+                        //location.reload( );
+                    }
+
+                });
+                return false;
+            })
+        });
+</script>
+
+
+@{
+    <h3 class="text-danger " >@ViewBag.Mensaje</h3>
+    <div class="form-group">
+
+        <div class="col-md-8">
+            @Html.DropDownList("IDCliente", ViewBag.cliente as List<SelectListItem>, new { @class = "form-control" })
+
+        </div>
+    </div>
+
+      <h6 align="right"><a href="@Url.Action("TiendaGeneral", "Tienda")"><span class="btn btn-primary btn-xs">Productos</span></a></h6>
+
+    SIAAPI.Models.Comercial.ClientesContext prov = new SIAAPI.Models.Comercial.ClientesContext();
+    List<SIAAPI.Models.Login.User> userid = prov.Database.SqlQuery<SIAAPI.Models.Login.User>("select * from [dbo].[User] where Username='" + User.Identity.Name + "'").ToList();
+    int usuario = userid.Select(s => s.UserID).FirstOrDefault();
+
+    SIAAPI.Models.Comercial.ClsDatoEntero contarcarrito = prov.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDCarrito) as Dato from Carrito where usuario='" + usuario + "'").ToList()[0];
+    if (contarcarrito.Dato != 0)
+    {
+         <h2>
+                <i class="fa fa-calculator"></i>
+                <span></span>
+
+
+                @if (@Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Comercial")  || @Roles.IsUserInRole("Gerenteventas"))
+                {
+                    <a href="@Url.Action("Create", "EncCotizacion")"><span class="btn btn-primary btn-xs">Cotización</span></a>
+                }
+                @if (@Roles.IsUserInRole("Cliente") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Comercial"))
+                {
+                    <a href="@Url.Action("Create", "EncPedido")"><span class="btn btn-warning btn-xs">Pedido</span></a>
+                }
+
+
+            </h2>
+
+
+
+
+    }
+}
+
+
+<br />
+<div class="table">
+    <table class="table table-striped" id="TableCar">
+        <tr>
+
+            <th width="40px">Referencia</th>
+            <th width="150px">Articulo</th>
+          
+        </tr>
+    </table>
+        @{using (Html.BeginForm())
+            {
+                var contador = 0;
+                foreach (var item in Model)
+                {
+                    SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+                    <div>
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    @articulo.Cref
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Descripcion)
+                                </td>
+                                <td>
+                                    <h6> @Html.DisplayFor(modelItem => item.Presentacion)</h6>
+                                </td>
+
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table class="table table-striped">
+                            <tr>
+                                <th >
+                                    @Html.DisplayNameFor(model => model.Nota)
+                                </th>
+                                <th >
+                                    @Html.DisplayNameFor(model => model.Cantidad)
+                                </th>
+                                <th >
+                                    @Html.DisplayNameFor(model => model.Unidad)
+                                </th>
+                                <th >@Html.DisplayNameFor(model => model.Moneda)</th>
+                                <th >
+                                    @Html.DisplayNameFor(model => model.Precio)
+                                </th>
+
+                                <th >@Html.DisplayNameFor(model => model.Importe)</th>
+                                <th >@Html.DisplayNameFor(model => model.preciomex)</th>
+
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @{string cadenaa = "Nota" + contador;
+                                    }
+                                    <input type="text" class="form-control" id="@cadenaa" name="Nota" value="@item.Nota">
+
+
+                                </td>
+
+                                <td>
+                                    @{string cadena = "Cantidad" + contador;
+                                    }
+                                    <input type="number" step="0.5" class="form-control" id="@cadena" name="Cantidad" value="@item.Cantidad">
+
+
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Unidad)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Moneda)
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Precio)*@
+                                    @String.Format("{0:C}", item.Precio)
+                                </td>
+
+
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.Importe)*@
+                                    @String.Format("{0:C}", item.Importe)
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(modelItem => item.preciomex)*@
+                                    @String.Format("{0:C}", item.preciomex)
+                                </td>
+                                <td>
+
+                                    <a class="edit" onclick="Actualizar(@item.IDCarrito,@contador )">
+                                        <i class="tbl_del_btn fa fa-refresh"></i>
+                                    </a>
+                                    <a class="delete" data-id="@item.IDCarrito">
+                                        <i class="tbl_del_btn fa fa-trash"></i>
+
+                                    </a>
+
+                                    @{
+                                        if (item.IDCliente != 0)
+                                        {
+                                            SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+
+                                            SIAAPI.Models.Comercial.ClsDatoEntero
+                                                                countMatriz = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDMatrizPrecio) as Dato from MatrizPrecioCliente where IDArticulo =" + item.IDArticulo + " and IDCliente =" + item.IDCliente + "").ToList()[0];
+
+
+                                            if (countMatriz.Dato == 0)
+                                            {
+                                                @Html.ActionLink("Crear MPC", "Agrega", "MatrizPrecioCliente", new { id = item.IDCarrito }, new { @class = "btn btn-success btn-xs" })
+
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink("Ver MPC", "Agrega", "MatrizPrecioCliente", new { id = item.IDCarrito }, new { @class = "btn btn-success btn-xs" })
+                                            }
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                                                contador++;
+                                            }
+                                        }
+        }
+
+</div>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th class="col-lg-1">
+                Moneda Origen
+            </th>
+            <th class="col-lg-1">
+                Subtotal
+            </th>
+            <th class="col-lg-1">
+                IVA
+            </th>
+            <th class="col-lg-1">
+                Total
+            </th>
+            @*<th class="col-lg-1">
+                    Total en Pesos Mexicanos
+                </th>*@
+        </tr>
+        @foreach (var itemresumen in ViewBag.sumatoria)
+        {
+
+            <tr>
+                <td class="col-lg-1">
+                    @itemresumen.MonedaOrigen
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Subtotal)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.IVA)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Total)
+                </td>
+                @*<td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.TotalenPesos)
+                    </td>*@
+
+            </tr>
+        }
+    </table>
+</div>
+
+
+@{
+
+
+    if (ViewBag.articulosc != null)
+    {
+        List< SIAAPI.Models.Comercial.ArticulosComprados> ARTICUC = (List<SIAAPI.Models.Comercial.ArticulosComprados>)ViewBag.articulosc;
+        Html.RenderPartial("Articuloscomprados", ARTICUC);
+
+    }
+
+
+
+}
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+
+             $('.delete').click(function () {
+                        var url = '@Url.Action("Deleteitem", "Carrito")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+                </script>
+
+                <script>
+
+      
+
+                    function Actualizar(id, numero) {
+                        var urledit = '@Url.Action("Edititem", "Carrito")';
+            var nota = document.getElementById("Nota" + numero).value
+            var cantidad = document.getElementById("Cantidad" + numero).value
+            $.post(urledit, { id: id, cantidad: cantidad, nota: nota }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+           
+
+      
+
+    function AgregaCarrito(id) {
+        var urlagre = '@Url.Action("AddCarritoGeneral", "Carrito")';
+            $.post(urlagre, { id: id}, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+</script>

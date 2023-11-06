@@ -1,0 +1,72 @@
+﻿@model SIAAPI.Models.CartaPorte.c_ConfigAutotransporte
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Eliminar Configuración Autotransporte</h3>
+
+<h4>¿Está seguro de eliminar este registro?</h4>
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveNom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveNom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoEjes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoEjes)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoLlantas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoLlantas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_In)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_In)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fecha_Fin)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fecha_Fin)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-success btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

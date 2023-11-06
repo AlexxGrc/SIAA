@@ -1,0 +1,210 @@
+﻿@model  SIAAPI.Models.Administracion.Configuracion
+
+@{
+    ViewBag.Title = "EditarConfiguracion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Configuraciones de parametros para el cotizador</h4>
+        <hr />
+
+        @Html.HiddenFor(model => model.SIAAPI_com_multifacturas_pac1_Timbrado_Remoto_de_INI, new { htmlAttributes = new { @class = "form-control", @id = "SIAAPI_com_multifacturas_pac1_Timbrado_Remoto_de_INI", @name = "SIAAPI_com_multifacturas_pac1_Timbrado_Remoto_de_INI" } })
+
+
+
+        @Html.HiddenFor(model => model.CorreofirmaFactura, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.TimbrarPrueba, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.Nombredelaaplicacion, new { htmlAttributes = new { @class = "form-control" } })
+
+
+        @Html.HiddenFor(model => model.ValorIVA, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.IDProveedorDesconocido, new { htmlAttributes = new { @class = "form-control" } })
+    </div>
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="input-group-addon">
+                @Html.Label("Rango Ganancia 1:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.Rango1gain, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Rango1gain, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-3">
+            <div class="input-group-addon">
+                @Html.Label("Rango Ganancia 2:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.Rango2gain, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Rango2gain, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-3">
+            <div class="input-group-addon">
+                @Html.Label("Rango  Ganancia 3:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.Rango3gain, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Rango3gain, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xs-3">
+            <div class="input-group-addon">
+                @Html.Label("Rango Ganancia 4:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.Rango4gain, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Rango4gain, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3>Cuando el material tenga costo 0 en MP</h3>
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="input-group-addon">
+                @Html.Label("Costo M2 de MP default:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.CostoM2default, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CostoM2default, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div>
+            @Html.HiddenFor(model => model.costodeempaque, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+            @Html.HiddenFor(model => model.paginaoficial, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+            @Html.HiddenFor(model => model.Eslogan, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+            @Html.HiddenFor(model => model.ColorReporte, new { htmlAttributes = new { @class = "form-control" } })
+        </div>
+    </div>
+    <h3>Tipo de cambio para el Cotizador</h3>
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="input-group-addon">
+                @Html.Label("Tipo de Cambio:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.TCcotizador, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TCcotizador, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <h3>Costos para suajes</h3>
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group">
+                @Html.Label("Costo Diente en Suaje Macizo:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.ValorDienteMacizo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ValorDienteMacizo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                @Html.Label("Costo Diente en Suaje Flexible:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.ValorDienteFlex, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ValorDienteFlex, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-3">
+
+            <div class="form-group">
+                @Html.Label("Costo Pulgada Lineal en Suaje Macizo:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.ValorPulMacizo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ValorPulMacizo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                @Html.Label("Costo Pulgada Lineal en Suaje Flexible:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div>
+                    @Html.EditorFor(model => model.ValorPulFlexible, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ValorPulFlexible, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Rendimiento de M2 x por KG de tinta:", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="input-group-addon">
+                @Html.EditorFor(model => model.ValorMtsXkg, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ValorMtsXkg, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+
+        @Html.HiddenFor(model => model.ColorFuenteEncabezado, new { htmlAttributes = new { @class = "form-control" } })
+
+
+        @Html.HiddenFor(model => model.AtributoGapje, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.AtributoGapAvance, new { htmlAttributes = new { @class = "form-control" } })
+
+
+        @Html.HiddenFor(model => model.AtributoCavidadesEje, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.AtributoEje, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.AtributoAvance, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.AtributoAnchoCinta, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.AtributoAnchoCintaImpresa, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        @Html.HiddenFor(model => model.factorcostoindirecto, new { htmlAttributes = new { @class = "form-control" } })
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+

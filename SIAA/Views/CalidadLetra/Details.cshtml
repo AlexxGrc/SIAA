@@ -1,0 +1,59 @@
+﻿@model SIAAPI.Models.Calidad.CalidadLetra
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CalidadLetra</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LI_Lote_mill)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LI_Lote_mill)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LS_Lote_mill)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LS_Lote_mill)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NGI1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NGI1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NGI2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NGI2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NGI3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NGI3)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IDLetra }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

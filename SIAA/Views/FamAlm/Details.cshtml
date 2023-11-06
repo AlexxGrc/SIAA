@@ -1,0 +1,49 @@
+﻿@model SIAAPI.Models.Inventarios.VFamAlm
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles</h2>
+
+<div>
+  
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CCodFam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CCodFam)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Familia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Familia)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Almacen)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Almacen)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CodAlm)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodAlm)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ID }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

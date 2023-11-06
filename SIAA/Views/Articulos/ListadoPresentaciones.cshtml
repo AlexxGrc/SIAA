@@ -1,0 +1,697 @@
+﻿
+@model IEnumerable<SIAAPI.ViewModels.Articulo.LPresentacion>
+
+
+    <table class="table table-hover">
+        <tr>
+ <th>Genera Plotter</th>
+            <th>ID Presentacion</th>
+            <th>Presentación</th>
+            <th></th>
+            <th>Cotizacion</th>
+            @*<th>Stock Min</th>
+            <th>Stock Max</th>*@
+            <th>
+                Stock
+            </th>
+            <th>Obsoleto</th>
+            <th>Acciones</th>
+            <th>Eliminar</th>
+
+        </tr>
+        @{
+            var contador = 0;
+            foreach (var item in Model)
+            {
+                <tr>
+ <td>
+                        @{
+                            try
+                            {
+                                SIAAPI.Models.Comercial.ArticulosGOPPlotter generaPlotter = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ArticulosGOPPlotter>("select*from ArticulosGOPPlotter where IDPresentacion=" + item.ID).ToList().FirstOrDefault();
+                                if (generaPlotter!=null)
+                                {
+                                    string cadena = "generaPlotter" + contador;
+
+                                    <input type="checkbox" id="@cadena" onclick="myFunctionPlotterEliminar(@generaPlotter.IDPlotter,@contador)" value="true" checked>
+                                }
+                                else
+                                {
+                                    string cadena = "generaPlotter" + contador;
+
+                                    <input type="checkbox" id="@cadena" onclick="myFunctionPlotter(@item.Articulo_IDArticulo,@item.ID,@contador)" value="true">
+                                }
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+
+                        }
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IDPresentacion)
+                    </td>
+
+                    <td>
+                        <table style="width:100%">
+                            <tr>
+                                <th>Atributo</th>
+                                <th>Valor</th>
+
+
+                            </tr>
+
+
+                            @{try
+                                {
+                                    string[] atributos = item.Presentacion.ToString().Split(',');
+                                    foreach (var atri in atributos)
+                                    {
+                                        string[] valor = atri.Split((char)58);
+                                        string Atri = valor[0];
+                                        string Val = valor[1];
+                                        try
+                                        {
+                                            if (Val == "false" || (Val == "true"))
+                                            {
+                                                bool valoramostrar = false;
+                                                if ((Val == "true"))
+                                                {
+                                                    valoramostrar = true;
+                                                }
+                                                <tr>
+                                                    <td>  <label class="text-info">@Atri :</label></td>
+                                                    <td> <input type="checkbox" checked="@valoramostrar"></td>
+                                                </tr>
+                                            }
+                                            else if (Val.Substring(0, 1) == "#" && (Val.Length == 7))
+                                            {
+                                                <tr>
+                                                    <td>  <label class="text-info">@Atri :</label></td>
+                                                    <td> <input type="color" value="@Val"></td>
+                                                </tr>
+                                            }
+                                            else
+                                            {
+                                                throw new Exception(""); // crea la excepcion para imprimir una label y entra al catch
+                                            }
+                                        }
+                                        catch (Exception err)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <label class="text-capitalize">@Atri :</label>
+                                                </td>
+                                                <td>   <label class="text-info">@Val</label></td>
+                                            </tr>
+
+                                        }
+                                    }
+
+
+                                }
+                                catch (Exception err)
+                                {
+                                    string mesajeerror = err.Message;
+                                }
+                            }
+                        </table>
+                    </td>
+
+                    <td>
+      
+                       
+                            @Html.ActionLink("Inventario", "Inventario", new { IDPresentacion = item.ID }, new { @class = "btn btn-default btn-xs" })
+                       
+                    </td>
+                    <td>
+                        @if (item.IDCotizacion == 0)
+                        {
+                            <h5 class="text-warning">No esta Cotizado</h5>
+                        }
+                        else
+                        {
+                            @*<div><button onclick="VerCotizacion(@item.IDCotizacion)" class="btn btn-success">Ver Cotizacion</button></div>*@
+                            @Html.ActionLink("Ver cotización", "CotizadorRapido1", "Diseno", new { Id = item.IDCotizacion }, new { @class = "btn btn-default btn-xs" })
+
+                            <h5> @item.IDCotizacion</h5>
+                        }
+                    </td>
+                    <td>
+
+                        @{
+                            ////stock
+                            List<SIAAPI.Models.Comercial.StockVSAlmacen> stockVs = new SIAAPI.Models.Comercial.StockVSAlmacenContext().Database.SqlQuery<SIAAPI.Models.Comercial.StockVSAlmacen>("select*from StockVSAlmacen where idcaracteristica= "+ item.ID).ToList();
+                        }
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        @Html.Label("Stock Min")
+                                    </td>
+
+                                    <td>
+                                        @Html.Label("Stock Max")
+                                    </td>
+
+                                    <td>
+                                        @Html.Label("Almacén")
+                                    </td>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            @{ 
+                                int cont = 0;
+                            }
+                            @foreach (SIAAPI.Models.Comercial.StockVSAlmacen co in stockVs)
+                            {
+                                SIAAPI.Models.Comercial.Almacen almacenporart = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.Find(co.IDAlmacen);
+                                SIAAPI.Models.Comercial.Caracteristica caracteristica = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select*from caracteristica where id="+ co.IDCaracteristica).ToList().FirstOrDefault();
+                                SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(caracteristica.Articulo_IDArticulo);
+                                <tr>
+
+                                    <td>
+                                        @{string cadena = "StockMin" + cont;
+                                        }
+                                        <input type="number" step="any" class="form-control" id="@cadena" name="StockMin" value="@co.StockMin">
+
+                                       @* @Html.DisplayFor(modelItem => co.StockMin)*@
+                                    </td>
+                                    <td>
+                                        @{string cadenaM = "StockMax" + cont;
+                                        }
+                                        <input type="number" step="any" class="form-control" id="@cadenaM" name="StockMax" value="@co.StockMax">
+
+                                    </td>
+                                    <td>
+                                        @{ 
+                                            string cadenaal = "IDAlmacen" + contador;
+                                             var ALMACENES = new SIAAPI.Models.Comercial.RequisicionesContext().Database.SqlQuery<SIAAPI.Models.Comercial.Almacen>("select distinct(f.idalmacen) , a.*  from Almacen as a inner join FamAlm as f on f.idalmacen=a.idalmacen where f.idfamilia=" + articulo.IDFamilia).ToList();
+
+                        int almacenValor = 0;
+
+
+
+                                    <select name="@cadenaal" id="@cadenaal">
+                                       @foreach (SIAAPI.Models.Comercial.Almacen almacen in ALMACENES)
+                                            {
+                                                if (almacen.IDAlmacen != co.IDAlmacen) // SI NO ES EL MODELO SOLO LO AÑADE AL COMBO
+                                                {
+                                                    <option value="@almacen.IDAlmacen">@almacen.CodAlm</option>
+                                                }
+                                                else // SI ES IGUAL AL MODELO LO CREA Y LO SELECCIONA
+                                                {
+                                                    <option value="@almacen.IDAlmacen" selected>@almacen.CodAlm</option>
+                                                    }
+                                                }
+                                            }
+                                    </select>
+                                    }
+                                        
+
+                                    </td>
+                                    <td>
+
+                                        <a class="edit" onclick="ActualizarStock(@co.ID,@contador )">
+                                            <i class="tbl_del_btn fa fa-save"></i>
+                                        </a>
+                                        <a class="delete" data-id="@co.ID">
+                                            <i class="tbl_del_btn fa fa-trash"></i>
+
+                                        </a>
+
+                                    </td>
+                                </tr>
+
+                            
+                               
+
+                            }
+                        </table>
+                    </td>
+                  
+                    
+                    <td>
+                        @*@Html.DisplayFor(modelItem => item.obsoleto)*@
+                        @if (item.obsoleto.Equals(true))
+                        {
+                            string cadena = "obsoleto" + contador;
+
+                            <input type="checkbox" id="@cadena" onclick="myFunction(@item.ID,@contador)" value="true" checked>
+                        }
+                        else
+                        {
+                            string cadena = "obsoleto" + contador;
+
+                            <input type="checkbox" id="@cadena" onclick="myFunction(@item.ID,@contador)" value="true">
+                        }
+
+                    </td>
+
+                    <td>
+                        @using (Html.BeginForm("EditarStock", "Articulos", FormMethod.Get, new { enctype = "multipart/form-data" }))
+                        {
+                            <input type="hidden" name="ID" value=@item.ID />
+                            <input type="hidden" name="IDArticulo" value=@item.Articulo_IDArticulo />
+                            <a class="btn btn-primary" data-toggle="modal" onClick="$('#SubirStock').modal('show')"><i class="fa fa-stack-overflow" aria-hidden="true"></i></a>
+                        }
+                        <form method="post" action='@Url.Action("ImprimirEtiquetasC", "Articulos", new { id = item.ID, idpresentacion = item.IDPresentacion })'>
+                            <button class="btn btn-warning"><i class="tbl_del_btn fa fa-print"></i></button>
+                        </form>
+
+                        <button onclick=ActualizarPres(@item.ID) class="btn btn-warning"><i class="tbl_del_btn fa fa-edit"></i></button>
+                        @{ 
+                            string cadenCaraPeso = "IDCaracteristicaP" + contador;
+                        }
+                    <form id="formulario" method="get" data-toggle="modal" data-target="#SubirArchPres">
+                       
+                        <input type="hidden" id="@cadenCaraPeso" value="@item.ID" />
+                        <input type="button" id="button3" name="enviar" value="Agregar Documento" class="btn-info btn-xs" onclick="recibir(@contador);" ><br>
+                    </form>
+
+                        @*@using (Html.BeginForm("SubirArchivoPres", "Articulos", FormMethod.Get, new { enctype = "multipart/form-data" }))
+        {
+
+                string cadenCaraPeso = "IDCaracteristicaP" + contador;
+
+            <input type="hidden" id="@cadenCaraPeso" name="ID" value=@item.ID />
+            <input type="hidden" name="IDArticulo" value=@item.Articulo_IDArticulo />
+            <a class="btn btn-primary" data-toggle="modal" onClick="$('#SubirArchPres').modal('show')"><i class="tbl_del_btn fa fa-file-o"></i></a>
+        }*@
+
+                        @*<input type="hidden" id="@cadenCaraPeso" name="ID" value=@item.ID />
+                        <input type="hidden" name="IDArticulo" value=@item.Articulo_IDArticulo />
+                        <a class="btn btn-primary" data-toggle="modal" onClick="$('#SubirArchPres').modal('show')"><i class="tbl_del_btn fa fa-file-o"></i></a>*@
+                    </td>
+                    <td>
+                        <button onclick="EliminarPres(@item.ID)" class="btn btn-danger"><i class="tbl_del_btn fa fa-trash"></i></button>
+                    </td>
+
+
+                </tr>
+                <tr>
+                    @{
+
+                        SIAAPI.Models.Comercial.ArtPresentacionAddContext db = new SIAAPI.Models.Comercial.ArtPresentacionAddContext();
+                        SIAAPI.Models.Comercial.ClsDatoEntero contard = db.Database.SqlQuery
+                        <SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDCaracteristica) as dato from [dbo].[ArtPresentacionAdd] where IDCaracteristica =" + item.ID).ToList().FirstOrDefault();
+                        if (contard.Dato != 0)
+                        {
+
+                            List<SIAAPI.Models.Comercial.ArtPresentacionAdd> doctos = db.Database.SqlQuery<SIAAPI.Models.Comercial.ArtPresentacionAdd>("select * from [dbo].[ArtPresentacionAdd] where IDCaracteristica = " + item.ID + "").ToList();
+
+                            ViewBag.doctos = doctos;
+                            foreach (SIAAPI.Models.Comercial.ArtPresentacionAdd b in ViewBag.doctos)
+                            {
+                                string extension  = Path.GetExtension(b.RutaArchivo);
+
+
+
+                                            <td></td>
+                                            <td></td>
+                                            <td style="font-size:x-small">
+                                                @{ if (extension.ToLower() == ".png" || extension.ToLower() == ".jpg" || extension.ToLower() == ".jpeg")
+                                                    {
+
+                                                        <a href="~/ArtPresentacionAdd/@b.nombreArchivo" class="w3-hover-opacity"><img src="~/ArtPresentacionAdd/@b.nombreArchivo" width="300" height="240"></a>
+                                                        <br />
+                                                        <a href="~/ArtPresentacionAdd/@b.nombreArchivo"  download="~/ArtPresentacionAdd/@b.nombreArchivo"  class="w3-hover-opacity">Descargar</a>
+
+                                                        @*@Html.ActionLink(b.nombreArchivo, "DescargarPDFPre", new { iddocto = b.ID, idart = b.IDArticulo }, new { @class = "btn btn-primary btn-xs" })*@
+                                                        @Html.ActionLink(".", "EliminarArchivoPres", new { iddocto = b.ID, idart = b.IDArticulo }, new { @class = "fa fa-trash", style = "font-size:16px;color:red" })
+
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.ActionLink(b.nombreArchivo, "DescargarPDFPre", new { iddocto = b.ID, idart = b.IDArticulo }, new { @class = "btn btn-primary btn-xs" })
+                                                        @Html.ActionLink(".", "EliminarArchivoPres", new { iddocto = b.ID, idart = b.IDArticulo }, new { @class = "fa fa-trash", style = "font-size:16px;color:red" })
+
+                                                    }
+                                                }
+
+
+
+                                            </td>
+                                        }
+                                    }
+                    }
+    </tr>
+    contador++;
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="SubirStock" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="testeSubirStock"></div>
+                    <h3>Agregar stock a presentación:</h3>
+
+                    <hr />
+                    <br />
+
+                    @using (Html.BeginForm("EditarStock", "Articulos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="IDCaracteristicaP" id="IDCaracteristicaP" value="@item.ID">
+                        <input type="hidden" name="IDArticuloP" id="IDArticuloP" value="@item.Articulo_IDArticulo">
+                      
+                <div class="form-horizontal">
+                    <h4>Stock Min:</h4>
+                    <input type="number" name="StockMin" id="StockMin" values="@item.StockMin">
+                    <h4>Stock Max:</h4>
+                    <input type="number" name="StockMax" id="StockMax" values="@item.StockMax">
+                    <br />
+                      @{
+
+                        //SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                        SIAAPI.Models.Comercial.Articulo articuloA = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.Articulo_IDArticulo);
+                        string cadenaal = "IDAlmacen" + contador;
+                        //var ALMACENES = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.OrderBy(S => S.CodAlm);
+                        var ALMACENES = db.Database.SqlQuery<SIAAPI.Models.Comercial.Almacen>("select distinct(f.idalmacen) , a.*  from Almacen as a inner join FamAlm as f on f.idalmacen=a.idalmacen where f.idfamilia=" + articuloA.IDFamilia).ToList();
+
+                        int almacenValor = 0;
+
+
+
+                                    <select name="IDAlmacen" id="IDAlmacen">
+                                        @{ foreach (SIAAPI.Models.Comercial.Almacen almacen in ALMACENES)
+                                            {
+                                                @*if (almacen.IDAlmacen != item.IDAlmacen) // SI NO ES EL MODELO SOLO LO AÑADE AL COMBO
+                                                {
+                                                    <option value="@almacen.IDAlmacen">@almacen.CodAlm</option>
+                                                }
+                                                else // SI ES IGUAL AL MODELO LO CREA Y LO SELECCIONA
+                                                {*@
+                                                    <option value="@almacen.IDAlmacen" selected>@almacen.CodAlm</option>
+                                                //}
+                                            }
+                                        }
+                                    </select>
+
+                                }
+                    <div class="modal-footer">
+                        <div class="row center-block">
+                            <button type="submit" value="Grabar" class="btn btn-success btn-xs">Guardar</button>
+                            <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cerrar</button>
+                        </div>
+
+                    </div>
+                    <div>
+                        <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+                    </div>
+                </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="SubirArchPres" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="testeSubirArchPres"></div>
+                    <h3>Subir el archivo complementario de la presentación del artículo:</h3>
+
+                    <hr />
+                    <br />
+
+                    @using (Html.BeginForm("SubirArchivoPres", "Articulos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="IDCaracteristicaDocumento" id="IDCaracteristicaDocumento" >
+                        <input type="hidden" name="IDCaraSubiArch" id="IDCaraSubiArch" value="@item.ID">
+                        <input type="hidden" name="IDArtArch" id="IDArtArch" value="@item.Articulo_IDArticulo">
+                        Session["IDcaracteristicadesubirarchivopresentacion"] = item.ID;
+                        Session["IDarticulodesubirarchivopresentacion"] = item.Articulo_IDArticulo;
+                        <div class="form-horizontal">
+                            <h4>Indica el archivo a subir</h4>
+
+                            <div class="form-group">
+                                <div class="col-md-10">
+                                    <input type="file" name="file">
+                                </div>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <div class="row center-block">
+                                    <button type="submit" value="Grabar" class="btn btn-success btn-xs">Cargar Archivo</button>
+                                    <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cerrar</button>
+                                </div>
+
+                            </div>
+                            <div>
+                                <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+}
+        }
+
+    </table>
+
+
+<div class="modal-footer">
+    <div class="row center-block">
+        <button type="button" name="button" class="btn btn-success btn-xs" onclick="ModalAPP(@ViewBag.idfamilia, @ViewBag.idarticulo)">Agregar Presentación</button>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="ModalAP" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="testeAP"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="EditaP" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="testeEditaP"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+  
+
+
+
+                    function ActualizarStock(id, numero) {
+                        var urledit = '@Url.Action("EdititemStock", "Articulos")';
+                        var StockMin = document.getElementById("StockMin" + numero).value
+                        var StockMax = document.getElementById("StockMax" + numero).value
+                        var IDAlmacen = document.getElementById("IDAlmacen" + numero).value
+                        $.post(urledit, { id: id, StockMin: StockMin, StockMax: StockMax, IDAlmacen: IDAlmacen }, function (response) {
+
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+</script>
+<script>
+
+
+             $('.delete').click(function () {
+                        var url = '@Url.Action("DeleteitemStock", "Articulos")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>
+<script>
+
+ 
+
+    function EliminarPres(id) {
+        var url = '@Url.Action("Deleteitempres", "Articulos")';
+        async: true;
+        var row = $(this).closest('tr');
+        $.post(url, { id: id}, function (response) {
+            if (response) {
+
+                location.reload();
+                row.remove();
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+    function EliminarPlaneacion(id) {
+        var url = '@Url.Action("Deleteplaneacion", "Articulos")';
+        async: true;
+        var row = $(this).closest('tr');
+        $.post(url, { id: id}, function (response) {
+            if (response) {
+
+                location.reload();
+               
+            }
+        }).fail(function (response) {
+            // display error message?
+        });
+    }
+
+</script>
+<script>
+    function myFunction(id,numero) {
+        var url = '@Url.Action("Obsoleto", "Articulos")';
+        var checkBox = document.getElementById("obsoleto"+numero);
+        var obsoleto=0;
+        if(checkBox.checked == true){
+            obsoleto=1;
+        }
+        $.post(url, { id: id,obsoleto:obsoleto}, function (response) {
+               if (response) {
+
+                   location.reload();
+               }
+           }).fail(function (response) {
+           });
+
+
+
+}
+</script>
+<script>
+                function ActualizarPres(id) {
+                    async: true;
+                    $("#testeEditaP").load("/Articulos/EditaPresentacion/" + id, function () {
+                        $('#EditaP').modal("show");
+                    });
+
+                }
+</script>
+<script>
+    function SubirArchPres(IDCaraSubiArch,IDArtArch) {
+        async: true;
+        $("IDCaraSubiArch").val(IDCaraSubiArch);
+        $("IDArtArch").val(IDArticulo);
+        alert($("IDCaraSubiArch").val());
+        alert($("IDArtArch").val());
+        $("#testeSubirArchPres").load("/Articulos/SubirArchivoPres/" + IDCaraSubiArch +"&IDArticulo="+IDArtArch, function () {
+            $('#SubirArchPres').modal("show");
+            $("IDCaraSubiArch").val(IDCaraSubiArch);
+            $("IDArtArch").val(IDArtArch);
+        });
+
+    }
+</script>
+<script>
+                function ModalAPP(id,IDArticulo) {
+                    async: true;
+                    var url = '@Url.Action("Presentacion", "Articulos")';
+                    $("#testeAP").load("/Articulos/Presentacion?id="+id+"&IDArticulo="+IDArticulo, function () {
+                        $('#ModalAP').modal("show");
+                    });
+
+                }
+</script>
+<script>
+
+
+
+
+                    function Actualizar(id, numero) {
+                        var urledit = '@Url.Action("Edititem", "Carrito")';
+            var nota = document.getElementById("Nota" + numero).value
+            var cantidad = document.getElementById("Cantidad" + numero).value
+            var idalmacen = document.getElementById("IDAlmacen" + numero).value
+            $.post(urledit, { id: id, cantidad: cantidad, nota: nota, idalmacen:idalmacen }, function (response) {
+
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+</script>
+<script>
+
+        function recibir(numero) {
+            var valor = document.getElementById("IDCaracteristicaP" + numero).value;
+            //alert(valor)
+            document.getElementById("IDCaracteristicaDocumento").value = valor;
+
+        }
+</script>
+<script>
+
+    function myFunctionPlotter(idarticulo, idpresentacion, numero) {
+        //alert("Entra")
+        var url = '@Url.Action("GeneraPlotter", "Articulos")';
+        var checkBox = document.getElementById("generaPlotter"+numero);
+        var genera=0;
+        if(checkBox.checked == true){
+            genera=1;
+        }
+        $.post(url, { idarticulo: idarticulo, idpresentacion: idpresentacion, genera: genera }, function (response) {
+               if (response) {
+
+                   location.reload();
+               }
+           }).fail(function (response) {
+           });
+
+
+
+}
+</script>
+<script>
+
+    function myFunctionPlotterEliminar(idplotter, numero) {
+        //alert("Entra")
+        var url = '@Url.Action("GeneraPlotter", "Articulos")';
+        var checkBox = document.getElementById("generaPlotter"+numero);
+        var genera=0;
+        if(checkBox.checked == true){
+            genera=1;
+        }
+        $.post(url, { idplotter: idplotter, genera: genera }, function (response) {
+               if (response) {
+
+                   location.reload();
+               }
+           }).fail(function (response) {
+           });
+
+
+
+}
+</script>

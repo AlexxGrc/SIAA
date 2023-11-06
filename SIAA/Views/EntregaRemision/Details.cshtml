@@ -1,0 +1,82 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.VDetEntregaRemision>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles de Remision</h3>
+<h4>Chofer: @ViewBag.Chofer</h4>
+<h4>Ruta: @ViewBag.Ruta</h4>
+@*<h4>Fecha de entrega: @ViewBag.Fecha.Year @ViewBag.Fecha. </h4>*@
+
+<table class="table">
+    <tr>
+   
+        <th>No. Factura</th>
+        <th>No. Remisión</th>
+        <th>Cliente</th>
+
+        <th>Entrega</th>
+
+        <th></th>
+    </tr>
+
+    
+    @foreach (var item in Model)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.NoFactura)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.IDRemision)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Cliente)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Entrega)
+    </td>
+
+    <td>
+        @{
+
+            SIAAPI.Models.Comercial.EntregaRemision entrega = new SIAAPI.Models.Comercial.EntregaRemisionesContext().EntregaRemisiones.Find(item.IDEntregar);
+
+
+            if (entrega.Status != "Finalizado")
+            {
+                <a class="delete" data-id="@item.IDRemision">
+                    <i class="tbl_del_btn fa fa-trash"></i>
+
+                </a>
+            }
+        }
+
+    </td>
+</tr>
+    }
+
+</table>
+<p>
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+        var url = '@Url.Action("DeleteRemision", "EntregaRemision")';
+        $('.delete').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>

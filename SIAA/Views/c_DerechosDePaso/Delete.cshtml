@@ -1,0 +1,88 @@
+﻿@model SIAAPI.Models.CartaPorte.c_DerechosDePaso
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Eliminar</h2>
+
+<h3>¿Está seguro de eliminar este registro?</h3>
+<div>
+    
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClavePaso)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClavePaso)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DerechoPaso)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DerechoPaso)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Entre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Entre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Hasta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hasta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OtorgaRecibe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OtorgaRecibe)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Concesionario)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Concesionario)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FIvigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FIvigencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FFvigencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FFvigencia)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+<div class="form-actions no-color">
+    <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" />  
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</div>
+    }
+</div>

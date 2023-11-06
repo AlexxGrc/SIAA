@@ -1,0 +1,551 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.DetRemision>
+
+@{
+    ViewBag.Title = "CreateERemision";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Crear empaque</h2>
+
+<div class="form-horizontal">
+    <h4>Empacar Remision @ViewBag.IDRemision</h4>
+    <h5 class="text-info">@ViewBag.Cliente.Nombre </h5>
+    @*<h5 class="text-info">No.Orden @ViewBag.IDOrden </h5>*@
+
+    <br />
+    @if (ViewBag.Cliente.FacturacionExacta)
+    {
+        <h5 class="text-info">El cliente solicita facturación exacta a su pedido </h5>
+    }
+    else
+    {
+        <h5 class="text-info">El cliente acepta margen adicional de fabricacion a su pedido </h5>
+    }
+</div>
+@{ int contador = 0;
+
+    foreach (var item in Model)
+    {
+
+
+
+
+
+        SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+
+        if (!articulo.esKit)
+        {
+            int IDEmpaque = 0;
+            var elementoEmpaque = new SIAAPI.Models.Comercial.EmpaqueCartaPRemisionContext().Database.SqlQuery<SIAAPI.Models.Comercial.EmpaqueCartaPRemision>("select*from EmpaqueCartaPRemision where iddetremision=" + item.IDDetRemision).ToList().FirstOrDefault();
+            try
+            {
+                IDEmpaque = elementoEmpaque.IDEmpaque;
+                SIAAPI.Models.Comercial.ClsDatoDecimal clsDato = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select sum(CantContenido) as dato from DetEmpaqueCartaPRemision where IDEmpaque=" + elementoEmpaque.IDEmpaque).ToList().FirstOrDefault();
+                ViewBag.CantidadEmpacada = clsDato.Dato;
+            }
+            catch (Exception err)
+            {
+                ViewBag.CantidadEmpacada = 0;
+            }
+            SIAAPI.Models.Comercial.Caracteristica caracteristica = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select*from caracteristica where id=" + item.Caracteristica_ID).ToList().FirstOrDefault();
+           <table class="table" align="center">
+                    <tr style="background-color:lightblue">
+                        <th>
+                            <h3> @Html.Label("Clave Artículo: " + articulo.Cref) </h3>
+                        </th>
+                </table>
+            <table>
+                @{
+                    string[] atributos = caracteristica.Presentacion.ToString().Split(',');
+                    <tr>
+                        @foreach (var atri in atributos)
+                        {
+                            string[] valor = atri.Split((char)58);
+                            try
+                            {
+                                string Atri = valor[0];
+                                string Val = valor[1];
+                                <td style="background-color:darkblue; font-size:xx-small" class="col-md-1">
+                                    <label style="color:white;">@Atri</label>
+                                </td>
+                            }
+                            catch (Exception err)
+                            {
+                                <td class="col-md-1">
+                                    <label> </label>
+                                </td>
+                            }
+
+                        }
+                    </tr>
+                    <tr>
+                        @foreach (var atri in atributos)
+                        {
+                            string[] valor = atri.Split((char)58);
+                            try
+                            {
+                                string Val = valor[1];
+                                <td class="col-md-1" style=" font-size:xx-small">
+                                    <label>@Val</label>
+                                </td>
+                            }
+                            catch (Exception err)
+                            {
+                                <td class="col-md-1">
+                                    <label> </label>
+                                </td>
+                            }
+
+
+                        }
+                    </tr>
+                }
+            </table>
+
+            <h5 class="text-info">Cantidad: </h5>
+            @item.Cantidad
+
+            using (Html.BeginForm("CreateERemision", "EmpaqueCartaPorte", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+
+
+                <div class="form-horizontal">
+                    <h4>Datos de empaque</h4>
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                    <input type="hidden" value="@item.IDRemision " id="IDRemision" name="IDRemision" />
+                    <input type="hidden" value="@item.IDDetRemision " id="IDDetRemision" name="IDDetRemision" />
+                    <input type="hidden" value="@IDEmpaque " id="IDEmpaque" name="IDEmpaque" />
+                    <input type="hidden" value="0" id="IDDetRemisionKit" name="IDDetRemisionKit" />
+
+                    @{ if (IDEmpaque == 0)
+                        {
+                            string cantidade = "Cantidad" + contador;
+                            //string Lotee = "Lote" + contador;
+                            //string PesoTotalE = "PesoTotal" + contador;
+                            //string LoteMPe = "LoteMP" + contador;
+                            //string Serie = "Serie" + contador;
+                            string Observacion = "Observacion" + contador;
+                            //string Pedimento = "Pedimento" + contador;
+
+                            <div class="row">
+                                <div class="col-xs-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon1">Cantidad empacada</span>
+
+
+                                        <input class="form-control" value="@item.Cantidad" type="number" step="any" id="Cantidad" name="Cantidad" />
+
+
+                                    </div>
+                                </div>
+
+                                @*<div class="col-xs-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">Lote</span>
+                                            <input id="Lote" name="Lote" class="form-control" />
+
+                                        </div>
+                                    </div>*@
+                            </div>
+                            <br />
+                            <br />
+                            @*<div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">Peso Total</span>
+
+                                            <input class="form-control" required type="number" step="any" id="PesoTotal" name="PesoTotal" />
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-8">
+                                        <div class="input-group">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />*@
+
+                            @*<div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">Lote Materia P</span>
+                                            <input class="form-control" id="LoteMP" name="LoteMP" />
+
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">Serie</span>
+
+                                            <input class="form-control" id="Serie" name="Serie" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />*@
+                            <div class="row">
+                                @*<div class="col-xs-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">Pedimento</span>
+
+                                            <input class="form-control" id="Pedimento" name="Pedimento" />
+
+
+                                        </div>
+                                    </div>*@
+                                <div class="col-xs-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon" id="basic-addon1">Observacion</span>
+
+                                        <input class="form-control" id="Observacion" name="Observacion" />
+
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                        }
+
+                        else
+                        {
+                            if (ViewBag.CantidadEmpacada == item.Cantidad)
+                            {
+                                if (!elementoEmpaque.Impreso)
+                                {
+                            @Html.ActionLink("Imprimir Etiquetas", "ImprimirEtiquetas", new { IDEmpaque = IDEmpaque, viene = "ALMACÉN" }, new { @class = "btn btn-info", target = "_blank" })
+
+
+                            }
+
+                                }
+
+                        }
+
+
+
+
+
+                    }
+
+                    @{ try
+                        {
+                            if (ViewBag.CantidadEmpacada == item.Cantidad)
+                            { }
+                            else
+                            {
+                                string caja = "NoCaja" + contador;
+                                string CantConte = "CantContenido" + contador;
+                                <div class="form-group">
+
+                                    <span class="input-group-addon" id="basic-addon1"></span>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">No. Cajas</span>
+
+                                            <input class="form-control" step="any" id="NoCaja" name="NoCaja" />
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">Cantidad Contenido</span>
+                                            <input class="form-control" step="any" id="CantContenido" name="CantContenido" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+
+
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input class="btn btn-info btn-xs" type="submit" value="Empacar" />
+                                    </div>
+                                </div>
+                            }
+
+
+                        }
+                        catch (Exception err)
+                        {
+
+                        }
+
+                    }
+
+                </div>
+
+
+            }
+
+
+            try
+
+            {
+                string consulta = "select * from detempaquecartaPRemision where idempaque=" + elementoEmpaque.IDEmpaque;
+                var elementos = new SIAAPI.Models.Comercial.EmpaqueCartaPRemisionContext().Database.SqlQuery<SIAAPI.Models.Comercial.DetEmpaqueCartaPRemision>(consulta).ToList();
+                Html.RenderPartial("DetalleContenidoR", elementos);
+            }
+            catch (Exception err)
+            {
+
+            }
+        }
+        else
+        {
+            List<SIAAPI.Models.Comercial.DetRemisionKit> kits = new SIAAPI.Models.Comercial.KitContext().Database.SqlQuery<SIAAPI.Models.Comercial.DetRemisionKit>("select*from DetRemisionKit where idremisiondetkit=" + item.IDDetRemision).ToList();
+            <table class="table" align="center">
+                <tr style="background-color:cornflowerblue">
+                    <th>
+                        <h3> @Html.Label("Artículo Kit: " + @articulo.Cref) </h3>
+                    </th>
+            </table>
+          
+            foreach (SIAAPI.Models.Comercial.DetRemisionKit K in kits)
+            {
+
+
+
+                int IDEmpaque = 0;
+                var elementoEmpaque = new SIAAPI.Models.Comercial.EmpaqueCartaPRemisionContext().Database.SqlQuery<SIAAPI.Models.Comercial.EmpaqueCartaPRemision>("select*from EmpaqueCartaPRemision where IDDetRemisionKit=" + K.IDDetRemisionKit).ToList().FirstOrDefault();
+                try
+                {
+                    IDEmpaque = elementoEmpaque.IDEmpaque;
+                    SIAAPI.Models.Comercial.ClsDatoDecimal clsDato = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select sum(cantcontenido) as dato from DetEmpaqueCartaPRemision where idempaque=" + IDEmpaque).ToList().FirstOrDefault();
+                    ViewBag.CantidadEmpacada = clsDato.Dato;
+                }
+                catch (Exception err)
+                {
+                    ViewBag.CantidadEmpacada = 0;
+                }
+                SIAAPI.Models.Comercial.Articulo articuloCom = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(K.IDArticulo);
+                SIAAPI.Models.Comercial.Caracteristica caracteristica = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>
+                    ("select*from caracteristica where id=" + K.Caracteristica_ID).ToList().FirstOrDefault();
+<table class="table" align="center">
+    <tr style="background-color:lightblue">
+        <th>
+            <h3> @Html.Label("Clave Artículo: " + articuloCom.Cref) </h3>
+        </th>
+</table>
+                <table>
+                    @{
+                        string[] atributos = caracteristica.Presentacion.ToString().Split(',');
+                        <tr>
+                            @foreach (var atri in atributos)
+                            {
+                                string[] valor = atri.Split((char)58);
+                                try
+                                {
+                                    string Atri = valor[0];
+                                    string Val = valor[1];
+                                    <td style="background-color:darkblue; font-size:xx-small" class="col-md-1">
+                                        <label style="color:white;">@Atri</label>
+                                    </td>
+                                }
+                                catch (Exception err)
+                                {
+                                    <td class="col-md-1">
+                                        <label> </label>
+                                    </td>
+                                }
+
+                            }
+                        </tr>
+                        <tr>
+                            @foreach (var atri in atributos)
+                            {
+                                string[] valor = atri.Split((char)58);
+                                try
+                                {
+                                    string Val = valor[1];
+                                    <td class="col-md-1" style=" font-size:xx-small">
+                                        <label>@Val</label>
+                                    </td>
+                                }
+                                catch (Exception err)
+                                {
+                                    <td class="col-md-1">
+                                        <label> </label>
+                                    </td>
+                                }
+
+
+                            }
+                        </tr>
+                    }
+                </table>
+
+                <h5 class="text-info">Cantidad: </h5>
+                decimal cantidad = K.CantidadNue;
+                @cantidad
+
+                using (Html.BeginForm("CreateERemision", "EmpaqueCartaPorte", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+
+
+                    <div class="form-horizontal">
+                        <h4>Datos de empaque</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                        <input type="hidden" value="@item.IDRemision" id="IDRemision" name="IDRemision" />
+                        <input type="hidden" value="@item.IDDetRemision" id="IDDetRemision" name="IDDetRemision" />
+                        <input type="hidden" value="@K.IDDetRemisionKit" id="IDDetRemisionKit" name="IDDetRemisionKit" />
+                        <input type="hidden" value="@IDEmpaque " id="IDEmpaque" name="IDEmpaque" />
+
+                        @{ if (IDEmpaque == 0)
+                            {
+                                string cantidade = "Cantidad" + contador;
+
+                                string Observacion = "Observacion" + contador;
+
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">Cantidad empacada</span>
+
+
+                                            <input class="form-control" value="@cantidad" type="number" step="any" id="Cantidad" name="Cantidad" />
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <br />
+                                <br />
+
+                                <div class="row">
+
+                                    <div class="col-xs-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon" id="basic-addon1">Observacion</span>
+
+                                            <input class="form-control" id="Observacion" name="Observacion" />
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <br />
+                            }
+
+                            else
+                            {
+                                if (ViewBag.CantidadEmpacada == item.Cantidad)
+                                {
+                                    if (!elementoEmpaque.Impreso)
+                                    {
+                                @Html.ActionLink("Imprimir Etiquetas", "ImprimirEtiquetas", new { IDEmpaque = IDEmpaque, viene = "ALMACÉN" }, new { @class = "btn btn-info", target = "_blank" })
+
+
+                                }
+
+                                    }
+
+                            }
+
+
+
+
+
+                        }
+
+                        @{ try
+                            {
+                                if (ViewBag.CantidadEmpacada == K.CantidadNue)
+                                { }
+                                else
+                                {
+                                    string caja = "NoCaja" + contador;
+                                    string CantConte = "CantContenido" + contador;
+                                    <div class="form-group">
+
+                                        <span class="input-group-addon" id="basic-addon1"></span>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" id="basic-addon1">No. Cajas</span>
+
+                                                <input class="form-control" step="any" id="NoCaja" name="NoCaja" />
+
+
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-8">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" id="basic-addon1">Cantidad Contenido</span>
+                                                <input class="form-control" step="any" id="CantContenido" name="CantContenido" />
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+
+
+
+                                    <div class="form-group">
+                                        <div class="col-md-offset-2 col-md-10">
+                                            <input class="btn btn-info btn-xs" type="submit" value="Empacar" />
+                                        </div>
+                                    </div>
+                                }
+
+
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+
+                        }
+
+                    </div>
+
+
+                }
+
+
+                try
+
+                {
+                    string consulta = "select * from detempaquecartaPRemision where idempaque=" + IDEmpaque;
+                    var elementos = new SIAAPI.Models.Comercial.EmpaqueCartaPRemisionContext().Database.SqlQuery<SIAAPI.Models.Comercial.DetEmpaqueCartaPRemision>
+                        (consulta).ToList();
+                    Html.RenderPartial("DetalleContenidoR", elementos);
+                }
+                catch (Exception err)
+                {
+
+                }
+            }
+
+
+        }
+
+
+
+
+    }
+}
+
+
+

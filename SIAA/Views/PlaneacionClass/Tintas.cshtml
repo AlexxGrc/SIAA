@@ -1,0 +1,270 @@
+﻿
+@model IEnumerable <SIAAPI.ClasesProduccion.Tinta>
+@if (Model != null)
+{
+    int contador = 1;
+
+    if (Model.Count()>0)
+    {
+        var tintas = new SIAAPI.ClasesProduccion.Repository().GetTintas();
+    <h2>Tintas</h2>
+    <p class="text-info">En la primer columna puedes escribir una frase al terminar presiona la tecla "AltGr" y la computadora buscará tintas que contengan la frase</p>
+
+
+
+        if ((Model.Count() == 3) || (Model.Count() == 4))
+        {
+            <fieldset id="Grupot">
+                <legend class="text-info">Elige una combinacion predefinida</legend>
+                <label>
+                    <input type="radio" name="predefinida" value="Ninguna" onlcik="ningunaPla()" checked> Ninguna
+                </label>
+
+                @if ((Model.Count() == 3))
+                {
+                <label>
+                    <input type="radio" name="predefinida" value="CMK" onclick="CMKPla()"> Tricomia CMK Agua
+                </label>
+                }
+                @if ((Model.Count() == 3))
+                {
+                <label>
+                    <input type="radio" name="predefinida" value="CYK" onclick="CYKPla()"> Tricomia CYK Agua
+                </label>
+                }
+                @if ((Model.Count() == 3))
+                {
+                <label>
+                    <input type="radio" name="predefinida" value="MYK" onclick="MYKPla()"> Tricomia MYK Agua
+                </label>
+                }
+                @if ((Model.Count() == 4))
+                {
+                <label>
+                    <input type="radio" name="predefinida" value="CMYK" onclick="CMYKPla()"> Seleccion a Color Agua
+                </label>
+                }
+                @if ((Model.Count() == 3))
+                {
+                <label>
+                    <input type="radio" name="predefinida" value="CMKU" onclick="CMKUPla()"> Tricomia CMK UV
+                </label>
+                }
+                @if ((Model.Count() == 3))
+                {
+                <label>
+                    <input type="radio" name="predefinida" value="CYKU" onclick="CYKUPla()"> Tricomia CYK UV
+                </label>
+                }
+                @if ((Model.Count() == 3))
+                {
+                <label>
+                    <input type="radio" name="predefinida" value="MYKU" onclick="MYKUPla()"> Tricomia MYK UV
+                </label>
+                }
+                @if ((Model.Count() == 4))
+                {
+                <label>
+                    <input type="radio" name="predefinida" value="CMYKU" onchange="CMYKUPla()"> Seleccion a Color UV
+                </label>
+                }
+            </fieldset>
+        }
+    <table class="table-responsive col-12">
+        <thead class="thead-dark">
+            <tr>
+                <th><div>Buscador</div></th>
+                <th><div>Pantone</div></th>
+
+
+                <th><div>Area %</div></th>
+            </tr>
+            @foreach (SIAAPI.ClasesProduccion.Tinta tinta in Model)
+            {
+                string nombre = "Area" + contador;
+                string nombretinta = "Tinta" + contador;
+                string nombrebustin = "Buscadortinta" + contador;
+                <tr>
+                    <td>
+                        <div class="col-md-2">
+
+                           
+                            <input type="text" name="@nombrebustin" id="@nombrebustin" onkeyup="actualizatintaPlaneacion(event,@contador)"  />
+
+
+                        </div>
+                    </td>
+                    <td>
+                      
+                           
+                            <div class="col-md-8">
+                              <select name="@nombretinta"  id="@nombretinta">
+                                  @{ foreach (SelectListItem itemtinta in tintas)
+                                      {
+                                          if (tinta.IDTinta != int.Parse(itemtinta.Value))
+                                          {
+                                            <option value="@itemtinta.Value">@itemtinta.Text</option>
+                                          }
+                                          if (tinta.IDTinta == int.Parse(itemtinta.Value))
+                                          {
+                                            <option selected value="@itemtinta.Value"  >@itemtinta.Text</option> 
+                                          }
+
+                                      }
+                                }
+                              </select>
+                            </div>
+                    
+
+                    </td>
+                    <td>
+                        @{ 
+                            string valor = "";
+                            if (tinta.Area > 0)
+                            {
+                                valor = tinta.Area.ToString();
+                            }
+                            else
+                            {
+                                valor = "";
+                            }
+                        }
+                        <input type="number" name="@nombre" value="@valor" id="@nombre" max="100" min="1" placeholder = "1-100" autofocus required>
+                    </td>
+                </tr>
+                                contador++;
+                            }
+            
+</table>
+                                }
+                            }
+
+
+
+
+<script>
+
+
+function ningunaPla() {
+
+
+    $("#Tinta1 option[value='" + 0 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 0 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 0 + "']").attr("selected", true);
+    $("#Tinta4 option[value='" + 0 + "']").attr("selected", true);
+    $("#Grupot").hide();
+}
+
+function CMKPla() {
+   
+  
+    $("#Tinta1 option[value='" + 1 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 2 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 4 + "']").attr("selected", true);
+    $("#Grupot").hide();
+
+}
+
+function CYKPla() {
+
+
+    $("#Tinta1 option[value='" + 1 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 3 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 4 + "']").attr("selected", true);
+    $("#Grupot").hide();
+
+}
+
+function MYKPla() {
+
+
+    $("#Tinta1 option[value='" + 2 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 3 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 4 + "']").attr("selected", true);
+    $("#Grupot").hide();
+
+}
+function CMYKPla() {
+
+    $("#Tinta1 option[value='" + 1 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 2 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 3 + "']").attr("selected", true);
+    $("#Tinta4 option[value='" + 4 + "']").attr("selected", true);
+    $("#Grupot").hide();
+
+}
+
+function CMKUPla() {
+
+
+    $("#Tinta1 option[value='" + 22 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 23 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 25 + "']").attr("selected", true);
+    $("#Grupot").hide();
+
+}
+
+function CYKUPla() {
+
+
+    $("#Tinta1 option[value='" + 22 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 24 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 25 + "']").attr("selected", true);
+    $("#Grupot").hide();
+
+}
+
+function MYKUPla() {
+
+
+    $("#Tinta1 option[value='" + 23 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 24 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 25 + "']").attr("selected", true);
+    $("#Grupot").hide();
+
+}
+function CMYKUPla() {
+
+    $("#Tinta1 option[value='" + 22 + "']").attr("selected", true);
+    $("#Tinta2 option[value='" + 23 + "']").attr("selected", true);
+    $("#Tinta3 option[value='" + 24 + "']").attr("selected", true);
+    $("#Tinta4 option[value='" + 25 + "']").attr("selected", true);
+    $("#Grupot").hide();
+
+}
+
+function actualizatintaPlaneacion(e,contador) {
+      
+ 
+    if (e.keyCode === 18) {
+        var control = "#Buscadortinta" + contador;
+        var selectcontrol = "#Tinta" + contador;
+        $(selectcontrol).empty();
+       
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("gettintasblandas")',
+            dataType: 'json',
+             data: { buscar: $(control).val() },
+            
+            success: function (articulos) {
+                $(control).val("");
+                for (i = 0; i < articulos.length; i++) {
+                    var Value = articulos[i].Value;
+                 
+                    var Text = articulos[i].Text;
+                    $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+                    
+                }
+            },
+            error: function (ex) {
+               // alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+}
+
+
+
+</script>

@@ -1,0 +1,45 @@
+﻿@model SIAAPI.ViewModels.Cfdi.PeriodoFechasPagoF
+
+@{
+    ViewBag.Title = "PeriodoFechasPagoF";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Pagos de Facturas:</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        <h4>Establecer los datos para la generación del reporte:</h4>
+        <br /><br />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.Label("Fecha inicial", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.fechaInicial, new { htmlAttributes = new { type = "date", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fechaInicial, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Fecha final", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.fechaFinal, new { htmlAttributes = new { type = "date", @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fechaFinal, "", new { @class = "text-danger" })
+            </div>
+        </div>
+     
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" name="Enviar" value="Generar reporte" class="btn btn-info btn-xs" />|
+                <input type="submit" name="Enviar" value="Generar excel" class="btn btn-info btn-xs" />|
+
+                @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+}

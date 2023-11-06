@@ -1,0 +1,41 @@
+﻿@model SIAAPI.Models.CartaPorte.c_Municipio
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles Municipio</h3>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.C_Municipio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.C_Municipio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.C_Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.C_Estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDMunicipio }, new { @class = "btn btn-success btn-xs" }) @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

@@ -1,0 +1,131 @@
+﻿@model SIAAPI.Models.Inventarios.Almacenista
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card-header">
+    <h3 class="card-title bg-dark text-white">Detalles del Almacenista</h3>
+</div>
+<br />
+
+
+<div class="form-horizontal">
+    <br />
+
+
+    
+        
+   
+
+
+    <dl class="dl-horizontal">
+        <dt>
+
+        </dt>
+        <dd>
+            <img src="@Url.Action("RenderImage", new { id=Model.IDA })" class="img-responsive" width="140" height="180" />
+        </dd>
+
+
+        <dt>
+            @Html.Label("RFC")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFC)
+        </dd>
+
+        <dt>
+            @Html.Label("Nombre")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.Label("E-Mail")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mail)
+        </dd>
+
+        <dt>
+            @Html.Label("Teléfono")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+
+
+
+        <dt>
+            @Html.Label("Fecha de Registro")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaIngreso)
+        </dd>
+
+        <dt>
+            @Html.Label("Periocidad Pago")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_PeriocidadPago.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.Label("Tipo Contrato")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_TipoContrato.ClaveTipoContrato)
+        </dd>
+
+        <dt>
+            @Html.Label("Jornada")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.c_Tipojornada.ClaveTipoComprobante)
+        </dd>
+
+        <dt>
+            @Html.Label("Oficina")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDOficina)
+        </dd>
+
+        <dt>
+            @Html.Label("Estado")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+        <dt>
+            @Html.Label("Notas")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notas)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <p>
+        @Html.ActionLink("Editar", "Edit", new { id = Model.IDA }, new { @class = "btn btn-success btn-xs" })
+
+        @Html.ActionLink("Eliminar", "Delete", new { id = Model.IDA }, new { @class = "btn btn-danger btn-xs" })
+    </p>
+</div>
+

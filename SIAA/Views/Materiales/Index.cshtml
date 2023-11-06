@@ -1,0 +1,255 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Administracion.Materiales>*@
+
+
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Administracion.Materiales>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Materiales para Cotizador</h3>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+                        @Html.ActionLink("Registrar nuevo material", "Create", new { page = Model.PageNumber, pagesize = Model.PageSize, searchString = ViewBag.searchString, Descripcion = ViewBag.Descripcionseleccionado }, new { @class = "btn btn-primary navbar-btn btn-xs" }) |
+                        <row>
+                            Estado : @Html.DropDownList("Obs", (IEnumerable<SelectListItem>)ViewData["Obsoletos"], "Todas") | 
+                        </row>
+                        Elementos por página: @Html.DropDownList("pageSize")  |
+                        Filtro: @Html.TextBox("SearchString", ViewBag.SearchString as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <div>
+                            Fecha verificación inicio: @Html.TextBox("Fechainicio", ViewBag.Fechainicio as string, new { type = "date" })
+                            Fecha verificación final:  @Html.TextBox("Fechafinal", ViewBag.Fechafinal as string, new { type = "date" })
+                        </div>
+                         <div>
+                            @*<row>
+                                Material: @Html.DropDownList("Descripcion", "Todos")
+                            </row>*@
+                            <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                            </div>
+</p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+
+@*Tabla de datos*@
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Clave", "Index", new { sortOrder = ViewBag.ClaveSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Descripcion", "Index", new { sortOrder = ViewBag.DescripcionSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        
+        @*<th>
+            @Html.DisplayNameFor(model => model.Fam)
+        </th>*@
+        <th>
+           @Html.Label("Ancho")
+        </th>
+        <th>
+            @Html.Label("Largo")
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Adhesivo)
+        </th>*@
+        <th>
+            Master
+            @*@Html.DisplayNameFor(model => model.Completo)*@
+        </th>
+      @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
+      {
+        <th>
+            Precio
+            @*@Html.DisplayNameFor(model => model.Precio)*@
+        </th>
+        <th>
+            @Html.ActionLink("Moneda", "Index", new { sortOrder = ViewBag.MonedaSortParm, currentFilter = ViewBag.CurrentFilter })
+            @*@Html.DisplayNameFor(model => model.Moneda)*@
+        </th>
+      }
+        @*<th>
+        @Html.DisplayNameFor(model => model.Calibre)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.Solicitarprecio)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.CalibreEsp)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.Tcompra)
+    </th>*@
+        <th>
+            Última fecha de verificación
+            @*@Html.DisplayNameFor(model => model.PrecioAct)*@
+       </th>
+        @*<th>
+        @Html.DisplayNameFor(model => model.Proveedor)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.Respaldo)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.Gramaje)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.ClaveEt)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.Plazo)
+    </th>
+    <th>
+        @Html.DisplayNameFor(model => model.Obsoleto)
+    </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Clave)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Fam)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Ancho)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Largo)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Adhesivo)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Completo)
+        </td>
+       @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
+       {
+        <td>
+            @item.Precio
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Moneda)
+        </td>
+       }
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Calibre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Solicitarprecio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CalibreEsp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tcompra)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.PrecioAct)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Proveedor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Respaldo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gramaje)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClaveEt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Plazo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Obsoleto)
+        </td>*@
+        <td>
+           @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
+           {
+            @Html.ActionLink("Editar", "Edit", new { id = item.ID, page = Model.PageNumber, pagesize = Model.PageSize, searchString = ViewBag.searchString, Descripcion = ViewBag.Descripcionseleccionado, Fechainicio = ViewBag.Fechainicio, Fechafinal = ViewBag.Fechafinal }, new { @class = "btn btn-success btn-xs" })
+           }
+            @Html.ActionLink("Detalles", "Details", new { id = item.ID, page = Model.PageNumber, pagesize = Model.PageSize, searchString = ViewBag.searchString, Descripcion = ViewBag.Descripcionseleccionado, Fechainicio = ViewBag.Fechainicio, Fechafinal = ViewBag.Fechafinal }, new { @class = "btn btn-default btn-xs" })
+            
+           
+                @*@{ try
+                    {
+                        if (ViewBag.Obsoleto == "si")
+                        {
+                            @Html.ActionLink("Obsoleto", "Obsoleto", new { id = item.ID, page = Model.PageNumber, pagesize = Model.PageSize, searchString = ViewBag.searchString }, new { @class = "btn btn-warning btn-xs" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Obsoleto", "Obsoleto", new { id = item.ID, page = Model.PageNumber, pagesize = Model.PageSize, searchString = ViewBag.searchString }, new { @class = "btn btn-danger btn-xs" })
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+
+
+                }*@
+
+        </td>
+    </tr>
+}
+
+</table>
+@*Paginación*@
+@using (Html.BeginForm("Index", "Materiales", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.searchString,
+       Fechainicio = ViewBag.Fechainicio,
+       FechaFinal = ViewBag.Fechafinal,
+       pageSize = ViewBag.psize
+   }))
+
+
+    </div>
+}
+@*Paginación*@

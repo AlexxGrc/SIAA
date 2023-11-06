@@ -1,0 +1,42 @@
+﻿@model SIAAPI.Models.Inventarios.Inventario
+
+
+@{
+    ViewBag.Title = "AgregarTinta";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    // var idcaracteristica = ViewBag.PresentacionList as List<SelectListItem>;
+}
+
+<h1>Agregar lote a caracteristica del artículo: </h1>
+<h2>   @ViewBag.IDArticulo</h2>
+@*<p>   @ViewBag.Caracteristica</p>*@
+<br />
+@{ if (ViewBag.Mensaje != "")
+    {
+        <div class="alert alert-danger">@ViewBag.Mensaje</div>
+    }
+}
+<form action="~/InventarioAlmacen/AgregarLoteTinta" method="post">
+    <div class="form-group">
+        @Html.LabelFor(model => model.IDCaracteristica, "Característica", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-6">
+            @Html.DropDownList("IDCaracteristica", ViewBag.IDCaracteristica as List<SelectListItem>, htmlAttributes: new { @class = "form-control", @id = "IDCaracteristica", @name = "IDCaracteristica" })
+            @Html.ValidationMessageFor(model => model.IDCaracteristica, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <br />
+    <br />
+    <div style="text-align:center;">
+        <input type="hidden" value="@ViewBag.idInven" name="id" id="id" />
+        <input type="hidden" value="@ViewBag.IDArticulo" name="IDArticulo" id="IDInvPl" />
+        <input type="hidden" value="@ViewBag.IDAlmacen" name="IDAlmacen" id="IDInvPl" />
+        <input type="submit" value="Agregar" class="btn btn-success" />
+    </div>
+</form>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+
+</script>

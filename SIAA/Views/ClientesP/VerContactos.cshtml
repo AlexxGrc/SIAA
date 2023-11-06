@@ -1,0 +1,59 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.ContactosPros>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "CreateContacto", null, new { @class = "btn btn-default btn-xs" })
+</p>
+<table class="table">
+    <tr>
+     
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Puesto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+    
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Telefono)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Puesto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observacion)
+        </td>
+        <td>
+        
+            @Html.ActionLink("Editar", "EditContacto", new { id = item.IDProspecto}, new { @class = "btn btn-default btn-xs" })
+            @Html.ActionLink("Detalles", "DetailsContacto", new { id = item.IDProspecto }, new { @class = "btn btn-default btn-xs" })
+            @Html.ActionLink("Eliminar", "DeleteContacto", new { id = item.IDProspecto }, new { @class = "btn btn-danger btn-xs" })
+        </td>
+    </tr>
+}
+
+</table>
+<p>
+
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>
+

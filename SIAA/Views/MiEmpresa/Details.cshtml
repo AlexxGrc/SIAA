@@ -1,0 +1,82 @@
+﻿@model SIAAPI.Models.miempresa.SGC
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles del registro</h2>
+
+<div>
+    <h4>SGC</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Codigo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Codigo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NoVersion)
+          
+        </dt>
+
+        <dd>
+            @*@Html.DisplayFor(model => model.NoVersion)*@
+            @Model.NoVersion
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Documento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Documento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDDepartamento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Departamentos.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DoctoSGC.Documento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DoctoSGC.Documento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaHora)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaHora)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Obsoleto)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Obsoleto)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ID }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Procedimientos", null, new { @class = "btn btn-default btn-xs" })
+</p>

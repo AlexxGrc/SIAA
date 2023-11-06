@@ -1,0 +1,244 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Caracteristica>
+@{
+    ViewBag.Title = "GetPresentaciones";
+}
+
+<div id="listado" style="display:block">
+    <h3>Listado de Presentaciones<br /></h3>
+    <h4 class="text-success"><label>Artículo: </label> <label>@ViewBag.Descripcion </label></h4>
+    </div>
+<div id="registropres" style="display:none">
+    <h3>Registro de Artículo de Planeación<br /></h3>
+</div>
+   
+<hr>
+ 
+    <div id="label" style="display:none">
+  
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <h5><label>Proceso: </label><p id="labelproceso"></p></h5>
+        </div>
+        <div class="columna col-md-4 col-sm-1">
+            <h5><label>Hoja de Especificación: </label><p id="nohoja"></p></h5>
+        </div>
+        <div class="columna col-md-4 col-sm-1">
+            <h5><label>Versión</label><p id="versionmodal"></p></h5>
+        </div>
+    </div>
+        <div class="row">
+            <div class="columna col-md-6 col-sm-1">
+                <h5><label>Artículo de hoja de especificación:</label> <p id="arthemodal"></p></h5>
+            </div>
+            <div class="columna col-md-6 col-sm-1">
+                <h5><label>Presentación de hoja de especificación:</label> <p id="preshemodal"></p></h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="columna col-md-6 col-sm-1">
+                <h5><label>Artículo: </label> <p>@ViewBag.Descripcion </p></h5>
+            </div>
+            <div class="columna col-md-6 col-sm-1">
+                <h5><label>Presentación:</label> <b><p class="text-success" id="labelHE"></p></b></h5>
+            </div>
+        </div>
+        <hr>
+        <br />
+</div>
+        <div id="ok" style="display:block">
+            <table class="table" id="TablaPresentaciones">
+
+
+                @{foreach (var item in Model)
+            {
+                        <tr>
+                            <td>
+                                @{
+                                    string[] atributos = item.Presentacion.ToString().Split(',');
+                                    foreach (var atri in atributos)
+                                    {
+                                        string[] valor = atri.Split((char)58);
+                                        string Atri = valor[0];
+                                        string Val = valor[1];
+
+                                        <label class="text-info">@Atri :</label><label class="text-danger">@Val</label>
+                                        @*<div id="ok" style="display:none">
+                                            <p id="@item.ID"></p>
+                                            </div>*@
+                                    }
+
+                                }
+                            </td>
+                            <td>
+                                @*<a class="delete" data-id="@item.ID">
+                                        <i class="tbl_del_btn fa fa-trash"></i>
+
+                                    </a>*@
+
+                                <p><button type="button" name="button" class="btn btn-warning btn-xs" onclick="actionregistro(@item.ID,@item.Articulo_IDArticulo,'@item.Presentacion')">Elegir</button><p></p></p>
+                            </td>
+
+                        </tr>
+                                    }
+
+                }
+            </table>
+        </div>
+        <div id="registro" class="form-group" style="display:none">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    @Html.Label("Formula de Relación", htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                    <div class="col-md-8">
+                        <input type="text" name="FormulaRelacion" id="FormulaRelacion" class="form-control" value="1" required="required"/>
+                    </div>
+                    <table>
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-info btn-xs" onclick="ValidarFormula()">Validar Formula</button>
+                            </td>
+                        </tr>
+                    </table>
+                    @*<table>
+                        <tr>
+                           
+                            <td>
+                                <button type="button" class="btn btn-warning btn-xs" onclick="Tinta()">Formula Tinta</button>
+                                <button type="button" class="btn btn-primary btn-xs" onclick="MP()">Formula Materia Prima</button>
+                            </td>
+                        </tr>
+                    </table>*@
+
+
+                </div>
+                <div class="form-group">
+                    @Html.Label("Factor Cierre", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <input type="text" name="FactorCierre" id="FactorCierre" class="form-control" value="0" required="required" />
+                    </div>
+                  
+                </div>
+                    
+                    <div class="form-group">
+                        @Html.Label("Indicaciones", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            <input type="text" name="Indicaciones" id="Indicaciones" class="form-control" />
+                        </div>
+                    </div>
+
+
+                    <input type="hidden" name="articulo" id="articulo" />
+                    <input type="hidden" name="caracteristica" id="caracteristica" />
+                    <input type="hidden" id="idhemodal" />
+                    <input type="hidden" id="idprocesomodal" />
+
+                </div>
+           
+
+            <div class="modal-footer">
+
+                <button type="button" name="button" class="btn btn-success btn-xs" onclick="Guardar()">Guardar</button>
+                <button type="button" class="btn btn-warning btn-xs" data-dismiss="modal">Cerrar</button>
+            </div>
+            </div>
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+        <script>
+
+            function actionregistro(id, idarticulo, presentacion) {
+                async: true;
+                var texto = document.getElementById("ok");
+                texto.style.display = "none";
+
+                var textlabel = document.getElementById("label");
+                textlabel.style.display = "block";
+                document.querySelector('#labelHE').innerText = presentacion;
+
+
+                var textregistropres = document.getElementById("registropres");
+                textregistropres.style.display = "block";
+
+                var textlistado = document.getElementById("listado");
+                textlistado.style.display = "none";
+
+
+                $('#articulo').val(idarticulo);
+                $('#caracteristica').val(id);
+                var text = document.getElementById("registro");
+                text.style.display = "block";
+            }
+        </script>
+<script>
+
+   
+
+    function Guardar() {
+        async: true;
+        var url = '@Url.Action("addarticuloplaneacion","PlanPlaneacionProduccion")';
+        $.post(url, { idhe: document.getElementById("idhemodal").value, idarticulo: document.getElementById("articulo").value, idcaracteristica: document.getElementById("caracteristica").value, idproceso: document.getElementById("idprocesomodal").value, formular: document.getElementById("FormulaRelacion").value, factorc: document.getElementById("FactorCierre").value, indicaciones: document.getElementById("Indicaciones").value }, function (response) {
+            if (response.errorMessage) {
+
+                swal("La Formula no se puede evaluar, por lo tanto, el artículo no fue registrado", "", "error")
+            }
+            else if (response) {
+                swal("Formula valida y producto registrado con éxito", "", "success")
+          $('#myModal').remove();
+           location.reload();
+               
+
+            }
+            
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+</script>
+        @*<script>
+
+            function Tinta() {
+                async: true;
+                //$('#FormulaRelacion').val("(ANCHO*LARGO*C*8.5)/(2926103.4*PORCENTAJEDETINTA)");
+                $('#FormulaRelacion').val("(ANCHO*ALTO*C*8.5)/(2926103.4*0.5)");
+            }
+        </script>
+        <script>
+
+            function MP() {
+                async: true;
+
+                $('#FormulaRelacion').val("(((C*1000)/ALPASO)*(ALTO/1000)+120)/1524");
+            }
+        </script>*@
+<script>
+
+            function Cancelar() {
+                async: true;
+                $('#myModal').remove();
+            }
+</script>
+
+@*<script>
+
+     var url ='@Url.Action("ValidarFormula", "PlanPlaneacionProduccion")';
+
+    function ValidarFormula() {
+        async: true;
+        $.post(url, { idhe: document.getElementById("idhemodal").value, formular: document.getElementById("FormulaRelacion").value, factorc: document.getElementById("FactorCierre").value, caracteristica: document.getElementById("caracteristica").value }, function (response) {
+            if (response.errorMessage) {
+
+                swal("La Formula no se puede evaluar", "", "error")
+            }
+            else if (response) {
+                //location.reload();
+                swal("Formula valida", "", "success")
+
+            }
+            }).fail(function (response) {
+            });
+        }
+
+
+</script>*@

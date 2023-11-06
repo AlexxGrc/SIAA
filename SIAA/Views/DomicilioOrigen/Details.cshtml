@@ -1,0 +1,133 @@
+﻿@model SIAAPI.Models.CartaPorte.Origen
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalle de Domicilio Origen</h3>
+
+<div>
+    
+    @{ 
+        SIAAPI.Models.Comercial.Empresa empresa = new SIAAPI.Models.Comercial.EmpresaContext().empresas.Find(Model.IDPais);
+        SIAAPI.Models.Administracion.Paises pais = new SIAAPI.Models.Administracion.PaisesContext().Paises.Find(Model.IDPais);
+        SIAAPI.Models.Administracion.Estados estado = new SIAAPI.Models.Administracion.EstadosContext().Estados.Find(Model.IDEstado);
+        SIAAPI.Models.CartaPorte.c_Municipio municipio = new SIAAPI.Models.CartaPorte.c_MunicipioContext().municipio.Find(Model.IDMunicipio);
+        SIAAPI.Models.CartaPorte.c_Localidad localidad = new SIAAPI.Models.CartaPorte.c_LocalidadContext().Localidad.Find(Model.IDLocalidad);
+        SIAAPI.Models.CartaPorte.c_Colonia colonia = new SIAAPI.Models.CartaPorte.c_ColoniaContext().colonias.Find(Model.IDColonia);
+    }
+
+    <dl class="dl-horizontal">
+        
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RFCRemitente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFCRemitente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreRemitente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreRemitente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calle)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calle)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumExt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumExt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumInt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumInt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDPais)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => pais.c_Pais) | @Html.DisplayFor(model => pais.Pais)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDEstado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => estado.c_estado) | @Html.DisplayFor(model => estado.Estado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDMunicipio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => municipio.C_Municipio) | @Html.DisplayFor(model => municipio.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDLocalidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => localidad.C_Localidad) | @Html.DisplayFor(model => localidad.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDColonia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => colonia.C_Colonia) | @Html.DisplayFor(model => colonia.NomAsentamiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Referencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Referencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDOrigen }, new { @class = "btn btn-success btn-xs" }) 
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</p>

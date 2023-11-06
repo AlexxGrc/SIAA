@@ -1,0 +1,108 @@
+﻿@model SIAAPI.Models.Produccion.Proceso
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Proceso</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreProceso)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreProceso)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsaMaquina)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsaMaquina)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsaHerramientas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsaHerramientas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsaInsumos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsaInsumos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsaDocumentos)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsaDocumentos)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsaManoDeObra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsaManoDeObra)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UsaBitacoraDeTrabajo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UsaBitacoraDeTrabajo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LigarOrdenDeCompra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LigarOrdenDeCompra)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SolicitaLote)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SolicitaLote)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProcesoAntecedente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProcesoAntecedente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProcesoPadre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProcesoPadre)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+
+    }
+</div>

@@ -1,0 +1,201 @@
+﻿
+@model PagedList.IPagedList<SIAAPI.Models.Produccion.OrdenProduccion>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "TerminacionProceso";
+            Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+@*<h3>Lista de Órdenes de Producción</h3>
+<hr />*@
+
+
+@*Busqueda*@
+<div>
+    <form>
+
+        @using (Html.BeginForm())
+        {
+            <div class="clear_fix">
+                Elementos por página: @Html.DropDownList("pageSize")  |
+                Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span>
+            </div>
+
+        }
+
+    </form>
+</div>
+
+<br>
+@*Busqueda*@
+
+
+
+
+
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+           
+            <th>
+                @Html.Label("Orden de Producción")
+            </th>
+
+            @{
+                SIAAPI.Models.Produccion.ProcesoContext db = new SIAAPI.Models.Produccion.ProcesoContext();
+                SIAAPI.Models.Comercial.ClsDatoEntero datos= db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDProceso) as Dato from Proceso").ToList()[0];
+
+            }
+            @for (int i = 0; i < datos.Dato; i++)
+            {
+                <th></th>
+            }
+            
+          
+        </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td width="4%">
+                            @{
+                                string noorden = item.IDOrden.ToString();
+                            }
+                          <h3>@Html.ActionLink(noorden, "Details", "OrdenProduccion", new { id = item.IDOrden }, null)</h3> 
+                         
+                        </td>
+
+                        @{
+                            int cont = 0;
+                            SIAAPI.Models.Produccion.OrdenProduccion orden = new SIAAPI.Models.Produccion.OrdenProduccionContext().OrdenesProduccion.Find(item.IDOrden);
+                            SIAAPI.Models.Produccion.VistaModeloProcesoContext dbv = new SIAAPI.Models.Produccion.VistaModeloProcesoContext();
+                            var lista = dbv.Database.SqlQuery<SIAAPI.Models.Produccion.VistaModeloProceso>("select * from [VModeloProceso] where idModeloProduccion=" + orden.IDModeloProduccion + " order by orden").ToList();
+                            ViewBag.listaprocesos = lista;
+
+                        }
+                        <td>
+                            @orden.EstadoOrden
+                        </td>
+                        <td>
+                            @orden.Cliente.Nombre
+                        </td>
+                       
+                        @foreach (SIAAPI.Models.Produccion.VistaModeloProceso proceso in ViewBag.listaprocesos)
+                        {
+
+                            <td>
+                                @{ SIAAPI.Models.Comercial.ClsDatoString nombre = dbv.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select EstadoProceso as Dato from OrdenProduccionDetalle where IDOrden="+ item.IDOrden +" and IDProceso=" + proceso.IDProceso + "").ToList()[0]; 
+                                    }
+                                    
+                                        @*@if (nombre.Dato.Equals("Conflicto") && (orden.EstadoOrden.Equals("Programada") || orden.EstadoOrden.Equals("Iniciada")))
+                                        {
+                                           @Html.ActionLink(proceso.NombreProceso, "ArticuloProduccion", new { idorden = item.IDOrden, id = proceso.IDProceso }, new { @class = "btn btn-default" })
+                                        }*@
+                                       @if (nombre.Dato.Equals("Conflicto"))
+                                        {
+                                            @Html.ActionLink(proceso.NombreProceso, "Details", new { id = item.IDOrden }, new { @class = "btn btn-danger" })
+                                        }
+                                        @if (nombre.Dato.Equals("Programado"))
+                                        {
+                                            @Html.ActionLink(proceso.NombreProceso, "Details", new { id = item.IDOrden }, new { @class = "btn btn-info" })
+                                        }
+                                            
+                                        @if (nombre.Dato.Equals("Iniciado"))
+                                            {
+                                            @Html.ActionLink(proceso.NombreProceso, "Details", new { id = item.IDOrden }, new { @class = "btn btn-warning" })
+                                        }
+                                        @if (nombre.Dato.Equals("Terminado"))
+                                        {
+                                           
+                                                @Html.ActionLink(proceso.NombreProceso, "Details", new { id = item.IDOrden }, new { @class = "btn btn-success" })
+
+                                           }
+                                           @if (nombre.Dato.Equals("Terminado con Reporte"))
+                                        {
+                                                            @Html.ActionLink(proceso.NombreProceso, "Details", new { id = item.IDOrden }, new { @class = "btn btn-secondary" })
+                                            }
+
+
+
+
+
+                            </td>
+                                        cont++;
+                                                    }
+                                                    @if (cont < datos.Dato)
+                        {
+                                                        for (int i = cont; i < datos.Dato; i++)
+                                                        {
+                                <td></td>
+                                                        }
+
+                                                    }
+
+
+                    </tr>
+        }
+
+    </table>
+
+    </div>
+
+
+
+    @*Paginación*@
+    @using (Html.BeginForm("Mapeo", "OrdenProduccion", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+        <div class="pager">
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+            @Model.Count de @Model.TotalItemCount elementos
+
+            @Html.PagedListPager(Model, page => Url.Action("Mapeo", new
+   {
+       page,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize
+   }))
+
+
+        </div>
+    }
+    @*Paginación*@
+
+<table class="table">
+    <tr>
+        @Html.Label("Código de Colores")
+    </tr>
+
+    <tr>
+        <td>@Html.ActionLink("En Conflicto", "", null, new { @class = "btn btn-danger btn-xs" })</td>
+
+        <td>@Html.ActionLink("Iniciado", "", null, new { @class = "btn btn-warning btn-xs" })</td>
+
+        <td>@Html.ActionLink("Progamado", "", null, new { @class = "btn btn-info btn-xs" })</td>
+
+        <td>@Html.ActionLink("Finalizado", "", null, new { @class = "btn btn-success btn-xs" })</td>
+
+        <td>@Html.ActionLink("Finalizado con Reporte de Incidiencia", "", null, new { @class = "btn btn-outline-secondary btn-xs" })</td>
+    </tr>
+</table>
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+function myFunction(id) {
+    var checkBox = document.getElementById("cliente");
+    var text = document.getElementById("uno");
+    if (checkBox.checked == true) {
+        text.style.display = "block";
+        document.getElementById("clientep").disabled = true;
+
+    } else {
+        text.style.display = "none";
+        document.getElementById("clientep").disabled =false;
+    }
+}
+</script>

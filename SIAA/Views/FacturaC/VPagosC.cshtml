@@ -1,0 +1,77 @@
+﻿@model IEnumerable<SIAAPI.Models.Cfdi.VPagos>
+
+@{
+    ViewBag.Title = "VPagosC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalles del Pago</h2>
+<h4> Cliente: @ViewBag.Nombre</h4>
+
+<h4> No. Factura: @ViewBag.NoFactura</h4>
+
+<h4> Total: @ViewBag.Total</h4>
+
+
+
+
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NoParcialidad)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FechaPago)
+                    </th>
+                    <th>
+                        FolioPago
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ImportePagado)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ImporteSaldoInsoluto)
+                    </th>
+                     <th>
+                        @Html.DisplayNameFor(model => model.StatusDocto)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NoParcialidad)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FechaPago)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FolioP)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ImportePagado)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ImporteSaldoInsoluto)
+                        </td>
+ 						@if (item.StatusDocto == "C")
+                        {
+                            <th>
+                                @*@Html.DisplayFor(model => model.StatusDocto)*@
+                                <p class="alert-danger">Cancelado</p>
+                            </th>
+                        }
+                        else
+                        {
+                            <th>
+                                <p class="alert-success">Activa</p>
+                            </th>
+                        }
+
+                    </tr>
+                }
+
+            </table>
+            @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })

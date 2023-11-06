@@ -1,0 +1,154 @@
+﻿@model SIAAPI.Models.Produccion.OrdenProduccion
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+<h3>Detalles Orden de Producción: @Html.DisplayFor(model => model.IDOrden)</h3>
+<hr />
+<table style="border-left-style:solid; border-width:20px; border-color:white">
+    <tr>
+        <td>
+            <div>
+                <div class="row">
+                    <div class="columna col-md-6 col-sm-3">
+                        <dl>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IDModeloProduccion)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.ModeloProduccion.Descripcion)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IDCliente)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Cliente.Nombre)
+                            </dd>
+
+
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Descripcion)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Descripcion)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Presentacion)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Presentacion)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Indicaciones)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Indicaciones)
+                            </dd>
+                            <dd>
+                                @Html.DisplayFor(model => model.IDDetPedido)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Prioridad)
+                            </dt>
+
+                        </dl>
+                    </div>
+                    <div class="columna col-md-1 col-sm-1"></div>
+                    <div class="columna col-md-3 col-sm-1">
+                        <dl>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FechaCompromiso)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FechaCompromiso)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FechaInicio)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FechaInicio)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FechaProgramada)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FechaProgramada)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FechaRealdeInicio)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FechaRealdeInicio)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.FechaRealdeTerminacion)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.FechaRealdeTerminacion)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.Cantidad)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Cantidad)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IDPedido)
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.IDPedido)
+                            </dd>
+
+                            <dt>
+                                @Html.DisplayNameFor(model => model.IDDetPedido)
+                            </dt>
+
+
+
+                            <dd>
+                                @Html.DisplayFor(model => model.Prioridad)
+                            </dd>
+
+                            <dt>
+                                @Html.Label("Estado Orden")
+                            </dt>
+
+                            <dd>
+                                @Html.DisplayFor(model => model.EstadoOrden)
+                            </dd>
+
+
+
+                        </dl>
+                    </div>
+                </div>
+            </div>
+          
+                    </table>
+         
+
+@Html.ActionLink("Regresar a la lista", "Prioridad", null, new { @class = "btn btn-default btn-xs" })

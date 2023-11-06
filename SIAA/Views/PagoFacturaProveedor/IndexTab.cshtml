@@ -1,0 +1,196 @@
+﻿@model IEnumerable<SIAAPI.Models.Cfdi.PagoFacturaProv>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Index</h2>
+
+<p>
+   @Html.ActionLink("Generar Pago", "PagarFacturaProv", null, new { @class = "btn btn-warning navbar-btn" })|
+    @Html.ActionLink("Cargar Archivo XML", "CargarPagos", null, new { @class = "btn btn-info navbar-btn" })|
+    @Html.ActionLink("Validar Proveedores", "ValidarProv", null, new { @class = "btn btn-primary navbar-btn" })
+
+</p>
+@using (Html.BeginForm())
+{
+    <h3>Pago de Facturas a Proveedores</h3>
+    <br />
+    <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">Pagos Electrónicos</a></li>
+        <li><a data-toggle="tab" href="#menu1">Pagos en Efectivo</a></li>
+    </ul>
+
+    @* Clase activa --PAgos electrónicos *@
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            @{
+                <h2>Pagos electrónicos</h2>
+                <p>
+                    @*@Html.ActionLink("Generar Pago Electrónico", "PagarFacturaProv", null, new { @class = "btn btn-warning navbar-btn" })*@
+                </p>
+
+                Html.RenderPartial("VPagoFacturaProvT", ViewData["VPagoFacturaProvT"]);
+            }
+        </div>
+        @* Clase activa --PAgos electrónicos *@
+        <div id="menu1" class="tab-pane fade">
+            @{
+                <h2>Pagos en efectivo</h2>
+                <p>
+                   @*@Html.ActionLink("Generar Pago en Efectivo", "PagarFacturaProvE", null, new { @class = "btn btn-warning navbar-btn" })*@
+                </p>
+
+                Html.RenderPartial("VPagoFacturaEfeProv", ViewData["VPagoFacturaEfeProv"]);
+            }
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            @{
+                <h2>Pagos en efectivo</h2>
+                <hr />
+                <br />
+                Html.RenderPartial("VPagoFacturaEfeProv", ViewData["VPagoFacturaEfeProv"]);
+            }
+        </div>
+    </div>
+
+ }
+
+@*<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SerieP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FolioP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IDProveedor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Empresa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaPago)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClaveFormaPago)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ClaveMoneda)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NoOperacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Monto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RFCBancoEmpresa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CuentaEmpresa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RFCBancoProv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CuentaProv)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IDTipoCadenaPago)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.UUID)
+        </th>
+        <th>
+            XML
+        </th>
+        <th>
+            PDF
+        </th>
+
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SerieP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FolioP)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDProveedor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Empresa)
+        </td>
+        <td>
+          @DateTime.Parse(@Html.DisplayFor(modelItem => item.FechaPago).ToString()).ToShortDateString();
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClaveFormaPago)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClaveMoneda)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NoOperacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Monto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RFCBancoEmpresa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CuentaEmpresa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RFCBancoProv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CuentaProv)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IDTipoCadenaPago)
+        </td>
+        
+        <td>
+            @Html.DisplayFor(modelItem => item.UUID)
+        </td>
+        <th>
+          @char.Parse(@Html.DisplayFor(modelItem => item.Estado).ToString())
+        </th>
+
+        
+        <td>
+            @Html.ActionLink("XML", "Descargarxml", new { id = item.IDPagoFacturaProv })
+        </td>*@
+        @*<td>
+            @Html.ActionLink("SubirPDF", "SubirArchivo")
+        </td>
+           
+        <td>
+            @Html.DisplayFor(modelItem => item.RutaPDF)
+        </td>
+        <td>
+            @Html.ActionLink("Detalles", "Details", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-default btn-xs" })
+        </td>
+             @if (item.Estado == "A")
+            {
+            <td>
+                @Html.ActionLink("Cancelar", "CancelaPagoProv", new { id = item.IDPagoFacturaProv }, new { @class = "btn btn-danger btn-xs" })
+            </td>
+            }
+
+
+    </tr>
+}
+
+</table>

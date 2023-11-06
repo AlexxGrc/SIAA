@@ -1,0 +1,192 @@
+﻿@model SIAAPI.Models.Administracion.Materiales
+
+@{
+    ViewBag.Title = "Obsoleto";
+}
+
+
+
+
+
+<h2>Obsoleto</h2>
+
+<h3>Estas seguro de definir como obsoleto el registro</h3>
+<div>
+    <h4>Materiales</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Clave)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Clave)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fam)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ancho)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ancho)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Largo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Largo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Adhesivo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Adhesivo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Moneda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Moneda)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Precio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Precio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Completo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Completo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Calibre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Calibre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Solicitarprecio)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Solicitarprecio)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CalibreEsp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CalibreEsp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tcompra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tcompra)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PrecioAct)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PrecioAct)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Proveedor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Proveedor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Respaldo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Respaldo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Gramaje)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Gramaje)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveEt)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveEt)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Plazo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plazo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Obsoleto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Obsoleto)
+        </dd>
+
+    </dl>
+
+   @using (Html.BeginForm("Obsoleto", "Materiales",
+                                                                   new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString }, FormMethod.Post, null))
+
+   {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Obsoleto" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", new { page = ViewBag.page, PageSize = ViewBag.pagesize, searchString = ViewBag.searchString }, new { @class = "btn btn-default btn-xs" })
+
+        </div>
+    }
+</div>

@@ -1,0 +1,58 @@
+﻿@model SIAAPI.Models.Produccion.OrdenProduccion
+@{
+    ViewBag.Title = "EditarObservacion";
+    Layout = "~/Views/Shared/_LayoutProduccion.cshtml";
+}
+
+
+    <table class="table table-striped" width="50">
+        <tr>
+            <td class="col-lg-1">
+                Fecha:  @ViewBag.FecCambio || Hora: @ViewBag.HorCambio
+            </td>
+        </tr>
+        <tr>
+            <td class="col-lg-1">
+                Orden:  @Model.IDOrden
+            </td>
+            <td class="col-lg-4">
+                Descripción:  @Model.Descripcion
+            </td>
+
+            <td class="col-lg-1">
+                Estado:  @ViewBag.descripcion ||  @ViewBag.tipo
+            </td>
+            <td class="hidden">
+                @ViewBag.idestadoanterior
+            </td>
+        </tr>
+    </table>
+
+
+
+@using (Html.BeginForm("EditarObservcion", "OrdenProduccion", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Observación<br /></h4>
+    <hr />
+    <div class="hidden">
+
+        <input type="hidden" id="idorden" name="idorden" value="@ViewBag.IDOrden" />
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Indicaciones, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-4">
+            @Html.EditorFor(model => model.Indicaciones, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+            @Html.ValidationMessageFor(model => model.Indicaciones, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Prioridad", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    </div>
+}
+
+

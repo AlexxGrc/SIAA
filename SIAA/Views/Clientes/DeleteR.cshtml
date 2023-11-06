@@ -1,0 +1,147 @@
+﻿@model SIAAPI.Models.Comercial.ReferenciaPagoCliente
+
+<div>
+    <h3>¿Está seguro de borrar este registro?</h3>
+    <h4>Eliminar Referencia de Pago de Cliente: @Html.DisplayFor(model => model.Clientes.Nombre)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Moroso)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Moroso)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Limitedecredito)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Limitedecredito)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RiesgoAlcanzado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RiesgoAlcanzado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacion)
+        </dd>
+        <dt>
+            @Html.ActionLink("Día de revisión", "")
+            
+            @Html.DisplayNameFor(model => model.DiaRevLu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaRevLu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaRevMa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaRevMa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaRevMi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaRevMi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaRevJu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaRevJu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaRevVi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaRevVi)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaRevAb)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaRevAb)
+        </dd>
+
+        <dt>
+            @Html.ActionLink("Día de pago", "")
+            
+            @Html.DisplayNameFor(model => model.DiaPagLu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaPagLu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaPagMa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaPagMa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaPagMi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaPagMi)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaPagJu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaPagJu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaPagVi)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaPagVi)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiaPagAb)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DiaPagAb)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+           @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+    }
+</div>

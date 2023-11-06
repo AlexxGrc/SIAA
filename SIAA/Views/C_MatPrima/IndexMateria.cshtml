@@ -1,0 +1,103 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Comercial.Administracion>*@
+
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Administracion.Peso>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "IndexMateria";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Lista de Pesos x Material</h3>
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+                        @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" }) |
+                        Elementos por página: @Html.DropDownList("PageSize")  |
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                       
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @Html.Label("Clave MP")
+            </th>
+            <th>
+                @Html.Label("Peso * Mts2")
+            </th>          
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDmatpri)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PesoxMt)
+                </td>
+                
+
+                <td>
+                    @Html.ActionLink(" Editar ", "Edit", new { id = item.idpeso }, new { @class = "btn btn-success btn-xs" })
+                    @Html.ActionLink("Detalles", "Details", new { id = item.idpeso }, new { @class = "btn btn-default btn-xs" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.idpeso }, new { @class = "btn btn-danger btn-xs" })
+                </td>
+
+            </tr>
+        }
+
+    </table>
+</div>
+@*Paginación*@
+@using (Html.BeginForm("IndexMateria", "C_MatPrima", FormMethod.Get, new { ID = "pageSizeForm" }))
+            {
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("IndexMateria", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize
+   }))
+
+
+    </div>
+}
+@*Paginación*@

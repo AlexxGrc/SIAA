@@ -1,0 +1,50 @@
+﻿@model SIAAPI.Models.Administracion.c_RegimenFiscal
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <h3>Detalles de Régimen Fiscal</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveRegimenFiscal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveRegimenFiscal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AplicaFisica)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AplicaFisica)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AplicaMoral)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AplicaMoral)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDRegimenFiscal }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index",null, new { @class = "btn btn-default btn-xs" })
+</p>

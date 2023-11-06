@@ -1,0 +1,49 @@
+﻿@model IEnumerable<SIAAPI.Models.Administracion.VBcoEmpresa>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-primary navbar-btn btn-xs" })
+</p>
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RazonSocial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CuentaBanco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Descripcion)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RazonSocial)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CuentaBanco)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Descripcion)
+                </td>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.IDBancoEmpresa }, new { @class = "btn btn-sucess btn-xs" })
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IDBancoEmpresa }, new { @class = "btn btn-default btn-xs" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.IDBancoEmpresa }, new { @class = "btn btn-danger btn-xs" })
+
+                </td>
+            </tr>
+        }
+
+    </table>
+    </div>

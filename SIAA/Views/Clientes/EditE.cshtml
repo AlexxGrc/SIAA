@@ -1,0 +1,438 @@
+﻿@model SIAAPI.Models.Comercial.Entrega
+
+@{ ViewBag.Title = "EditE";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idpais = ViewBag.ListPais as List<SelectListItem>;
+    var idestado = ViewBag.ListEstado as List<SelectListItem>;
+    var idmunicipio = ViewBag.ListMunicipio as List<SelectListItem>;
+    var idlocalidad = ViewBag.ListLocalidad as List<SelectListItem>;
+    var idcolonia = ViewBag.IDColonia as List<SelectListItem>;
+
+}
+
+<script defer src="~/Scripts/cascade.combo.js"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h3>Editar Domicilio de Entrega de Cliente: @Html.DisplayFor(model => model.Clientes.Nombre)</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IDEntrega)
+        @Html.HiddenFor(model => model.IDCliente)
+        <div class="row">
+            <table class="table">
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDPais, "País", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.IDPais, idpais, new
+                       {
+                           @class = "form-control",
+                           data_cascade_combo = "#IDEstado",
+                           data_cascade_combo_source = Url.Action("getJsonEstadoPorPais", "Clientes"),
+                           data_cascade_combo_param_name = "id"
+                       })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDEstado, "Estado", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.IDEstado, idestado, new
+                       {
+                           @class = "form-control",
+                           @onchange = "actualizacomboLocalidadE()",
+                           data_cascade_combo = "#IDMunicipio",
+                           data_cascade_combo_source = Url.Action("getJsonMunicipioPorEstado", "Clientes"),
+                           data_cascade_combo_param_name = "id"
+                       })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDMunicipio, "Municipio", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.IDMunicipio, idmunicipio, new
+                       {
+                           @class = "form-control",
+                           id = "IDMunicipio"
+                       })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDLocalidad, "Localidad", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.IDLocalidad, idlocalidad, new { @class = "form-control", @name = "IDLocalidad", @id = "IDLocalidad" })
+
+                            @Html.ValidationMessageFor(model => model.IDLocalidad, "", new { @class = "text-danger" })
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CPEntrega, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CPEntrega, new { htmlAttributes = new { @class = "form-control", @onchange = "actualizacombo()" } })
+                            @Html.ValidationMessageFor(model => model.CPEntrega, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDColonia, "Colonia", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.IDColonia, idcolonia, new { @class = "form-control", @name = "IDColonia", @id = "IDColonia" })
+
+
+                            @Html.ValidationMessageFor(model => model.IDColonia, "", new { @class = "text-danger" })
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CalleEntrega, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CalleEntrega, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CalleEntrega, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NumExtEntrega, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            <input class = "form-control" value="@Model.NumExtEntrega" id="NumExtEntrega" name="NumExtEntrega" required/>
+                            @*@Html.EditorFor(model => model.NumExtEntrega, new { htmlAttributes = new { @class = "form-control", required } })*@
+                            @Html.ValidationMessageFor(model => model.NumExtEntrega, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.NumIntentrega, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.NumIntentrega, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.NumIntentrega, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Referencia, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Referencia, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Referencia, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ObservacionEntrega, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ObservacionEntrega, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ObservacionEntrega, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </table>
+        </div>
+
+    </div>
+    <div class="form-group">
+
+        <div class="col col-md-6 col-sm-1">
+            <table class="table">
+                <tr></tr>
+                <tr>
+
+                    <th colspan="5">
+                        Días de Entrega
+                    </th>
+                    <th colspan="5">
+                        Horario de Entrega
+                    </th>
+                </tr>
+                <tr>
+
+                    <th>
+                        Lu
+                    </th>
+                    <th>
+                        Ma
+                    </th>
+                    <th>
+                        Mi
+                    </th>
+                    <th>
+                        Ju
+                    </th>
+                    <th>
+                        Vi
+                    </th>
+                    <th>
+                        Horario
+                    </th>
+                <tr>
+                    <td>
+                        @Html.EditorFor(model => model.DiaEntLu, new { htmlAttributes = new { @class = "form-control" } })
+
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.DiaEntMa, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.DiaEntMi, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.DiaEntJu, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.DiaEntVi, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HorarioEnt, new { htmlAttributes = new { @class = "form-control" } })
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+        </div>
+    </div>
+
+}
+
+
+
+<table class="table">
+    <tr align="center">
+        <th>
+            Domicilio de Entrega
+        </th>
+    </tr>
+    <tr>
+        <th>
+            País
+        </th>
+        <th>
+            Estado
+        </th>
+        <th>
+            Municipio
+        </th>
+        <th>
+            Localidad
+        </th>
+        <th>
+            Código Postal
+        </th>
+        <th>
+            Colonia
+        </th>
+        <th>
+            Calle
+        </th>
+        <th>
+            No. Exterior
+        </th>
+        <th>
+            No. Interior
+        </th>
+        <th>
+            Referencia
+        </th>
+        <th>
+            Observación
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(model => model.c_Pais)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.c_Estado)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.MunicipioEntrega)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.c_Localidad)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.CPEntrega)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.CalleEntrega)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.NumExtEntrega)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.NumIntentrega)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.Referencia)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.ObservacionEntrega)
+        </td>
+    </tr>
+</table>
+
+
+
+
+<div class="col col-md-6 col-sm-1">
+    <table class="table">
+        <tr></tr>
+        <tr>
+
+            <th colspan="5">
+                Días de Entrega
+            </th>
+            <th colspan="5">
+                Horario de Entrega
+            </th>
+        </tr>
+        <tr>
+
+            <th>
+                Lu
+            </th>
+            <th>
+                Ma
+            </th>
+            <th>
+                Mi
+            </th>
+            <th>
+                Ju
+            </th>
+            <th>
+                Vi
+            </th>
+            <th>
+                Horario
+            </th>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntLu, new { htmlAttributes = new { @class = "form-control" } })
+
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntMa, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntMi, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntJu, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntVi, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.HorarioEnt, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<script type="text/javascript">
+
+    function actualizacomboE() {
+
+
+    var control = "#CPEntrega";
+    var selectcontrol = "#IDColonia";
+        $(selectcontrol).empty();
+
+        $.ajax({
+              type: 'GET',
+                url: '@Url.Action("getColonias")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (colonias) {
+
+                    for (i = 0; i < colonias.length; i++)
+                    {
+                        var Value = colonias[i].Value;
+
+                        var Text = colonias[i].Text;
+                        var select = "Selecciona una colonia";
+                          $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                       $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+
+
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+
+
+    }
+
+
+      function actualizacomboLocalidadE() {
+
+
+    var control = "#IDEstado";
+    var selectcontrol = "#IDLocalidad";
+        $(selectcontrol).empty();
+
+        $.ajax({
+              type: 'GET',
+                url: '@Url.Action("getLocalidades")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (localidades) {
+
+                    for (i = 0; i < localidades.length; i++)
+                    {
+                        var Value = localidades[i].Value;
+
+                        var Text = localidades[i].Text;
+                        var select = "Selecciona una localidad";
+                          $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                       $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+
+
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+
+
+    }
+
+
+</script>

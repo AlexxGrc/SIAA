@@ -1,0 +1,137 @@
+﻿@model SIAAPI.Models.Calidad.CalidadLimiteAceptacion
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>CalidadLimiteAceptacion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoLetra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoLetra)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TamanoMuestra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TamanoMuestra)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AC1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AC1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RE1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RE1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AC15)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AC15)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RE15)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RE15)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AC25)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AC25)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RE25)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RE25)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AC4)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AC4)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RE4)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RE4)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AC65)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AC65)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RE65)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RE65)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AC10)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AC10)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RE10)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RE10)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,294 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.DetRemision>
+@{
+    ViewBag.Title = "CintasRemision";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    Remisionar Cintas
+</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+
+            <th>
+                @Html.Label("Clave")
+            </th>
+            <th>
+                @Html.Label("Descripcion")
+            </th>
+            <th>
+                @Html.Label("Num Presentacion")
+            </th>
+            <th>
+                @Html.Label("Presentación")
+            </th>
+
+
+        </tr>
+
+        @*@{
+                string cadenaw = "  select * from [WorkinProcess] as w inner join articulo as a on w.idarticulo=a.idarticulo where a.idtipoarticulo=6 and orden=" + ViewBag.ordenproduccion.IDOrden;
+
+                List<SIAAPI.Models.Produccion.WorkinProcess> elementosw = new SIAAPI.Models.Produccion.WorkinProcessContext().Database.SqlQuery<SIAAPI.Models.Produccion.WorkinProcess>(cadenaw).ToList();
+
+            }*@
+        @foreach (SIAAPI.Models.Comercial.DetRemision item in Model)
+        {
+            SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+            SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(item.IDArticulo);
+            SIAAPI.Models.Comercial.Caracteristica caracteristicas = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where id=" + item.Caracteristica_ID).ToList().FirstOrDefault();
+
+
+
+            <tr>
+                <td>
+                    @articulo.Cref
+                </td>
+                <td>
+                    @articulo.Descripcion
+                </td>
+                <td>
+                    @caracteristicas.IDPresentacion
+                </td>
+                <td>
+                    @caracteristicas.Presentacion
+                </td>
+
+
+            </tr>
+        }
+    </table>
+</div>
+
+
+<table class="table">
+
+
+    @foreach (SIAAPI.Models.Comercial.DetRemision item in Model)
+    {
+        <tr>
+
+            <div class="form-horizontal">
+                <input type="hidden" id="remision" name="remision" value="@item.IDRemision" />
+                <div class="form-group">
+                    @Html.Label("Codigo de Lote", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <input type="text" id="lote" name="lote" onkeyup="asignarMP(event)" />
+                    </div>
+                </div>
+            </div>
+
+
+        </tr>
+
+        List<SIAAPI.Models.Inventarios.Clslotemp> lotes = new SIAAPI.Models.Inventarios.AjustesAlmacenContext().Database.SqlQuery<SIAAPI.Models.Inventarios.Clslotemp>("Select * from clslotemp where IDArticulo=" + item.IDArticulo + " and idCaracteristica =" + item.Caracteristica_ID + " and metrosdisponibles>0").ToList();
+
+        <tr>
+            <table class="table">
+                <tr>
+                    <td>
+                        <h2>
+                            Existencias
+                        </h2>
+                    </td>
+
+                </tr>
+            </table>
+        </tr>
+
+
+
+        <tr>
+            <h6>Lotes disponibles</h6>
+            <table class="table" style="color:blue">
+
+                <tr>
+                    <th>
+                        No de cinta
+                    </th>
+                    <th>
+                        Lote
+                    </th>
+                    <th>
+                        Lote interno
+                    </th>
+                    <th>
+                        Mts2 Disponibles
+                    </th>
+                    <th>
+                        Mts Lineales Disponibles
+                    </th>
+                </tr>
+                @foreach (SIAAPI.Models.Inventarios.Clslotemp lote in lotes)
+                {
+                    string[] separado;
+                    separado = lote.LoteInterno.Split('/');
+                    int ancho = int.Parse(separado[1].ToString());
+                    int largo = int.Parse(separado[2].ToString());
+
+
+                    <tr>
+                        <td>
+                            @Html.Label(lote.NoCinta.ToString())
+                        </td>
+                        <td>
+                            @try
+                            {
+                                @Html.Label(lote.Lote)
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+                        </td>
+                        <td>
+                            @Html.Label(lote.LoteInterno)
+                        </td>
+                        <td>
+                            @lote.MetrosDisponibles
+                        </td>
+                        <td>
+                            @Html.Label(largo.ToString())
+                        </td>
+                    </tr>
+                }
+            </table>
+
+        </tr>
+
+
+
+
+
+    }
+
+
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+
+                <th>
+                    @Html.Label("Clave")
+                </th>
+                <th>
+                    @Html.Label("Descripcion")
+                </th>
+                <th>
+                    @Html.Label("Num Presentacion")
+                </th>
+                <th>
+                    @Html.Label("Presentación")
+                </th>
+                <th>
+                    @Html.Label("Lote Interno")
+                </th>
+                <th>
+                </th>
+
+            </tr>
+
+            @{
+                SIAAPI.Models.Comercial.RemisionContext db = new SIAAPI.Models.Comercial.RemisionContext();
+                string cadenar = "select * from RemisionMP where idremision=" + ViewBag.remision;
+                List<SIAAPI.Models.Comercial.RemisionMP> RemisionMP = db.Database.SqlQuery<SIAAPI.Models.Comercial.RemisionMP>(cadenar).ToList();
+            }
+            @foreach (var item in RemisionMP)
+            {
+                SIAAPI.Models.Comercial.DetRemision detremi = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.DetRemision>("select * from DetRemision where IDDetRemision=" + item.IDDetRemision).ToList().FirstOrDefault();
+
+                SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(detremi.IDArticulo);
+                SIAAPI.Models.Comercial.Caracteristica caracteristicas = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where id=" + detremi.Caracteristica_ID).ToList().FirstOrDefault();
+
+                string loteInterno = "";
+                int idrmp = 0;
+                if (RemisionMP != null)
+                {
+                    loteInterno = item.LoteInterno;
+                }
+
+                <tr>
+                    <td>
+                        @articulo.Cref
+                    </td>
+                    <td>
+                        @articulo.Descripcion
+                    </td>
+                    <td>
+                        @caracteristicas.IDPresentacion
+                    </td>
+                    <td>
+                        @caracteristicas.Presentacion
+                    </td>
+
+                    <td>
+                        @loteInterno
+                    </td>
+                    <td>
+                        @if (RemisionMP != null)
+                        {
+                            idrmp = item.IDRemisionMP;
+                            <a class="delete" data-id="@idrmp">
+                                <i class="tbl_del_btn fa fa-trash"></i>
+
+                            </a>
+                        }
+                        else
+                        {
+
+                        }
+
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+
+
+
+
+    <div>
+        @Html.ActionLink("Regresar al Index", "Index", "EncRemision", null, new { @class = "btn btn-primary btn-large" })
+
+
+    </div>
+
+
+</table>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+    function asignarMP(e) {
+
+        var lote = document.getElementById("lote").value;
+        var idremision = document.getElementById("remision").value;
+
+        var url = "/EncRemision/descontarlote";
+        if (e.keyCode === 13) {
+            e.preventDefault();
+
+            $.post(url, { loteinterno: lote, remision: idremision } ,function (response) {
+
+                window.location.reload(true);
+
+            })
+        }
+    }
+</script>
+<script>
+
+        var url = '@Url.Action("Deleteremi", "EncRemision")';
+        $('.delete').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>

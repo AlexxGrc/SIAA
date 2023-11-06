@@ -1,0 +1,321 @@
+﻿using PagedList;
+using SIAAPI.Models.Administracion;
+using SIAAPI.Models.Comercial;
+using SIAAPI.Reportes;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SIAAPI.Controllers.Comercial
+{
+    public class EntregaRemisionController : Controller
+    {
+        EntregaRemisionesContext db = new EntregaRemisionesContext();
+       
+        RemisionContext BD = new RemisionContext();
+        // GET: EntregaRemision
+
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page, int? PageSize)
+        {
+            VEntregaRContext dbv = new VEntregaRContext();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.ClaveSortParm = String.IsNullOrEmpty(sortOrder) ? "Chofer" : "Chofer";
+            ViewBag.NombreSortParm = String.IsNullOrEmpty(sortOrder) ? "Ruta" : "Ruta";
+            // Not sure here
+            if (searchString == null)
+            {
+                searchString = currentFilter;
+            }
+
+            // Pass filtering string to view in order to maintain filtering when paging
+            ViewBag.SearchString = searchString;
+
+            //Paginación
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            //Paginación
+            var elementos = from s in dbv.VEntregas
+                            select s;
+            //Busqueda
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                //elementos = elementos.Where(s => s.ClaveBanco.ToUpper().Contains(searchString.ToUpper()));
+
+                elementos = elementos.Where(s => s.Chofer.Contains(searchString) || s.Ruta.Contains(searchString));
+
+            }
+
+            //Ordenacion
+
+            switch (sortOrder)
+            {
+                case "Chofer":
+                    elementos = elementos.OrderBy(s => s.Chofer);
+                    break;
+                case "Ruta":
+                    elementos = elementos.OrderBy(s => s.Ruta);
+                    break;
+
+                default:
+                    elementos = elementos.OrderBy(s => s.Fecha);
+                    break;
+            }
+
+            //Paginación
+            // DROPDOWNLIST FOR UPDATING PAGE SIZE
+            int count = dbv.VEntregas.OrderBy(e => e.ID).Count(); // Total number of elements
+
+            // Populate DropDownList
+            ViewBag.PageSize = new List<SelectListItem>()
+            {
+                new SelectListItem { Text = "10", Value = "10", Selected = true },
+                new SelectListItem { Text = "25", Value = "25" },
+                new SelectListItem { Text = "50", Value = "50" },
+                new SelectListItem { Text = "100", Value = "100" },
+                new SelectListItem { Text = "Todos", Value = count.ToString() }
+             };
+
+            int pageNumber = (page ?? 1);
+            int pageSize = (PageSize ?? 10);
+            ViewBag.psize = pageSize;
+
+            //return View(elementos.ToPagedList(pageNumber, pageSize));
+            return View(elementos.ToPagedList(pageNumber, pageSize));
+            //Paginación
+        }
+        public ActionResult IndexAntes(string sortOrder, string currentFilter, string searchString, int? page, int? PageSize)
+        {
+            VEntregaRContext dbv = new VEntregaRContext();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.ClaveSortParm = String.IsNullOrEmpty(sortOrder) ? "Chofer" : "Chofer";
+            ViewBag.NombreSortParm = String.IsNullOrEmpty(sortOrder) ? "Ruta" : "Ruta";
+            // Not sure here
+            if (searchString == null)
+            {
+                searchString = currentFilter;
+            }
+
+            // Pass filtering string to view in order to maintain filtering when paging
+            ViewBag.SearchString = searchString;
+            //Paginación
+            var elementos = from s in dbv.VEntregas
+                            select s;
+            //Busqueda
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                elementos = elementos.Where(s => s.Chofer.Contains(searchString) || s.Ruta.Contains(searchString));
+            }
+
+            //Ordenacion
+
+            switch (sortOrder)
+            {
+                case "Chofer":
+                    elementos = elementos.OrderBy(s => s.Chofer);
+                    break;
+                case "Ruta":
+                    elementos = elementos.OrderBy(s => s.Ruta);
+                    break;
+                default:
+                    elementos = elementos.OrderBy(s => s.Chofer);
+                    break;
+            }
+
+            //Paginación
+            // DROPDOWNLIST FOR UPDATING PAGE SIZE
+            int count = dbv.VEntregas.OrderBy(e => e.ID).Count(); // Total number of elements
+
+            // Populate DropDownList
+            ViewBag.PageSize = new List<SelectListItem>()
+            {
+                new SelectListItem { Text = "10", Value = "10", Selected = true },
+                new SelectListItem { Text = "25", Value = "25" },
+                new SelectListItem { Text = "50", Value = "50" },
+                new SelectListItem { Text = "100", Value = "100" },
+                new SelectListItem { Text = "Todos", Value = count.ToString() }
+             };
+
+            int pageNumber = (page ?? 1);
+            int pageSize = (PageSize ?? 10);
+            ViewBag.psize = pageSize;
+
+
+
+            var lista = db.VEntregas.ToList();
+            //List<VEntregaR> listAux = new List<VEntregaR>();
+
+            //foreach (var e in (IEnumerable<VEntregaR>)lista)
+            //{
+            //    bool exist = listAux.Exists(
+            //        delegate (VEntregaR entrega)
+            //        {
+            //            return (entrega.Fecha == e.Fecha) && (entrega.Chofer == e.Chofer) && (entrega.Ruta == e.Ruta);
+            //        });
+
+            //    if (!exist)
+            //    {
+            //        listAux.Add(e);
+            //    }
+            //}
+            //return View(listAux);
+                return View(elementos.ToPagedList(pageNumber, pageSize));
+        }
+
+        public ActionResult CreateEntrega()
+        {
+            ViewBag.Rutas = new RutaRepository().GetRuta();
+            ViewBag.Choferes = new ChoferRepository().GetChofer();
+
+            ViewBag.Lista = null;
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateEntrega(EntregaRemision elemento)
+        {
+            ViewBag.Rutas = new RutaRepository().GetRuta();
+            ViewBag.Choferes = new ChoferRepository().GetChofer();
+            
+            try
+            {
+                int idremisioncount = db.Database.SqlQuery<int>("SELECT count(IDRemision) from EntregaRemision WHERE IDRemision = " + elemento.IDRemision).FirstOrDefault();
+                if(idremisioncount == 0)
+                {
+                    db.EntregaRemisiones.Add(elemento);
+                    db.SaveChanges();
+                }
+
+                var lista = BD.Database.SqlQuery<EncRemisionEntrega>("SELECT R.IDRemision,R.Fecha, R.Subtotal, R.IVA, R.Total, R.IDCliente, C.Nombre as Cliente, R.Entrega FROM EncRemision R, EntregaRemision E, Clientes C where R.IDCliente=C.IDCliente and R.IDRemision=E.IDRemision  and E.Fecha='" + elemento.Fecha.Year + "/" + elemento.Fecha.Month + "/" + elemento.Fecha.Day + "' and E.IDChofer= " + elemento.IDChofer + " and E.IDRuta= " + elemento.IDRuta).ToList();
+                ViewBag.Lista = lista;
+                return View();
+            }
+            catch
+            {
+                var lista = BD.Database.SqlQuery<EncRemisionEntrega>("SELECT R.IDRemision,R.Fecha, R.Subtotal, R.IVA, R.Total, R.IDCliente, C.Nombre as Cliente, R.Entrega FROM EncRemision R, EntregaRemision E, Clientes C where R.IDCliente=C.IDCliente and R.IDRemision=E.IDRemision  and E.Fecha='" + elemento.Fecha.Year + "/" + elemento.Fecha.Month + "/" + elemento.Fecha.Day + "' and E.IDChofer= " + elemento.IDChofer + " and E.IDRuta= " + elemento.IDRuta).ToList();
+                ViewBag.Lista = lista;
+                return View();
+            }
+        }
+
+        public ActionResult Details(DateTime fecha, string chofer, string ruta)
+        {
+            int idChofer = 0;
+
+            try
+            {
+                ClsDatoEntero clientecapturado = db.Database.SqlQuery<ClsDatoEntero>("select IDChofer AS dato from Chofer where  NOMBRE='" + chofer + "'").ToList()[0];
+                idChofer = clientecapturado.Dato;
+            }
+
+            catch
+            {
+
+            }
+
+            int idRuta = 0;
+
+            try
+            {
+                ClsDatoEntero clientecapturado = db.Database.SqlQuery<ClsDatoEntero>("select IDRuta AS dato from Ruta where  DESCRIPCION='" + ruta + "'").ToList()[0];
+                idRuta  = clientecapturado.Dato;
+            }
+
+            catch
+            {
+
+            }
+
+            ViewBag.Chofer = chofer;
+            ViewBag.Ruta = ruta;
+            ViewBag.Fecha = fecha;
+            var lista = BD.Database.SqlQuery<EncRemisionEntrega>("SELECT R.IDRemision,R.Fecha, R.Subtotal, R.IVA, R.Total, R.IDCliente, C.Nombre as Cliente, R.Entrega FROM EncRemision R, EntregaRemision E, Clientes C " +
+                "where R.IDCliente=C.IDCliente and R.IDRemision=E.IDRemision  and E.Fecha='" + fecha.Year + "/" + fecha.Month + "/" + fecha.Day + "' and E.IDChofer= " + idChofer + " and E.IDRuta= " + idRuta).ToList();
+            return View(lista);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var elemento = db.EntregaRemisiones.Single(m => m.IDRemision== id);
+            return View(elemento);
+        }
+
+        // POST: c_Banco/Edit/5
+        [HttpPost]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add update logic here
+                var elemento = db.EntregaRemisiones.Single(m => m.IDRemision == id);
+                if (TryUpdateModel(elemento))
+                {
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return View(elemento);
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        public void Imprimir(DateTime fecha, string chofer, string ruta, Empresa em)
+        {
+            EntregaRemisionesContext db = new EntregaRemisionesContext();
+            EmpresaContext dbe = new EmpresaContext();
+            var empresa = dbe.empresas.Single(m => m.IDEmpresa == 2);
+           
+
+
+            System.Drawing.Image logoempresa = byteArrayToImage(empresa.Logo);
+
+            try
+            {
+
+
+                CreaEntregaPDF documento = new CreaEntregaPDF(logoempresa, fecha,chofer,ruta, empresa);
+
+            }
+            catch (Exception err)
+            {
+                string mensajederror = err.Message;
+            }
+            RedirectToAction("Index");
+
+        }
+
+        public System.Drawing.Image byteArrayToImage(byte[] byteArrayIn)
+        {
+            System.Drawing.Image returnImage = null;
+            try
+            {
+                MemoryStream ms = new MemoryStream(byteArrayIn, 0, byteArrayIn.Length);
+                ms.Write(byteArrayIn, 0, byteArrayIn.Length);
+                returnImage = System.Drawing.Image.FromStream(ms, true);//Exception occurs here
+            }
+            catch { }
+            return returnImage;
+
+        }
+
+       
+     
+
+
+    }
+}
+
+    

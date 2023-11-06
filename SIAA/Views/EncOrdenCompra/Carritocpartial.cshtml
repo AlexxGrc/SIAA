@@ -1,0 +1,101 @@
+﻿@model IEnumerable<SIAAPI.ViewModels.Comercial.VCarritoRequisicion>
+
+
+
+
+<div class="table-responsive">
+    <table class="table">
+        <tr>
+
+            <th colspan="1" >Requisición</th>
+            <th colspan="5">Articulo</th>
+            <th colspan="6">Presentacion</th>
+            </tr>
+        <tr>
+            <th>Compra Mínima</th>
+            <th>Cantidad</th>
+            <th>Costo</th>
+            <th>Importe</th>
+            <th>IVA</th>
+            <th>Total</th>
+            <th>Nota</th>
+            <th></th>
+        </tr>
+        @{ int contador = 1;
+            foreach (SIAAPI.ViewModels.Comercial.VCarritoRequisicion i in Model)
+            {
+                <tr>
+                    @{ string articulo = "IDArticulo" + contador;
+                        string Presentacion = "Presentacion" + contador;
+                        string IDCarrito = "IDCarrito" + contador;
+                        string cadenacosto = "costo" + contador;
+                        string Requisicion = "Requisicion" + contador;
+                        string Nota = "Nota" + contador;}
+
+
+                    <input name="@IDCarrito" value="@i.IDCarritoRequisicion" hidden />
+
+                    <input name="@Requisicion" value="@i.IDRequisicion" hidden />
+                    <input name="@articulo" value="@i.IDArticulo" hidden />
+                    <input name="@Presentacion" value="@i.IDCaracteristica" hidden />
+                    @*<input name="@Nota" value="@i.Nota" hidden />*@
+
+
+                    <td colspan="1" style="background-color:cornsilk">@i.IDRequisicion</td>
+                    <td colspan="5" style="background-color:cornsilk"><div>@i.Cref </div><div>@i.Articulo</div></td>
+                    <td colspan="6" style="background-color:cornsilk">@i.Presentacion </td>
+                    </tr>
+                    <tr>
+
+                    @{string cadenacantidad = "Cantidad" + contador; }
+                    @if (i.Cantidad < i.MinimoCompra)
+                    {
+                        <td class="danger">@i.MinimoCompra</td>
+                    }
+                    else
+                    {
+                        <td>@i.MinimoCompra</td>
+                    }
+
+                    <td><input type="number" value="@i.Cantidad" name="@cadenacantidad" id="@cadenacantidad" /></td>
+
+
+                    @{
+                        SIAAPI.Models.Comercial.ArticuloContext db = new SIAAPI.Models.Comercial.ArticuloContext();
+                        SIAAPI.Models.Comercial.Articulo articulocompleto = db.Articulo.Find(i.IDArticulo);
+
+                        SIAAPI.Models.Comercial.ClsDatoDecimal costoart = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>("select [dbo].[GetCosto](0," + articulocompleto.IDArticulo + "," + i.Cantidad + ") as Dato").ToList().FirstOrDefault();
+
+                        string clavemoneda = db.Database.SqlQuery<SIAAPI.Models.Administracion.c_Moneda>("select * from c_Moneda WHERE IDMoneda='" + articulocompleto.IDMoneda + "'").ToList().FirstOrDefault().ClaveMoneda;
+                    }
+
+
+                    <td> <input type="number" value="@i.Costo" name="@cadenacosto" id="@cadenacosto" step="any" />  @clavemoneda  </td>
+
+                    <td>@i.Importe</td>
+                    <td>@i.ImporteIva</td>
+                    <td>@i.ImporteTotal</td>
+                    <td width="400">
+                        @*@{string cadenaa = "Nota" + contador;
+                            }*@
+                        <input type="text" class="form-control" id="@Nota" name="@Nota" value="@i.Nota">
+
+
+                    </td>
+                    <td>
+
+                        @*@Html.ActionLink(" ", "deletecarrito", new { idr = i.IDCarritoRequisicion }, new { @class = "tbl_del_btn fa fa-trash" })*@
+                        <a class="delete" data-id="@i.IDCarritoRequisicion">
+                            <i class="tbl_del_btn fa fa-trash"></i>
+
+                        </a>
+
+                    </td>
+                </tr>
+                            contador += 1;
+                        }
+                        contador -= 1;
+                        <input name="Contador" value="@contador" hidden />
+        }
+    </table>
+</div>

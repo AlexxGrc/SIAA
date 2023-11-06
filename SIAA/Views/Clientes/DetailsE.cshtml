@@ -1,0 +1,144 @@
+﻿@model SIAAPI.Models.Comercial.Entrega
+
+<div>
+    <h3>Detalles de Domicilio de Entrega de Cliente: @Html.DisplayFor(model => model.Clientes.Nombre)</h3>
+    <hr />
+    <table class="table">
+        <tr align="center">
+            <th>
+                Domicilio de Entrega
+            </th>
+        </tr>
+        <tr>
+            <th>
+                País
+            </th>
+            <th>
+                Estado
+            </th>
+            <th>
+                Municipio
+            </th>
+            <th>
+                Localidad
+            </th>
+            <th>
+                Código Postal
+            </th>
+            <th>
+                Colonia
+            </th>
+            <th>
+                Calle
+            </th>
+            <th>
+                No. Exterior
+            </th>
+            <th>
+                No. Interior
+            </th>
+            <th>
+                Referencia
+            </th>
+            <th>
+                Observación
+            </th>
+        </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.c_Pais)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.c_Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.MunicipioEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.c_Localidad)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CPEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CalleEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.NumExtEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.NumIntentrega)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Referencia)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.ObservacionEntrega)
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+
+<div class="col col-md-6 col-sm-1">
+    <table class="table">
+        <tr></tr>
+        <tr>
+
+            <th colspan="5">
+                Días de Entrega
+            </th>
+            <th colspan="5">
+                Horario de Entrega
+            </th>
+        </tr>
+        <tr>
+
+            <th>
+                Lu
+            </th>
+            <th>
+                Ma
+            </th>
+            <th>
+                Mi
+            </th>
+            <th>
+                Ju
+            </th>
+            <th>
+                Vi
+            </th>
+            <th>
+                Horario
+            </th>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntLu, new { htmlAttributes = new { @class = "form-control" } })
+
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntMa, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntMi, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntJu, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.DiaEntVi, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.HorarioEnt, new { htmlAttributes = new { @class = "form-control" } })
+            </td>
+        </tr>
+    </table>
+</div>
+
+<p>
+    @Html.ActionLink("Editar", "EditE", new { id = Model.IDEntrega }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+</p>

@@ -1,0 +1,138 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Cfdi.VPagoFacturaEfe>*@
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+
+@model PagedList.IPagedList<SIAAPI.Models.Cfdi.VPagoFacturaEfe>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "Pagos Efectivo";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Pagos en Efectivo de Facturas de Clientes</h3>
+<hr />
+<div class="form-group">
+    @Html.ActionLink("Pago Electrónico", "Index",null, new { @class = "btn btn-success btn-outline btn-xs" })
+    @Html.ActionLink("Pago Efectivo", "IndexEfe",null, new { @class = "btn btn-success  btn-xs" })
+    @*@Html.ActionLink("Pago Factoraje Financiero", "IndexFac", null, new { @class = "btn btn-success btn-outline btn-xs" })*@
+</div>
+
+    @*Busqueda*@
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <form class="navbar-form navbar-left">
+                <div class="form-group">
+                    @using (Html.BeginForm())
+                    {
+                           <div>
+                                Elementos por página: @Html.DropDownList("pageSize")
+
+                            <row>
+                                Cliente: @Html.DropDownList("ClieFac", "Todas")
+                            </row>
+                            <row>
+                                Estado: @Html.DropDownList("Estado", "Todas")
+                            </row>
+                            <div>
+                                <row>
+                                    Id Inicial: @Html.TextBox("Numero")
+                                    Id final: @Html.TextBox("Numerof")
+                                </row>
+                                <row>
+                                    Fecha: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "AAAA-MM-DD" })
+                                </row>
+                                <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                            </div>
+                        </div>
+                        <div>
+                            <a class="btn btn-info btn-xs" href="@Url.Action("CreaReporteEstado")">Reporte por Fecha</a> |
+                            <a class="btn btn-info btn-xs" href="@Url.Action("CreaReporteporFecha")">Reporte por Cliente</a> |
+                            <a class="btn btn-info btn-xs" href="@Url.Action("CreaReporteporMoneda")">Reporte por Moneda</a> |
+                            <a class="btn btn-info btn-xs" href="@Url.Action("CreaReporteporFPago")">Reporte por Forma de Pago</a> |
+                            <a class="btn btn-info btn-xs" href="@Url.Action("CreaReporteOficina")">Reporte por Oficina</a> |
+                            <a class="btn btn-info btn-xs" href="@Url.Action("CreaReporteGeneralCliente")">Reporte General por Cliente</a>
+                        </div>
+                    }
+
+                </div>
+            </form>
+        </div>
+    </nav>
+    <br>
+    @*Busqueda*@
+
+
+    @using (Html.BeginForm())
+    {
+
+        <br />
+
+        <p>
+            @Html.ActionLink("Generar Pago", "PagarFacturaE", null, new { @class = "btn btn-warning btn-xs" })
+
+        </p>
+
+        Html.RenderPartial("VPagoFacturaEfe", ViewData["VPagoFacturaEfe"]);
+
+
+
+    }
+    @*Paginación*@
+    @using (Html.BeginForm("Index", "PagoFacturaEfe", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+        <div class="pager">
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+            @Model.Count de @Model.TotalItemCount elementos
+
+            @Html.PagedListPager(Model, page => Url.Action("IndexEfe", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.CurrentFilter,
+       pageSize = ViewBag.psize
+   }))
+
+
+        </div>
+    }
+    @*Paginación*@
+
+
+
+<script>
+
+
+
+    $(function(){
+        $("#ClieFac").on("change", function() {
+            @ViewBag.Clienteseleccionado=  $('[id$=ClieFac] option:selected').text();
+
+        });
+    });
+
+    $(function(){
+        $("#Estado").on("change", function() {
+            @ViewBag.Estadoseleccionado=  $('[id$=Estado] option:selected').text();
+
+        });
+    });
+
+
+    $(function(){
+        $("#pageSize").on("change", function() {
+            @ViewBag.pzise=  $('[id$=pageSize] option:selected').text();
+
+        });
+    });
+
+
+
+
+
+
+</script>

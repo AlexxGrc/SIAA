@@ -1,0 +1,56 @@
+﻿@model SIAAPI.Models.Comercial.ContactosProv
+
+<div>
+    <h3>Detalles de Contacto de Proveedor:@Html.DisplayFor(model => model.Proveedor.Empresa)</h3>
+    <hr />
+    <dl class="dl-horizontal">
+       
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            <a href="mailto:#">@Html.DisplayFor(model => model.Email)</a>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Telefono)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telefono)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Puesto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Puesto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacion)
+        </dd>
+
+    </dl>
+</div>
+
+
+<p>
+    @Html.ActionLink("Editar", "EditContacto", new { id = Model.IDProveedor ,  searchString = ViewBag.searchString}, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a proveedor", "details", new { id = Model.IDProveedor, searchString = ViewBag.searchString }, new { @class = "btn btn-default btn-xs" })
+</p>

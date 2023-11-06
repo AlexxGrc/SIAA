@@ -1,0 +1,126 @@
+﻿@model SIAAPI.Models.Inventarios.Clslotempcreate
+
+@{
+    ViewBag.Title = "Cargarcintas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Cargar cintas x por Lotes</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        <table>
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.NoCintas, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.NoCintas, new { htmlAttributes = new { @class = "form-control " } })
+                    @Html.ValidationMessageFor(model => model.NoCintas, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Ancho, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.Ancho, new { htmlAttributes = new { @class = "form-control ", @id = "Ancho", name = "Ancho", @onkeyup = "cal()" } })
+                    @Html.ValidationMessageFor(model => model.Ancho, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Largo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-2">
+                    @Html.EditorFor(model => model.Largo, new { htmlAttributes = new { @class = "form-control", @id = "Largo", name = "Largo", @onkeyup = "cal()" } })
+                    @Html.ValidationMessageFor(model => model.Largo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Lote, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Lote, new { htmlAttributes = new { @class = "form-control " } })
+                    @Html.ValidationMessageFor(model => model.Lote, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.LoteInterno, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.LoteInterno, new { htmlAttributes = new { @class = "form-control", @id = "LoteInterno" } })
+                    @Html.ValidationMessageFor(model => model.LoteInterno, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.MetrosCuadrados, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MetrosCuadrados, new { htmlAttributes = new { @class = "form-control", name = "M2", id = "M2", @readonly = "readonly" } })
+                    @Html.ValidationMessageFor(model => model.MetrosCuadrados, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+
+            @Html.HiddenFor(model => model.OrdenCompra, htmlAttributes: new { @class = "control-label col-md-2", @id = "OrdenCompra", @name = "OrdenCompra" })
+
+            @Html.HiddenFor(model => model.IDDetOrdenCompra, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+            @Html.HiddenFor(model => model.IDCarrito, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.HiddenFor(model => model.IDArticulo, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.HiddenFor(model => model.IDCaracteristica, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.HiddenFor(model => model.IDRecepcion, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @Html.HiddenFor(model => model.Cref, htmlAttributes: new { @class = "control-label col-md-2", @id = "Cref", @name = "Cref" })
+
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-4 ">
+                    <input type="submit" value="Grabar" class="btn btn-success" />
+                </div>
+
+                <div class="col-md-offset-2 col-md-4">
+                    @Html.ActionLink("Volver a la Recepcion", "DetailsRecepcionando", new { id = Model.IDRecepcion }, new { @class = "btn btn-info" })
+                </div>
+
+            </div>
+
+    </div>
+
+    try
+
+    {
+        var elementos = new SIAAPI.Models.Comercial.RecepcionContext().lotes.ToList().Where(S => S.IDDetOrdenCompra == Model.IDDetOrdenCompra);
+        Html.RenderPartial("Detallecintas", elementos);
+    }
+    catch (Exception err)
+    {
+
+    }
+
+}
+
+<script>
+
+    function cal() {
+        var dato1 = document.getElementById("Ancho").value;
+        var dato2 = document.getElementById("Largo").value;
+
+        var m2 = dato2 * (dato1 / 1000);
+        var cref = document.getElementById("Cref").value;
+        var Orden = document.getElementById("OrdenCompra").value;
+        var f = new Date(Date.now());
+
+        var cadfec = f.toDateString();
+
+        //  alert(f);
+        //var resultado = eval(calculo)
+
+        document.getElementById("M2").value = m2;
+        document.getElementById("LoteInterno").value = cref + "/" + dato1 + "/" + dato2 + "/" + Orden + "/" + cadfec + "/";
+    }
+</script>

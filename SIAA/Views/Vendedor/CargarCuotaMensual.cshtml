@@ -1,0 +1,198 @@
+﻿@model SIAAPI.Models.Comercial.CuotaMensual
+
+@{
+    ViewBag.Title = "CargarCuotaMensual";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("InsertarCuotaMensual", "Vendedor", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Cargar cuota mensual al vendedor @ViewBag.id: @ViewBag.nombre</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.IDVendedor)
+
+        <div class="form-horizontal">
+
+            <div class="form-horizontal">
+                <input type="hidden" name="IDVendedor" class="form-control" value="@ViewBag.id" />
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDMes, "Mes", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("IDMes", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDMes, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                    @Html.LabelFor(model => model.Mes, "Mes", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.Mes, ViewBag.meses as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Mes, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Ano, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Ano, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Ano, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Cuota, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Cuota, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cuota, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDMoneda, "Divisa de cuota", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("IDMoneda", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDMoneda, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PorcComision, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+                            @Html.EditorFor(model => model.PorcComision, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.PorcComision, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    <div class="form-group">
+
+        <div class="col-md-offset-2 col-md-10">
+            <center><input type="submit" value="Grabar" class="btn btn-success btn-xs" /></center>
+        </div>
+    </div>
+
+
+    <h2>Cuotas establecidas</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IDMes)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Ano)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Cuota)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Moneda)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PorcComision)
+                </th>
+
+                <th></th>
+                @{
+                    int contador = 0;
+
+
+                    string cadena1 = "select TOP 24 * from CuotaMensual where idVendedor=" + ViewBag.id + " order by ano desc, idmes desc";
+                    SIAAPI.Models.Comercial.CuotaMensualContext dbart = new SIAAPI.Models.Comercial.CuotaMensualContext();
+                    List<SIAAPI.Models.Comercial.CuotaMensual> articulos = dbart.Database.SqlQuery<SIAAPI.Models.Comercial.CuotaMensual>(cadena1).ToList();
+
+                    foreach (SIAAPI.Models.Comercial.CuotaMensual item in articulos)
+                    {
+                        SIAAPI.Models.Comercial.ClsDatoString monedacu = dbart.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select ClaveMoneda as Dato from c_Moneda where IDMoneda = "+@item.IDMoneda).ToList()[0];
+                        SIAAPI.Models.Comercial.ClsDatoString mescu = dbart.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Mes as Dato from c_Meses where IDMes = " + @item.IDMes).ToList()[0];
+
+                    <tr>
+                        <td></td>
+
+                        <td>
+                            @mescu.Dato
+                        </td>
+                        @*<td>
+                            @{string cadena = "Mes" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadena" name="Mes" value="@item.Mes">
+                        </td>*@
+
+                        <td> 
+                        @item.Ano
+                        </td>
+
+                        @*<td>
+                            @{string cadenaa = "Añooo" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadenaa" name="Mes" value="@item.Ano">
+                        </td>*@
+
+                        <td>
+                            @{string cadenaaa = "Cuota" + contador;
+                            }
+                            <div class="col-md-8">
+                                @item.Cuota.ToString("C")
+                            </div>
+
+
+                        </td>
+                       
+                       
+                            <td>
+                                @monedacu.Dato
+                            </td>
+
+                        <td>
+                            @item.PorcComision %
+                        </td>
+                        <td>
+                            @*<a class="edit" onclick="ActualizarC(@item.IDCuotaMensual,@contador)">
+                                <i class="tbl_del_btn fa fa-refresh"></i>
+                            </a>*@
+                            <a class="deleteCM" data-id="@item.IDCuotaMensual">
+                                <i class="tbl_del_btn fa fa-trash"></i>
+                            </a>
+                        </td>
+
+                            <td></td>
+</tr>
+                                    contador++;
+                                }
+                }
+            </table>
+        </div>
+        @Html.ActionLink("Regresar", "Details", new { id = Model.IDVendedor }, new { @class = "btn btn-default btn-xs" }) 
+
+                                }
+
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+
+        $('.deleteCM').click(function () {
+            var url = '@Url.Action("DeleteCuotaMensual", "Vendedor")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>

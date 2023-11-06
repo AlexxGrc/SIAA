@@ -1,0 +1,334 @@
+﻿@model SIAAPI.Models.Comercial.mArticulo
+
+
+<h4>Edita Artículo<br /><small></small></h4>
+<hr />
+@using (Html.BeginForm("editArticulo", "Articulos", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data" }))
+{
+
+    <input value="@ViewBag.id" name="IDArticulo" id="IDArticulo" type="hidden" class="form-control">
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Clave de Producto</span>
+                <input value="@ViewBag.claveproducto" Name="Cref" id="Cref" type="text" class="form-control" placeholder="Escribe clave ejem ATT102" aria-describedby="basic-addon1" required="required">
+                @*<input value="@ViewBag.claveproducto" name="Cref" id="Cref" type="hidden" class="form-control">*@
+            </div>
+        </div>
+        <div class="col-xs-8">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Descripcion del Articulo</span>
+                <input value="@ViewBag.descripcion" name="Descripcion" id="Descripcion" type="text" class="form-control" placeholder="Escriba una Descripcion para el Producto" aria-describedby="basic-addon1" required="required">
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Mínimo Venta</span>
+                <input value="@ViewBag.minimoventa" name="MinimoVenta" id="MinimoVenta" type="number" step="0.01" class="form-control" placeholder="0" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Mínimo Compra</span>
+                <input value="@ViewBag.minimocompra" name="MinimoCompra" id="MinimoCompra" type="number" step="0.01" class="form-control" placeholder="0" aria-describedby="basic-addon1">
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-7">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Familia</span>
+
+
+                @Html.DropDownList("IDFamilia", ViewBag.IDFamilia as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Tipo</span>
+
+                @Html.DropDownList("IDTipoArticulo", ViewBag.IDFamilia as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="input-group">
+                <span class="input-group-addon">Precio Unico de Venta</span>
+                <span class="input-group-addon">
+                    @if (ViewBag.preciounico == true)
+                    {
+                        <input type="checkbox" name="Preciounico" id="Preciounico" value="true" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="Preciounico" id="Preciounico" value="true" />
+                    }
+                </span>
+
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Moneda</span>
+
+                @Html.DropDownList("IDMoneda", ViewBag.IDMoneda as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">U. Medida</span>
+
+                @Html.DropDownList("IDClaveUnidad", ViewBag.IDClaveUnidad as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="input-group">
+                <span class="input-group-addon">Controla inventario</span>
+                <span class="input-group-addon">
+                    @if (ViewBag.controlai == true)
+                    {
+                        <input type="checkbox" name="CtrlStock" id="CtrlStock" value="true" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="CtrlStock" id="CtrlStock" value="true" />
+                    }
+
+
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <div class="input-group">
+                <span class="input-group-addon">Manejo de mas de una Presentación</span>
+                <span class="input-group-addon">
+                    @if (ViewBag.manejamas == true)
+                    {
+                        <input type="checkbox" name="ManejoCar" id="ManejoCar" value="true" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="ManejoCar" id="ManejoCar" value="true" />
+                    }
+
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="input-group">
+                <span class="input-group-addon">Devoluciones Previas</span>
+                <span class="input-group-addon">
+                    @if (ViewBag.devolucion == true)
+                    {
+                        <input type="checkbox" name="ExistenDev" id="ExistenDev" value="true" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="ExistenDev" id="ExistenDev" value="true" />
+                    }
+
+
+                </span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="input-group">
+                <span class="input-group-addon">Código de Barras</span>
+                <span class="input-group-addon">
+                    @if (ViewBag.ccodigo == true)
+                    {
+                        <input type="checkbox" onclick="myFunction()" name="bCodigodebarra" id="bCodigodebarra" value="true" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" onclick="myFunction()" name="bCodigodebarra" id="bCodigodebarra" value="true" />
+                    }
+
+                </span>
+                @if (ViewBag.ccodigo == true)
+                {
+                    <input value="@ViewBag.codigob" name="Codigodebarras" id="Codigodebarras" type="text" class="form-control" aria-describedby="basic-addon1">
+                }
+                else
+                {
+                    <input style="display:none" name="Codigodebarras" id="Codigodebarras" type="text" class="form-control" placeholder="Escriba o Escannee el Código de Barras Correspondiente" aria-describedby="basic-addon1">
+                }
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="input-group">
+                <span class="input-group-addon">AQL</span>
+
+                @Html.DropDownList("IDAQL", ViewBag.IDAQL as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <div class="input-group">
+                <span class="input-group-addon">Inspeccion</span>
+
+                @Html.DropDownList("IDInspeccion", ViewBag.IDInpeccion as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="input-group">
+                <span class="input-group-addon">Muestreo</span>
+
+                @Html.DropDownList("IDMuestreo", ViewBag.IDMuestreo as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-2">
+            <div class="input-group">
+                <span class="input-group-addon">Es kit</span>
+                <span class="input-group-addon">
+                    @if (ViewBag.eskit == true)
+                    {
+                        <input type="checkbox" name="esKit" id="esKit" value="true" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="esKit" id="esKit" value="true" />
+                    }
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="input-group">
+                <span class="input-group-addon">Genera Orden de produccion</span>
+                <span class="input-group-addon">
+
+                    @if (ViewBag.generaorden == true)
+                    {
+                        <input type="checkbox" name="GeneraOrden" id="GeneraOrden" value="true" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="GeneraOrden" id="GeneraOrden" value="true" />
+                    }
+
+                </span>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="input-group">
+                <span class="input-group-addon">Obsoleto</span>
+                <span class="input-group-addon">
+                    @if (ViewBag.obsoleto == true)
+                    {
+                        <input type="checkbox" name="obsoleto" id="obsoleto" value="true" checked />
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="obsoleto" id="obsoleto" value="true" />
+                    }
+
+                </span>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Stock Mínimo</span>
+                <input value="@ViewBag.StockMin" name="StockMin" id="StockMin" type="number" step="0.01" class="form-control" placeholder="0" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Stock Máximo</span>
+                <input value="@ViewBag.StockMax" name="StockMax" id="StockMax" type="number" step="0.01" class="form-control" placeholder="0" aria-describedby="basic-addon1">
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-xs-12">
+            <input type="file" name="fileIMG" class="btn btn-primary" id="imgProducto" />
+            @ViewBag.nombreimagen
+        </div>
+    </div>
+    <br />
+
+    <div class="modal-footer">
+
+        <div class="row center-block">
+            @*<button type="button" name="button" class="btn btn-primary btn-xs" onclick="Guardar()">Guardar</button>*@
+            <input type="submit" value="Grabar" class="btn btn-success btn-xs" />
+            <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Cerrar</button>
+        </div>
+
+    </div>
+
+
+}
+
+
+<script>
+    function myFunction() {
+        var checkBox = document.getElementById("bCodigodebarra");
+        var text = document.getElementById("Codigodebarras");
+        if (checkBox.checked == true) {
+            text.style.display = "block";
+
+        }
+        else {
+            text.style.display = "none";
+
+        }
+    }
+</script>
+
+@*<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+    <script>
+        function Guardar() {
+            async: true;
+            var frmData = new mArticulo();
+            frmData.append("Cref", document.getElementById("Cref").value);
+            frmData.append("Descripcion", document.getElementById("Descripcion").value);
+            frmData.append("MinimoVenta",document.getElementById("MinimoVenta").value);
+            frmData.append("fileIMG", document.getElementById("imgProducto").files[0]);
+
+            var url = '@Url.Action("addarticulo","PlanPlaneacionProduccion")';
+            $.post(url, { Art: frmData, idhe: document.getElementById("idhe").value, Cref: document.getElementById("Cref").value, Descripcion: document.getElementById("Descripcion").value, MinimoVenta: document.getElementById("MinimoVenta").value, MinimoCompra: document.getElementById("MinimoCompra").value, IDFamilia: $("#IDFamilia").val(), IDTipoArticulo: $("#IDTipoArticulo").val(), Preciounico: document.getElementById("Preciounico").value, IDMoneda: $("#IDMoneda").val(), IDClaveUnidad: $("#IDClaveUnidad").val(), CtrlStock: document.getElementById("CtrlStock").value, ManejoCar: document.getElementById("ManejoCar").value, ExistenDev: document.getElementById("ExistenDev").value, Codigodebarra: document.getElementById("Codigodebarra").value, Codigodeb: document.getElementById("Codigodeb").value, IDAQL: $("#IDAQL").val(), IDInspeccion: $("#IDInspeccion").val(), IDMuestreo: $("#IDMuestreo").val(), esKit: document.getElementById("esKit").value, GeneraOrden: document.getElementById("GeneraOrden").value, obsoleto: document.getElementById("obsoleto").value, imgProducto: document.getElementById("imgProducto").files[0] }, function (response) {
+                if (response.errorMessage) {
+
+                    swal("No registrado", "", "error")
+                }
+                else if (response) {
+                    swal("Registrado con éxito", "", "success")
+              $('#ModalAA').remove();
+               location.reload();
+                }
+                }).fail(function (response) {
+                });
+            }
+
+
+    </script>*@

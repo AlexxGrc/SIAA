@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Cobro>
+<h3>Domicilio de Cobro de Cliente</h3>
+<p>
+    @Html.ActionLink("Crear un nuevo registro", "CreateC", null, new { @class = "btn btn-warning btn-xs" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDCliente)
+        </th>
+      
+        <th>
+            @Html.DisplayNameFor(model => model.MunicipioCobro)
+        </th>
+     
+      
+        <th>
+            @Html.DisplayNameFor(model => model.Estados.Estado)
+        </th>
+     
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Clientes.Nombre)
+        </td>
+      
+        <td>
+            @Html.DisplayFor(modelItem => item.MunicipioCobro)
+        </td>
+     
+   
+        <td>
+            @Html.DisplayFor(modelItem => item.Estados.Estado)
+        </td>
+     
+        <td>
+            @Html.ActionLink("Editar", "EditC", new { id=item.IDCobro }, new { @class = "btn btn-success btn-xs" }) 
+            @Html.ActionLink("Detalles", "DetailsC", new { id=item.IDCobro }, new { @class = "btn btn-default btn-xs" }) 
+            @*@Html.ActionLink("Eiminar", "DeleteC", new { id=item.IDCobro }, new { @class = "btn btn-danger btn-xs" })*@
+
+            @*<div class="row"><a href=@("Clientes/EditC/"+item.IDCobro) class="btn btn-default">Editar</a>         </div>
+            <div class="row"><a href=@("Clientes/DetailsC/"+item.IDCobro ) class="btn btn-default">Detalles</a> </div>
+            <div class="row"><a href=@("Clientes/DeleteC/" + item.IDCobro ) class="btn btn-danger">Eliminar</a> </div>*@ 
+        </td>
+    </tr>
+}
+
+</table>
+<p>
+
+  @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+</p>
+

@@ -1,0 +1,62 @@
+﻿@model SIAAPI.Models.Cfdi.Encfacturas
+
+@{
+    ViewBag.Title = "Registrar factura desde archivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (@ViewBag.Proveedor != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <h3>
+                        Facturas del Proveedor
+                    </h3>
+                <tr>
+                    <th>RFC</th>
+                    <th>Proveedor</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.Proveedor)
+            {
+                <tr>
+                    <td>@item.RFC</td>
+                    <td>@item.Empresa </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+<h3>Carga una factura desde un Xml</h3>
+<h3>para la orden de compra @ViewBag.IDOrden</h3>
+<hr />
+
+@using (Html.BeginForm("CreatedesdeArchivoF", "EncOrdenCompra", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Registrar factura desde archivo</h4>
+        
+        <div class="form-group">
+            <h2>Indica el archivo a subir</h2>
+            <div class="col-md-10">
+                <input type="file" id="Imag1" name="Imag1" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "IndexP", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+    <div>
+        <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+    </div>
+}
+
+

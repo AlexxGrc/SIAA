@@ -1,0 +1,52 @@
+﻿@model SIAAPI.Models.Administracion.c_Impuesto
+
+<div>
+    <h3>Detalles de Impuesto</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveImpuesto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveImpuesto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Retencion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Retencion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Traslado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Traslado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.IDImpuesto }, new { @class = "btn btn-success btn-xs" }) |
+    @Html.ActionLink("Regresar a la lista", "Index",null, new { @class = "btn btn-default btn-xs" })
+</p>

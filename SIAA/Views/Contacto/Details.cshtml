@@ -1,0 +1,73 @@
+﻿@model SIAAPI.Models.Administracion.VMensajes
+
+@{
+    ViewBag.Title = "Atencion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@Html.DisplayFor(model => model.IDContacto)
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Para:</th>
+            <th scope="col">De:</th>
+            <th scope="col">Mensaje:</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">@Html.DisplayFor(model => model.Para)</th>
+            <td>@Html.DisplayFor(model => model.DeUsuario)</td>
+            <td rowspan=5>@Html.DisplayFor(model => model.Mensaje)</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayFor(model => model.Fecha)</td>
+            <td>@Html.DisplayFor(model => model.RFC)</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>@Html.DisplayFor(model => model.Nombre)</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>@Html.DisplayFor(model => model.Email)</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>@Html.DisplayFor(model => model.Telefono)</td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+@{SIAAPI.Models.Administracion.Contacto item = (SIAAPI.Models.Administracion.Contacto)ViewBag.elemento2;
+
+    <h3>Atención al mensaje</h3>
+    <hr />
+        <table class="table table-striped">
+            <tr>
+                <td class="col-lg-2">
+                    Fecha: @item.FechaAtencion
+                </td>  
+                </tr>
+            <tr>
+                <td class="col-lg-10">
+                    Atendio: @item.Por
+                </td>
+                
+            </tr>
+            <tr>
+                <td class="col-lg-12">
+                    Observación: @item.Observacion
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.ActionLink("Regresar", "VMensajes")
+                </td>
+            </tr>
+        </table>
+
+    }

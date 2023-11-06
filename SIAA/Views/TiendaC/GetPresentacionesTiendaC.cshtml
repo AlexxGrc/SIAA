@@ -1,0 +1,67 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Caracteristica>
+
+@{
+    ViewBag.Title = "GetPresentacionesTiendaC";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Listado de Presentaciones de Articulo<br /></h3>
+<h3 class="text-info"> @ViewBag.Descripcion </h3>
+<h4 class="text-success">@ViewBag.Cref</h4>
+
+<table class="table" id="TablaPresentaciones">
+ 
+
+@{foreach (var item in Model)
+    {
+        <tr>
+        <td>
+            @{
+                string[] atributos = item.Presentacion.ToString().Split(',');
+                foreach (var atri in atributos)
+                {
+                    string[] valor = atri.Split((char)58);
+                    string Atri = "";
+                    string Val = "";
+                    try
+                    {
+                         Atri = valor[0];
+                         Val = valor[1];
+                    }
+                    catch (Exception err)
+                    {
+
+                    }
+
+                    <label class="text-info">@Atri :</label><label class="text-danger">@Val</label>
+                    @*@Html.DisplayFor(modelItem => item.Presentacion).ToString().Replace(","," * ")*@
+
+
+                    }
+                }
+        </td>
+            @*<td>
+                <a href="@Url.Action("AddCarritoGeneral", "TiendaC", new { id = item.ID })" class="elements">
+                    <span class="fa fa-cart-plus" style="color:green"></span>
+                </a>1
+            </td>*@
+            <td>
+                <form method="post" action='@Url.Action("AddCarritoGeneral", "TiendaC", new { searchString = ViewBag.SearchString })'>
+                    <div class="col-xs-6">
+                        @*<label for="cantidad">Cantidad</label>*@
+                        <input class="form-control smallTxt" type="number" value="1" min="0" step="any" data-number-to-fixed="3" data-number-stepfactor="100" name="Cantidad" id="Cantidad" required autofocus />
+                        <input type="hidden" class="form-control" name="id" id="id" placeholder="@item.ID" value="@item.ID ">
+                    </div>
+           
+                    <button class="fa fa-cart-plus fa-2x" style="color:green" type="submit"></button>
+                </form>
+            </td>
+        </tr>
+    }
+ 
+    }
+</table>
+
+<div>
+    @Html.ActionLink("Agregar Presentacion", "AgregarPresentacion3", "TiendaC", new { id = @ViewBag.IDArticulo }, new { @class = "btn btn-primary active" })
+</div>

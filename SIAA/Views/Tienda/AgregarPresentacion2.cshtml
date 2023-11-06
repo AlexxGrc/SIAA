@@ -1,0 +1,319 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.AtributodeFamilia>
+@{
+    ViewBag.Title = "Presentacion";
+}
+
+<h3>Crear una presentacion al articulo</h3>
+
+<h4>@ViewBag.IDArticulo @ViewBag.nombrearticulo</h4>
+<h4>@ViewBag.Cref</h4>
+
+@{
+    //using (Html.BeginForm("CrearPresentacion", "PlanPlaneacionProduccion", FormMethod.Post))
+    using (Html.BeginForm())
+    {
+        var contador = 0;
+        string retorno = string.Empty;
+<div class="table-responsive">
+
+    <table class="table">
+        <tr>
+
+            <th>Atributo</th>
+            <th></th>
+        </tr>
+
+     
+
+
+
+        @{ foreach (var item in Model)
+            {
+                string cadenarequerido = "Requerido" + contador;
+
+                <input type="hidden" name="@cadenarequerido" id="@cadenarequerido" class="form-control" value="@item.Requerido" />
+
+                <tr>
+                    <td>
+                        @if (item.Requerido)
+                        {
+
+                            <p class="text-danger">@item.Titulo *</p>
+
+                        }
+                        else
+                        {
+                            <p class="text-primary">@item.Titulo</p>
+
+                        }
+                    </td>
+                    <td>
+
+                        @if (item.Tipo.Equals("NUMERO"))
+                        {
+                            string cadenatitulo = "Titulo" + contador;
+
+
+                            string cadenades = "des" + contador;
+                            if (item.Requerido)
+                            {
+                                <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" placeholder="@item.Ayuda" required />
+                            }
+                            else
+                            {
+                                <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                <input type="number" name="@cadenades" id="@cadenades" class="form-control" placeholder="@item.Ayuda" />
+                            }
+
+                        }
+                        @if (item.Tipo.Equals("CADENA"))
+                        {
+                            string cadenatitulo = "Titulo" + contador;
+
+
+                            string cadenades = "des" + contador;
+                            if (item.Requerido)
+                            {
+                                <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                <input type="text" name="@cadenades" id="@cadenades" class="form-control" placeholder="@item.Ayuda" required />
+                            }
+                            else
+                            {
+                                <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                <input type="text" name="@cadenades" id="@cadenades" class="form-control" placeholder="@item.Ayuda" />
+                            }
+
+                        }
+                        @if (item.Tipo.Equals("COLOR"))
+                        {
+                            string cadenatitulo = "Titulo" + contador;
+
+
+                            string cadenades = "des" + contador;
+                            if (item.Requerido)
+                            {
+                                <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                <input type="color" name="@cadenades" id="@cadenades" />
+                            }
+                            else
+                            {
+                                <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                                <input type="color" name="@cadenades" id="@cadenades" />
+                            }
+
+                        }
+                        @if (item.Tipo.Equals("LISTA"))
+                        {
+
+                            SIAAPI.Models.Comercial.AtributodeFamiliaContext db = new SIAAPI.Models.Comercial.AtributodeFamiliaContext();
+
+                            SIAAPI.Models.Comercial.ClsDatoString cadena = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Valores as Dato from AtributodeFamilia where IDAtributo='" + item.IDAtributo + "'").ToList().FirstOrDefault();
+                            //SIAAPI.Models.Comercial.ClsDatoString cadena = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Valores as Dato from AtributodeFamilia where IDAtributo='" + item.IDAtributo + "'").ToList().FirstOrDefault();
+
+
+
+
+
+                            string[] numeros = cadena.Dato.Split(',');
+                            List<SelectListItem> atributos = new List<SelectListItem>();
+
+
+
+                            atributos.Add(new SelectListItem
+                            {
+                                Text = retorno,
+                                Value = retorno,
+                            });
+
+                            if (!item.Requerido)
+                            {
+                                atributos.Add(new SelectListItem
+                                {
+                                    Text = "",
+                                    Value = "",
+                                });
+                            }
+                            foreach (string numero in numeros)
+                            {
+
+                                atributos.Add(new SelectListItem
+                                {
+                                    Text = numero,
+                                    Value = numero,
+                                });
+                            }
+                            List<SIAAPI.Models.Administracion.Materiales> materiales = new List<SIAAPI.Models.Administracion.Materiales>();
+                            string cadenaM = "Select* from Materiales where Obsoleto <> '1' order by clave";
+                            materiales = db.Database.SqlQuery<SIAAPI.Models.Administracion.Materiales>(cadenaM).ToList();
+                            List<SelectListItem> listaArticulo = new List<SelectListItem>();
+                            //listaArticulo.Add(new SelectListItem { Text = "--Todos los Materiales--", Value = "0" });
+
+                            foreach (var m in materiales)
+                            {
+                                if (m.Clave == retorno)
+                                {
+                                    listaArticulo.Add(new SelectListItem { Text = m.Clave, Value = m.Clave.ToString(), Selected = true });
+                                }
+                                else
+                                {
+                                    listaArticulo.Add(new SelectListItem { Text = m.Clave, Value = m.Clave.ToString() });
+                                }
+
+
+                            }
+
+                            if (item.Descripcion == "MATERIAL")
+                            {
+                                ViewBag.IDAtributo = listaArticulo;
+                            }
+                            else
+                            {
+                                ViewBag.IDAtributo = atributos;
+                            }
+
+
+
+                            string cadenatituloa = "Titulo" + contador;
+
+                            <input type="hidden" name="@cadenatituloa" id="@cadenatituloa" class="form-control" value="@item.Descripcion:" />
+
+
+                            string cadenaatributo = "des" + contador;
+
+                            @Html.DropDownList("IDAtributo", ViewBag.IDAtributo as List<SelectListItem>, new { @class = "form-control", @id = @cadenaatributo })
+
+                        }
+                        @*@if (item.Tipo.Equals("LISTA"))
+                        {
+
+                            SIAAPI.Models.Comercial.AtributodeFamiliaContext db = new SIAAPI.Models.Comercial.AtributodeFamiliaContext();
+
+                            SIAAPI.Models.Comercial.ClsDatoString cadena = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>("select Valores as Dato from AtributodeFamilia where IDAtributo='" + item.IDAtributo + "'").ToList()[0];
+
+                            string[] numeros = cadena.Dato.Split(',');
+                            List<SelectListItem> atributos = new List<SelectListItem>();
+
+                            if (!item.Requerido)
+                            {
+                                atributos.Add(new SelectListItem { Text = "", Value = "" });
+                            }
+
+                            foreach (string numero in numeros)
+                            {
+                                atributos.Add(new SelectListItem { Text = numero, Value = numero });
+                            }
+
+                            ViewBag.IDAtributo = atributos;
+
+                            string cadenatituloa = "Titulo" + contador;
+
+                            <input type="hidden" name="@cadenatituloa" id="@cadenatituloa" class="form-control" value="@item.Descripcion:" />
+
+
+                            string cadenaatributo = "des" + contador;
+
+                            @Html.DropDownList("IDAtributo", ViewBag.IDAtributo as List<SelectListItem>, new { @class = "form-control", @id = @cadenaatributo })
+
+                        }*@
+                        @if (item.Tipo.Equals("checkbox"))
+                        {
+                            string cadenatitulo = "Titulo" + contador;
+
+
+                            string cadenades = "des" + contador;
+
+                            <input type="hidden" name="@cadenatitulo" id="@cadenatitulo" class="form-control" value="@item.Descripcion:" />
+                            <input type="checkbox" name="@cadenades" id="@cadenades" class="form-control" value="false" />
+
+
+                        }
+                    </td>
+                    <td>
+                        <p>@item.Ayuda</p>
+                    </td>
+
+                </tr>
+
+                contador = contador + 1;
+            }
+
+
+            <input type="hidden" name="contador" id="contador" class="form-control" value="@contador" />
+
+        }
+
+
+    </table>
+
+    <input name="Presentacion" id="Presentacion" type="hidden" />
+    <button  class="btn btn-success btn-xs" onclick="Actualizar()">Generar</button>
+      @{ var idarticulo = @ViewBag.IDArticulo; }
+       @Html.ActionLink("Cerrar", "GetPresentacionesTienda", "Tienda", new { id = idarticulo }, null)
+        
+</div>
+                      }
+                  }
+
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script>
+
+    function Actualizar() {
+        var url = '@Url.Action("AgregarPresentacion", "Tienda")';
+        var texto = "";
+        var j;
+        for (j = 0; j < document.getElementById("contador").value; j++) {
+
+
+            if (document.getElementById("Requerido" + [j]).value && document.getElementById("des" + [j]).type != "checkbox") {
+
+                if (document.getElementById("des" + [j]).value === "") {
+                    alert(document.getElementById("Titulo" + [j]).value + " ES OBLIGATORIO");
+                    return;
+                }
+            }
+            if (document.getElementById("des" + [j]).value == "") {
+
+            }
+            else {
+
+                if (document.getElementById("des" + [j]).type == "checkbox") {
+                    if (document.getElementById("Requerido" + [j]).value) {
+                        texto += document.getElementById("Titulo" + [j]).value + document.getElementById("des" + [j]).checked + ",";
+                    }
+                    else {
+                        if (document.getElementById("des" + [j]).checked == true) {
+                            texto += document.getElementById("Titulo" + [j]).value + document.getElementById("des" + [j]).checked + ",";
+                        }
+                    }
+
+                }
+                else {
+                    texto += document.getElementById("Titulo" + [j]).value + document.getElementById("des" + [j]).value + ",";
+                }
+
+            }
+        }
+
+
+    //    alert(texto);
+
+        $('#Presentacion').val(texto);
+
+      
+        $.post(url, { id: @ViewBag.IDArticulo, Presentacion: document.getElementById("Presentacion").value }, function (response) {
+         
+            if (response) {
+
+                swall("Datos Guardados");
+            }
+        }).fail(function (response) {
+            // display error message?
+           
+        });
+
+        }
+
+
+</script>

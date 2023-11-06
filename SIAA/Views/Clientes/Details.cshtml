@@ -1,0 +1,896 @@
+﻿@model SIAAPI.Models.Comercial.Clientes
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<meta name="googlebot" content="noindex, nofollow, nosnippet, noimageindex">
+<meta name="robots" content="noindex, nofollow, nofollow, nosnippet, noimageindex">
+<meta name="googlebot-news" content="noindex, nofollow, nosnippet, noimageindex" />
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="form-group">
+            @{
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        <div>
+                            <table>
+                                <tr>
+                                                <td>   <h3>Detalles de Cliente: @Html.DisplayFor(model => model.Nombre)</h3> </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SIAAPI_Clientes.pdf" })' target="_blank">
+                                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</nav>
+<br>
+<div>
+   
+ 
+
+    @*menu Tab Content*@
+    <div class="tabs-container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <!--Tabulador detalles-->
+            <li role="tab">
+                <a class="nav-linkactive" id="Detalle-tab" href="#Detalle" data-toggle="tab" role="tab" aria-controls="Detalle" aria-selected="true" aria-expanded="true">Detalles</a>
+            </li>
+          
+                <li class="nav-item">
+                    <a class="nav-link" id="Domicilioe-tab" data-toggle="tab" href="#Domicilioe" role="tab" aria-controls="Domicilioe" aria-selected="false">Domicilio de entrega</a>
+                </li>
+            
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Facturacion"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="Domicilioc-tab" data-toggle="tab" href="#Domicilioc" role="tab" aria-controls="Domicilioc" aria-selected="false">Domicilio de cobro</a>
+                </li>
+            }
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Facturacion"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="Referencia-tab" data-toggle="tab" href="#Referencia" role="tab" aria-controls="Referencia" aria-selected="false">Referencia de pago</a>
+                </li>
+            }
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Facturacion"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="Contactos-tab" data-toggle="tab" href="#Contactos" role="tab" aria-controls="Contactos" aria-selected="false">Contactos</a>
+                </li>
+            }
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Facturacion"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="Articulos-tab" data-toggle="tab" href="#Articulos" role="tab" aria-controls="Articulos" aria-selected="false">Articulos</a>
+                </li>
+            }
+
+
+
+
+        </ul>
+    </div>
+
+</div>
+
+
+<div class="tab-content" id="tabs">
+
+    <div class="tab-pane active" id="Detalle" role="tabpanel" aria-labelledby="Detalle-tab" aria-expanded="true">
+
+        <dl class="dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Nombre)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Nombre40)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Nombre40)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.RegimenSocietario)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RegimenSocietario)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Mayorista)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Mayorista)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IDRegimenFiscal)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.c_RegimenFiscal.ClaveRegimenFiscal)|@Html.DisplayFor(model => model.c_RegimenFiscal.Descripcion)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IDGrupo)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.c_Grupo.ClaveGrupo)|@Html.DisplayFor(model => model.c_Grupo.Descripcion)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Oficina.NombreOficina)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Oficina.NombreOficina)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Correo)
+            </dt>
+
+            <dd>
+                <a href="mailto:#">@Html.DisplayFor(model => model.Correo)</a>
+            </dd>
+
+            @*<dt>
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Password)
+        </dd>*@
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Telefono)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Telefono)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Curp)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Curp)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IDVendedor)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Vendedor.Nombre)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.VentasAcu)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.VentasAcu)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Ultimaventa)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Ultimaventa)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Calle)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Calle)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NumExt)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NumExt)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NumInt)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NumInt)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Colonia)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Colonia)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Municipio)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Municipio)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CP)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CP)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Estados.Estado)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Estados.Estado)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.paises.Pais)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.paises.Pais)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Observacion)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Observacion)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IDFormapago)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.c_FormaPago.ClaveFormaPago)|@Html.DisplayFor(model => model.c_FormaPago.Descripcion)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.IDMetodoPago)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.c_MetodoPago.ClaveMetodoPago)|@Html.DisplayFor(model => model.c_MetodoPago.Descripcion)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.IDMoneda)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.c_Moneda.ClaveMoneda)|@Html.DisplayFor(model => model.c_Moneda.Descripcion)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.FacturacionExacta)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.FacturacionExacta)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.RFC)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RFC)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.IDUsoCFDI)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.c_UsoCFDI.ClaveCFDI)|@Html.DisplayFor(model => model.c_UsoCFDI.Descripcion)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CorreoCfdi)
+            </dt>
+
+
+
+            <dd>
+                <a href="mailto:#">@Html.DisplayFor(model => model.CorreoCfdi)</a>
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.CorreoPagoC)
+            </dt>
+
+            <dd>
+                <a href="mailto:#">@Html.DisplayFor(model => model.CorreoPagoC)</a>
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CertificadoCalidad)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CertificadoCalidad)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.cuentaContable)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.cuentaContable)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.noExpediente)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.noExpediente)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.SinFactura)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SinFactura)
+            </dd>
+
+        </dl>
+        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Facturacion"))
+        {
+            <div>@Html.ActionLink("Editar", "Edit", new { id = Model.IDCliente, searchString = ViewBag.searchString }, new { @class = "btn btn-success btn-xs" }) |</div>
+
+        }
+    </div>
+
+
+    @*Finaliza Modal Editar*@
+
+
+    @*Tab Domicilioe*@
+    <div class="tab-pane fade" id="Domicilioe" name="Domicilioe" role="tabpanel" aria-labelledby="Domicilioe-tab">
+        @{ SIAAPI.Models.Comercial.Clientes cliente = new SIAAPI.Models.Comercial.ClientesContext().Clientes.Find(Model.IDCliente);
+
+            List<SIAAPI.Models.Comercial.Entrega> listado = new SIAAPI.Models.Comercial.EntregaContext().Entregas.Where(s => s.IDCliente == cliente.IDCliente).OrderBy(a => a.IDCliente).ToList();
+
+        }
+        <h3>Domicilio de Entrega de Cliente</h3>
+        <p>
+            @Html.ActionLink("Crear un nuevo registro", "CreateE", null, new { @class = "btn btn-warning btn-xs" })
+        </p>
+
+
+        <table class="table">
+            <tr>
+
+                <th>
+                    Domicilio
+                </th>
+
+
+
+                <th>
+                    Municipio
+                </th>
+                <th>
+                    Estado
+                </th>
+                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
+                {
+                    <th>
+                        Fecha
+                    </th>
+                    <th>
+                        Usuario
+                    </th>
+                }
+
+                @*<th>
+            @Html.DisplayNameFor(model => model.ObservacionEntrega)
+        </th>*@
+                <th></th>
+            </tr>
+
+            @foreach (SIAAPI.Models.Comercial.Entrega item in listado)
+            {
+        <tr>
+
+            <td>
+                <div>@Html.DisplayFor(modelItem => item.CalleEntrega) @Html.DisplayFor(modelItem => item.NumExtEntrega) @Html.DisplayFor(modelItem => item.NumIntentrega, @Html.DisplayFor(modelItem => item.ColoniaEntrega))  </div>
+
+
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.MunicipioEntrega)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estados.Estado)
+            </td>
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
+            {
+                try
+                {
+
+                }
+                catch (Exception err)
+                {
+                    SIAAPI.Models.Comercial.VFechaCreacionDomEC entrega = new SIAAPI.Models.Comercial.VFechaCreacionDomECContext().Database.SqlQuery<SIAAPI.Models.Comercial.VFechaCreacionDomEC>("select FC.*, U.Username from FechaCreacionDomEC FC inner join Entrega E on FC.IDEntrega = E.IDEntrega inner join[dbo].[User] U on FC.IDUsuario = U.UserID where FC.IDEntrega=" + item.IDEntrega).ToList().FirstOrDefault();
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => entrega.Fecha)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => entrega.Username)
+                    </td>
+                }
+
+
+
+            }
+        <td>
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Compras"))
+            {
+                @Html.ActionLink("Editar", "EditE", new { id = item.IDEntrega }, new { @class = "btn btn-success btn-xs" })
+                
+                @Html.ActionLink("Eliminar", "DeleteE", new { id = item.IDEntrega }, new { @class = "btn btn-danger btn-xs" })
+            }
+            @Html.ActionLink("Detalles", "DetailsE", new { id = item.IDEntrega }, new { @class = "btn btn-default btn-xs" })
+            @*<div class="row"><a href=@("Clientes/EditE/"+item.IDEntrega) class="btn btn-default">Editar</a>         </div>
+        <div class="row"><a href=@("/DetailsE/"+item.IDEntrega ) class="btn btn-default">Detalles</a> </div>
+        <div class="row"><a href=@("/DeleteE/" + item.IDEntrega ) class="btn btn-danger">Eliminar</a> </div>*@
+        </td>
+
+        </tr>
+            }
+
+        </table>
+
+
+
+
+
+    </div> @*Fin Tab Domicilioe*@
+
+    <div class="tab-pane fade" id="Domicilioc" role="tabpanel" aria-labelledby="Domicilioc-tab">
+        @{
+            List<SIAAPI.Models.Comercial.Cobro> cob = new SIAAPI.Models.Comercial.CobroContext().Cobros.Where(s => s.IDCliente == cliente.IDCliente).OrderBy(a => a.IDCliente).ToList();
+
+
+        }
+        <h3>Domicilio de Cobro de Cliente</h3>
+        <p>
+            @Html.ActionLink("Crear un nuevo Domicilio de cobro", "CreateC", null, new { @class = "btn btn-warning btn-xs" })
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    Domicilio
+                </th>
+
+                <th>
+                    Municipio
+                </th>
+
+
+                <th>
+                    Estado
+                </th>
+
+                <th></th>
+            </tr>
+
+            @foreach (SIAAPI.Models.Comercial.Cobro item in cob)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CalleCobro) @Html.DisplayFor(modelItem => item.NumExtCobro) @Html.DisplayFor(modelItem => item.NumIntCobro), @Html.DisplayFor(modelItem => item.ColoniaCobro)
+
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MunicipioCobro)
+                    </td>
+
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Estados.Estado)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink("Editar", "EditC", new { id = item.IDCobro }, new { @class = "btn btn-success btn-xs" })
+                        @Html.ActionLink("Detalles", "DetailsC", new { id = item.IDCobro }, new { @class = "btn btn-default btn-xs" })
+                        @*@Html.ActionLink("Eiminar", "DeleteC", new { id=item.IDCobro }, new { @class = "btn btn-danger btn-xs" })*@
+
+                        @*<div class="row"><a href=@("Clientes/EditC/"+item.IDCobro) class="btn btn-default">Editar</a>         </div>
+                            <div class="row"><a href=@("Clientes/DetailsC/"+item.IDCobro ) class="btn btn-default">Detalles</a> </div>
+                            <div class="row"><a href=@("Clientes/DeleteC/" + item.IDCobro ) class="btn btn-danger">Eliminar</a> </div>*@
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+    @*finaliza tab domicilio c*@
+    <div class="tab-pane fade" id="Referencia" role="tabpanel" aria-labelledby="Referencia-tab">
+        @{
+            List<SIAAPI.Models.Comercial.ReferenciaPagoCliente> refe = new SIAAPI.Models.Comercial.ReferenciaPagoClienteContext().ReferenciaPagoClientes.Where(s => s.IDCliente == cliente.IDCliente).OrderBy(a => a.IDCliente).ToList();
+            int c = new SIAAPI.Models.Comercial.ClientesContext().Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(IDCliente) as Dato from ReferenciaPagoCliente where IDCliente='" + cliente.IDCliente + "'").ToList().FirstOrDefault().Dato;
+
+        }
+        <h3>Referencia de Pago Cliente</h3>
+
+        @{
+            if (c == 0)
+            {
+                <p>
+                    @Html.ActionLink("Crear Referencia de Pago", "CreateR", null, new { @class = "btn btn-warning btn-xs" }) | @Html.ActionLink("Crear un nuevo registro de Banco", "CreateB", null, new { @class = "btn btn-warning btn-xs" })
+                </p>
+            }
+            else
+            {
+                <p>
+                    @Html.ActionLink("Crear un nuevo registro de Banco", "CreateB", null, new { @class = "btn btn-warning btn-xs" })
+                </p>
+            }
+        }
+
+        <table class="table">
+            <tr>
+                <th colspan="3">
+                    .                                                 .
+                </th>
+                <th colspan="5">
+                    Días de Revisión
+                </th>
+                <th colspan="4">
+                    |    Días de Pago
+                </th>
+                <th colspan="6">
+
+                </th>
+            </tr>
+            <tr>
+
+                <th>
+                    Moroso
+                </th>
+
+                <th>
+
+                    Limite de crédito
+                </th>
+                <th>
+
+                    Riesgo Alcanzado
+                </th>
+                <th>
+                <th>
+                    Observación
+                </th>
+                Lu
+                </th>
+                <th>
+                    Ma
+                </th>
+                <th>
+                    Mi
+                </th>
+                <th>
+                    Ju
+                </th>
+                <th>
+                    Vi
+                </th>
+                <th>
+                    Abierto
+                </th>
+                <th>
+                    Lu
+                </th>
+                <th>
+                    Ma
+                </th>
+                <th>
+                    Mi
+                </th>
+                <th>
+                    Ju
+                </th>
+                <th>
+                    Vi
+                </th>
+                <th>
+                    Abierto
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (SIAAPI.Models.Comercial.ReferenciaPagoCliente item in refe)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Moroso)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Limitedecredito)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RiesgoAlcanzado)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaRevLu)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaRevMa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaRevMi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaRevJu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaRevVi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaRevAb)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaPagLu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaPagMa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaPagMi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaPagJu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaPagVi)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DiaPagAb)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "EditR", new { id = item.IDReferenciaPagoCliente }, new { @class = "btn btn-success btn-xs" }) |
+                        @Html.ActionLink("Detalles", "DetailsR", new { id = item.IDReferenciaPagoCliente }, new { @class = "btn btn-default btn-xs" }) |
+                        @*@Html.ActionLink("Eliminar", "DeleteR", new { id = item.IDReferenciaPagoCliente }, new { @class = "btn btn-danger btn-xs" })*@
+                    </td>
+                </tr>
+
+            }
+
+        </table>
+        <br />
+        <h3>Cuentas Bancarias de  Cliente</h3>
+        <table class="table">
+            <thead>
+                <tr>
+
+                    <th>Banco</th>
+                    <th>No. Cuenta Bancaria</th>
+                    <th>Divisa</th>
+
+                </tr>
+            </thead>
+
+            @{
+                List<SIAAPI.Models.Comercial.VBancoCliente> orden = new SIAAPI.Models.Comercial.ClientesContext().Database.SqlQuery<SIAAPI.Models.Comercial.VBancoCliente>("select BancoCliente.IDBancoCliente,BancoCliente.CuentaBanco, Clientes.Nombre as Cliente, c_Banco.Nombre as Banco, c_Moneda.Descripcion as Moneda from BancoCliente inner join Clientes on Clientes.IDCliente=BancoCliente.IDCliente inner join c_Banco on c_Banco.IDBanco=BancoCliente.IDBanco inner join c_Moneda on c_Moneda.IDMoneda=BancoCliente.IDMoneda where  BancoCliente.IDCliente='" + cliente.IDCliente + "'").ToList();
+
+                foreach (SIAAPI.Models.Comercial.VBancoCliente item in orden)
+                {
+                    <tr>
+
+                        <td>@item.Banco</td>
+                        <td>@item.CuentaBanco</td>
+                        <td>@item.Moneda</td>
+
+                        <td>
+                            @Html.ActionLink("Editar", "EditB", new { id = item.IDBancoCliente }, new { @class = "btn btn-default btn-xs" }) |
+                            @Html.ActionLink("Detalles", "DetailsB", new { id = item.IDBancoCliente }, new { @class = "btn btn-default btn-xs" }) |
+                            @Html.ActionLink("Eliminar", "DeleteB", new { id = item.IDBancoCliente }, new { @class = "btn btn-danger btn-xs" })
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+
+    </div>
+    <div class="tab-pane fade" id="Contactos" role="tabpanel" aria-labelledby="Contactos-tab">
+        @{
+            List<SIAAPI.Models.Comercial.ContactosClie> contacto = new SIAAPI.Models.Comercial.ContactosClieContext().ContactosClies.Where(s => s.IDCliente == cliente.IDCliente).OrderBy(a => a.IDCliente).ToList();
+
+
+        }
+        <h3>Contactos de Cliente</h3>
+        <p>
+            @Html.ActionLink("Crear un nuevo registro", "CreateContacto", null, new { @class = "btn btn-warning btn-xs" })
+        </p>
+        <table class="table">
+            <tr>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Telefono)
+                </th>
+                @*<th>
+                        @Html.DisplayNameFor(model => model.Puesto)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Observacion)
+                    </th>*@
+                <th></th>
+            </tr>
+
+            @foreach (SIAAPI.Models.Comercial.ContactosClie item in contacto)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                    <td>
+                        <a href="mailto:#">@Html.DisplayFor(modelItem => item.Email)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Telefono)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.Puesto)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Observacion)
+                        </td>*@
+                    <td>
+                        @Html.ActionLink("Editar", "EditContacto", new { id = item.IDContactoClie }, new { @class = "btn btn-success btn-xs" })
+                        @Html.ActionLink("Detalles", "DetailsContacto", new { id = item.IDContactoClie }, new { @class = "btn btn-default btn-xs" })
+                        @Html.ActionLink("Eliminar", "DeleteContacto", new { id = item.IDContactoClie }, new { @class = "btn btn-danger btn-xs" })
+                        @*<div class="row"><a href=@("Clientes/EditContacto/"+item.IDContactoClie) class="btn btn-default">Editar</a>         </div>
+                            <div class="row"><a href=@("Clientes/DetailsContacto/"+item.IDContactoClie ) class="btn btn-default">Detalles</a> </div>
+                            <div class="row"><a href=@("Clientes/DeleteContacto/" + item.IDContactoClie ) class="btn btn-danger">Eliminar</a> </div>*@
+                    </td>
+                </tr>
+            }
+
+        </table>
+
+    </div>
+
+
+    @*tab Articulos*@
+    <div class="tab-pane fade" id="Articulos" role="tabpanel" aria-labelledby="Articulos-tab">
+        <h2>Articulos del cliente</h2>
+
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.Label("Foto")
+                </th>
+                <th>
+                    @Html.Label("Ultima Fecha de Venta")
+                </th>
+                <th>
+                    @Html.Label("Artículo")
+                </th>
+
+                <th></th>
+
+
+                <th></th>
+            </tr>
+            @{
+
+                //List<SIAAPI.Models.Comercial.ArticulosComprados> art = new SIAAPI.Models.Comercial.ArticulosCompradosContext().ArticulosComprados.Where(s => s.IDCliente == cliente.IDCliente).OrderBy(a => a.Cref).ToList();
+                List<SIAAPI.Models.Comercial.ArticulosComprados> art = new SIAAPI.Models.Comercial.ArticulosCompradosContext().Database.SqlQuery<SIAAPI.Models.Comercial.ArticulosComprados>("select * from dbo.ArticulosComprados where idcliente  ='" + cliente.IDCliente + "' order by Cref").ToList();
+            }
+            @foreach (SIAAPI.Models.Comercial.ArticulosComprados itema in art)
+            {
+
+                SIAAPI.Models.Comercial.Caracteristica carateristica = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from caracteristica where id=" + itema.IDCaracteristica).ToList().FirstOrDefault();
+
+                <tr>
+
+                    <td class="col-lg-1"><img src="~/imagenes/Upload/@itema.nameFoto" alt="" width="50" height="50"></td>
+                    <td class="col-lg-1">
+                        <div>@Html.DisplayFor(modelItem => itema.Fecha)</div>
+                        <div class="text-danger">@Html.DisplayFor(modelItem => itema.Cref)</div>
+                    </td>
+
+                    <td class="col-lg-6">
+                        <div>@Html.DisplayFor(modelItem => itema.Descripcion)</div>
+                        <div class="text-info" style="font-size:small">@Html.DisplayFor(modelItem => itema.Presentacion)</div>
+                    </td>
+                    <td class="hidden">@Html.HiddenFor(modelItem => itema.ID)</td>
+                    <td>
+                        @if (carateristica.IDCotizacion == 0)
+                        {
+                            <h5 class="text-warning">No esta Cotizado</h5>
+                        }
+                        else
+                        {
+                            @*<div><button onclick="VerCotizacion(@item.IDCotizacion)" class="btn btn-success">Ver Cotizacion</button></div>*@
+                            @Html.ActionLink("Ver cotización " + carateristica.IDCotizacion, "CotizadorRapido1", "Diseno", new { Id = carateristica.IDCotizacion }, new { @class = "btn btn-default btn-xs" })
+
+                            <h5> </h5>
+                        }
+                    </td>
+                    <td class="col-lg-4">
+                        <center><a href="@Url.Action("EliminarArticulo","Clientes",  new {id = itema.ID})" )><span class="fa fa-trash 2" style="font-size:16px;color:red"></span></a></center>
+
+                    </td>
+
+                </tr>
+            }
+
+        </table>
+
+    </div>
+    @*finaliza tab Articulos*@
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<p>
+
+    @Html.ActionLink("Regresar a clientes", "Index", new { searchString = ViewBag.searchString, page = 1 }, new { @class = "btn btn-default btn-xs" })
+</p>

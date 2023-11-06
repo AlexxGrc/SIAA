@@ -1,0 +1,78 @@
+﻿@model SIAAPI.Models.Comisiones.Penalizacion_Factura
+
+@{
+    ViewBag.Title = "PenalizarF";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <h2>Penalización Factura</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @*@Html.LabelFor(model => model.Motivo, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="col-md-10">
+            @Html.HiddenFor(model => model.IdFactura, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.IdFactura, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Motivo, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Motivo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Motivo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @{
+        SIAAPI.Models.Comisiones.Penalizacion_FacturaContext db = new SIAAPI.Models.Comisiones.Penalizacion_FacturaContext();
+        string cadena = "Select subtotal as Dato from EncFacturas where numero=" + Model.IdFactura + " and serie='" + ViewBag.serie + "'";
+        SIAAPI.Models.Comercial.ClsDatoDecimal subtotal = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>(cadena).ToList().FirstOrDefault();
+
+
+        decimal valorsub = subtotal.Dato;
+
+    }
+   <input type="hidden" value="@ViewBag.serie" name="serie" />
+    <div class="form-group">
+        @Html.LabelFor(model => model.Monto, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Monto, new { htmlAttributes = new { @maxlength = valorsub, @Value = valorsub, @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Monto, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Mes, "Mes", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownList("IDMes", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Mes, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Periodo, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Periodo, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Periodo, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Guardar" class="btn btn-success btn-xs" /> |  @Html.ActionLink("Regresar a la lista", "ListaPenalizacionFacturas", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    </div>
+</div>
+}
+
+

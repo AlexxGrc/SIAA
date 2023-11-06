@@ -1,0 +1,213 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.inventariompxcb>
+
+@{
+    ViewBag.Title = "IIporlotemp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Inventario Inicial por Lote interno</h2>
+
+@*<div>@Html.ActionLink("Eliminar todo", "Deleteloteall", null, new { @class = "btn btn-danger" })</div>*@
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        Almacenes
+        <select name="Almacen" id="Almacen" >
+            @if (ViewBag.Almacen == "6")
+            {
+            <option value="6" selected>Tultitlan</option>
+            }
+            else
+            {
+                <option value="6" >Tultitlan</option>
+            }
+            @if (ViewBag.Almacen == "11")
+            {
+                    <option value="11" selected>Leon</option>
+            }
+            else
+            {
+                <option value="11">Leon</option>
+            }
+        </select>
+        <br />
+        <br />
+    </div>
+
+    <div class="form-group col-md-12">
+        <div class="col-md-2"> Cargar Lote</div>
+        <div class="col-md-10">
+            <input name="codigo" id="codigo" type="text" autofocus />
+        </div>
+    </div>
+
+
+    @*<div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success" />
+            </div>
+
+
+        </div>*@
+
+
+}
+<div class="form-group col-md-12">
+
+    <input type="button" value="Verificar existencias" name="Verificar existencias" class="btn btn-success" onclick="verificar()" />
+    <input type="button" value="Eliminar todo" name="Eliminar todo" class="btn btn-danger" onclick="eliminar()" />
+</div>
+
+<table class="table">
+    <tr>
+        <th>Lote Interno</th>
+        <th>Clave</th>
+        <th>Ancho</th>
+        <th>Largo</th>
+        <th>M2</th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (SIAAPI.Models.Comercial.inventariompxcb item in Model)
+    {
+        <tr>
+            <td>
+                @item.codigo
+            </td>
+            <td>
+                @item.clave
+            </td>
+            <td>
+                @item.ancho
+            </td>
+            <td>
+                @item.largo
+            </td>
+            <td>
+                @item.m2
+            </td>
+
+
+            @if (item.Existencia == true)
+            {
+                <td>
+                    <i class="fa fa-check-square-o fa-3x" aria-hidden="true"></i>
+                </td>
+                <td>
+                </td>
+            }
+            else
+            {
+                <td>
+                    <i class="fa fa-check-square fa-3x" aria-hidden="true"></i>
+
+                </td>
+                <td>
+
+                    <a href="@Url.Action("AgregarPre", "InventarioAlmacen", new { id= item.id})" class="btn btn-warning">
+                        <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+                    </a>
+                </td>
+
+
+            }
+            <td>
+                <a class="delete" data-id="@item.id">
+                    <i class="tbl_del_btn fa fa-trash fa-3x"></i>
+
+                </a>
+            </td>
+
+
+            @*@Html.ActionLink("Eliminar", "Deletelote", new { id = item.id }, new { @class = "btn btn-danger" })*@
+
+        </tr>
+    }
+
+</table>
+<div>
+    Elementos incorporados @ViewBag.Conteo
+</div>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+
+
+    function Agregar(id) {
+            var urledit = '@Url.Action("AgregarLote", "InventarioAlmacen")';
+            $.post(urledit, { id: id}, function (response) {
+                    if (response) {
+                        location.reload();
+                        row.change;
+
+                    }
+                }).fail(function (response) {
+                    // display error message?
+                });
+    }
+
+
+
+    </script>
+
+
+<script>
+        function eliminar() {
+            var urledit = '@Url.Action("Deletelote", "InventarioAlmacen")';
+            $.post(urledit, null, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+</script>
+
+
+
+<script>
+        function verificar() {
+            var urledit = '@Url.Action("VerificarExistencias", "InventarioAlmacen")';
+            $.post(urledit, null, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+    $("#Almacen").change(function () {
+        this.form.submit();
+    });
+
+</script>
+
+
+<script>
+
+
+      $('.delete').click(function () {
+            var url = '@Url.Action("DeleteitemLote", "InventarioAlmacen")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>

@@ -1,0 +1,74 @@
+﻿@model SIAAPI.Models.Comercial.VFamilia
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Familia de Atributos</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CCodFam)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CCodFam)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveSat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveSat)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductoSat)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductoSat)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveSTCC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveSTCC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductoSTCC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProductoSTCC)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FactorMinimoGanancia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FactorMinimoGanancia)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+
+    }
+</div>

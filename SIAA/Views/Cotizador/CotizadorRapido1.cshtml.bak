@@ -1,0 +1,680 @@
+﻿@model SIAAPI.ClasesProduccion.ClsCotizador
+
+@{
+    ViewBag.Title = "Asistente de cotizador";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+ }
+
+
+@Html.ActionLink("Consultar Materiales", "Index","Materiales", null, new { @class = "btn btn-warning btn-xs" }) |
+@Html.ActionLink("Consultar Tintas", "TipoArticulo", "Cotizador", null, new { @class = "btn btn-info btn-xs" })
+<table>
+    <tr>
+        <td class="col-lg-8">
+            <h4>Ingresa los siguientes datos</h4>
+        </td>
+        <td class="col-lg-4">
+            Tipo de Cambio @Model.TCcotizado
+        </td>
+    </tr> 
+	<tr>
+        <td class="col-lg-8 text-info" style="font-size:x-large">
+            <h4>Cuando estes en el eje de Etiqueta presiona la tecla arroba para reducir la busqueda de suaje</h4>
+        </td>
+       
+    </tr> 
+</table>
+
+
+
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.IDCotizacion, null)
+   
+        <table class="table-responsive col-12">
+            <tr>
+
+                <table style="background-color:#c2996b" class="table-responsive col-12">
+                    <tr>
+                        <td>
+
+                            <div class="form-group">
+                                <h6>Eje  en mm</h6>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.anchoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Anchomm", name = "Anchomm", onkeyup = "actualizasuaje(event) } })
+                                    @Html.ValidationMessageFor(model => model.anchoproductomm, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <h6 >Avance  en mm</h6>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.largoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Largomm", name = "Largomm" } })
+                                    @Html.ValidationMessageFor(model => model.largoproductomm, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+
+                            <div class="form-group">
+                                <h6 >Gap al eje en mm</h6>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.gapeje, new { htmlAttributes = new { @class = "form-control", id = "Gapeje", name = "Gapeje" } })
+                                    @Html.ValidationMessageFor(model => model.gapeje, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <h6 >Gap al Avance en mm</h6>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.gapavance, new { htmlAttributes = new { @class = "form-control", id = "Gapavance", name = "Gapavance" } })
+                                    @Html.ValidationMessageFor(model => model.gapavance, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <h6>Cantidad de etiquetas al paso</h6>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.productosalpaso, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.productosalpaso, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <h6>Número de Tintas</h6>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Numerodetintas, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Numerodetintas, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div class="form-group">
+                                <h6>Cantidad de etiquetas x rollo o paquete</h6>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Cantidadxrollo, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Cantidadxrollo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <h6 >Cantidad  a cotizar en Millares</h6>
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Cantidad, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="form-group">
+                              
+                                <div class="col-md-10" style="font-size: x-small">
+                                    Termoencogible
+                                   @* <div class="checkbox">*@
+                                        @Html.EditorFor(model => model.mangatermo)
+                                        @Html.ValidationMessageFor(model => model.mangatermo, "", new { @class = "text-danger" })
+                                    @*</div>*@
+                                </div>
+                            </div>
+                          
+                            <div class="col-md-10" style="font-size: x-small">
+                                Con adhesivo
+                                @*<div class="checkbox">*@
+                                    @Html.EditorFor(model => model.conadhesivo)
+                                    @Html.ValidationMessageFor(model => model.conadhesivo, "", new { @class = "text-danger" })
+                                @*</div>*@
+                            </div>
+                          
+                        </td>
+                    </tr>
+
+                </table>
+
+ 
+            </tr>
+            <br />
+            <tr>
+                <table>
+                    <tr>
+                        <td>
+                            <h6 style="font-size: small">Suaje Existente</h6>
+                        </td>
+                        <td>
+
+
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.IDSuaje, ViewBag.IDSuaje as List<SelectListItem>, new { @class = "form-control", id = "IDSuaje",name = "IDSuaje", onchange = "Suaje()" })
+                                @Html.ValidationMessageFor(model => model.IDSuaje, "", new { @class = "text-danger" })
+                            </div>
+
+
+                        </td>
+
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h6 style="font-size: small">Ancho de master en cm</h6>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <div class="col-md-2">
+                                    @Html.EditorFor(model => model.CobrarMaster, new { htmlAttributes = new { @class = "form-control", id = "CobrarMaster", name = "CobrarMaster" } })
+                                    @*<input id="CobrarMaster"  type="checkbox" value="@Model.CobrarMaster" name="CobrarMaster" />*@
+                                </div>
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.anchommmaster, new { htmlAttributes = new { @class = "form-control", id="AnchoMaster", name="AnchoMaster" } })
+                                    @Html.ValidationMessageFor(model => model.anchommmaster, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </td>
+                       
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <h6 style="font-size: small">Cavidades al eje del suaje</h6>
+                        </td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.cavidadesdesuaje, new { htmlAttributes = new { @class = "form-control", id = "Cavidades", name = "Cavidades" } })
+                                @Html.ValidationMessageFor(model => model.cavidadesdesuaje, "", new { @class = "text-danger" })
+                            </div>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <h6 style="font-size: small">Largo de la cinta a considerar</h6>
+                        </td>
+                        <td>
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.LargoCinta, new { htmlAttributes = new { @class = "form-control", id = "LargoCinta", name = "LargoCinta" } })
+                                @Html.ValidationMessageFor(model => model.LargoCinta, "", new { @class = "text-danger" })
+                            </div>
+                        </td>
+
+                    </tr>
+                    @*<tr>
+                            <td></td>
+
+                            <td>
+                                <input id="btnRevisar" type="submit" name="Enviar" value="Revisar calculos Basicos" class="btn btn-dark" />
+                            </td>
+                        </tr>*@
+                </table>
+            </tr>
+        </table>
+        @*/////////////////////////////////*@
+
+   
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+    <table>
+        <tr>
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Ancho de cinta minimo necesitado |</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.anchomaterialenmm, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.anchomaterialenmm, "", new { @class = "text-danger" })*@
+                    @{int anchomaterialenmm = Model.anchomaterialenmm;}
+                    @anchomaterialenmm mm
+                </div>
+            </td>
+
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Largo de Cinta necesitada |</h6>
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.largomaterialenMts, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.largomaterialenMts, "", new { @class = "text-danger" })*@
+                    @{decimal largomaterialenMts = Model.largomaterialenMts;}
+                    @largomaterialenMts Mts
+                </div>
+            </td>
+
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Mts necesarios de preparacion y cambios |</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.MtsdeMerma, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MtsdeMerma, "", new { @class = "text-danger" })*@
+                    @{decimal MtsdeMerma = Model.MtsdeMerma;}
+                    @MtsdeMerma Mts
+
+                </div>
+
+            </td>
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Material total necesitado |</h6>
+                <div class="col-md-10 text-primary">
+                    @{decimal MaterialNecesitado = Math.Round(Model.MaterialNecesitado, 2);}
+                    @MaterialNecesitado Mts
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Cantidad de Mts2 de MP |</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.CantidadMPMts2, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CantidadMPMts2, "", new { @class = "text-danger" })*@
+                    @{decimal CantidadMPMts2 = Math.Round(Model.CantidadMPMts2, 2);}
+                    @CantidadMPMts2 Mts2
+                </div>
+            </td>
+
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Número de Cintas |</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.Numerodecintas, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Numerodecintas, "", new { @class = "text-danger" })*@
+                    @{decimal Numerodecintas = Math.Round(Model.Numerodecintas, 2);}
+                    @Numerodecintas Piezas
+                </div>
+            </td>
+
+            <td>
+                <h6 style="font-size: small" class="text-black-50">Número de Cintas  en el Master|</h6>
+
+                <div class="col-md-10 text-primary">
+                    @*@Html.EditorFor(model => model.CintasMaster, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CintasMaster, "", new { @class = "text-danger" })*@
+
+                    @{decimal CintasMaster = Model.CintasMaster;}
+                    @CintasMaster Piezas
+                </div>
+            </td>
+
+        </tr>
+        @* ////////////////////////////hablitar cuando esten los roles /////////////////////*@
+
+
+        @if (@Roles.IsUserInRole("Administrador")  || @Roles.IsUserInRole("Gerencia"))
+            {
+                <tr>
+
+
+                    <td>
+                        <h6 style="font-size: small" class="text-black-50">Costo Total Cinta</h6>
+
+                        <div class="col-md-10 text-primary">
+                            @{decimal CostototalMP = Math.Round(Model.CostototalMP, 2);}
+                             @CostototalMP  USD
+                        </div>
+                    </td>
+
+                    <td>
+                        <h6 style="font-size: small" class="text-black-50">Minutos en prensa</h6>
+
+                        <div class="col-md-10 text-primary">
+                            @{ decimal hrprensa = Math.Round((Model.HrPrensa * 60), 0); }
+                             @hrprensa Minutos 
+                        </div>
+                    </td>
+
+
+                </tr>
+
+
+                           
+
+                                   
+                
+
+                                   
+             }
+
+    </table>
+
+
+            <div class="form-group">
+                <h2>Minimo de Millares a Producir</h2>
+                <div class="col-md-10">
+                    @{decimal Minimo = Math.Round(Model.Minimoproducir, 2);}
+                    <h3 class="text-capitalize">  @Minimo Millares</h3>
+                </div>
+            </div>
+
+
+ <table >
+                <thead class="thead-dark">
+                    <tr>
+                        <th><div class="col-md-1">Cintas</div></th>
+
+                        <th><div class="col-md-5"></div></th>
+  					@if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia"))
+                        {
+                        <th><div  class="col-md-1">Costo</div></th>
+                        <th><div  class="col-md-5"></div></th>
+ 					}
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h6 style="font-size: small">Cinta Existente</h6>
+                        </td>
+                        <td>
+
+
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.IDMaterial, ViewBag.IDMaterial as List<SelectListItem>, new { @class = "form-control", id = "IDMp", onchange = "getMP()" })
+                                @Html.ValidationMessageFor(model => model.IDMaterial, "", new { @class = "text-danger" })
+                            </div>
+                            <input id="AnchoCinta" name="AnchoCinta" value="0" hidden />
+
+                        </td>
+
+ @{if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia"))
+                            {
+                        <td>
+                            <h6 style="font-size: small">Costo en USD de M2 </h6>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.CostoM2Cinta, new { htmlAttributes = new { @class = "form-control", id = "Precio", name = "Precio" } })
+                                    @Html.ValidationMessageFor(model => model.CostoM2Cinta, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </td>
+   						}
+                            }
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <h6 style="font-size: small">Adicional</h6>
+                        </td>
+                        <td>
+
+
+                            <div class="col-md-10">
+                                @Html.DropDownListFor(model => model.IDMaterial2, ViewBag.IDMaterial as List<SelectListItem>, new { @class = "form-control", id = "IDMp2", onchange = "getMP2()" })
+                                @Html.ValidationMessageFor(model => model.IDMaterial2, "", new { @class = "text-danger" })
+                            </div>
+                            <input id="AnchoCinta" name="AnchoCinta" value="0" hidden />
+
+                        </td>
+
+  				@if (@Roles.IsUserInRole("Administrador")  || @Roles.IsUserInRole("Gerencia"))
+                        {
+                        <td>
+                            <h6 style="font-size: small">Costo en USD de M2 Adicional</h6>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.CostoM2Cinta2, new { htmlAttributes = new { @class = "form-control", id = "Precio2", name = "Precio2" } })
+                                    @Html.ValidationMessageFor(model => model.CostoM2Cinta2, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </td>
+				}
+                    </tr>
+
+            </table>
+
+                       @Html.HiddenFor(model => model.TCcotizado)
+                        @Html.HiddenFor(model => model.IDMonedapreciosconvenidos)
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.Cantidaderollos, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Cantidaderollos, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cantidaderollos, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+
+
+
+
+
+           
+                        @*<div class="form-group">
+                                @Html.LabelFor(model => model.VelocidaddePrensaPies, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.VelocidaddePrensaPies, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.VelocidaddePrensaPies, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+                        @*<div class="form-group">
+                                @Html.LabelFor(model => model.VelocidaddePrensaMts, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.VelocidaddePrensaMts, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.VelocidaddePrensaMts, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+
+
+
+
+
+
+                        @*</div> @*fin de div general*@
+
+
+
+
+try
+{
+    //if ((ViewBag.EnqueEstoy == 2) && ( Model.Numerodetintas> 0))
+    //{
+    Html.RenderPartial("Tintas", ViewData["Tintas"]);
+    //}
+}
+catch (Exception err)
+{
+    string mensajederror1 = err.Message;
+}
+
+if (ViewBag.Mensajedeerror=="")
+{
+    try
+    {
+        //if ((ViewBag.EnqueEstoy == 2) && ( Model.Numerodetintas> 0))
+        //{
+        Html.RenderPartial("Rango", Model);
+        //}
+    }
+    catch (Exception err2)
+    {
+        string mensajederror2 = err2.Message;
+    }
+}
+if (Model.Yatienematriz)
+{
+    try
+    {
+        //if ((ViewBag.EnqueEstoy == 2) && ( Model.Numerodetintas> 0))
+        //{
+        ViewBag.Cantidad1 = Model.Rango1;
+        ViewBag.Cantidad2 = Model.Rango2;
+        ViewBag.Cantidad3 = Model.Rango3;
+        ViewBag.Cantidad4 = Model.Rango4;
+ 	   if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia"))
+        {
+   
+            Html.RenderPartial("MatrizCosto",Model);
+        }
+        Html.RenderPartial("Matriz", Model.MatrizPrecio);
+   		ViewBag.TC = Model.TCcotizado;
+        ViewBag.idMonedaconvenida = Model.IDMonedapreciosconvenidos;
+        Html.RenderPartial("Precioconv", Model);
+        //}
+    }
+    catch (Exception err2)
+    {
+        string mensajederror2 = err2.Message;
+    }
+}
+
+<div class="text-danger"><h5>@ViewBag.Mensajedeerror</h5></div>
+
+
+string cadena = "Siguiente";
+
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+
+                                <input type="submit" id="btnSiguiente" name="Enviar" value="@cadena" class="btn btn-dark" />
+                                @if (Model.Yatienematriz)
+                                {
+                                 <input type="submit" id="btnSiguiente" name="Enviar" value="Grabar Archivo" class="btn btn-info  " />
+                                    if (Model.IDCotizacion > 0)
+                                    { 
+                                        <input type="submit" id="btnSiguiente" name="Enviar" value="Crear Articulo" class="btn btn-warning  btn-xs" />
+                                        <input type="submit" id="btnSiguiente" name="Enviar" value="Asignar Articulo" class="btn btn-warning  btn-xs" />
+                                        <input type="submit" id="btnSiguiente" name="Enviar" value="Crear PDF" class="btn btn-warning  btn-xs" />
+                                    }
+                                @*<input type="submit" id="btnSiguiente" name="Enviar" value="Crear Articulo para un Cliente" class="btn btn-warning btn-xs" />
+                                <input type="submit" id="btnSiguiente" name="Enviar" value="Asignar matriz a un Articulo Existente" class="btn btn-info  btn-xs" />*@
+                                
+                                }
+                            </div>
+                        </div>
+
+                        }
+
+
+<div>
+    @Html.ActionLink("ir  a la lista", "Index")
+</div>
+
+
+
+<script>
+    function Suaje() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getSuaje")',
+            dataType: 'json',
+            data: { IDSuaje: $("#IDSuaje").val() },
+            success: function (suaje) {
+                $("#Anchomm").val(suaje.Eje);
+                $("#Largomm").val(suaje.Avance);
+                $("#Cavidades").val(suaje.Cavidades);
+                $("#Gapeje").val(suaje.Gapeje);
+                $("#Gapavance").val(suaje.Gapavance);
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+    function getMP() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getMP")',
+            dataType: 'json',
+            data: { IDMp: $("#IDMp").val() },
+            success: function (Cinta) {
+                $("#AnchoMaster").val(Cinta.Ancho);
+                $("#LargoCinta").val(Cinta.Largo);
+                $("#Precio").val(Cinta.Costo);
+                if(Cinta.CobrarMaster==true)
+                {
+                    elemento = $("#CobrarMaster");
+                    elemento.prop("checked", true);
+                    
+                }
+                else {
+                    elemento = $("#CobrarMaster");
+                    elemento.prop("checked", false);
+
+                }
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+    function getMP2() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("getMP")',
+            dataType: 'json',
+            data: { IDMp: $("#IDMp2").val() },
+            success: function (Cinta) {
+               
+                $("#Precio2").val(Cinta.Costo);
+
+               
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+
+
+    function actualizasuaje(e) {
+
+
+
+
+        if (e.keyCode === 81) {
+            var control = "#Anchomm";
+            var selectcontrol = "#IDSuaje" ;
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getsuajesblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+                    }
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+</script>

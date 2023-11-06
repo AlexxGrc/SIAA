@@ -1,0 +1,44 @@
+﻿
+@model IEnumerable<SIAAPI.Models.Comercial.VDetEntregaRemision>
+
+
+<div class="container">
+    <h3>Listado de Remisiones de Entrega</h3>
+    <p>Esta tabla lista las entregas anexadas para el chofer seleccionado.</p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No. Factura</th>
+                <th>No. Remisión</th>
+                <th>Cliente</th>
+
+                <th>Entrega</th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{ foreach (var remision in Model)
+                {
+                   
+                    <tr>
+                        <td>@remision.NoFactura</td>
+                        <td>@remision.Cliente</td>
+                       
+                        <td>@remision.Entrega</td>
+                     
+                        <td>
+                            <a class="delete" data-id="@remision.IDRemision">
+                                <i class="tbl_del_btn fa fa-trash"></i>
+
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+</div>

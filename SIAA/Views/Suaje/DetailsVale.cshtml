@@ -1,0 +1,168 @@
+﻿@model SIAAPI.Models.Suajes.VValeSuaje
+
+@{
+    ViewBag.Title = "DetailsVale";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<h3>Detalles del vale</h3>
+<hr />
+<div>
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+
+                </dt>
+                <dt>
+                    @Html.Label("Folio")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IDValeSuaje)
+                </dd>
+
+                <dt>
+                    @Html.Label("Fecha")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Fecha)
+                </dd>
+
+
+                <dt>
+                    @Html.Label("Entrega a")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Entregar)
+                </dd>
+                <dt>
+                    @Html.Label("Tipo Operación")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TipoOperacion)
+                </dd>
+
+            </dl>
+        </div>
+
+
+
+
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+
+                <dt>
+                    @Html.Label("Concepto")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Concepto)
+                </dd>
+                <dt>
+                    @Html.Label("Solicito")
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Solicito)
+                </dd>
+                <dt>
+                    @Html.Label("Observación")
+                </dt>
+                <dd>
+
+                    @Html.DisplayFor(model => model.Observacion)
+                </dd>
+               
+            </dl>
+        </div>
+
+
+
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        @*<thead>*@
+        <tr>
+
+            <td>Referencia</td>
+            <td>Artículo</td>
+            <td>Almacén</td>
+
+            <td>Cantidad</td>
+            <td>Precio</td>
+            <td>Moneda</td>
+            <td>Importe</td>
+            <td>Motivo</td>
+
+        </tr>
+        @* </thead>*@
+
+        @foreach (SIAAPI.Models.Suajes.VDetValeSuaje item in ViewBag.req)
+        {
+
+
+            SIAAPI.Models.Comercial.Caracteristica car = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where ID=" + item.IDCaracteristica).ToList().FirstOrDefault();
+            SIAAPI.Models.Comercial.ArticuloContext dbar = new SIAAPI.Models.Comercial.ArticuloContext();
+            SIAAPI.Models.Comercial.Articulo articulo = dbar.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>("select * from Articulo where IDArticulo='" + item.IDArticulo + "'").ToList().FirstOrDefault();
+
+
+          
+
+    <tr class="info">
+        <td>
+            @articulo.Cref
+        </td>
+
+        <td>
+            <div>@articulo.Descripcion</div>
+            <div><h5>Número de Presentación @car.IDPresentacion</h5><h6> @item.Presentacion</h6></div>
+            <br />
+
+        </td>
+        <td>
+            @item.Almacen
+
+        </td>
+        <td>
+            @item.Cantidad
+
+        </td>
+
+
+        @* <td>@item.Suministro</td>*@
+        <td>@string.Format("{0:C}", @item.Precio)</td>
+        <td>@item.Moneda</td>
+        <td>@string.Format("{0:C}", @item.Importe)</td>
+
+        <td>@item.Motivo</td>
+
+
+    </tr>
+
+        }
+
+    </table>
+</div>
+
+
+
+
+@{ 
+    SIAAPI.Models.Login.User usuario = new SIAAPI.Models.Login.UserContext().Database.SqlQuery<SIAAPI.Models.Login.User>("select * from [dbo].[User] where UserID=" + Model.UserID).ToList().FirstOrDefault();
+}
+
+
+<h5 align="right">Elaboró: @Html.DisplayFor(model => usuario.Username)</h5>
+<p>
+    @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+    @Html.ActionLink("Regresar a la lista", "ValesDeSalida", null, new { @class = "btn btn-default btn-xs" })
+</p>
+

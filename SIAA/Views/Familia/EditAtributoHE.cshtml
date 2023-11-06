@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.AtributosdeHE>
+<h3>Lista de Atributos</h3>
+<div>
+    @*@Html.ActionLink("Crea un nuevo atributo", "CreateAtributo")*@
+    <p>
+        @Html.ActionLink("Crear un nuevo Atributo de Hoja de Especificacion", "CreateAtributoHE", null, new { @class = "btn btn-warning btn-xs" })
+    </p>
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Valores)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Titulo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Requerido)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Valores)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Titulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Requerido)
+            </td>
+            <td>
+                @Html.ActionLink("Editar", "EditarAtributoHE", new { id = item.IDAtributo }, new { @class = "btn btn-success btn-xs" })
+
+                @Html.ActionLink("Eliminar", "DeleteAtributoHE", new { id = item.IDAtributo }, new { @class = "btn btn-danger btn-xs" })
+            </td>
+        </tr>
+
+    }
+</table>
+@Html.ActionLink("Regresar  a la lista de FAMILIA", "Index", null, new { @class = "btn btn-default btn-xs" })

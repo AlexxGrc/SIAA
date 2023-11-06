@@ -1,0 +1,110 @@
+﻿<h3>Cancelación del Pago</h3>
+<hr />
+@if (@ViewBag.detallesP != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        Datos del pago
+                    </th>
+                <tr>
+                    <th>Fecha del Pago</th>
+                    <th>Cliente</th>
+                    <th>Monto</th>
+                    <th>Divisa</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.detallesP)
+            {
+                <tr>
+                    <td>@item.FechaPago</td>
+                    <td>@item.Nombre </td>
+                    <td>@item.Monto</td>
+                    <td>@item.ClaveDivisa </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+@model SIAAPI.Models.Cfdi.RegistroCancelacionFacturas
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <input value="@Model.FViene" name="FViene" id="FViene" type="hidden" />
+    <input value="@Model.IDFactura" name="IDPago" id="IDPago" type="hidden" />
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col col-md-6 col-sm-1">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Motivo, "Motivo", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Motivo", null, htmlAttributes: new { @class = "form-control", @onchange = "Habilitar()" })
+                    @Html.ValidationMessageFor(model => model.Motivo, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col col-md-6 col-sm-1" style="display:none" id="Folio">
+            <div class="form-group">
+                @Html.LabelFor(model => model.FolioFiscal, "Folio Fiscal", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FolioFiscal, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FolioFiscal, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Cancelar" class="btn btn-success btn-xs" /> @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script>
+
+    function Habilitar() {
+        var x = document.getElementById("Folio");
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("VerMotivo","FacturaAll")',
+            dataType: 'json',
+            data: { id: $("#Motivo").val()},
+            success: function (obj) {
+
+                if (obj == true)
+                {
+
+
+                    if (x.style.display == "none") {
+
+                        alert('Agregar folio fiscal del CFDI que sustituye al cancelado. ')
+                        x.style.display = "block";
+
+                    }
+                       else {
+                        x.style.display = "none";
+
+                    }
+                }
+
+
+
+            },
+            error: function (ex) {
+                //alert('Falle.' + ex.data);
+            }
+
+        });
+    }
+</script>
+
+
+

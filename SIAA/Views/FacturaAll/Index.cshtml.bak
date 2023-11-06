@@ -1,0 +1,536 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Cfdi.Encfacturas>*@
+<globalization uiCulture="auto" culture="auto" />
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+
+@*@model PagedList.IPagedList<SIAAPI.Models.Cfdi.Encfacturas>*@
+@model PagedList.IPagedList<SIAAPI.Models.Cfdi.EncfacturasSaldos>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "IndexAll";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Facturas</h3>
+<hr />
+
+<meta name="googlebot" content="noindex, nofollow, nosnippet, noimageindex">
+<meta name="robots" content="noindex, nofollow, nofollow, nosnippet, noimageindex">
+<meta name="googlebot-news" content="noindex, nofollow, nosnippet, noimageindex" />
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+				<div class="dropdown dropright col-xs-2">
+                        <button class="btn btn-secondary dropdown-toggle dropdown-toggle-split btn-xs " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Reportes de Facturas
+                            <span class="caret"></span>
+                            <span class="sr-only"></span>
+                        </button>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                             <li> <a class="dropdown-item" href="@Url.Action("reporteSaldos")">Saldos de Clientes</a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("AntiguedadSaldos")"> Antiguedad de saldos </a></li>
+                            <li><a class="dropdown-item" href="@Url.Action("AntiguedadSaldosV")"> Antiguedad de saldos vendedores </a></li>
+
+                            <li><a class="dropdown-item" href="@Url.Action("EntreFechasLFac")">Listado de facturas</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        @Html.ActionLink("Cargar una factura", "CreatedesdeArchivo", null, new { @class = "btn btn-warning btn-xs" })
+                        @Html.ActionLink("Validar Clientes", "ValidarClie", null, new { @class = "btn btn-info btn-xs" })
+
+
+                  
+                        <div class="dropdown dropright col-xs-2">
+                            <button class="btn btn-secondary dropdown-toggle dropdown-toggle-split btn-xs " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Generar Excel
+                                <span class="caret"></span>
+                                <span class="sr-only"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li> <a class="dropdown-item" href="@Url.Action("GenerarExcelFacturas", new { num=1})">Todas las facturas</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("GenerarExcelFacturas", new { num=12})">Últimos 12 meses</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("GenerarExcelFacturas", new { num=6})">Últimos 6 meses</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("GenerarExcelFacturas", new { num=3})">Últimos 3 meses</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <table>
+                        <tr>
+                            <td class="col-lg-3">
+                                Elementos por página: @Html.DropDownList("pageSize")
+
+                            </td>
+                            <td class="col-lg-3">
+                                Facturas: @Html.DropDownList("FacPag", (IEnumerable<SelectListItem>)ViewData["FacPag"], "Todas")
+                            </td>
+                            <td class="col-lg-2">
+                                Serie: @Html.DropDownList("SerieFac", "Todas")
+                            </td>
+                            <td class="col-lg-3">
+                                Estado: @Html.DropDownList("Estado", "Todas")
+                            </td>
+                            <td class="col-lg-3">Factura: @Html.TextBox("Numero")</td>
+                        </tr>
+
+                    </table>
+                    <table>
+                        <tr>
+                            <td class="col-lg-3">
+                                Fecha inicio: @Html.TextBox("Fechainicio", ViewBag.Fechainicio as string, new { type = "date" })
+
+                            </td>
+                            <td class="col-lg-3">
+                                Fecha final:  @Html.TextBox("Fechafinal", ViewBag.Fechafinal as string, new { type = "date" })
+                            </td>
+
+                            <td class="col-lg-3">Cliente: @Html.DropDownList("ClieFac", "Todas") </td>
+                        </tr>
+
+                        <tr></tr>
+                    </table>
+                    <div class="col-xs-3">
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+                        <span class="sr-only">(current)</span>
+                        <input type="button" value="Descargar Poliza" class="btn btn-success btn-xs" onclick="DesPoliza()" /><span class="sr-only">(current)</span>
+
+                    </div>
+
+
+
+                }
+
+            </div>
+
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @Html.ActionLink("Activa", "Index", new { sortOrder = ViewBag.EstadoSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+
+            <th>
+                @*@Html.DisplayNameFor(model => model.Serie)*@
+                @Html.ActionLink("Serie", "Index", new { sortOrder = ViewBag.SerieSortParm, currentFilter = ViewBag.CurrentFilter })
+
+
+            </th>
+
+            <th>
+                @*@Html.DisplayNameFor(model => model.Numero)*@
+                @Html.ActionLink("Numero", "Index", new { sortOrder = ViewBag.NumeroSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+
+            <th>
+                @*@Html.DisplayNameFor(model => model.Fecha)*@
+                @Html.ActionLink("Fecha", "Index", new { sortOrder = ViewBag.FechaSortParm, currentFilter = ViewBag.CurrentFilter })
+
+
+            </th>
+            <th>
+                @*Html.DisplayNameFor(model => model.Nombre_Cliente)*@
+                @Html.ActionLink("Nombre_Cliente", "Index", new { sortOrder = ViewBag.ClienteSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Subtotal)*@
+                @Html.Label("Subtotal")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.IVA)*@
+                @Html.Label("IVA")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Total)*@
+                @Html.Label("Total")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.UUID)*@
+                @Html.Label("Moneda")
+            </th>
+            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Gerente Ventas"))
+            {
+                <th>
+                    @Html.Label("Importe Pagado")
+                </th>
+                <th>
+                    @Html.Label("Saldo Insoluto")
+                </th>
+            }
+            <th>
+                @*@Html.DisplayNameFor(model => model.RutaXML)*@
+                @Html.Label("XML")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.RutaXML)*@
+                @Html.Label("PDF")
+            </th>
+            <th>
+
+            </th>
+            <th>
+
+            </th>
+            <th>
+ <th>
+			               
+			
+			            </th>
+                @Html.Label("Cancelar")
+
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+            {
+            <tr>
+
+                <td>
+                    @if (item.Estado == "A")
+                    {
+                        <a><span class="fa fa-check-circle" style="font-size:16px;color:green"></span></a>
+                        try
+                        { 
+                            if (item.pagada == true)
+                            {
+                                <a><span class="fa fa-check-circle" style="font-size:16px;color:blueviolet"></span></a>
+                            }
+                        }
+                        catch(Exception err)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        <a><span class="fa fa-times-circle" style="font-size:16px;color:red"></span></a>
+                    }
+
+
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Serie)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Numero)
+                </td>
+                <td>
+                    @DateTime.Parse(@Html.DisplayFor(modelItem => item.Fecha).ToString()).ToShortDateString()
+                </td>
+
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.Nombre_cliente)
+                    @if (item.IDCliente == 0)
+                    {
+                        <a><span class="fa fa-user-times" style="font-size:16px;color:red"></span></a>
+                    }
+                </td>
+                <td align="right">
+                    @String.Format("{0:C}", item.Subtotal)
+                    @*@Html.DisplayFor(modelItem => item.Subtotal)*@
+                </td>
+                <td align="right">
+
+                    @String.Format("{0:C}", item.IVA)
+                    @*@Html.DisplayFor(modelItem => item.IVA)*@
+                </td>
+                <td align="right">
+                    @String.Format("{0:C}", item.Total)
+                    @*@Html.DisplayFor(modelItem => item.Total)*@
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Moneda)
+                </td>
+                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Gerente Ventas"))
+                {
+                    <td align="right">
+
+                        @String.Format("{0:C}", item.ImportePagado)
+                    </td>
+                    <td align="right">
+                        @String.Format("{0:C}", item.ImporteSaldoInsoluto)
+                    </td>
+                }
+
+                <td>
+                    @Html.ActionLink("XML", "Descargarxml", new { id = item.ID }, new { @class = "btn btn-warning btn-xs" })
+                </td>
+                <td>
+                    @Html.ActionLink("PDF", "DescargarPdf", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+                </td>
+              
+@*/////// para la fecha*@
+		
+		        <td>
+		            @{
+		                SIAAPI.Models.Cfdi.EncfacturaContext db = new SIAAPI.Models.Cfdi.EncfacturaContext();
+		                SIAAPI.Models.Comercial.ClsDatoEntero contarfac = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select count(EncFacturas.id) as dato from EncFacturas inner join EncPrefactura on EncFacturas.numero=EncPrefactura.numero and EncFacturas.serie=[EncPrefactura].serie and EncPrefactura.IDCondicionesPago <> 10 and EncPrefactura.IDCondicionesPago <>1 and EncPrefactura.IDCondicionesPago <>2  where EncFacturas.id=" + item.ID).ToList().FirstOrDefault();
+		                string cadena = "select * from [EncFacturas] where ID=" + item.ID;
+		
+		                SIAAPI.Models.Cfdi.Encfacturas fecharev = db.Database.SqlQuery<SIAAPI.Models.Cfdi.Encfacturas>(cadena).ToList().FirstOrDefault();
+		
+		                if (contarfac.Dato != 0 /*&& fecharev.FechaRevision == null*/ )
+		                {
+		                    @Html.ActionLink("Fecha Revisión", "FechaRevision", new { id = item.ID }, new { @class = "btn btn-warning btn-xs" })
+		                }
+		
+		            }
+		        </td>
+                <td>
+                    @Html.ActionLink("Enviar a correo la factura", "EnviarPdf", new { id = item.ID }, new { @class = "btn btn-success btn-xs", @target="_blank" })
+                </td>
+                @if (item.ConPagos == true)
+                {
+                    <td>
+                        @Html.ActionLink("Ver Pagos", "VPagos", new { id = item.ID })
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+
+
+                <td>
+                    @if (item.Estado == "A")
+                    {
+                        <center><a href="#" class="edit" onclick="Cancelar(@item.ID)"><span class="fa fa-ban" style="font-size:16px;color:red"></span></a></center>
+                    }
+                </td>
+                @if (item.Nombre_cliente.ToLower().Contains("envases univ"))
+                {
+                    <td>
+                        @Html.ActionLink("Crear Addenda", "AddendaEnvanses", new { id = item.ID })
+                    </td>
+                }
+            </tr>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.pagada)
+                    </td>*@
+
+        }
+    </table>
+    </div>
+    <br />
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+                <th class="col-lg-1">
+                    Moneda Origen
+                </th>
+                <th class="col-lg-1">
+                    Subtotal
+                </th>
+                <th class="col-lg-1">
+                    IVA
+                </th>
+                <th class="col-lg-1">
+                    Total
+                </th>
+                <th class="col-lg-1">
+                    Total en Pesos Mexicanos
+                </th>
+            </tr>
+            @foreach (var itemresumen in ViewBag.sumatoria)
+            {
+
+                <tr>
+                    <td class="col-lg-1">
+                        @itemresumen.MonedaOrigen
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.Subtotal)
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.IVA)
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.Total)
+                    </td>
+                    <td class="col-lg-1">
+                        @String.Format("{0:C}", itemresumen.TotalenPesos)
+                    </td>
+
+                </tr>
+            }
+        </table>
+    </div>
+
+    @*Paginación*@
+    @using (Html.BeginForm("Index", "FacturaAll", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+        <div class="pager">
+            Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+            @Model.Count de @Model.TotalItemCount elementos
+
+            @Html.PagedListPager(Model, page => Url.Action("Index", new
+       {
+           page,
+           sortOrder = ViewBag.CurrentSort,
+           currentFilter = ViewBag.CurrentFilter,
+           SerieFac = ViewBag.SerieFacseleccionado,
+           ClieFac =  ViewBag.ClieFacseleccionado,
+           FacPag = ViewBag.ClieFacseleccionado,
+           Estado = ViewBag.Estadoseleccionado,
+           Factura = ViewBag.Factura,
+           Numero = ViewBag.Numero,
+           Fechainicio = ViewBag.Fechainicio,
+           FechaFinal = ViewBag.Fechafinal,
+           pageSize = ViewBag.psize
+       }))
+
+
+        </div>
+    }
+
+
+
+
+    @*Paginación*@
+
+    <script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+    <script>
+
+        $(function(){
+            $("#SerieFac").on("change", function() {
+             @ViewBag.SerieFacseleccionado=  $('[id$=SerieFac] option:selected').text();
+
+            });
+        });
+
+        $(function(){
+            $("#ClieFac").on("change", function() {
+             @ViewBag.Clienteseleccionado=  $('[id$=ClieFac] option:selected').text();
+
+            });
+        });
+
+        $(function(){
+            $("#Estado").on("change", function() {
+             @ViewBag.Estadoseleccionado=  $('[id$=Estado] option:selected').text();
+
+            });
+        });
+
+        $(function(){
+            $("#FacPag").on("change", function() {
+             @ViewBag.FacPagseleccionado=  $('[id$=FacPag] option:selected').text();
+
+            });
+        });
+
+        $(function(){
+            $("#pageSize").on("change", function() {
+             @ViewBag.pzise=  $('[id$=pageSize] option:selected').text();
+
+            });
+        });
+
+      
+
+       
+
+
+    </script>
+<script>
+    function Cancelar(id) {
+        var urledit = '@Url.Action("cancelarFactura", "FacturaAll")';
+        swal({
+            title: "¿Estas seguro de cancelar?",
+            text: "Esta opcion cancela la factura!",
+            type: "Warning",
+            buttons: true,
+            dangerMode: true,
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Si, Cancelalo!",
+            cancelButtonText: "No, dejalo!",
+            closeOnConfirm: true
+        }).then(function (isConfirm) {
+            if (isConfirm) {
+               
+                $.post(urledit, { id: id }, function (response) {
+                    if (response) {
+                        location.reload();
+                        swal("La factura ha sido cancelada!", "", "success")
+
+                    }
+                }).fail(function (response) {
+                    swal("La factura no pudo ser cancelada!", "", "error")
+
+                })
+            }
+            else {
+                swal("Abortado", "Tu factura esta a salvo", "error");
+            }
+        }
+
+      );
+
+
+
+    }
+
+</script>
+<script>
+    function DesExcel(id) {
+        var urledit = '@Url.Action("DescargaExcel", "FacturaAll")';
+        var Numero = $("input[id$=Numero]").val();
+
+        var SerieFac = $('[id$=SerieFac] option:selected').text();
+        var ClieFac = $('[id$=ClieFac] option:selected').text();
+        var sortOrder = $("input[id$=sortOrder]").val();
+        var currentFilter = $("input[id$=currentFilter]").val();
+        var Fechainicio = $("input[id$=Fechainicio]").val();
+        var Fechafinal = $("input[id$=Fechafinal]").val();
+        var FacPag = $('[id$=FacPag] option:selected').text();
+        var Estado = $('[id$=Estado] option:selected').text();
+
+
+        var urledit =urledit+ "?FacPag=" + FacPag +"&SerieFac=" + SerieFac +"&ClieFac=" + ClieFac +"&Estado=" +Estado +"&Numero=" + Numero +"&Fechainicio=" + Fechainicio +"&Fechafinal=" +Fechafinal
+        window.location.href = urledit
+
+
+
+    }
+    function DesPoliza(id) {
+        var urledit = '@Url.Action("DescargaPoliza", "FacturaAll")';
+        var Numero = $("input[id$=Numero]").val();
+
+        var SerieFac = $('[id$=SerieFac] option:selected').text();
+        var ClieFac = $('[id$=ClieFac] option:selected').text();
+        var sortOrder = $("input[id$=sortOrder]").val();
+        var currentFilter = $("input[id$=currentFilter]").val();
+        var Fechainicio = $("input[id$=Fechainicio]").val();
+        var Fechafinal = $("input[id$=Fechafinal]").val();
+        var FacPag = $('[id$=FacPag] option:selected').text();
+        var Estado = $('[id$=Estado] option:selected').text();
+
+
+        var urledit =urledit+ "?FacPag=" + FacPag +"&SerieFac=" + SerieFac +"&ClieFac=" + ClieFac +"&Estado=" +Estado +"&Numero=" + Numero +"&Fechainicio=" + Fechainicio +"&Fechafinal=" +Fechafinal
+        window.location.href = urledit
+
+
+
+    }
+
+</script>

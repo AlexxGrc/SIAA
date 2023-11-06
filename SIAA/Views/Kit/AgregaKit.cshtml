@@ -1,0 +1,265 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Articulo>
+@{
+            ViewBag.Title = "AgregaKit";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("AgregaKit", "Kit", FormMethod.Post))
+{ <div>
+      
+            <h3>Crear Kit de Artículo: @ViewBag.articulo</h3><br />
+  
+</div>
+    
+        }
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                @*<form class="navbar-form navbar-left">*@
+                <div class="form-group">
+                    <h4>Busca un Artículo Complemento</h4>
+                    @using (Html.BeginForm("AgregaKit", "Kit", FormMethod.Post))
+                    {
+<p>
+                                        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:" })
+                                        <input type="submit" value="Aplicar" class="btn btn-primary navbar-btn btn-xs" /><span class="sr-only">(current)</span>
+                                  
+                    </p>
+                   
+                }
+              
+            </div>
+        @*</form>*@
+    </div>
+</nav>
+<br>
+
+@if (@ViewBag.elementos != null)
+{
+<table class="table">
+    <tr>
+        <th></th>
+        <th>
+            @Html.Label("Clave de Artículo")
+        </th>
+        <th>
+            @Html.Label("Descripción")
+        </th>
+        <th>
+            @Html.Label("Familia")
+        </th>
+
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td>
+
+                <img src="~/imagenes/Upload/@item.nameFoto" alt="" width="50" height="50">
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cref)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descripcion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Familia.Descripcion)
+            </td>
+
+            <td>
+            
+               @using (Html.BeginForm("AgregaKit", "Kit", FormMethod.Post))
+               {
+                   <input type="hidden" name="id" id="id" value="@ViewBag.id">
+                <input type="hidden" name="idarticuloc" id="idarticuloc" value="@item.IDArticulo">
+                <input type="hidden" name="searchString" id="searchString" value="@item.Cref">
+                @*<a class="edit" onclick="Inserta(@item.IDArticulo)"><i class="fa fa-plus"></i></a>*@
+                <button type="submit" ><i class="fa fa-plus"></i></button>
+               }
+               @* @Html.ActionLink("Elegir", "Edit", new { id = item.IDArticulo }, new { @class = "btn btn-default btn-xs" })*@
+            </td>
+        </tr>
+    }
+    
+</table>
+}
+@if (@ViewBag.form != null)
+{
+
+    using (Html.BeginForm("Insertar", "Kit", FormMethod.Post))
+    {
+<div class="form-horizontal" name="formulario" id="formulario">
+    <input type="hidden" name="id" class="form-control" value="@ViewBag.id" />
+    @*<div class="form-group">
+        @Html.Label("Artículo", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownList("IDArticulo", ViewBag.articulo as List<SelectListItem>, new { @class = "form-control" })
+           @* @Html.DropDownList("IDArticulo", null, htmlAttributes: new { @class = "form-control" })
+        </div>
+    </div>*@
+    <div class="form-group">
+        @Html.Label("Artículo Complemento", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            @Html.DropDownList("IDArticuloComp", ViewBag.articuloc as List<SelectListItem>, new { @class = "form-control" })
+            @*@Html.DropDownList("IDArticuloComp", null, htmlAttributes: new { @class = "form-control" })*@
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Cantidad", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            <input type="text" name="cantidad" id="cantidad" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Tipo", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-8">
+            <select name="tipo" id="tipo" class="form-control">
+                <option value="C">Por Cantidad</option>
+                <option value="P">Por Porcentaje</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+
+        <input type="submit" value="Grabar" class="btn btn-success" />
+        @*<a class="edit" onclick="Inserta(@ViewBag.id)"><i class="btn btn-success btn-xs">Grabar</i></a>*@ 
+        | @Html.ActionLink("Regresar a Kits", "Index", null, new { @class = "btn btn-default btn-xs" })
+
+    </div>
+</div>
+    }
+}
+@{
+    var contador = 0;
+    if (ViewBag.datos != null)
+    {
+<div class="table-responsive">
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th></th>
+                @*<th>Artículo</th>*@
+                <th>Artículo Complemento</th>
+                <th>Cantidad</th>
+                @*<th>Clave</th>*@
+                <th>Porción</th>
+                <th></th>
+            </tr>
+        </thead>
+        
+           
+                @foreach (var item in ViewBag.datos)
+                {
+                    <tr>
+                        <td>
+
+                            <img src="~/imagenes/Upload/@item.Imagen" alt="" width="50" height="50">
+
+                        </td>
+                        @*<td>@item.Articulo*@
+                            <input type="hidden" class="form-control" id="id"  value="@item.IDArticulo"/>
+                        @*</td>*@
+
+                        <td>@item.Descripcion</td>
+                        <td>
+                            @{string cadena = "Cantidad" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadena" name="Cantidad" value="@item.Cantidad">
+                        </td>
+                        @*<td>@item.Clave</td>*@
+                        <td>
+                            @if (item.porcantidad == true)
+                            {
+                                <p>Por cantidad</p>
+                            }
+                            else if (item.porporcentaje == true)
+                            {
+                                <p>Por porcentaje</p>
+                            }
+                        </td>
+                     
+                        <td>
+
+                            <a class="edit" onclick="Actualizar(@item.IDKit,@contador)">
+                                <i class="tbl_del_btn fa fa-refresh"></i>
+                            </a>
+
+                            <a class="delete" data-id="@item.IDKit">
+                                <i class="tbl_del_btn fa fa-trash"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                    contador++;
+                }
+
+    </table>
+</div>
+           
+}
+}
+@Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script>
+
+                var url = '@Url.Action("Deleteitem", "Kit")';
+                $('.delete').click(function () {
+                    var row = $(this).closest('tr');
+                    $.post(url, { id: $(this).data('id')}, function (response) {
+                        if (response) {
+                            location.reload();
+                            row.remove();
+                          
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                });
+    </script>
+
+    <script>
+
+                var urledit = '@Url.Action("Edititem", "Kit")';
+                var urla = '@Url.Action("AgregaKit", "Kit")';
+                function Actualizar(id, numero) {
+                    var cantidad= document.getElementById("Cantidad" + numero).value
+
+                    $.post(urledit, { id: id,cantidad:cantidad}, function (response) {
+                        if (response) {
+                            location.reload();
+                            row.change;
+                        }
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                }
+
+
+    </script>
+
+    @*<script>
+
+                var urlinsert = '@Url.Action("Insertar", "Kit")';
+
+                function Inserta(id) {
+                    var tipo = document.getElementById("tipo").value
+                    var cantidad = document.getElementById("cantidad").value
+
+                    $.post(urlinsert, {cantidad: cantidad, tipo: tipo, IDArticulo: $("#IDArticulo").val(), IDArticuloComp: $("#IDArticuloComp").val() }, function (response) {
+                      
+                    }).fail(function (response) {
+                        // display error message?
+                    });
+                }
+
+
+    </script>*@

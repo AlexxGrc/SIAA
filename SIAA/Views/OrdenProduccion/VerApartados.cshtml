@@ -1,0 +1,38 @@
+﻿@model IEnumerable<SIAAPI.ViewModels.produccion.Vapartado>
+
+<h2>Apartados</h2>
+
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.orden)
+            </th>
+            <th>
+                @Html.Label("Cliente")
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.cantidad)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td class="text-info" style="font-size:large">
+            @Html.DisplayFor(modelItem => item.orden)
+        </td>
+        <td class="text-info" style="font-size:large">
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td class="text-info" style="font-size:large">
+            @Html.DisplayFor(modelItem => item.cantidad)
+        </td>
+
+    </tr>
+        }
+
+    </table>
+</div>

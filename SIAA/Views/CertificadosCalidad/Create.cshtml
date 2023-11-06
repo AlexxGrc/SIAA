@@ -1,0 +1,307 @@
+﻿@model SIAAPI.Models.Calidad.CertificadoCalidad
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idcaracteristica = ViewBag.PresentacionList as List<SelectListItem>;
+    var idarticulo = ViewBag.IDArticulo as List<SelectListItem>;
+}
+<script defer src="~/Scripts/cascade.combo.js"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h3>Certificado</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <hr />
+
+        <h2 style="color:red">@ViewBag.Mensaje </h2>
+        <hr />
+
+        <div class="row">
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FechaCertificado, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @{
+                            string fecha = DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year;
+                        }
+                        @Html.EditorFor(model => model.FechaCertificado, new { htmlAttributes = new { @disabled = "disabled", @class = "form-control", @Value = fecha } })
+                        @Html.ValidationMessageFor(model => model.FechaCertificado, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-md-6 col-sm-1">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDCliente, "Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+
+                        @Html.DropDownList("IDCliente", ViewBag.IDCliente as List<SelectListItem>, new { @class = "form-control", name = "IDCliente", id = "IDCliente" })
+                        @Html.ValidationMessageFor(model => model.IDCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+
+            <table>
+                <td class="col-lg-3">
+                    Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                    <br /><input id="clave" name="clave" onkeyup="actualizacombo(event)" />
+                </td>
+                <td class="col-lg-9">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.IDArticulo, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-8">
+
+                            @*@Html.DropDownListFor(model => model.IDArticulo, ViewBag.IDCaracteristica as List<SelectListItem>, new { @class = "form-control" })*@
+                            @Html.DropDownListFor(model => model.IDArticulo, idarticulo, new
+                       {
+                           @class = "form-control",
+                           @name = "IDArticulo",
+                           @id = "IDArticulo",
+                           data_cascade_combo = "#IDCaracteristica",
+                           data_cascade_combo_source = Url.Action("getJsonCaracteristicaArticulo", "CertificadosCalidad"),
+                           data_cascade_combo_param_name = "id"
+                       })
+                        </div>
+                    </div>
+                </td>
+
+            </table>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDCaracteristica, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+
+                @Html.DropDownListFor(model => model.IDCaracteristica, idcaracteristica, new { @class = "form-control", id = "IDCaracteristica" })
+
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Lote, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Lote, new { @type = "number", id = "Lote", name = "Lote" })
+                @Html.ValidationMessageFor(model => model.Lote, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Cantidad, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Cantidad, "{0:0.0000}", new { @type = "number", id = "Cantidad", name = "Cantidad" })
+                @Html.ValidationMessageFor(model => model.Cantidad, "", new { @class = "text-danger" })
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-6 col-sm-1">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDInspeccion, "Inspección", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+
+                        @Html.DropDownList("IDInspeccion", ViewBag.IDInspeccion as List<SelectListItem>, new { @class = "form-control", name = "IDInspeccion", id = "IDInspeccion", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.IDInspeccion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col col-md-6 col-sm-1">
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDMuestreo, "Muestreo", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("IDMuestreo", ViewBag.IDMuestreo as List<SelectListItem>, new { @class = "form-control", name = "IDMuestreo", id = "IDMuestreo", @disabled = "disabled" })
+
+                        @Html.ValidationMessageFor(model => model.IDMuestreo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("Revisar", new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <input type="number" id="Revisar" name="Revisar" value="0" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col-md-6 col-sm-1">
+                <div class="form-group">
+                    @Html.Label("¿Cuantás estuvierón mal?", new { @class = "control-label col-md-2" })
+                    <div class="col-md-8">
+                        <input type="number" class="form-control" text="0" name="CantidadMal" id="CantidadMal" value="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input type="hidden" id="Letra" name="Letra" value="0" />
+
+        <div class="form-group">
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+
+    </div>
+
+    try
+    {
+        var elementos = new SIAAPI.Models.Calidad.CertificadoCalidadContext().CertificadosCalidad.ToList().Where(S => S.IDCertificado == Model.IDCertificado);
+        Html.RenderPartial("PresentacionArticulo", elementos);
+    }
+    catch (Exception err)
+    {
+
+    }
+
+}
+
+
+
+
+
+<div>
+
+</div>
+
+<script>
+
+    function actualizacombo(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clave";
+            var selectcontrol = "#IDArticulo";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getarticulosblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un articulo";
+                          $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                       $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+</script>
+
+
+
+
+
+
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#IDCaracteristica").change(function () {
+            var idproveedor = $("#IDArticulo").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("JsonArticulo")',
+                dataType: 'json',
+                data: { id: $("#IDArticulo").val() },
+                success: function (data) {
+
+                    $("#IDMuestreo").val(data.IDMuestreo);
+                    $("#IDInspeccion").val(data.IDInspeccion);
+
+
+
+
+                },
+
+
+                error: function (ex) {
+                alert('Falla con el proveedor.' + ex);
+                }
+            });
+
+
+
+
+
+            return false;
+        })
+
+
+    });
+
+</script>
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        $("#Cantidad").change(function () {
+            var idproveedor = $("#Cantidad").val();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("JsonCantidad")',
+                dataType: 'json',
+                data: { id: $("#IDArticulo").val(), cantidad: $("#Cantidad").val() },
+                success: function (data) {
+
+
+                    $("#Letra").val(data.LetraR);
+                    $("#Revisar").val(data.Revisar);
+
+
+
+                },
+
+
+                error: function (ex) {
+                alert('Falla con el proveedor.' + ex);
+                }
+            });
+
+
+
+
+
+            return false;
+        })
+
+
+    });
+
+</script>
+

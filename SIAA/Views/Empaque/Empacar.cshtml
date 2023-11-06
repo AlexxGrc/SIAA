@@ -1,0 +1,191 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.detpack>
+
+@{
+    ViewBag.Title = "Empacar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Empacar</h2>
+
+<div class="form-horizontal">
+    <h4>Enviar Pedido @ViewBag.Pedido.IDPedido a empacar en Version @ViewBag.EncPack.Version</h4>
+    <h5 class="text-info">@ViewBag.Cliente.Nombre </h5>
+    <h5 class="text-info">Se entregara en @ViewBag.Pedido.Entrega </h5>
+    <h4 class="text">Observaciones @ViewBag.EncPack.observa</h4>
+
+    <br />
+    @if (ViewBag.Cliente.FacturacionExacta)
+    {
+        <h5 class="text-info">El cliente solicita facturación exacta a su pedido </h5>
+    }
+    else
+    {
+        <h5 class="text-info">El cliente acepta margen adicional de fabricacion a su pedido </h5>
+    }
+</div>
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Cref)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NP)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Cantidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoteMp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Serie)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pedimento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CantEmp)
+        </th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cajas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Paquetes)
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Cref)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NP)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Cantidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoteMp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Serie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pedimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CantEmp)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Observacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cajas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Paquetes)
+            </td>
+            <td>
+                <button type="button" class="btn btn-warning" ><span class="fa fa-edit" aria-hidden="true" onclick=Vermodaleditar(@item.iddetpack)></span> </button>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6">
+                <table class="table">
+                    @{ List<SIAAPI.Models.Produccion.LiberaOrden> lista = new SIAAPI.Models.Produccion.LiberaOrdenContext().Database.SqlQuery<SIAAPI.Models.Produccion.LiberaOrden>("select LO.*, '' as USUARIO from LiberaOrdenProduccion  as LO inner join OrdenProduccion as OP on LO.IDorden=OP.IDorden where OP.Iddetpedido=" + item.iddetpedido + " and OP.EstadoOrden!='Cancelada'").ToList();}
+                    @foreach (SIAAPI.Models.Produccion.LiberaOrden Liberacion in lista)
+
+                    {
+
+                        <tr>
+                            <td colspan="2">
+                                Liberacion de la Orden: @Liberacion.IDOrden
+                            </td>
+                            <td colspan="2">
+                                Cantidad : @Liberacion.Cantidad
+                            </td>
+                            <td colspan="2">
+                                Lote: @Liberacion.Lote
+                            </td>
+                        </tr>
+
+                    }
+                </table>
+                </td>
+            <td colspan="6">
+                @{ SIAAPI.Models.Produccion.OrdenProduccion op = new SIAAPI.Models.Produccion.OrdenProduccionContext().Database.SqlQuery<SIAAPI.Models.Produccion.OrdenProduccion>("select OP.*  from OrdenProduccion as OP where OP.Iddetpedido=" + item.iddetpedido + " and OP.EstadoOrden!='Cancelada'").FirstOrDefault();
+
+                    try
+                    {
+                        List<SIAAPI.Models.Produccion.WorkinProcess>
+                        listamate = new SIAAPI.Models.Produccion.WorkinProcessContext().WIP.Where(s => s.Orden == @op.IDOrden).ToList();
+                        int contadorcinta = 1;
+
+                        foreach (SIAAPI.Models.Produccion.WorkinProcess LOTE in listamate)
+                        {
+                            SIAAPI.Models.Inventarios.Clslotemp lotemp = new SIAAPI.Models.Inventarios.ClslotempContext().materiaP.Find(LOTE.IDClsMateriaPrima);
+                                <div class="text-info">Lote de la cinta @contadorcinta << @lotemp.Lote >>Recepcion @lotemp.IDRecepcion </div>
+                                contadorcinta++;
+                            }
+                        }
+                        catch (Exception err)
+                        {
+
+                        }
+                    }
+            </td>
+
+
+            </tr>
+            
+  
+    }
+
+</table>
+
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" id="ModalEA" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div id="Ventana"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+<script>
+    function Vermodaleditar(valor) {
+
+        $("#Ventana").load("/Empaque/EditaArticulo/" + valor, function () {
+            $('#ModalEA').modal("show");
+        });
+
+    }
+</script>

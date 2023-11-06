@@ -1,0 +1,50 @@
+﻿@model SIAAPI.ViewModels.Cfdi.ViewAnticipoAplicacion
+
+@{
+    ViewBag.Title = "CrearAnticipoEgreso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CrearAnticipoEgreso</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Crear la Aplicacion del Anticipo para el UUID que se indica</h4>
+        <h3>@ViewBag.Cliente</h3>
+        <h3>Factura @ViewBag.Factura    @ViewBag.Monto @ViewBag.Moneda </h3>
+        <h3>@ViewBag.Anticipo </h3>
+
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.UUID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.UUID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.UUID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.serie, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @* @Html.EditorFor(model => model.IDTipoComprobante, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.serie, ViewBag.listaserie as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.serie, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Generar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index", "FacturaAll")
+</div>

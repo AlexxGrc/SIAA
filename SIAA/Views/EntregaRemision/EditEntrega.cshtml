@@ -1,0 +1,134 @@
+﻿@model SIAAPI.Models.Comercial.EntregaRemision
+
+@{
+    ViewBag.Title = "EditEntrega";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Crear Entrega</h3>
+@{ if (ViewBag.Mensaje != "")
+    {
+        <div class="alert alert-info">
+            <h2>@ViewBag.Mensaje</h2>
+        </div>
+    }
+}
+@using (Html.BeginForm())
+{
+    @*<input type="hidden" id="ruta" name="ruta" value="@ViewBag.ruta" />
+        <input type="hidden" id="chofer" name="chofer" value="@ViewBag.chofer" />
+        <input type="hidden" id="fechaR" name="fechaR" value="@ViewBag.fecha" />*@
+
+    <input type="hidden" id="ID" name="ID" value="@ViewBag.IDEntrega" />
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Fecha, htmlAttributes: new { @class = "control-label col-md-2" })
+
+            @{
+                if (ViewBag.Fecha != "")
+                {
+                    <div class="col-md-8">
+                        @{
+                            string fecha = ViewBag.FechaV.Day + "/" + ViewBag.FechaV.Month + "/" + ViewBag.FechaV.Year;
+                        }
+                        <input value="@fecha" name="Fecha" id="Fecha" class="form-control" disabled />
+
+                        @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+                    </div>
+
+                }
+                else
+                {
+                    <div class="col-md-8">
+                        @{
+                            string fecha = DateTime.Now.Day + "/" + DateTime.Now.Month + "/" + DateTime.Now.Year;
+                        }
+                        @Html.EditorFor(model => fecha, new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "form-control",
+                                @type = "date"@*, @value = fecha, @disabled = "disabled"*@}
+})
+                        @Html.ValidationMessageFor(model => model.Fecha, "", new { @class = "text-danger" })
+                    </div>
+                }
+            }
+
+
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDRuta, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @* @Html.EditorFor(model => model.IDRuta, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.IDRuta, ViewBag.Rutas as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDRuta, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IDChofer, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                @*@Html.EditorFor(model => model.IDChofer, new { htmlAttributes = new { @class = "form-control" } })*@
+                @Html.DropDownListFor(model => model.IDChofer, ViewBag.Choferes as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.IDChofer, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("No.Factura", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input id="Factura" name="Factura" type="number" class="form-control" />
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Entregado, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.Entregado)
+                        @Html.ValidationMessageFor(model => model.Entregado, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Crear" class="btn btn-success btn-xs" />
+            </div>
+        </div>
+
+
+
+    </div>
+                                try
+                                {
+
+                                    string listaR = "select*from VDetEntregaRemision where identregar=" + ViewBag.IDEntrega;
+
+                                    var lista = new SIAAPI.Models.Comercial.EntregaRemisionesContext().Database.SqlQuery<SIAAPI.Models.Comercial.VDetEntregaRemision>(listaR).ToList();
+
+                                    if (lista.Count() == 0)
+                                    {
+                                        listaR = "select*from VDetEntregaRemisionSF where identregar=" + ViewBag.IDEntrega;
+                                        lista = new SIAAPI.Models.Comercial.EntregaRemisionesContext().Database.SqlQuery<SIAAPI.Models.Comercial.VDetEntregaRemision>(listaR).ToList();
+
+                                    }
+                                    Html.RenderPartial("DetEntrega", lista);
+                                }
+                                catch (Exception err)
+                                {
+                                }
+                            }
+
+
+<div>
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+
+</div>

@@ -1,0 +1,100 @@
+﻿@model IEnumerable<SIAAPI.Models.Inventarios.Clslotemp>
+
+
+
+<h2>Listado</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NoCinta)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Ancho)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Largo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lote)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoteInterno)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.OrdenCompra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MetrosCuadrados)
+        </th>
+
+        <th></th>
+    </tr>
+    @{
+        decimal contador = 0;
+    }
+    @foreach (var item in Model)
+    {
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoCinta)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Ancho)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Largo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoteInterno)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.OrdenCompra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MetrosCuadrados)
+            </td>
+
+
+            <td>
+                @Html.ActionLink("Eliminar", "Eliminarcinta", new { id = item.ID, IDDetRecepcion = item.IDDetOrdenCompra }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+
+        contador += item.MetrosCuadrados;
+
+        SIAAPI.Models.Comercial.DetRecepcion recepcion = new SIAAPI.Models.Comercial.RecepcionContext().DetRecepciones.Where(s => s.Caracteristica_ID == item.IDCaracteristica && s.IDRecepcion == item.IDRecepcion).FirstOrDefault();
+
+        ViewBag.CantidadRecepcionada = recepcion.Cantidad;
+    }
+
+
+</table>
+
+@{
+    if (ViewBag.CantidadRecepcionada == contador)
+    {
+        @Html.Label("CANTIDAD CORRECTA")
+        <i class="fa fa-check-circle-o fa-5x" style="color:forestgreen" aria-hidden="true"></i>
+
+    }
+    else if (ViewBag.CantidadRecepcionada < contador)
+    {
+        @Html.Label("LA CANTIDAD ES MAYOR A LA RECEPCIONADA")
+        <i class="fa fa-times-circle fa-5x" style="color:red" aria-hidden="true"></i>
+    }
+    else
+    {
+        @Html.Label("LA CANTIDAD ES MENOR A LA RECEPCIONADA")
+        <i class="fa fa-times-circle-o fa-5x" style="color:palevioletred" aria-hidden="true"></i>
+    }
+
+}

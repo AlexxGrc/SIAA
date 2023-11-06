@@ -1,0 +1,268 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Comercial.Clientes>*@
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.VCliente>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<meta name="googlebot" content="noindex, nofollow, nosnippet, noimageindex">
+<meta name="robots" content="noindex, nofollow, nofollow, nosnippet, noimageindex">
+<meta name="googlebot-news" content="noindex, nofollow, nosnippet, noimageindex" />
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <div class="form-group">
+            @{
+                <div class="col col-md-6 col-sm-1">
+                    <div class="form-group">
+                        <div>
+                            <table>
+                                <tr>
+                                    <td>  <h3>Clientes</h3> </td>
+                                    <td>
+                                        <form method="post" action='@Url.Action("DescargarPDFH", "FilePDF", new { ruta = "~/Manual/", name = "SIAAPI_Clientes.pdf" })' target="_blank">
+                                            <button class="btn btn-warning btn-xs"><i class="fa fa-question-circle-o fa-lg"></i></button>
+                                        </form>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+            }
+
+        </div>
+
+    </div>
+</nav>
+<br>
+
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                <p>
+                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Ventas"))
+                    {
+                        @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning btn-xs" })
+                    } |
+                    Elementos por página: @Html.DropDownList("pageSize")  |
+                    Filtro: @Html.TextBox("searchString", ViewBag.searchString as string, new { @placeholder = " Introduce el texto a buscar:" })
+                    <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                    @*<a class="btn btn-info btn-xs" href="@Url.Action("Reporte")">Descargar Catálogo</a>*@
+
+
+                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Facturacion"))
+                    {
+                        <a class="btn btn-info btn-xs" href="@Url.Action("ReportePorClientes")">Descargar Catálogo</a>
+                        <a class="btn btn-info btn-xs" href="@Url.Action("ExcelClientes")">Exportar a Excel</a>
+                        <a class="btn btn-info btn-xs" href="@Url.Action("ArticulosCliente", "Clientes")">ArticulosvsCliente</a>
+
+                    }
+
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+
+<div class="table-responsive">
+    <table class="table table-striped" width="50">
+        <tr>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Nombre)*@
+                @Html.Label("Número")
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Nombre)*@
+                @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.NombreSortParm, currentFilter = ViewBag.CurrentFilter })
+
+            </th>
+            <th>
+                @Html.ActionLink("Grupo", "Index", new { sortOrder = ViewBag.GrupoSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Mayorista)*@
+                @Html.Label("Mayorista")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>*@
+            <th>
+                @* @Html.DisplayNameFor(model => model.Correo)*@
+                @Html.Label("Correo")
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.Password)
+                </th>*@
+            <th>
+                @* @Html.DisplayNameFor(model => model.Telefono)*@
+                @Html.Label("Telefóno")
+            </th>
+
+            <th>
+                @*@Html.DisplayNameFor(model => model.Municipio)*@
+                @Html.ActionLink("Municipio", "Index", new { sortOrder = ViewBag.MunicipioSortParm, currentFilter = ViewBag.CurrentFilter })
+
+            </th>
+            <th>
+                @*@Html.DisplayNameFor(model => model.Estados.Estado)*@
+                @Html.ActionLink("Estado", "Index", new { sortOrder = ViewBag.EstadoSortParm, currentFilter = ViewBag.CurrentFilter })
+            </th>
+
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*Class*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.IDCliente)
+                </td>
+
+                @*Garin*@
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.noExpediente)
+                    </td>*@
+
+                @if (item.Status.Equals("Activo"))
+                {
+                    <td class="success">
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                }
+                else if (item.Status.Equals("Suspendido"))
+                {
+                    <td class="danger">
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                }
+
+                else if (item.Status.Equals("Obsoleto"))
+                {
+                    <td class="warning">
+                        @Html.DisplayFor(modelItem => item.Nombre)
+                    </td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Grupo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mayorista)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>*@
+                <td>
+                    <a href="mailto:#"> @Html.DisplayFor(modelItem => item.Correo)</a>
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Password)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Telefono)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.Calle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumExt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumInt)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Colonia)
+                    </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.Municipio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Estado)
+
+                </td>
+                @*<td>
+                            @Html.DisplayFor(modelItem => item.CP)
+                        </td>
+                       <td>
+                        @Html.DisplayFor(modelItem => item.Observacion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Curp)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.VentasAcu)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ultimaventa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RFC)
+                    </td>
+                    <td>
+                        <a href="mailto:#"> @Html.DisplayFor(modelItem => item.CorreoCfdi)</a>
+                    </td>*@
+                <td>
+
+                    @Html.ActionLink("Detalles", "Details", new { id = item.IDCliente, searchString = ViewBag.searchString }, new { @class = "btn btn-success btn-xs" })
+
+
+
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@*Paginación*@
+@using (Html.BeginForm("Index", "Clientes", FormMethod.Get, new { id = "pageSizeForm" }))
+{
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new
+   {
+       page,
+       sortOrder = ViewBag.CurrentSort,
+       currentFilter = ViewBag.CurrentFilter,
+       searchString = ViewBag.searchString,
+       pageSize = ViewBag.psize
+   }))
+
+
+    </div>
+}
+@*Paginación*@
+
+

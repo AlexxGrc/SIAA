@@ -1,0 +1,272 @@
+﻿
+@{
+    ViewBag.Title = "ArticuloPlaneacion";
+    Layout = "~/Views/Shared/_LayoutPlaneacion.cshtml";
+}
+
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.Articulo>
+
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{ 
+    SIAAPI.Models.PlaneacionProduccion.HEspecificacionContext dbhe = new SIAAPI.Models.PlaneacionProduccion.HEspecificacionContext();
+    SIAAPI.Models.PlaneacionProduccion.HEspecificacion versionhe = dbhe.HEspecificaciones.Find(ViewBag.idhe);
+
+<h3>Planeacion: @versionhe.Planeacion Versión: @versionhe.Version</h3>
+    }
+<hr />
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+                    <p>
+
+                        <input type="hidden" id="idhe" name="idhe" value="@ViewBag.idhe" />
+                        <input type="hidden" id="idproceso" name="id" value="@ViewBag.idproceso" />
+                        <input type="hidden" id="nombreproceso" value="@ViewBag.nombreproceso" />
+                      
+                        <h4>Proceso: @ViewBag.nombreproceso</h4>
+                        Tipo de Artículo: @Html.DropDownList("TipoArticulo", null, new { @class = "form-control" })
+                        Filtro: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = " Introduce el texto a buscar:", @class = "form-control" })
+                        <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+
+                    </p>
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+<input type="hidden" id="versionhe" name="versionhe" value="@ViewBag.version" />
+<input type="hidden" id="preshe" name="preshe" value="@ViewBag.preshe" />
+<input type="hidden" id="arthe" name="arthe" value="@ViewBag.arthe" />
+@if (ViewBag.Datos != null)
+{
+    <h5>Artículos Planeación</h5>
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+                @*<th>
+                    Hoja de Especificación
+                </th>
+                <th>
+                    Versión
+                </th>*@
+                <th>
+                    Artículo
+                </th>
+                <th>
+                    Tipo de Articulo
+                </th>
+                <th>
+                    Característica
+                </th>
+                <th>
+                    Proceso
+                </th>
+                <th>
+                    Formula de Relación
+                </th>
+                <th>
+                    Factor Cierre
+                </th>
+                <th>
+                    Indicaciones
+                </th>
+                <th> </th>
+</tr>
+
+            @foreach (var item in ViewBag.Datos)
+            {
+                <tr>
+                    @*<td>
+                        @item.IDHE
+                    </td>
+                    <td>
+                        @item.Version
+                    </td>*@
+                    <td>
+                        @item.Articulo
+                    </td>
+                    <td>
+                        @item.TipoArticulo
+                    </td>
+                    <td>
+                        @item.Presentacion
+                    </td>
+                    <td>
+                        @item.Proceso
+                    </td>
+                    <td>
+                        @item.Formuladerelacion
+                    </td>
+                    <td>
+                        @item.factorcierre
+                    </td>
+                    <td>
+                        @item.Indicaciones
+                    </td>
+                    <td>
+                        <a class="delete" data-id="@item.IDArtPlan">
+                            <i class="tbl_del_btn fa fa-trash"></i>
+
+                        </a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+        </div>
+        }
+@if (ViewBag.Documentos != null)
+{
+    <h5>Documentos Planeación</h5>
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <tr>
+
+                <th>
+                    Descripción
+                </th>
+                <th>
+                    Proceso
+                </th>
+                <th>
+
+                    Nombre
+                </th>
+                <th> </th>
+            </tr>
+
+            @foreach (var item in ViewBag.Documentos)
+            {
+                <tr>
+
+                    <td>
+                        @item.Descripcion
+                    </td>
+                    <td>
+                        @item.Proceso
+                    </td>
+                    <td>
+                        @{
+                            string nombre = @item.Nombre;
+                        }
+                        @Html.ActionLink(nombre, "DescargarDoc", new { id = item.IDDocumento }, null)
+
+                    </td>
+
+                    <td>
+                        <a class="deletedoc" data-id="@item.IDDocumento">
+                            <i class="tbl_del_btn fa fa-trash"></i>
+
+                        </a>
+                    </td>
+                </tr>
+                            }
+
+        </table>
+    </div>
+                            }
+
+
+        @if (ViewBag.VerPag != null)
+        {
+            <div class="row">
+                @foreach (var m in Model)
+                {
+
+                    <div class="col-md-4">
+                        <div class="row">
+                            <h5><span id="mobilename" style="color:darkred">@m.Descripcion</span></h5>
+                            <p><span class="fa fa-bars" style="color:red;pointer-events:fill" contextmenu="Added To WishList"></span></p>
+
+                        </div>
+                        <a href="">
+                            <img class="a.photo" src="~/imagenes/Upload/@m.nameFoto" style="overflow: hidden; position: relative; width:200px; height:200px; cursor:pointer" />
+                        </a>
+
+                        <p><button type="button" name="button" class="btn btn-warning btn-xs" onclick="actionmodal(@m.IDArticulo)">Ver presentaciones...</button><p></p></p>
+                    </div>
+
+                }
+            </div>
+            <div class="modal fade bd-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div id="teste"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pager">
+                Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+                @Model.Count de @Model.TotalItemCount elementos
+                @Html.PagedListPager(Model, page => Url.Action("ArticuloPlaneacion",
+        new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, TipoArticulo = ViewBag.TArticulo, id = ViewBag.idproceso, idhe = ViewBag.idhe }))
+            </div>
+        }
+
+
+        <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+        <script>
+            function actionmodal(id) {
+                async: true;
+                $("#teste").load("/PlanPlaneacionProduccion/GetPresentaciones/" + id, function () {
+                    $('#myModal').modal("show");
+
+                    document.querySelector('#labelproceso').innerText = document.getElementById("nombreproceso").value;
+                    document.querySelector('#nohoja').innerText = document.getElementById("idhe").value;
+                    document.querySelector('#versionmodal').innerText = document.getElementById("versionhe").value;
+                    document.querySelector('#arthemodal').innerText = document.getElementById("arthe").value;
+                    document.querySelector('#preshemodal').innerText = document.getElementById("preshe").value;
+                    $('#idhemodal').val(document.getElementById("idhe").value);
+                    $('#idprocesomodal').val(document.getElementById("idproceso").value);
+                });
+
+
+            }
+        </script>
+
+
+<script>
+
+        var url = '@Url.Action("Deleteitem", "PlanPlaneacionProduccion")';
+        $('.delete').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>
+
+<script>
+
+        var url = '@Url.Action("Deleteitemdoc", "PlanPlaneacionProduccion")';
+        $('.deletedoc').click(function () {
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+</script>

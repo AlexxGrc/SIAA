@@ -1,0 +1,478 @@
+﻿@model SIAAPI.ClasesProduccion.ClsDisenoDigital
+
+@{
+    ViewBag.Title = "SolicitudDisenoDigital";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Solicitud de Diseño Digital</h2>
+
+<h2 class="text-danger">@ViewBag.Error</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+
+
+
+
+    <table class="table">
+        <tr>
+            <td colspan="1">
+
+                <input type="checkbox" onchange="habilitar(this.checked);" id="PROS" name="PROS" value="1"> <label for="PROS">  <h6 style="font-size: small">Prospecto</h6></label>
+
+            </td>
+            <td class="col-lg-3">
+                Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                <br /><input id="clavep" name="clavep" onkeyup="getprospe(event)" />
+            </td>
+            <td colspan="8">
+                <div class="form-group" style="display: none" id="PROSPECTO">
+
+                    <div class="col-md-10">
+                        @Html.DropDownList("IDClienteP", null, new { @class = "form-control" })
+                        @*@Html.DropDownList("IDClienteP", null, htmlAttributes: new { @class = "form-control" })*@
+                        @Html.ValidationMessageFor(model => model.IDClienteP, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="1">
+                <input type="checkbox" onchange="habilitarC(this.checked);" id="CLIE" name="CLIE" value="1"> <label for="CLIE">  <h6 style="font-size: small">Cliente</h6></label>
+            </td>
+            <td class="col-lg-3">
+                Busca una clave  => Escribe parte de ella y presiona "Alt Gr"
+                <br /><input id="clave" name="clave" onkeyup="getClientesBlando(event)" />
+            </td>
+            <td colspan="8">
+                <div class="form-group" style="display: none" id="CLIENTE">
+
+                    <div class="col-md-10">
+                        @Html.DropDownList("IDCliente", null, htmlAttributes: new { @class = "form-control", @name = "IDCliente", @id = "IDCliente" })
+                        @Html.ValidationMessageFor(model => model.IDCliente, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+
+
+
+    <table class="table-responsive col-12">
+
+        <tr>
+            <td colspan="12">
+                <div class="form-group">
+                    <h6>Vendedor</h6>
+                    <div class="col-md-8">
+                        @Html.DropDownList("IDVendedor", null, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDVendedor, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="12">
+                <div class="form-group">
+                    <h6>Etiqueta</h6>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control", id = "Descripcion", name = "Descripcion" } })
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+
+    </table>
+
+
+    <h3>No te desplazes con enter, por favor desplazate con la tecla "tab"</h3>
+    <table style="background-color:cadetblue" class="table-responsive col-12">
+        <tr>
+            <td>
+
+
+                <div class="form-group">
+                    <h6>Eje  en mm</h6>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.anchoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Anchomm", name = "Anchomm" } })
+                        @Html.ValidationMessageFor(model => model.anchoproductomm, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <h6>Avance  en mm</h6>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.largoproductomm, new { htmlAttributes = new { @class = "form-control", id = "Largomm", name = "Largomm" } })
+                        @Html.ValidationMessageFor(model => model.largoproductomm, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+
+
+
+
+            <td>
+                <div class="col-md-12">
+                    <h6 style="font-size: small">Esquinas: </h6>
+                    @Html.DropDownList("EsquinasSuaje", null, Model.Esquinas, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Esquinas, "", new { @class = "text-danger" })
+                </div>
+            </td>
+
+            <td>
+                <div class="col-md-12">
+                    <h6 style="font-size: small">Acabado: </h6>
+                    @Html.DropDownList("Acabado", null, Model.Acabado, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Acabado, "", new { @class = "text-danger" })
+                </div>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <div class="form-group">
+                    <h6 style="font-size: small">Embobinado: </h6>
+
+                    <div class="col-md-10">
+                        @Html.DropDownList("Embobinado", null, Model.Embobinado, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Embobinado, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    Etiquetas al paso
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.AlPaso, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.AlPaso, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    Cantidad de Etiquetas por rollo o paquete
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Cantidadxrollo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cantidadxrollo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+    </table>
+
+    <table>
+
+        <tr>
+            <th><div class="col-md-1"><h3>Cintas</h3></div></th>
+
+            <th><div class="col-md-5"></div></th>
+
+        </tr>
+
+        <tr>
+
+            <td class="col-lg-3">
+                Material
+            </td>
+            <td>
+
+
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Material, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDMaterial, "", new { @class = "text-danger" })
+                </div>
+
+            </td>
+
+
+        </tr>
+
+
+    </table>
+    <h3> Suaje </h3>
+    <table>
+        <tr>
+
+            <td class="col-lg-3">
+                Escibe el ancho o el avance  => Escribe  y presiona "Alt Gr"
+                <br /><input id="claves" name="claves" onkeyup="actualizacomboArticuloSuaje(event)" />
+            </td>
+            <td>
+
+
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.IDSuaje, ViewBag.IDMaterial as List<SelectListItem>, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDSuaje, "", new { @class = "text-danger" })
+                </div>
+
+
+            </td>
+
+
+        </tr>
+        <tr>
+            <td>Observación</td>
+            <td colspan="2">
+
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Observacion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>Consumo Mensual</td>
+            <td>
+                <div class="form-group">
+
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.consumomensual, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.consumomensual, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td> Monto de Anticipo</td>
+            <td>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MontoAnticipo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MontoAnticipo, "", new { @class = "text-danger" })
+                </div>
+
+            </td>
+        </tr>
+    </table>
+    <br />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+
+
+            <input type="submit" id="btnSiguiente" name="Enviar" value="Realizar Solicitud" class="btn btn-info  " />
+
+        </div>
+    </div>
+
+}
+
+<div>
+    @Html.ActionLink("Volver a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+</div>
+
+
+
+<script>
+
+
+
+
+
+
+
+    function actualizacomboArticulo(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clave";
+            var selectcontrol = "#IDMaterial";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getarticulosblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un articulo";
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+
+
+    function actualizacomboArticuloSuaje(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#claves";
+            var selectcontrol = "#IDSuaje";
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getsuajesblando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un suaje";
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+
+
+    function getClientesBlando(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clave";
+            var selectcontrol = "#IDCliente";
+
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getClientesBlando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un cliente";
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+
+
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+    function getprospe(e) {
+
+
+
+        if (e.keyCode === 18) {
+
+            var control = "#clavep";
+            var selectcontrol = "#IDClienteP";
+
+            $(selectcontrol).empty();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("getProspeBlando")',
+                dataType: 'json',
+                data: { buscar: $(control).val() },
+                success: function (articulos) {
+
+                    for (i = 0; i < articulos.length; i++) {
+                        var Value = articulos[i].Value;
+
+                        var Text = articulos[i].Text;
+                        var select = "Selecciona un cliente";
+                        $(selectcontrol).append('<option selected value="' + Value + '">' + Text + '</option>');
+
+                    }
+                    $(selectcontrol).append('<option selected value="' + 0 + '">' + select + '</option>');
+
+
+                },
+                error: function (ex) {
+                    //alert('Falle.' + ex.data);
+                }
+
+            });
+        }
+    }
+
+
+
+
+
+
+
+
+</script>
+
+<script>
+    function habilitar(value) {
+        var c = document.getElementById("PROSPECTO");
+        var x = document.getElementById("CLIENTE");
+
+        if (c.style.display === "none") {
+            c.style.display = "block";
+            x.style.display = "none";
+            document.getElementById("CLIE").disabled = true
+        } else {
+            c.style.display = "none";
+            document.getElementById("CLIE").disabled = false
+        }
+    }
+</script>
+<script>
+    function habilitarC(value) {
+
+        var c = document.getElementById("CLIENTE");
+        var x = document.getElementById("PROSPECTO");
+
+        if (c.style.display === "none") {
+            c.style.display = "block";
+            x.style.display = "none";
+            document.getElementById("PROS").disabled = true
+        } else {
+            c.style.display = "none";
+            document.getElementById("PROS").disabled = false
+        }
+    }
+</script>

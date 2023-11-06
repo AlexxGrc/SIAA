@@ -1,0 +1,71 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.Entrega>
+<h3>Domicilio de Entrega de Cliente</h3>
+<p>
+    @Html.ActionLink("Crear un nuevo registro", "CreateE",null, new { @class = "btn btn-warning btn-xs" })
+</p>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.IDCliente)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.CalleEntrega)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NumExtEntrega)
+        </th>*@
+       
+       
+        <th>
+            @Html.DisplayNameFor(model => model.MunicipioEntrega)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IDEstado)
+        </th>
+       
+        @*<th>
+            @Html.DisplayNameFor(model => model.ObservacionEntrega)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Clientes.Nombre)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.CalleEntrega)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NumExtEntrega)
+        </td>*@
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.MunicipioEntrega)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estados.Estado)
+        </td>
+        
+        @*<td>
+            @Html.DisplayFor(modelItem => item.ObservacionEntrega)
+        </td>*@
+        <td>
+            @Html.ActionLink("Editar", "EditE", new { id=item.IDEntrega }, new { @class = "btn btn-success btn-xs" }) 
+            @Html.ActionLink("Detalles", "DetailsE", new { id=item.IDEntrega }, new { @class = "btn btn-default btn-xs" }) 
+            @Html.ActionLink("Eliminar", "DeleteE", new { id=item.IDEntrega }, new { @class = "btn btn-danger btn-xs" })
+            @*<div class="row"><a href=@("Clientes/EditE/"+item.IDEntrega) class="btn btn-default">Editar</a>         </div>
+            <div class="row"><a href=@("/DetailsE/"+item.IDEntrega ) class="btn btn-default">Detalles</a> </div>
+            <div class="row"><a href=@("/DeleteE/" + item.IDEntrega ) class="btn btn-danger">Eliminar</a> </div>*@
+        </td>
+    </tr>
+}
+
+</table>
+<p>
+
+  @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+</p>

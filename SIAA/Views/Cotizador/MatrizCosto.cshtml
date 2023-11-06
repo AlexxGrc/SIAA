@@ -1,0 +1,29 @@
+﻿
+
+@model SIAAPI.ClasesProduccion.ClsCotizador
+
+@if (Model != null)
+{
+    <h1 class="text-info"> Matriz de Costo</h1>
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th>Precios /Cantidades</th>
+                <th><div>@Model.Rango1 Millares</div></th>
+                <th><div>@Model.Rango2 Millares</div></th>
+                <th><div>@Model.Rango3 Millares</div></th>
+                <th><div>@Model.Rango4 Millares</div></th>
+            </tr>
+            <tr>
+                <td>Costo</td>
+                <td>@Model.Costo1.ToString("C")</td>
+                <td>@Model.Costo2.ToString("C")</td>
+                <td>@Model.Costo3.ToString("C")</td>
+                <td>@Model.Costo4.ToString("C")</td>
+            </tr>
+           
+    </table>
+
+
+
+}

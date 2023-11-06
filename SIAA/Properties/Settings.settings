@@ -1,0 +1,69 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SIAAPI.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ColorReporte" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Azul</Value>
+    </Setting>
+    <Setting Name="ColorFuenteEncabezado" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Blanco</Value>
+    </Setting>
+    <Setting Name="paginaoficial" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">www.claslabels.com</Value>
+    </Setting>
+    <Setting Name="Eslogan" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Calidad premium a tu etiqueta</Value>
+    </Setting>
+    <Setting Name="Rango1gain" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">40</Value>
+    </Setting>
+    <Setting Name="Rango2gain" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">35</Value>
+    </Setting>
+    <Setting Name="Rango3gain" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+    <Setting Name="Rango4gain" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
+    <Setting Name="TimbrarPrueba" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">NO</Value>
+    </Setting>
+    <Setting Name="Nombredelaaplicacion" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SIAAPI</Value>
+    </Setting>
+    <Setting Name="SIAAPI_WScancela_Cancelar_cfdi_4_0_SAT" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://pac1.multifacturas.com/cancelacion2022/index.php</Value>
+    </Setting>
+    <Setting Name="ValorIVA" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">0.16</Value>
+    </Setting>
+    <Setting Name="TCcotizador" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">22</Value>
+    </Setting>
+    <Setting Name="IDProveedorDesconocido" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">72</Value>
+    </Setting>
+    <Setting Name="CorreofirmaFactura" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">gfinanzas@classlabels.com</Value>
+    </Setting>
+    <Setting Name="costodeempaque" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="CostoM2default" Type="System.Decimal" Scope="Application">
+      <Value Profile="(Default)">0.50</Value>
+    </Setting>
+    <Setting Name="ValorMtsXkg" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
+    <Setting Name="DefaultConnection" Type="(Connection string)" Scope="Application">
+      <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;ConnectionString&gt;data source=DESKTOP-T76IPVK\SQLSERVERE2019;initial catalog=siaapico_sap;user id=sa;password=Gabriela@2018;multipleactiveresultsets=True
+ providerName="System.Data.SqlClient"&lt;/ConnectionString&gt;
+&lt;/SerializableConnectionString&gt;</DesignTimeValue>
+      <Value Profile="(Default)">data source=DESKTOP-T76IPVK\SQLSERVERE2019;initial catalog=siaapico_sap;user id=sa;password=Gabriela@2018;multipleactiveresultsets=True
+ providerName="System.Data.SqlClient"</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

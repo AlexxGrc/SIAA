@@ -1,0 +1,83 @@
+﻿@model SIAAPI.Models.Comercial.Cobro
+
+
+<div>
+    
+    <h3>¿Está seguro de borrar este registro?</h3>
+    <h4>Eliminar Domicilio de Cobro de Cliente: @Html.DisplayFor(model => model.Clientes.Nombre)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+    
+
+     
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CalleCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CalleCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumExtCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumExtCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumIntCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumIntCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ColoniaCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ColoniaCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MunicipioCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MunicipioCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CPCobro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CPCobro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Estados.Estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Estados.Estado)
+        </dd>
+
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+          @Html.ActionLink("Regresar a la lista", "Details", new { id = Session["IDCliente"] }, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+
+    }
+</div>

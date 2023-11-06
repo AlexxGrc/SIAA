@@ -1,0 +1,147 @@
+﻿@model SIAAPI.Models.Comercial.EncPack
+
+@{
+    ViewBag.Title = "CreateEmpaque";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Solicitud de Empaque</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>Enviar Pedido @Model.idPedido a empacar en Version @Model.Version</h4>
+    <h5 class="text-info">@ViewBag.Cliente.Nombre </h5>
+    <h5 class="text-info">Se entregara en @ViewBag.Pedido.Entrega </h5>
+
+    <br />
+    @if (ViewBag.Cliente.FacturacionExacta)
+    {
+        <h5 class="text-info">El cliente solicita facturación exacta a su pedido </h5>
+    }
+    else
+    {
+        <h5 class="text-info">El cliente acepta margen adicional de fabricacion a su pedido </h5>
+    }
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.HiddenFor(model => model.idPedido, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+
+    @Html.HiddenFor(model => model.Version, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+    @Html.HiddenFor(model => model.Fecha, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+
+    @Html.HiddenFor(model => model.Cliente, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+    @Html.HiddenFor(model => model.status, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.observa, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.observa, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.observa, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @Html.HiddenFor(model => model.Idusuario, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+    @if (ViewBag.Numero == 0)
+    {
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                Todos los productos han sido entregados
+            </div>
+        </div>
+    }
+    else
+    {
+<table class="table" border="1">
+    <tr>
+        <td>
+            Clave
+        </td>
+        <td>
+            Articulo
+        </td>
+        <td>
+            Presentacion
+        </td>
+        <td>
+            Cantidad
+        </td>
+        <td>
+            Suministro
+        </td>
+        <td>
+        </td>
+    </tr>
+
+    @foreach (SIAAPI.Models.Comercial.VPedidoDet detpedido in ViewBag.empacados)
+    {
+                    <tr id="borra">
+                        <td>
+                            @detpedido.Cref
+                        </td>
+                        <td>
+                            @detpedido.Articulo
+                        </td>
+                        <td>
+                            @detpedido.Presentacion
+                        </td>
+                        <td>
+                            @detpedido.Cantidad
+                        </td>
+                        <td>
+                            @detpedido.suministro
+                        </td>
+                        <td>
+                            <button onclick="EliminarPres(@detpedido.IDDetPedido,this); return false;" class="btn btn-danger"><i class="tbl_del_btn fa fa-trash"></i></button>
+
+                        </td>
+                    </tr>
+    }
+      
+    </table>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Enviar" class="btn btn-default" />
+            </div>
+        </div>
+    }
+
+</div>
+}
+
+<div>
+    @Html.ActionLink("Volver a Pedidos", "Index")
+</div>
+
+<script>
+     function EliminarPres(id,btn) {
+        var url = '@Url.Action("Deleteitemempaque", "Encpedido")';
+        async: true;
+        var row = $(btn).closest('tr');
+        $.post(url, { id: id}, function (response) {
+            if (response) {
+               
+               // location.reload();
+                  row.remove();
+               
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+</script>

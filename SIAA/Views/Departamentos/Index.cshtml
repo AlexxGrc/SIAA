@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SIAAPI.Models.miempresa.Departamentos>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Departamentos de la Empresa</h2>
+
+<p>
+    @Html.ActionLink("Crea un nuevo registro", "Create", null, new { @class = "btn btn-warning navbar-btn btn-xs" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ClaveDepartamento)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Obsoleto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Responsable)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClaveDepartamento)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Obsoleto)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Responsable)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.IDDepartamento }, new { @class = "btn btn-success btn-xs" })
+            @Html.ActionLink("Detalles", "Details", new { id = item.IDDepartamento }, new { @class = "btn btn-info btn-xs" })
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.IDDepartamento }, new { @class = "btn btn-danger btn-xs" })
+        </td>
+    </tr>
+}
+
+</table>

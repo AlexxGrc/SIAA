@@ -1,0 +1,35 @@
+﻿@model SIAAPI.Models.Cfdi.Encfacturas
+
+@{
+    ViewBag.Title = "Registrar factura desde archivo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Crear Archivo</h3>
+
+
+@using (Html.BeginForm("CreatedesdeArchivo", "Facturaall", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Registrar factura desde archivo</h4>
+        <div class="form-group">
+            <h2>Indica el archivo a subir</h2>
+            <div class="col-md-10">
+                <input type="file" id="Imag1" name="Imag1" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn-xs" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+            </div>
+        </div>
+    </div>
+    <div >
+        <h2 class="text-danger">@ViewBag.Mensajeerror</h2>
+    </div>
+}
+
+

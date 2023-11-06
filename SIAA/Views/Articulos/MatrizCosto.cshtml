@@ -1,0 +1,184 @@
+﻿@model IEnumerable<SIAAPI.Models.Comercial.MatrizCosto>
+@*@{
+            ViewBag.Title = "MatrizCosto";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+<h4>
+    <small>Establezca el rango por ejemplo de 0 a 10, el precio para ese rango y presione grabar</small>
+ </h4>
+<hr />
+
+@using (Html.BeginForm("InsertarMatrizCosto", "Articulos", FormMethod.Post))
+                    {
+    <div class="form-horizontal">
+        <input type="hidden" name="id" class="form-control" value="@ViewBag.id" />
+
+      
+
+        <div class="form-group">
+            @Html.Label("Rango Inferior", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input type="text" name="ranginf" id="ranginf" class="form-control" required="required" value="@ViewBag.rangoinferior" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Rango Superior", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input type="text" name="rangsup" id="rangsup" class="form-control" required="required" value="@ViewBag.rangosuperior" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Precio", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-8">
+                <input type="text" name="precio" id="precio" class="form-control" />
+            </div>
+        </div>
+    </div>
+
+        @*<div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Grabar" class="btn btn-success btn" />
+            </div>
+        </div>*@
+@*<center><a class="edit" onclick="Inserta(@ViewBag.id)"><i class="btn btn-success btn-xs">Grabar</i></a></center>*@
+    <center><input type="submit" value="Grabar" class="btn btn-success btn-xs" /></center>
+            }
+       
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+               
+                @*<th>
+                    @Html.DisplayNameFor(model => model.IDArticulo)
+                </th>*@
+                <th>
+                    @Html.DisplayNameFor(model => model.RangInf)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.RangSup)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Precio)
+                </th>
+
+                <th></th>
+            </tr>
+            @{
+               int contador = 0;
+                foreach (var item in Model)
+                {
+                    <tr>
+                      
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.Articulo.Descripcion)
+                        </td>*@
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.RangInf)*@
+                            @{string cadenaa = "RangoIc" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadenaa" name="RangoI" value="@item.RangInf">
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.RangSup)*@
+                            @{string cadena = "RangoSc" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadena" name="RangoS" value="@item.RangSup">
+                        </td>
+                        <td>
+
+                            @*@String.Format("{0:C}", item.Precio)*@
+                            @{string cadenaaa = "Precioc" + contador;
+                            }
+                            <input type="text" class="form-control" id="@cadenaaa" name="Precio" value="@item.Precio">
+                        </td>
+
+                        <td>
+
+                            <a class="edit" onclick="ActualizarC(@item.idMatrizCosto,@contador)">
+                                <i class="tbl_del_btn fa fa-refresh"></i>
+                            </a>
+
+                            <a class="deleteC" data-id="@item.idMatrizCosto">
+                                <i class="tbl_del_btn fa fa-trash"></i>
+                            </a>
+
+                        </td>
+                    </tr>
+                                    contador++;
+                                }
+            }
+
+        </table>
+    </div>
+    @*@Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })*@
+
+
+
+
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script>
+
+       
+        $('.deleteC').click(function () {
+            var url = '@Url.Action("DeleteitemMatrizCosto", "Articulos")';
+            var row = $(this).closest('tr');
+            $.post(url, { id: $(this).data('id') }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.remove();
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        });
+    </script>
+
+    <script>
+
+      
+
+        function ActualizarC(id, numero) {
+            var urledit = '@Url.Action("EdititemMatrizCosto", "Articulos")';
+            var rangi = document.getElementById("RangoIc" + numero).value
+            var rangs = document.getElementById("RangoSc" + numero).value
+            var precio = document.getElementById("Precioc" + numero).value
+           
+            $.post(urledit, { id: id, rangi: rangi, rangs: rangs, precio: precio }, function (response) {
+                if (response) {
+                    location.reload();
+                  //  row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+    </script>
+
+    @*<script>
+
+        var urlinsert = '@Url.Action("Insertar", "MatrizPrecioCliente")';
+
+        function Inserta(id) {
+            var rangi = document.getElementById("ranginf").value
+            var rangs = document.getElementById("rangsup").value
+            var precio = document.getElementById("precio").value
+
+            $.post(urlinsert, { id: id, rangi: rangi, rangs: rangs, precio: precio, IDCliente: $("#IDCliente").val(), IDArticulo: $("#IDArticulo").val() }, function (response) {
+                if (response) {
+                    location.reload();
+                    row.change;
+
+                }
+            }).fail(function (response) {
+                // display error message?
+            });
+        }
+
+
+    </script>*@

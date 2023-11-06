@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "AgregarProceso";
+}
+
+
+
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Agregar Proceso a Artículo:<br /><small><p id="demo">@ViewBag.NombreArticulo</p> </small></h3>
+
+<hr />
+
+
+
+<input type="hidden" class="form-control" name="mensaje" id="mensaje" value="@ViewBag.IDArticulo">
+
+<br />
+<div class="form-group">
+    @Html.Label("Proceso", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("IDProceso", ViewBag.IDProceso as List<SelectListItem>, new { @class = "form-control" })
+
+    </div>
+
+</div>
+<br /><br /><br />
+<div class="modal-footer">
+    <button type="button" class="btn btn-success btn-xs" onclick="Actualizar()">Guardar</button>
+
+    <button type="button" class="btn btn-warning btn-xs" data-dismiss="modal">Cerrar</button>
+</div>
+
+
+<script>
+    function Actualizar() {
+
+
+        var url = '@Url.Action("Formula", "Articulos")';
+        $.post(url, { IDArticulo: document.getElementById("mensaje").value, IDProceso: $("#IDProceso").val() }, function (response) {
+            if (response.errorMessage) {
+
+                swal("No registrado", "", "error")
+            }
+            else if (response) {
+                swal("Asignación con éxito", "", "success")
+                $('#ProcesoArticulo').remove();
+                location.reload();
+            }
+        }).fail(function (response) {
+        });
+    }
+
+
+</script>
+
+

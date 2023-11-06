@@ -1,0 +1,255 @@
+﻿@model SIAAPI.Models.Cfdi.VPagoFacturaProvElec
+
+@{
+    ViewBag.Title = "DetailsP";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <h4>Pago de Facturas a un Proveedor</h4>
+    <hr />
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            @Html.HiddenFor(model => model.IDPagoFacturaProv)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SerieP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SerieP)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FolioP)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FolioP)
+        </dd>
+
+      
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Empresa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDProveedor) | 
+            @Html.DisplayFor(model => model.Empresa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaPago)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FormaPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveFormaPago) | 
+            @Html.DisplayFor(model => model.FormaPago)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Moneda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveMoneda) |
+            @Html.DisplayFor(model => model.Moneda)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NoOperacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NoOperacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Monto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Monto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RFCBancoEmpresa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFCBancoEmpresa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CuentaEmpresa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CuentaEmpresa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RFCBancoProv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RFCBancoProv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CuentaProv)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CuentaProv)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoCadenaPago)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IDTipoCadenaPago) | 
+            @Html.DisplayFor(model => model.TipoCadenaPago)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Observacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Observacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UUID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UUID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Estado)
+        </dt>
+        
+
+            @if (Model.Estado == "C")
+            {
+            <dd>
+                @*@Html.DisplayFor(model => model.StatusPago)*@
+                <h2 class="alert-danger">Cancelado</h2>
+            </dd>
+            }
+            else
+            {
+                <dd>
+                    @*@Html.DisplayFor(model => model.StatusPago)*@
+                    <h2 class="alert-success">Activo</h2>
+                </dd>
+            }
+        
+
+       
+
+    </dl>
+</div>
+
+@if (@ViewBag.pagoFacturaSPEI != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <h4>
+                        Cadena de Pago SPEI
+                    </h4>
+                <tr>
+                    <th>Certificado de Pago</th>
+                    <th>Cadena Pago</th>
+                    <th>Sello de Pago</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.pagoFacturaSPEI)
+            {
+                <tr>
+                    <td>@item.CertificadoPago</td>
+                    <td>@item.IDTipoCadenaPago </td>
+                    <td>@item.SelloPago</td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+
+
+@if (@ViewBag.detallesDR != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <h4> Documentos Relacionados </h4>
+                </tr>
+                <tr>
+
+
+                    <th>UUID</th>
+                    <th>Serie</th>
+                    <th>Numero</th>                  
+                    <th>ImportePagado</th>
+                    <th>ImporteSaldoInsoluto</th>
+                    <th>NoParcialidad</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.detallesDR)
+            {
+                <tr>
+                    <td>@item.UUID</td>
+                    <td>@item.Serie</td>
+                    <td>@item.Numero</td>                   
+                    <td>@string.Format("{0:C}", @item.ImportePagado)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteSaldoInsoluto)</td>
+                    
+                    <td>@item.NoParcialidad</td>
+
+                    
+                    @if (item.Estado == "C")
+                    {
+                        <td>
+                            @*@Html.DisplayFor(model => model.StatusPago)*@
+                            <h4 class="alert-danger">Cancelado</h4>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @*@Html.DisplayFor(model => model.StatusPago)*@
+                            <h4 class="alert-success">Activo</h4>
+                        </td>
+                    }
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+<p>
+    @Html.ActionLink("Volver a la lista", "IndexP", null, new { @class = "btn btn-default btn-xs" })
+   
+</p>

@@ -1,0 +1,59 @@
+﻿@model SIAAPI.Models.Administracion.c_Impuesto
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Impuesto</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ClaveImpuesto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ClaveImpuesto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Retencion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Retencion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Traslado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Traslado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tipo)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+        </div>
+    }
+</div>

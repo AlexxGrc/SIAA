@@ -1,0 +1,420 @@
+﻿@model SIAAPI.Models.Comercial.Articulo
+
+@{
+    ViewBag.Title = "Detalles de Artículo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4> Código: @ViewBag.cref</h4>
+<h4> Artículo: @ViewBag.articulo</h4>
+id = @ViewBag.id
+<br />
+
+
+    @*<ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">...</div>
+            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+            <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+        </div>*@
+
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="Detalles-tab" data-toggle="tab" href="#Detalles" role="tab" aria-controls="Detalles" aria-selected="true" aria-expanded="true">Detalles</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="Editar-tab" data-toggle="tab" href="#Editar" role="tab" aria-controls="Editar" aria-selected="false">Editar</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="Presenta-tab" data-toggle="tab" href="#Presenta" role="tab" aria-controls="Presenta" aria-selected="false">Presentación</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="MatrizP-tab" data-toggle="tab" href="#MatrizP" role="tab" aria-controls="MatrizP" aria-selected="false">Matriz Precio</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="MatrizC-tab" data-toggle="tab" href="#MatrizC" role="tab" aria-controls="MatrizC" aria-selected="false">Matriz Costo</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="PrecioP-tab" data-toggle="tab" href="#PrecioP" role="tab" aria-controls="PrecioP" aria-selected="false">Precio Proveedor</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent"> @*Div Tab Content*@
+        @*Tab Detalles*@
+        <div class="tab-pane fade show active" id="Detalles" role="tabpanel" aria-labelledby="Detalles-tab " aria-expanded="true">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.AQLCalidad.Descripcion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AQLCalidad.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.c_ClaveUnidad.ClaveUnidad)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_ClaveUnidad.ClaveUnidad)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.c_Moneda.ClaveMoneda)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_Moneda.ClaveMoneda)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Familia.CCodFam)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Familia.CCodFam)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Inspeccion.Descripcion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Inspeccion.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Muestreo.Descripcion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Muestreo.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Cref)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Cref)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Descripcion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDTipoArticulo)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IDTipoArticulo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Preciounico)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Preciounico)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.CtrlStock)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CtrlStock)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ManejoCar)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ManejoCar)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.bCodigodebarra)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.bCodigodebarra)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Codigodebarras)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Codigodebarras)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Obscalidad)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Obscalidad)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.ExistenDev)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.ExistenDev)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.esKit)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.esKit)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.GeneraOrden)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.GeneraOrden)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.obsoleto)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.obsoleto)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.nameFoto)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.nameFoto)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.MinimoVenta)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MinimoVenta)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.MinimoCompra)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.MinimoCompra)
+                </dd>
+
+            </dl>
+        </div> @*Fin de Tab Detalles*@
+
+        @*Tab Editar*@
+        <div class="tab-pane fade" id="Editar" role="tabpanel" aria-labelledby="Editar-tab">
+            ...
+            
+            entre editar
+        </div>@*Fin Tab Editar*@
+
+        @*Tab Editar*@
+        <div class="tab-pane fade" id="Presenta" role="tabpanel" aria-labelledby="Presenta-tab">
+         
+               
+                    @{
+                        SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(Model.IDArticulo);
+                        SIAAPI.ViewModels.Articulo.LPresentacionSchema dat = new SIAAPI.ViewModels.Articulo.LPresentacionSchema();
+                        List<SIAAPI.ViewModels.Articulo.LPresentacion> listado = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.ViewModels.Articulo.LPresentacion>("Select [ID] ,[IDPresentacion],[Cotizacion] ,[version] ,[Presentacion] ,[jsonPresentacion] ,[Articulo_IDArticulo] ,[obsoleto] from Caracteristica where Articulo_IDArticulo = " + Model.IDArticulo + " order by IDPresentacion").ToList();
+
+                        //Html.RenderPartial("ListadoPresentaciones", listado );
+                   
+                
+            <table class="table table-hover">
+                <tr>
+                    <th>ID Presentacion</th>
+
+
+                    <th>Presentación</th>
+                    <th></th>
+                    <th>Planeación</th>
+                    <th>Obsoleto</th>
+                    <th></th>
+
+                </tr>
+                @{
+                    var contador = 0;
+                    foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IDPresentacion)
+                            </td>
+
+                            <td>
+                                <table style="width:100%">
+                                    <tr>
+                                        <th>Atributo</th>
+                                        <th>Valor</th>
+
+                                    </tr>
+
+
+                                    @{try
+                                        {
+                                            string[] atributos = item.Presentacion.ToString().Split(',');
+                                            foreach (var atri in atributos)
+                                            {
+                                                string[] valor = atri.Split((char)58);
+                                                string Atri = valor[0];
+                                                string Val = valor[1];
+                                                try
+                                                {
+                                                    if (Val == "false" || (Val == "true"))
+                                                    {
+                                                        bool valoramostrar = false;
+                                                        if ((Val == "true"))
+                                                        {
+                                                            valoramostrar = true;
+                                                        }
+                                                        <tr>
+                                                            <td>  <label class="text-info">@Atri :</label></td>
+                                                            <td> <input type="checkbox" checked="@valoramostrar"></td>
+                                                        </tr>
+                                                    }
+                                                    else if (Val.Substring(0, 1) == "#" && (Val.Length == 7))
+                                                    {
+                                                        <tr>
+                                                            <td>  <label class="text-info">@Atri :</label></td>
+                                                            <td> <input type="color" value="@Val"></td>
+                                                        </tr>
+                                                    }
+                                                    else
+                                                    {
+                                                        throw new Exception(""); // crea la excepcion para imprimir una label y entra al catch
+                                                    }
+                                                }
+                                                catch (Exception err)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <label class="text-capitalize">@Atri :</label>
+                                                        </td>
+                                                        <td>   <label class="text-info">@Val</label></td>
+                                                    </tr>
+
+                                                }
+                                            }
+
+
+                                        }
+                                        catch (Exception err)
+                                        {
+                                            string mesajeerror = err.Message;
+                                        }
+                                    }
+                                </table>
+                            </td>
+                            <td>
+                                @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
+                                {
+                                    @Html.ActionLink("Inventario", "Inventario", new { IDPresentacion = item.ID }, new { @class = "btn btn-default btn-xs" })
+                                }
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Cotizacion) ver.  @Html.DisplayFor(modelItem => item.version)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.obsoleto)*@
+                                @if (item.obsoleto.Equals(true))
+                                {
+                                    string cadena = "obsoleto" + contador;
+
+                                    <input type="checkbox" id="@cadena" onclick="myFunction(@item.ID,@contador)" value="true" checked>
+                                }
+                                else
+                                {
+                                    string cadena = "obsoleto" + contador;
+
+                                    <input type="checkbox" id="@cadena" onclick="myFunction(@item.ID,@contador)" value="true">
+                                }
+
+                            </td>
+                            <td>
+                                <button onclick=Actualizar(@item.ID) class="btn btn-warning"><i class="tbl_del_btn fa fa-edit"></i></button>
+                                <button onclick="Eliminar(@item.ID)" class="btn btn-danger"><i class="tbl_del_btn fa fa-trash"></i></button>
+                            </td>
+
+
+                        </tr>
+                                            contador++;
+                                        }
+                } }
+
+            </table>
+
+
+
+
+        </div> @*Fin Tab Editar*@
+
+        @*Tab MatrizP*@
+        <div class="tab-pane fade" id="MatrizP" role="tabpanel" aria-labelledby="MatrizP-tab">
+            ...
+            entre MatrizP
+
+        </div> @*Fin Tab MatrizP*@
+
+        @*Tab MatrizC*@
+        <div class="tab-pane fade" id="MatrizC" role="tabpanel" aria-labelledby="MatrizC-tab">
+            ...
+            entre MatrizC
+
+        </div> @*Fin Tab MatrizC*@
+
+        @*Tab PrecioP*@
+        <div class="tab-pane fade" id="PrecioP" role="tabpanel" aria-labelledby="PrecioP-tab">
+            ...
+            entre PrecioP
+
+        </div> @*Fin Tab PrecioP*@
+    </div>@*Fin Div Tab Content*@
+
+
+
+
+    <p>
+        @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDArticulo }) |*@
+
+        @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+
+    </p>
+
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+
+<script>
+    $('#Detalles').tab('show') // Select tab by name
+   
+</script>

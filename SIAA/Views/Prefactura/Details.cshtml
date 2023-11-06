@@ -1,0 +1,333 @@
+﻿@model SIAAPI.Models.Comercial.EncPrefactura
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Detalles Prefactura: @Model.Serie @Model.Numero </h3>
+<h6>Id de operacion @Model.IDPrefactura </h6>
+<div>
+    <hr />
+    @*<dl class="dl-horizontal">*@
+    <div class="row">
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDCliente)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Clientes.Nombre)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Fecha)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Fecha)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDVendedor)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Vendedor.Nombre)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Observacion)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Observacion)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDTipoRelacion)
+                </dt>
+
+                <dd>
+                  
+                    @Html.DisplayFor(model => model.c_TipoRelacion.ClaveTipoRelacion)| @Html.DisplayFor(model => model.c_TipoRelacion.Descripcion)
+                </dd>
+
+            </dl>
+        </div>
+
+
+        <div class="columna col-md-4 col-sm-1">
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDUsoCFDI)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_UsoCFDI.Descripcion)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDFormapago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_FormaPago.ClaveFormaPago)|@Html.DisplayFor(model => model.c_FormaPago.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDMetodoPago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.c_MetodoPago.ClaveMetodoPago)|@Html.DisplayFor(model => model.c_MetodoPago.Descripcion)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDMoneda)
+                </dt>
+
+                <dd>
+
+                    @Html.DisplayFor(model => model.c_Moneda.ClaveMoneda)|@Html.DisplayFor(model => model.c_Moneda.Descripcion)
+
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.TipoCambio)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.TipoCambio)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IDCondicionesPago)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.CondicionesPago.ClaveCondicionesPago)|@Html.DisplayFor(model => model.CondicionesPago.Descripcion)
+                </dd>
+
+            </dl>
+        </div>
+        @if (ViewBag.PrefacturaAnticipo != null)
+        {
+        <div class="columna col-md-4 col-sm-1">
+           
+                @*@Html.Label("Documentos Relacionados", htmlAttributes: new { @class = "control-label col-md-2" })*@
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Documentos Relacionados</th>
+
+
+
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            <br />
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                
+                                <th>UUID </th>
+
+
+
+                            </tr>
+                        </thead>
+
+                        @foreach (var item in ViewBag.PrefacturaAnticipo)
+                        {
+                            <tr>
+
+                             
+                                <td>@item.UUIDAnticipo</td>
+                            </tr>
+
+
+                        }
+                    </table>
+                </div>
+        
+</div>
+        }
+    </div>
+
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+              
+                <th>Clave</th>
+                <th>Artículo</th>
+                <th>OC</th>
+                <th>
+                    Lote
+                </th>
+                <th>Nota</th>
+                @*<th>Compra Mínima</th>*@
+                <th>Cantidad</th>
+                @*<th>Devolución</th>*@
+                <th>Precio</th>
+               
+                <th>Importe</th>
+                <th>Descuento</th>
+                <th>IVA</th>
+                <th>Total</th>
+
+            </tr>
+        </thead>
+
+        @foreach (SIAAPI.ViewModels.Comercial.VDetPrefactura item in ViewBag.req)
+        {
+            if (item.Status.Equals("Cancelado"))
+            {
+                <tr class="danger">
+
+                    <td>@item.Cref</td>
+                    <td>
+                    <div>@item.Articulo</div>
+                    <div><h6>@item.Presentacion</h6></div>
+                    </td>
+                 <td>
+                     @{ 
+                         string oc = "";
+                         try
+                         {
+                             SIAAPI.clasescfdi.ClsRastreaOC rastrea = new SIAAPI.clasescfdi.ClsRastreaOC(item.IDPrefactura);
+                             oc = rastrea.RastreaOC(item.IDPrefactura, item.Caracteristica_ID, item.Cantidad);
+                         }
+
+                         catch (Exception err)
+                         {
+
+                         }
+                     }
+                     @oc
+                 </td>
+                    <td>@item.Lote</td>
+                    <td>@item.Nota</td>
+                   
+                    <td>@item.Cantidad</td>
+                    <td>@string.Format("{0:C}", @item.Costo)</td>
+                    <td>@string.Format("{0:C}", @item.Importe)</td>
+                    <td>@string.Format("{0:C}", @item.Descuento)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+                </tr>
+            }
+            else
+            {
+
+                <tr>
+                    @if (item.Status.Equals("Devuelto"))
+                    {
+                        <td class="warning">@item.Cref</td>
+                        <td class="warning">
+                           <div>@item.Articulo</div> 
+                            <div>@item.Presentacion</div>
+                        </td>
+                    }
+                    else if (item.Status.Equals("Activo"))
+                    {
+                        <td class="success">@item.Cref</td>
+                        <td class="success">
+                          <div>@item.Articulo</div>
+                            <div><h6>@item.Presentacion</h6></div>
+                        </td>
+                    }
+                    else if (item.Status.Equals("Finalizado"))
+                    {
+                        <td >@item.Cref</td>
+                        <td>
+                          <div>@item.Articulo</div>  
+                            <div>@item.Presentacion</div>
+                        </td>
+                    }
+
+                <td>
+                    @{
+                        string oc = "";
+                        try
+                        {
+                            SIAAPI.clasescfdi.ClsRastreaOC rastrea = new SIAAPI.clasescfdi.ClsRastreaOC(item.IDPrefactura);
+                            oc = rastrea.RastreaOC(item.IDPrefactura, item.Caracteristica_ID, item.Cantidad);
+                        }
+
+                        catch (Exception err)
+                        {
+
+                        }
+                    }
+                    @oc
+                </td>
+                    <td>@item.Lote</td>
+                    <td>@item.Nota</td>
+                    @*<td>@item.MinimoVenta</td>*@
+                    <td>@item.Cantidad</td>
+                    @*<td>@item.Devolucion</td>*@
+                    <td>@string.Format("{0:C}", @item.Costo)</td>
+                    <td>@string.Format("{0:C}", @item.Importe)</td>
+                    <td>@string.Format("{0:C}", @item.Descuento)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped" >
+        <tr>
+            <th class="col-lg-1">
+                Moneda Origen
+            </th>
+            <th class="col-lg-1">
+                Subtotal
+            </th>
+            <th class="col-lg-1">
+                IVA
+            </th>
+            <th class="col-lg-1">
+                Total
+            </th>
+            <th class="col-lg-1">
+                Total en Pesos Mexicanos
+            </th>
+        </tr>
+        @foreach (var itemresumen in ViewBag.sumatoria)
+        {
+
+            <tr>
+                <td class="col-lg-1">
+                    @itemresumen.MonedaOrigen
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Subtotal)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.IVA)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.Total)
+                </td>
+                <td class="col-lg-1">
+                    @String.Format("{0:C}", itemresumen.TotalenPesos)
+                </td>
+
+            </tr>
+        }
+    </table>
+</div>
+
+<h5 align="right">Elaboró: @Html.DisplayFor(model => model.User.Username)</h5> 
+<p>
+    @*@Html.ActionLink("Editar", "Edit", new { id = Model.IDRequisicion }, new { @class = "btn btn-success" }) |*@
+    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default" })
+</p>
+

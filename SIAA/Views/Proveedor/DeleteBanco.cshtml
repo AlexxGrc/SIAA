@@ -1,0 +1,53 @@
+﻿@model SIAAPI.Models.Comercial.BancosProv
+
+<h3>¿Está seguro de borrar este registro?</h3>
+<div>
+    <h4>Eliminar Banco de Proveedor: @Html.DisplayFor(model => model.Proveedor.Empresa)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.IDBanco)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Banco.ClaveBanco)|@Html.DisplayFor(model => model.Banco.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IDMoneda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Moneda.ClaveMoneda)|@Html.DisplayFor(model => model.Moneda.Descripcion)
+        </dd>
+
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cuenta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cuenta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CuentaClabe)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CuentaClabe)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger btn-xs" /> |
+            @Html.ActionLink("Regresar a la lista", "VerBancos", new { id = Model.Proveedor.IDProveedor }, new { @class = "btn btn-default btn-xs" })
+        </div>
+
+    }
+</div>

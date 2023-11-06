@@ -1,0 +1,170 @@
+﻿@model SIAAPI.Models.Cfdi.PagoFactura
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h3>Pago de Factura CFDI</h3>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+       
+            <div class="form-group">
+                @Html.LabelFor(model => model.FechaPago, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input id="FechaPago" name="FechaPago" class="form-control" value="@ViewBag.horafecha"/>
+                    @Html.ValidationMessageFor(model => model.FechaPago, "", new { @class = "text-danger" })
+                  
+                </div>
+            </div>
+       
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDFormaPago, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IDFormaPago", ViewBag.datosFormaPago as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDFormaPago, "", new { @class = "text-danger" })
+                </div>
+            </div>
+       
+                <div class="form-group">
+                    @Html.LabelFor(model => model.IDMoneda, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                       @* @Html.DropDownList("IDMoneda", ViewBag.datosMoneda as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })*@
+                        @Html.DropDownList("IDMoneda", ViewBag.datosMoneda as List<SelectListItem>, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IDMoneda, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.TC, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @*@Html.EditorFor(model => model.TC, new { htmlAttributes = new { @class = "form-control"} })*@
+                    <input id="TC" name="TC" class="form-control" />
+                </div>
+            </div>
+      
+        
+            <div class="form-group">
+                @Html.LabelFor(model => model.NoOperacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.NoOperacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.NoOperacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Monto, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Monto, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Monto, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDCliente, "Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @* @Html.DropDownListFor(model => model.Status, ViewBag.ComboStatus as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })*@
+                    @Html.DropDownList("IDCliente", ViewBag.cliente as List<SelectListItem>, new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.IDCliente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDBancoCliente, "Banco Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @* @Html.DropDownList("IDCondicionesPago", null, htmlAttributes: new { @class = "form-control" })*@
+                    @Html.DropDownList("IDBancoCliente", new SelectList(string.Empty, "Value", "Text"), "--Selecciona Banco Cliente--", new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDBancoCliente, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDBancoEmpresa, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @*@Html.EditorFor(model => model.IDBancoBeneficiario, new { htmlAttributes = new { @class = "form-control" } })*@
+                    @Html.DropDownList("IDBancoEmpresa", ViewBag.datosBancoEmp as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDBancoEmpresa, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.IDTipoCadenaPago, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("IDTipoCadenaPago", ViewBag.datosTipoCadena as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.IDTipoCadenaPago, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Observacion, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Observacion, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Observacion, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Grabar" class="btn btn-success btn-xs" />
+                    @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+                </div>
+            </div>
+           
+         </div>
+         }
+
+           
+
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#IDCliente").change(function () {
+            $("#IDBancoCliente").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getbanco")',
+                dataType: 'json',
+                data: { id: $("#IDCliente").val() },
+                success: function (metodos) {
+                $.each(metodos, function (i, metodo) {
+                    $("#IDBancoCliente").append('<option value="' + metodo.Value + '">' +
+                 metodo.Text + '</option>');
+                });
+                },
+                error: function (ex) {
+                alert('Failed to retrieve.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#IDMoneda").change(function () {
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("getTC")',
+                dataType: 'json',
+                data: { id: $("#IDMoneda").val() },
+                success: function (tcs) {
+
+                    $('#TC').val(tcs);
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve.' + ex);
+                }
+
+            });
+            return false;
+        })
+    });
+</script>

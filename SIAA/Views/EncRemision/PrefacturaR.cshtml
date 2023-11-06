@@ -1,0 +1,284 @@
+﻿@model List<SIAAPI.ViewModels.Comercial.VCarritoPrefacturaR>
+@{
+    ViewBag.Title = "PrefacturaR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head runat="server">
+    <script src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.2.js" type="text/javascript"></script>
+    <script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript">
+     //Consecutivo de campos a agregar
+         campoNuevo = 0;
+        //Funcion de agregar campos
+        function AgregarCampos() {
+            campoNuevo = campoNuevo + 1;
+            campo = '<div class="col-md-8"><li><label>UUID Anticipo ' + campoNuevo + ':</label><input type="text" size="20" class="form-control" name="campo' + campoNuevo + '"  /><br></li></div>';
+            $("#campos").append(campo);
+        }
+
+    </script>
+</head>
+
+<h3>Prefactura Remisión</h3>
+
+@using (Html.BeginForm("PrefacturaR", "EncRemision", FormMethod.Post))
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Remisión</h3>
+        </div>
+        <div class="panel-body">
+
+            <input type="text" name="id" />
+
+            <button type="submit" class="btn btn-primary btn-xs">Buscar</button>
+
+
+
+
+        </div>
+    </div>
+}
+@if (ViewBag.otro != 0)
+{
+    <h2>Detalles</h2>
+
+    foreach (var item in ViewBag.data)
+    {
+        <table>
+            <tr>
+                <B>Cliente: </B>@item.Cliente
+                <br />
+                <B>Fecha: </B>@item.Fecha
+                <br />
+            </tr>
+        </table>
+    }
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>No. Partida Remisión</th>
+                    <th>Artículo</th>
+                    <th>Presentación</th>
+                    <th>Nota</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Importe</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.datos)
+            {
+                <tr>
+                    <td>@item.IDDetRemision</td>
+                    <td>@item.Articulo</td>
+                    <td>@item.Presentacion</td>
+                    <td>@item.Nota</td>
+                    <td>@item.Cantidad</td>
+                    <td>@string.Format("{0:C}", @item.Costo)</td>
+                    <td>@string.Format("{0:C}", @item.Importe)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteIva)</td>
+                    <td>@string.Format("{0:C}", @item.ImporteTotal)</td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+
+
+@if (ViewBag.idnull != 0 && ViewBag.dato != 0)
+{
+    using (Html.BeginForm("PrefacturaRemision", "EncRemision", FormMethod.Post))
+
+    {
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.Label("Serie", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+               
+                         @Html.DropDownList("IDFolioVentas", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Tipo de Relacion", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDTipoRelacion", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Uso CFDI", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDUsoCFDI", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.Label("Condición de Pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDCondicionesPago", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Método de pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDMetodoPago", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                @Html.Label("Forma de pago", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    @Html.DropDownList("IDFormapago", null, htmlAttributes: new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Observación", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-8">
+                    <input type="text" name="Observacion" class="form-control" />
+                </div>
+            </div>
+
+
+            <div>
+
+                @*<form id="form1" runat="server">*@
+
+                <a href="#" class="btn btn-warning btn-xs" onclick="AgregarCampos();">Agregar Documentos Relacionados</a>
+                <div id="campos">
+                </div>
+
+
+                @*</form>*@
+
+            </div>
+            <div class="form-group">
+
+                <div class="col-md-8">
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="table-responsive">
+            <table class="table">
+                <tr>
+
+                    <th>No. Remisión</th>
+                    <th>Articulo</th>
+                    <th>Presentacion</th>
+                    <th>Lote</th>
+                    <th>Cantidad</th>
+                    @*<th>Cantidad Devuelta</th>
+                        <th>Cantidad a Devolver</th>*@
+                    <th>Costo</th>
+                    <th>Importe</th>
+                    <th>IVA</th>
+                    <th>Total</th>
+                    <th>Nota</th>
+                    <th></th>
+                </tr>
+                @if (Model != null && Model.Count > 0)
+                {
+                    int j = 0;
+                    foreach (var i in Model)
+                    {
+                        <tr>
+                            @Html.TextBoxFor(a => a[j].IDDetExterna, new { @class = "form-control", @Value = i.IDDetExterna, @type = "hidden" })
+                            @Html.TextBoxFor(a => a[j].IDRemision, new { @class = "form-control", @Value = i.IDRemision, @type = "hidden" })
+                            @Html.TextBoxFor(a => a[j].IDCarritoPrefacturaR, new { @class = "form-control", @Value = i.IDCarritoPrefacturaR, @type = "hidden" })
+                            @*@Html.TextBoxFor(a => a[j].Cantidad, new { @class = "form-control", @Value = i.Cantidad, @type = "hidden" })*@
+                            @*@Html.TextBoxFor(a => a[j].IDCaracteristica, new { @class = "form-control", @Value = i.IDCaracteristica, @type = "hidden" })*@
+                            @*@Html.TextBoxFor(a => a[j].Nota, new { @class = "form-control", @Value = i.Nota, @type = "hidden" })*@
+                            <td>@Html.DisplayFor(modelItem => i.IDRemision)</td>
+                            <td>@Html.DisplayFor(modelItem => i.Articulo)</td>
+                            <td>@Html.DisplayFor(modelItem => i.Presentacion) </td>
+                            <td>@Html.DisplayFor(modelItem => i.Lote) </td>
+                            <td>@Html.DisplayFor(modelItem => i.Cantidad)</td>
+                            @*<td>@Html.DisplayFor(modelItem => i.CantidadPedida)</td>
+                                <td>@Html.TextBoxFor(a => a[j].Cantidad, new { @class = "form-control", @Value = i.Cantidad - i.CantidadPedida, style = "width:80px;" })</td>*@
+                            <td>@Html.DisplayFor(modelItem => i.Costo) </td>
+                            <td>@Html.DisplayFor(modelItem => i.Importe)</td>
+                            <td>@Html.DisplayFor(modelItem => i.ImporteIva)</td>
+                            <td>@Html.DisplayFor(modelItem => i.ImporteTotal)</td>
+                            <td>@Html.DisplayFor(modelItem => i.Nota) </td>
+                            <td>
+
+                                @Html.ActionLink(" ", "deletepr", new { id = i.IDCarritoPrefacturaR }, new { @class = "tbl_del_btn fa fa-trash" })
+
+                            </td>
+                        </tr>
+                        j++;
+                    }
+                }
+            </table>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped" width="50">
+                <tr>
+                    <th class="col-lg-1">
+                        Moneda Origen
+                    </th>
+                    <th class="col-lg-1">
+                        Subtotal
+                    </th>
+                    <th class="col-lg-1">
+                        IVA
+                    </th>
+                    <th class="col-lg-1">
+                        Total
+                    </th>
+                    <th class="col-lg-1">
+                        Total en Pesos Mexicanos
+                    </th>
+                </tr>
+                @foreach (var itemresumen in ViewBag.sumatoria)
+                    {
+
+                    <tr>
+                        <td class="col-lg-1">
+                            @itemresumen.MonedaOrigen
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.Subtotal)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.IVA)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.Total)
+                        </td>
+                        <td class="col-lg-1">
+                            @String.Format("{0:C}", itemresumen.TotalenPesos)
+                        </td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+
+            <div class="form-group">
+
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Grabar" class="btn btn-success" /> | @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default" })
+                </div>
+
+
+            </div>
+            @*@Html.ActionLink("Grabar", "PrefacturaRemision", null, new { @class = "btn btn-default btn-xs" })*@
+    }
+}
+
+<h3 class="text-danger">@ViewBag.mensaje</h3>

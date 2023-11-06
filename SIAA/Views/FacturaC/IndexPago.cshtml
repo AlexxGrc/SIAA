@@ -1,0 +1,195 @@
+﻿@*@model IEnumerable<VPagoFacturaC>*@
+<globalization uiCulture="auto" culture="auto" />
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<VPagoFacturaC>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+            ViewBag.Title = "IndexPago";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (@ViewBag.cliente != null)
+{
+    <div class="table-responsive">
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <h3>
+                        Pagos del Cliente
+                    </h3>
+                <tr>
+                    <th>RFC</th>
+                    <th>Empresa</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in ViewBag.cliente)
+            {
+                <tr>
+                    <td>@item.RFC</td>
+                    <td>@item.Nombre </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+}
+<hr />
+
+@*Busqueda*@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <form class="navbar-form navbar-left">
+            <div class="form-group">
+                @using (Html.BeginForm())
+                {
+
+                    <div>
+                        Elementos por página: @Html.DropDownList("pageSize")
+
+                    </div>
+                    <div>
+                            <row>
+                                FolioPago: @Html.TextBox("Numero")
+                            </row>
+                            <row>
+                                Fecha inicio: @Html.TextBox("Fechainicio", ViewBag.Fechainicio as string, new { type = "date" })
+                                Fecha final:  @Html.TextBox("Fechafinal", ViewBag.Fechafinal as string, new { type = "date" })
+                            </row>
+                            <input type="submit" value="Aplicar" class="btn btn-primary btn-xs" /><span class="sr-only">(current)</span>
+                    </div>
+
+                }
+
+            </div>
+        </form>
+    </div>
+</nav>
+<br>
+@*Busqueda*@
+
+<table class="table">
+    <tr>
+        <th>
+        Folio Pago
+        </th>
+        <th>
+
+            @Html.ActionLink("FechaPago", "IndexPago", new { sortOrder = ViewBag.SerieSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+ 
+        <th>
+
+            @Html.ActionLink("Descripcion", "IndexPago", new { sortOrder = ViewBag.SerieSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+
+            @Html.ActionLink("ClaveDivisa", "IndexPago", new { sortOrder = ViewBag.SerieSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+
+        <th>
+
+            @Html.ActionLink("TC", "IndexPago", new { sortOrder = ViewBag.SerieSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+
+        <td align = "right">
+
+            @Html.ActionLink("Monto", "IndexPago", new { sortOrder = ViewBag.SerieSortParm, currentFilter = ViewBag.CurrentFilter })
+        </td>
+        <td>
+</td>
+        <th>
+
+            @Html.ActionLink("Estado", "IndexPago", new { sortOrder = ViewBag.SerieSortParm, currentFilter = ViewBag.CurrentFilter })
+        </th>
+
+
+        <th>Complemento de Pago</th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Folio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaPago)
+        </td>
+        <td class="hidden">
+            @Html.HiddenFor(modelItem => item.IDCliente)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ClaveDivisa)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.TC)
+        </td>
+
+        <td align = "right">
+
+            @String.Format("{0:C}", item.Monto)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.CertificadoPago)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+
+        @if (item.RutaXML != null)
+        {
+            <td>
+                @Html.ActionLink("XML", "DescargarxmlPago", new { id = item.ID }, new { @class = "btn btn-warning btn-xs" })
+
+                @Html.ActionLink("PDF", "DescargarPdfPago", new { id = item.ID }, new { @class = "btn btn-primary btn-xs" })
+            </td>
+        }
+
+
+
+    </tr>
+}
+
+</table>
+
+@*Paginación*@
+@using (Html.BeginForm("IndexPago", "VPagoFacturaC", FormMethod.Get, new { id = "pageSizeForm" }))
+            {
+    <div class="pager">
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) de @Model.PageCount<br />
+
+        @Model.Count de @Model.TotalItemCount elementos
+
+        @Html.PagedListPager(Model, page => Url.Action("IndexPago", new
+       {
+           page,
+           sortOrder = ViewBag.CurrentSort,
+           currentFilter = ViewBag.CurrentFilter,
+           Fechainicio = ViewBag.Fechainicio,
+           FechaFinal = ViewBag.Fechafinal,
+           Numero = ViewBag.Numero,
+           pageSize = ViewBag.psize
+       }))
+
+
+    </div>
+}
+@*Paginación*@

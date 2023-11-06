@@ -1,0 +1,213 @@
+﻿@model SIAAPI.Models.Comercial.Articulo
+
+@{
+    ViewBag.Title = "Crear Articulo";
+}
+
+<h2>Crear Etiqueta</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4 class="text-danger">@ViewBag.errorpersonalizado</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Clave de Producto</span>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Cref, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Cref, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-8">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Descripcion del Articulo</span>
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-xs-7">
+                <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1">Familia</span>
+                    @Html.DropDownList("IDFamilia", ViewBag.IDFamilia as List<SelectListItem>, new { @class = "form-control", @required = "required" })
+
+                    @Html.ValidationMessageFor(model => model.IDFamilia, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <br />
+       
+
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="input-group">
+                    <span class="input-group-addon">Código de Barras</span>
+                   
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Codigodebarras, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Codigodebarras, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                </div>
+            </div>
+        <br />
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon2">Cliente</span>
+                        <div class="col-md-8">
+                            <select name="IDCliente" id="IDCliente">
+                                @{ foreach (SelectListItem itemcliente in ViewBag.Clientes)
+                                    {
+
+                                        <option value="@itemcliente.Value">@itemcliente.Text</option>
+
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+
+        @Html.HiddenFor(model => model.IDTipoArticulo, htmlAttributes: new { @class = "control-label col-md-2" })
+
+        @Html.HiddenFor(model => model.Preciounico, htmlAttributes: new { @class = "control-label col-md-2" })
+
+        @Html.HiddenFor(model => model.IDMoneda, htmlAttributes: new { @class = "control-label col-md-2" })
+
+        @Html.HiddenFor(model => model.CtrlStock, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+
+        @Html.HiddenFor(model => model.ManejoCar, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+
+        @Html.HiddenFor(model => model.IDClaveUnidad, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+
+        @Html.HiddenFor(model => model.bCodigodebarra, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.Obscalidad, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.ExistenDev, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.IDAQL, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.IDInspeccion, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.IDMuestreo, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+
+                @Html.HiddenFor(model => model.esKit, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.GeneraOrden, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.obsoleto, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.nameFoto, htmlAttributes: new { @class = "control-label col-md-2" })
+
+
+                @Html.HiddenFor(model => model.MinimoVenta, htmlAttributes: new { @class = "control-label col-md-2" })
+
+                @Html.HiddenFor(model => model.MinimoCompra, htmlAttributes: new { @class = "control-label col-md-2" })
+        <br />
+
+     
+
+        <br />
+
+        @try
+        {
+            <h1> Precios convenidos</h1>
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Cantidades</th>
+                        <th><div>@ViewBag.Cantidad1 Millares</div></th>
+                        <th><div>@ViewBag.Cantidad2 Millares</div></th>
+                        <th><div>@ViewBag.Cantidad3 Millares</div></th>
+                        <th><div>@ViewBag.Cantidad4 Millares</div></th>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                Precios
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <label for="precioconvenido1" class="text-info" style="font-size:large">@ViewBag.precioconvenidos.precio1.ToString("C") </label>
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                 
+                                <label for="precioconvenido2" class="text-info" style="font-size:large">@ViewBag.precioconvenidos.precio2.ToString("C")  </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <label for="precioconvenido3" class="text-info" style="font-size:large">@ViewBag.precioconvenidos.precio3.ToString("C")  </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+
+                                <label for="precioconvenido4" class="text-info" style="font-size:large">@ViewBag.precioconvenidos.precio4.ToString("C")  </label>
+                            </div>
+                        </td>
+                    </tr>
+
+
+
+
+            </table>
+        }
+        catch (Exception err2)
+        {
+            string mensajederror2 = err2.Message;
+        }
+
+        <input id="IDCotizacion" name="IDCotizacion" type="number" hidden value="@ViewBag.IDCotizacion" />
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Grabar" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+            }
+
+          

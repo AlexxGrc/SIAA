@@ -1,0 +1,492 @@
+﻿@*@model IEnumerable<SIAAPI.Models.Comercial.EncRequisiones>*@
+
+@*Paginación*@
+<script src="~/Scripts/jquery-3.2.1.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () { // Submit pageSizeForm when another pageSize value is selected
+        $("#pageSize").change(function () {
+            $("#pageSizeForm").submit();
+        });
+    });
+</script>
+@model PagedList.IPagedList<SIAAPI.Models.Comercial.EncPedido>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+@*Paginación*@
+
+@{
+    ViewBag.Title = "OrdenesAGenerar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Generar Ordenes</h3>
+
+
+<br>
+<h3>@ViewBag.Mensaje</h3>
+<br />
+ @using (Html.BeginForm("GeneraOrden", "EncPedido", FormMethod.Post))
+ {
+     
+    <div class="table-responsive">
+        <table class="table table-striped" width="50">
+            <thead>
+                <tr>
+                    <th>Artículo</th>
+                    <th>Almacén</th>
+                    <th>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    Almacén
+                                </th>
+                                <th>
+                                    @Html.Label("Existencia")
+                                </th>
+                                <th>
+                                    @Html.Label("Por llegar")
+                                </th>
+                                <th>
+                                    @Html.Label("Apartado")
+                                </th>
+                                <th>
+                                    @Html.Label("Disponible")
+                                </th>
+                            </tr>
+                        </table>
+                    </th>
+                    <th>Cantidad</th>
+
+                    <td></td>
+                </tr>
+            </thead>
+
+
+            @{int contador = 1; }
+
+            @foreach (SIAAPI.ViewModels.Comercial.VDetPedido item in ViewBag.req)
+            {
+                SIAAPI.Models.Comercial.ArticuloContext dbar = new SIAAPI.Models.Comercial.ArticuloContext();
+
+                SIAAPI.Models.Comercial.Articulo articuloKIT = dbar.Database.SqlQuery<SIAAPI.Models.Comercial.Articulo>
+                     ("select * from Articulo where IDArticulo='" + item.IDArticulo + "'").ToList().FirstOrDefault();
+
+                if (articuloKIT.esKit)
+                {
+                    SIAAPI.Models.Comercial.ArticuloContext dbart = new SIAAPI.Models.Comercial.ArticuloContext();
+                    List<SIAAPI.Models.Comercial.Kit> liAC;
+
+                    liAC = dbart.Database.SqlQuery<SIAAPI.Models.Comercial.Kit>("select * from [dbo].[Kit] where idarticulo=" + articuloKIT.IDArticulo + "").ToList();
+
+                    ViewBag.articulos = liAC;
+
+                    foreach (SIAAPI.Models.Comercial.Kit c in ViewBag.articulos)
+                    {
+
+
+                        SIAAPI.Models.Comercial.Articulo articulo = new SIAAPI.Models.Comercial.ArticuloContext().Articulo.Find(c.IDArticuloComp);
+                        SIAAPI.Models.Comercial.Caracteristica cara = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where id=" + c.IDCaracteristica).FirstOrDefault();
+                        ViewBag.verGeneraOrden = articulo;
+                        <input type="hidden" name="iddetpedido" id="iddetpedido" value="@item.IDDetPedido" />
+
+
+
+                        <tr>
+                            <td>
+                                <input type="hidden" name="idarticulo" id="idarticulo" value="@articulo.IDArticulo" />
+                                <input type="hidden" name="idcotizacionarticulo" id="idcotizacionarticulo" value="@cara.IDCotizacion" />
+                                <div>@c.Clave</div>
+                                <div>Presentacion @cara.IDPresentacion</div>
+                            </td>
+                            <td>
+
+                                N/A
+
+                            </td>
+                            <td>
+                                @{
+                                    SIAAPI.Models.Comercial.AlmacenContext db11 = new SIAAPI.Models.Comercial.AlmacenContext();
+                                    decimal disponibilidadInventario1 = 0;
+                                    try
+                                    {
+
+                                        string cadcara = "select IDcaracteristica as Dato from Kit where idarticulo=" + c.IDArticulo + " and idArticuloComp=" + c.IDArticuloComp;
+                                        SIAAPI.Models.Comercial.ClsDatoEntero idcara = db11.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>(cadcara).ToList()[0];
+
+
+
+                                        string cadenadis = "select Disponibilidad as Dato from InventarioAlmacen where idAlmacen=" + item.IDAlmacen + " and idcaracteristica=" + idcara;
+                                        SIAAPI.Models.Comercial.ClsDatoDecimal disponibilidad = db11.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>(cadenadis).ToList().FirstOrDefault();
+                                        if (disponibilidad.Dato < 0)
+                                        {
+                                            disponibilidadInventario1 = 0;
+                                        }
+                                        else
+                                        {
+                                            disponibilidadInventario1 = disponibilidad.Dato;
+                                        }
+
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        disponibilidadInventario1 = 0;
+
+                                    }
+
+                                }
+
+                                @disponibilidadInventario1
+
+
+                            </td>
+                            <td>
+
+
+
+                                <div>
+                                    @{
+
+                                        decimal cantidadartComp = item.Cantidad * c.Cantidad;
+                                        decimal CantidadReal = cantidadartComp;
+                                        string cadenacant = "Cantidad" + contador;
+                                    }
+
+                                    <input type="number" step="0.5" class="form-control" id="@cadenacant" name="Cantidad" value="@CantidadReal">
+
+
+                                </div>
+                            </td>
+                         
+
+
+                            <td>
+
+
+
+                                        @if (articulo.GeneraOrden == true)
+                                             {
+
+                                                if (item.GeneraOrden.Equals(true) && item.Status.Equals("Activo") || item.Status.Equals("PreFacturado") || item.Status.Equals("Finalizado") || item.Status.Equals("Recepcionado"))
+                                                {
+                                                    SIAAPI.Models.Produccion.OrdenProduccionContext db = new SIAAPI.Models.Produccion.OrdenProduccionContext();
+                                                    int iddetpedido = item.IDDetPedido;
+                                                    int idordenc = db.Database.SqlQuery<int>("select count(IDOrden) from OrdenProduccion where IDDetPedido=" + iddetpedido + " and idarticulo=" + c.IDArticuloComp + " and idcaracteristica=" + c.IDCaracteristica + "  and ESTADOORDEN <> 'Cancelada' ").FirstOrDefault();
+                                                    if (idordenc == 0 && item.Status.Equals("Activo") || item.Status.Equals("PreFacturado"))
+                                                    {
+
+                                                           
+                                                    }
+                                                    else
+                                                    {
+                                                                try
+                                                                {
+                                                                    SIAAPI.Models.Comercial.ClsDatoEntero idorden = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select IDOrden as Dato from OrdenProduccion where IDDetPedido=" + iddetpedido + " and idarticulo=" + c.IDArticuloComp + " and idcaracteristica=" + c.IDCaracteristica + " and EstadoOrden<>'Cancelada'").ToList().FirstOrDefault();
+                                                                    ViewBag.datoidorden = idorden.Dato.ToString();
+                                                                    string numeroorden = ViewBag.datoidorden;
+
+                                                                    <center>
+                                                                        @*@Html.ActionLink(numeroorden, "TerminacionProceso", "OrdenProduccion", null, null)*@
+                                                                        @numeroorden
+                                                                    </center>
+
+
+
+
+                                                                }
+                                                                catch (Exception err)
+                                                                {
+
+                                                                }
+
+                                                     }
+
+                                                   }
+                                            }
+                                            else
+                                            {
+
+                                                <h2> N/A</h2>
+
+                                            }
+
+
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        @{  SIAAPI.Models.Produccion.OrdenProduccion OP = new SIAAPI.Models.Produccion.OrdenProduccionContext().OrdenesProduccion.ToList().Where(s => s.IDArticulo == c.IDArticulo && s.IDCaracteristica == c.IDCaracteristica && s.EstadoOrden != "Cancelada").FirstOrDefault();
+                                            string cadenap = string.Empty;
+                                            string nombreobs = "Observacion" + contador;
+                                            if (OP == null)
+                                            {
+                                                cadenap = "Esta etiqueta nunca se ha hecho";
+                                            }
+                                            if (OP != null)
+                                            {
+                                                cadenap = "Esta etiqueta se va repetir";
+
+                                            }
+
+                                          
+
+                                        }
+                                        <h4 class="text-info">@cadenap , Observacion de la orden</h4>
+                                    </td>
+                                    <td colspan="10">
+                                        <input type="text" class="form-control" id="@nombreobs" name="Observacion">
+                                    </td>
+                                </tr>
+
+                                contador++;
+                            }
+
+
+
+
+                         }   //
+
+
+                        else  // no es kit
+                        {
+                            if (articuloKIT.GeneraOrden) //genera orden
+                                            {
+                                            SIAAPI.Models.Comercial.Caracteristica cara = new SIAAPI.Models.Comercial.ArticuloContext().Database.SqlQuery<SIAAPI.Models.Comercial.Caracteristica>("select * from Caracteristica where id=" + item.Caracteristica_ID).FirstOrDefault();
+        <tr>
+
+            <td>
+                <div>
+                    <input type="hidden" name="iddetpedido" id="iddetpedido" value="@item.IDDetPedido" />
+
+                    <input type="hidden" name="idcotizacionarticulo" id="idcotizacionarticulo" value="@cara.IDCotizacion" />
+                </div>
+                <input type="hidden" name="idarticulo" id="idarticulo" value="@articuloKIT.IDArticulo" />
+                <div> @articuloKIT.Cref </div>
+                <div>Presentacion @cara.IDPresentacion</div>
+            </td>
+
+
+            <td>
+                @{
+
+                    SIAAPI.Models.Comercial.AlmacenContext db1 = new SIAAPI.Models.Comercial.AlmacenContext();
+                    string cadena = "select Descripcion as Dato from Almacen where idAlmacen='" + item.IDAlmacen + "'";
+                    SIAAPI.Models.Comercial.ClsDatoString cod = db1.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoString>(cadena).ToList()[0];
+                }
+                @cod.Dato
+            </td>
+
+            @*<td>*@
+
+            @*@{
+                decimal disponibilidadInventario = 0;
+                try
+                {
+                    string cadenadis = "select Disponibilidad as Dato from InventarioAlmacen where idAlmacen=" + item.IDAlmacen + " and idcaracteristica=" + item.Caracteristica_ID;
+                    SIAAPI.Models.Comercial.ClsDatoDecimal disponibilidad = db1.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoDecimal>(cadenadis).ToList()[0];
+                    if (disponibilidad.Dato < 0)
+                    {
+                        disponibilidadInventario = 0;
+                    }
+                    else
+                    {
+                        disponibilidadInventario = disponibilidad.Dato;
+                    }
+
+                }
+                catch (Exception err)
+                {
+                    disponibilidadInventario = 0;
+
+                }
+
+            }
+
+            @disponibilidadInventario
+
+
+
+        </td>*@
+            @{
+                SIAAPI.Models.Comercial.ArticuloContext dd = new SIAAPI.Models.Comercial.ArticuloContext();
+                //SIAAPI.Models.Comercial.InventarioAlmacen inventario = dd.Database.SqlQuery<SIAAPI.Models.Comercial.InventarioAlmacen>("select* from InventarioAlmacen where idalmacen=" + item.IDAlmacen + " and idcaracteristica=" + item.Caracteristica_ID).ToList().FirstOrDefault();
+                var almacenesP = dd.Database.SqlQuery<SIAAPI.Models.Comercial.InventarioAlmacen>("select*  from InventarioAlmacen where  idalmacen="+item.IDAlmacen+"  and idarticulo=" + item.IDArticulo + "and idcaracteristica=" + item.Caracteristica_ID).ToList();
+
+            }
+            <td>
+                <table class="table">
+                    @foreach (SIAAPI.Models.Comercial.InventarioAlmacen co in almacenesP)
+                    {
+                        SIAAPI.Models.Comercial.Almacen almacenporart = new SIAAPI.Models.Comercial.AlmacenContext().Almacenes.Find(co.IDAlmacen);
+                        <tr>
+                            <td>
+                                @almacenporart.CodAlm
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => co.Existencia)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => co.PorLlegar)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => co.Apartado)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => co.Disponibilidad)
+                            </td>
+                        </tr>
+                    }
+                </table>
+
+            </td>
+
+            <td>
+
+                @{
+                    string cadenacan = "Cantidad" + contador;
+                }
+
+                <input type="number" step="0.5" class="form-control" id="@cadenacan" name="Cantidad" value="@item.Cantidad">
+
+            </td>
+
+
+            <td>
+
+                @if (item.GeneraOrden == true)
+                {
+
+                    if (item.GeneraOrden.Equals(true) && item.Status.Equals("Activo") || item.Status.Equals("PreFacturado") || item.Status.Equals("Finalizado") || item.Status.Equals("Recepcionado"))
+                    {
+                        SIAAPI.Models.Produccion.OrdenProduccionContext db = new SIAAPI.Models.Produccion.OrdenProduccionContext();
+                        int iddetpedido = item.IDDetPedido;
+                        int idordenc = db.Database.SqlQuery<int>("select count(IDOrden) from OrdenProduccion where IDDetPedido=" + iddetpedido + " and idarticulo=" + item.IDArticulo + " and idcaracteristica=" + item.Caracteristica_ID + "  and ESTADOORDEN <> 'Cancelada' ").FirstOrDefault();
+                        if (idordenc == 0 && item.Status.Equals("Activo") || item.Status.Equals("PreFacturado"))
+                        {
+
+
+
+                        }
+                        else
+                        {
+                            try
+                            {
+                                SIAAPI.Models.Comercial.ClsDatoEntero idorden = db.Database.SqlQuery<SIAAPI.Models.Comercial.ClsDatoEntero>("select IDOrden as Dato from OrdenProduccion where IDDetPedido=" + iddetpedido + " and estadoOrden<> 'Cancelada' and idarticulo=" + item.IDArticulo).ToList().FirstOrDefault(); ;
+                                ViewBag.datoidorden = idorden.Dato.ToString();
+                                string nombre = ViewBag.datoidorden;
+
+                                <center>
+                                    @*@Html.ActionLink(nombre, "TerminacionProceso", "OrdenProduccion", null, null)*@
+                                    @nombre
+                                </center>
+
+
+
+
+                            }
+                            catch (Exception err)
+                            {
+
+                            }
+
+                        }
+
+                    } // fin de si genera orden y esta activo
+                }
+                else // si no genera orden
+                {
+
+                    <h2> N/A</h2>
+
+                }
+
+
+            </td>
+
+
+        </tr>
+                                                        <tr>
+                                                            <td colspan="2">
+                                                                @{  SIAAPI.Models.Comercial.DetPedido OP = new SIAAPI.Models.Comercial.PedidoContext().DetPedido.ToList().Where(s => s.IDArticulo == cara.Articulo_IDArticulo && s.Caracteristica_ID == cara.ID && s.Status != "Cancelado" && s.IDPedido!=item.IDPedido).FirstOrDefault();
+                                                                    string cadenap = string.Empty;
+                                                                    string nombreobs = "Observacion" + contador;
+                                                                    if (OP == null)
+                                                                    {
+                                                                        cadenap = "Esta etiqueta nunca se ha hecho";
+                                                                    }
+                                                                    if (OP != null)
+                                                                    {
+                                                                        cadenap = "Esta etiqueta se va repetir";
+
+                                                                    }
+                                                                    
+                                                                }
+                                                                <h4 class="text-info">@cadenap , Observacion de la orden</h4>
+                                                            </td>
+                                                            <td colspan="10">
+                                                                <input type="text" class="form-control" id="@nombreobs" name="Observacion">
+                                                            </td>
+                                                        </tr>
+
+
+
+                                                                            }
+
+
+                                                                        }
+
+
+                                                                    }
+
+
+
+
+
+
+            <table>
+                <tr>
+
+
+                    <input type="submit" value="Generar Orden" class="btn btn-success" />
+
+
+
+
+
+
+
+                </tr>
+            </table>
+        </div>
+                                                        }
+<br />
+<script src="~/Scripts/libs/jquery_1.10.2/jquery-1.10.2.min.js"></script>
+
+<script src="~/Scripts/libs/salert/sweetalert.min.js"></script>
+
+
+<script>
+
+    var urledit = '@Url.Action("GeneraOrden", "EncPedido")';
+
+    function GeneraOrdenP(id, numero) {
+        var cantidad = document.getElementById("Cantidad" + numero).value
+        var cantidad = document.getElementById("Cantidad" + numero).value
+
+        $.post(urledit, { id: id, cantidad: cantidad }, function (response) {
+            if (response.errorMessage) {
+
+                swal("El producto no tiene planeación", "", "error")
+            }
+            else if (response) {
+                location.reload();
+                swal("Planeación Encontrada", "", "success")
+
+            }
+        })
+
+    }
+
+
+</script>

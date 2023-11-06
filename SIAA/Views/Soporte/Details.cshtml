@@ -1,0 +1,228 @@
+﻿@model SIAAPI.Models.Soporte.MensajesSoporte
+
+    <div>
+        <h3>Detalles de Mensaje</h3>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.Label("Ticket"):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Id_Ticket)
+            </dd>
+
+            <dt>
+                @Html.Label("Fecha"):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Fecha_Hora)
+            </dd>
+
+            <dt>
+                @Html.Label("Mensaje"):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Mensaje)
+            </dd>
+
+            <dt>
+                @Html.Label("Área"):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Rol)
+            </dd>
+
+
+            <dt>
+                @Html.Label("Usuario"):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Users.Username)
+            </dd>
+            <dt>
+                @Html.Label("Error generado por"):
+            </dt>
+
+            <dd>
+                @*@Html.DisplayFor(model => model.ErrorGeneradoPor)*@
+                @if (Model.ErrorGeneradoPor == "X")
+                {
+                    @Html.Label("Aun sin definir")
+                }
+                @if (Model.ErrorGeneradoPor == "U")
+                {
+                    @Html.Label("Usuario")
+                }
+                @if (Model.ErrorGeneradoPor == "D")
+                {
+                    @Html.Label("Datos")
+                }
+                @if (Model.ErrorGeneradoPor == "SI")
+                {
+                    @Html.Label("Sistema")
+                }
+                @if (Model.ErrorGeneradoPor == "SS")
+                {
+                    @Html.Label("Servidor del Sistema")
+                }
+                @if (Model.ErrorGeneradoPor == "BD")
+                {
+                    @Html.Label("Gestor de la Base de Datos")
+                }
+                @if (Model.ErrorGeneradoPor == "I")
+                {
+                    @Html.Label("Servicio de Internet")
+                }
+                @if (Model.ErrorGeneradoPor == "L")
+                {
+                    @Html.Label("Falla de Luz")
+                }
+                @if (Model.ErrorGeneradoPor == "O")
+                {
+                    @Html.Label("Otro")
+                }
+            </dd>
+            <dt>
+                @Html.Label("Tiempo estimado solución"):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TiempoEstimado)
+            </dd>
+            <dt>
+                @Html.Label("Estado Soporte"):
+            </dt>
+
+            <dd>
+                @*@Html.DisplayFor(model => model.EstadoTicket)*@
+                @if (Model.EstadoTicket == true)
+            {
+                    @Html.Label("Abierto")
+
+                }
+                else
+                {
+                    @Html.Label("Cerrado")
+                }
+            </dd>
+            <dt>
+                @Html.Label("Estado Cliente"):
+            </dt>
+
+            <dd>
+                @*@Html.DisplayFor(model => model.CerradoPorCliente)*@
+                @if (Model.CerradoPorCliente == true)
+            {
+                    @Html.Label("Abierto")
+                }
+                else
+                {
+                    @Html.Label("Cerrado")
+                }
+            </dd>
+
+        </dl>
+
+        @{
+            try
+            {
+                List<SIAAPI.Models.Soporte.RespuestaSoporte> elemento = new SIAAPI.Models.Soporte.MRdbContext().Database.SqlQuery<SIAAPI.Models.Soporte.RespuestaSoporte>("select * from [dbo].[RespuestaSoporte] where ID_Ticket=" + Model.Id_Ticket).ToList();
+                ViewBag.Ele = elemento;
+            }
+            catch (Exception err)
+            {
+
+            }
+
+            <table class="table table-striped" width="50">
+                <tr>
+                    <td>
+                        @Html.Label("Fecha de Atención")
+                    </td>
+                    <td>
+                        @Html.Label("Respuesta")
+                    </td>
+                   
+                    <td>
+                        @Html.Label("Prioridad")
+                    </td>
+                    <th>
+                        @Html.Label("Área")
+                    </th>
+                    <th>
+                        @Html.Label("Usuario")
+
+                    </th>
+
+
+                </tr>
+                @{try
+                    {
+                        foreach (var i in ViewBag.Ele)
+                        {
+                            <tr>
+                                <td>
+                                    @i.Fecha_Atencion
+                                </td>
+                                <td>
+                                    @i.Respuesta
+                                </td>
+                                <td>
+                                    @{
+                                       if (i.Prioridad == "A")
+                                        {
+                                            @Html.Label("Alta") ;
+                                        }
+                                        if (i.Prioridad == "S")
+                                        {
+                                             @Html.Label(" ");
+                                         }
+                                         if (i.Prioridad == "M")
+                                         {
+                                             @Html.Label("Media");
+                                         }
+                                         if (i.Prioridad == "B")
+                                         {
+                                             @Html.Label("Baja");
+                                         }
+                                       }
+                                </td>
+                                <th>
+                                    @i.Rol
+                                </th>
+                                <th>
+                                     @i.UserN
+
+                                </th>
+                               
+                            </tr>
+                                            }
+                                        }
+                                        catch (Exception err)
+                                        {
+
+                                        }
+
+                }
+
+
+
+            </table>
+        }
+    </div>
+    <p>
+       @if (Model.EstadoTicket == false && Model.CerradoPorCliente == false)
+       {
+
+       }
+       else
+       {
+            @Html.ActionLink("Respuesta", "Respuesta", new { id = Model.Id_Ticket }, new { @class = "btn btn-success btn-xs" }) 
+       }|
+        @Html.ActionLink("Regresar a la lista", "Index", null, new { @class = "btn btn-default btn-xs" })
+    </p>
