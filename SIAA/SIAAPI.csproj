@@ -17,7 +17,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SIAAPI</RootNamespace>
     <AssemblyName>SIAAPI</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -38,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,6 +47,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Automatadll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -159,7 +161,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Runtime.Serialization" />
@@ -168,7 +169,6 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.9\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -207,7 +207,6 @@
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -393,6 +392,7 @@
     <Compile Include="Controllers\Produccion\TrabajadorController.cs" />
     <Compile Include="Controllers\Produccion\TrabajadorProcesoController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
+    <Compile Include="Controllers\Solicitudes\CintaController.cs" />
     <Compile Include="Controllers\Soporte\SoporteController.cs" />
     <Compile Include="Controllers\Suajes\SuajeController.cs" />
     <Compile Include="Controllers\UserRoleController.cs" />
@@ -1321,6 +1321,7 @@
     <Folder Include="Estilos\Plugins\uplot\" />
     <Folder Include="Scripts\" />
     <Folder Include="Views\BancoPag\" />
+    <Folder Include="Views\Cinta\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

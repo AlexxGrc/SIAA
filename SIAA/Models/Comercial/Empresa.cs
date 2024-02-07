@@ -90,7 +90,19 @@ namespace SIAAPI.Models.Comercial
         [Required]
         public string RegimenSocietario { get; set; }
 
+        [DisplayName("Numero de Almacenes")]
+        [Required]
+        public int NoAlmacenes { get; set; }
 
+
+        [DisplayName("Numero de Articulos")]
+        [Required]
+        public int NoArticulos { get; set; }
+
+
+        [DisplayName("Numero de Usuarios")]
+        [Required]
+        public int NoUsuarios { get; set; }
     }
 
     public class EmpresaContext : DbContext

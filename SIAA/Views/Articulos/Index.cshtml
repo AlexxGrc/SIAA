@@ -63,7 +63,7 @@
                                 @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Gerencia"))
                                 {
                                     <th>
-                                    <td>@Html.ActionLink("Crea un nuevo Articulo", "AgregaArticuloIsrael", "Articulos", null, new { @class = "btn btn-primary navbar-btn btn-xs" }) | </td>
+                                    <td>@Html.ActionLink("Crea un nuevo Articulo", "AgregaArticulo", "Articulos", null, new { @class = "btn btn-primary navbar-btn btn-xs" }) | </td>
 
                                     </th>
                                 }

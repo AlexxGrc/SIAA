@@ -1,5 +1,6 @@
 ﻿
 using PagedList;
+using SIAAPI.Models.Comercial;
 using SIAAPI.Models.Login;
 using System;
 using System.Collections.Generic;
@@ -90,9 +91,17 @@ namespace SIAAPI.Controllers
             return View(usuario);
         }
 
-        // GET: Proveedor/Create
+        // GET: Usuario/Create
         public ActionResult Create(string mensaje)
         {
+            ViewBag.Validacion = "";
+
+            //Validar el numero de articulos
+            int nodeusuarios = new UserContext().Users.Count();
+            int limite = new EmpresaContext().empresas.FirstOrDefault().NoUsuarios;
+            if (nodeusuarios >= limite)
+            { ViewBag.Validacion = "Has excedido el numero de usuarios permitidos, contacta a tu administrador"; }
+
             ViewBag.Mensaje = mensaje;
             return View();
         }

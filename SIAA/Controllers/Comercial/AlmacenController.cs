@@ -128,6 +128,14 @@ namespace SIAAPI.Controllers.Comercial
         {
             var lista = new EstadosRepository().GetEstados();
             ViewBag.ComboEstados = lista;
+            ViewBag.Validacion = "";
+
+            //Validar el numero de almacenes
+            int nodealmacenes = new AlmacenContext().Almacenes.Count();
+            int limite = new EmpresaContext().empresas.FirstOrDefault().NoAlmacenes;
+            if (nodealmacenes >= limite)
+                { ViewBag.Validacion = "Has excedido el numero de almacenes permitido, contacta a tu administrador"; }
+
             return View();
         }
 

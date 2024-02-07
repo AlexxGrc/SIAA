@@ -210,11 +210,7 @@
                                     {
                                         <li class="nav-item"><a href="@Url.Action("Index", "Almacenista")" class="nav-link">Almacenistas</a></li>
                                     }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "c_Banco")" class="nav-link">Bancos</a></li>
-                                    }
+                                    
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
 
                                     {
@@ -243,11 +239,7 @@
                                         <li class="nav-item"><a href="@Url.Action("Index", "c_Impuesto")" class="nav-link">Impuesto</a></li>
 
                                     }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Compras"))
-
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Materiales")" class="nav-link">Materiales Cotizador</a></li>
-                                    }
+                                   
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
 
                                     {
@@ -301,10 +293,7 @@
                                         <li class="nav-item"><a href="@Url.Action("Index", "c_TipoComprobante")" class="nav-link">Tipo de Comprobante</a></li>
 
                                     }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "c_TipoContrato")" class="nav-link">Tipo de Contrato</a></li>
-                                    }
+                                    
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
 
                                     {
@@ -317,12 +306,7 @@
                                         <li class="nav-item"><a href="@Url.Action("Index", "c_TipoRelacion")" class="nav-link">Tipo de Relación</a></li>
 
                                     }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "c_TipoJornada")" class="nav-link">Tipo Jornada</a></li>
-
-                                    }  
+                                     
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
 
                                     {
@@ -349,10 +333,7 @@
                                     {
                                         <li class="nav-item"><a href="@Url.Action("Index", "Departamentos")" class="nav-link">Departamentos</a></li>
                                     }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "DoctoSGCs")" class="nav-link">Documentos SGC</a></li>
-                                    }
+                                    
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GestionCalidad"))
                                     {
                                         <li class="nav-item"><a href="@Url.Action("Index", "RolDepto")" class="nav-link">Departamentos/Roles</a></li>
@@ -375,14 +356,6 @@
                                         <li class="nav-item"><a href="@Url.Action("Index", "Articulos")" class="nav-link">Artículo</a></li>
                                     }
 
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Cliente") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("ConsultaSuaje") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("ConsultaSuaje", "Articulos")" class="nav-link">Consulta Suajes</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Cliente") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("ConsultaSuaje") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("ConsultaRodillo", "Articulos")" class="nav-link">Consulta Rodillos</a></li>
-                                    }
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("GerenteVentas"))
                                     {
                                         <li class="nav-item"><a href="@Url.Action("Index", "KIT")" class="nav-link">KITS de Artículo</a></li>
@@ -390,10 +363,6 @@
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("GestionCalidad") || @Roles.IsUserInRole("Almacenista"))
                                     {
                                         <li class="nav-item"><a href="@Url.Action("Index", "Clientes")" class="nav-link">Clientes</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("GerenteVentas"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "ClientesP")" class="nav-link">Clientes prospectos</a></li>
                                     }
 
 
@@ -417,16 +386,7 @@
                                     {
                                         <li class="nav-item"><a href="@Url.Action("Index", "TipoArticulo")" class="nav-link">Tipo de Artículo</a></li>
                                     }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Facturacion"))
-
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "TipoVendedor")" class="nav-link">Tipo de Vendedor</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("GerenteVentas"))
-
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Vendedor")" class="nav-link">Vendedor</a></li>
-                                    }
+                                    
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Facturacion"))
 
                                     {
@@ -434,14 +394,6 @@
                                         <li class="nav-item"><a href="@Url.Action("Index", "Proveedor")" class="nav-link">Proveedor</a></li>
                                     }
 
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Folio")" class="nav-link">Folios Facturas</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "FolioVentas")" class="nav-link">Folios de prefacturas</a></li>
-                                    }
                                     @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("GerenteVentas"))
                                     {
                                         <li class="nav-item"><a href="@Url.Action("Index", "VObtenerMoneda")" class="nav-link">Tipo de Cambio</a></li>
@@ -456,14 +408,6 @@
                                         <li class="nav-item"><a href="@Url.Action("MovComercial", "Movimientos")" class="nav-link">Movimientos Comerciales</a></li>
                                     }
 
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("GerenteVentas"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("CierreVentas", "Comisiones")" class="nav-link">Cierre de Ventas Mensual</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("GerenteVentas"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("CierreComisiones", "Comisiones")" class="nav-link">Comisiones</a></li>
-                                    }
                                 </ul>
                                 <!-- /ul-second-level Comercial-->
                             </li>
@@ -544,11 +488,7 @@
                             {
                                 <li class="nav-item"><a href="@Url.Action("AsignarMateriales", "Almacen")" class="nav-link">Surtir Materiales al WIP</a></li>
                             }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista"))
-
-                            {
-                                <li class="nav-item"><a href="@Url.Action("EntregarTintaaProduccion", "Almacen")" class="nav-link">Surtir Tintas al WIP</a></li>
-                            }
+                            
                             @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista"))
 
                             {
@@ -560,11 +500,7 @@
                             {
                                 <li class="nav-item"><a href="@Url.Action("IIporlotemp", "InventarioAlmacen")" class="nav-link">Inventario Inicial por lotes</a></li>
                             }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Compras"))
-
-                            {
-                                <li class="nav-item"><a href="@Url.Action("IIporloteTintas", "InventarioAlmacen")" class="nav-link">Inventario Inicial de tintas por lotes</a></li>
-                            }
+                            
                             @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Compras"))
 
                             {
@@ -618,322 +554,11 @@
                                         <li class="nav-item"><a href="@Url.Action("IndexDevolucion", "EncRecepcion")" class="nav-link">Devolución</a></li>
                                     }
 
-                                    @if (@Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "FacturaProv")" class="nav-link">Facturas digitales </a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "PagoFacturaProveedor")" class="nav-link">Pagos a proveedores </a></li>
-                                    }
 
                                 </ul>
 
                             </li>
                         }
-
-                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad") || @Roles.IsUserInRole("Compras"))
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link "><i class="fa fa-store"></i> Ventas<i class="right fas fa-angle-left"></i></a>
-                                <!--ul-second-level facturacion -->
-                               <ul class="nav nav-treeview">
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Cotizaprospecto")" class="nav-link">Cotizacion Prospecto </a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("CCotizador", "Cotizador", new { Id = 0 })"  class="nav-link">Cotizacion Rapida </a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Cotizador")" class="nav-link">Listado de Cotizaciones  </a></li>
-                                    }
-
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("TiendaGeneral", "Tienda")" class="nav-link">Productos a seleccionar para el carrito</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Carrito")" class="nav-link">Carrito</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Compras"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "EncCotizacion")" class="nav-link">Cotizaciones Clientes</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "EncPedido")" class="nav-link">Pedido</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Cotizaciones", "EncPedido")" class="nav-link">Crear Pedido</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "EncRemision")" class="nav-link">Remisión</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("PrefacturaR", "EncRemision")" class="nav-link">Prefacturar varias remisiones</a></li>
-                                    }
-
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("IndexDevolucionR", "EncRemision")" class="nav-link">Devolución</a></li>
-                                    }
-
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Empaque", new { Estado = "Empacado" })"  class="nav-link">Pedidos Empacados</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "EntregaRemision")" class="nav-link">Control de Rutas</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("SolicitudDisenoDigital", "Digital")" class="nav-link">Solicitud Diseño Digital</a></li>
-
-
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Compras") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("SolicitudSuajeDigital", "Digital")" class="nav-link">Solicitud Suaje Digital</a></li>
-
-
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("RSuajes", "FacturaAll")" class="nav-link">Reporte Suajes</a></li>
-
-
-                                    }
-
-                                </ul>
-
-                            </li>
-                        }
-
-                        @*Diseño*@
-
-                        <!-- menu Diseño-->
-                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-                        {
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link "><i class="fa fa-sim-card fa-fw"></i>Diseño<i class="right fas fa-angle-left"></i></a>
-                                <!--ul-second-level Administración-->
-                               <ul class="nav nav-treeview">
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Diseno")" class="nav-link">Solicitudes</a></li>
-                                    }
-
-                                </ul>
-                                <!-- /ul-second-level Administración -->
-                            </li>
-                        }
-
-
-                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GestionCalidad"))
-                        {
-                    <li class="nav-item">
-                        <a href="#" class="nav-link "><i class="fa fa-file-invoice-dollar "></i> Facturacion<i class="right fas fa-angle-left"></i></a>
-                        <!--ul-second-level facturacion -->
-                        <ul class="nav nav-treeview">
-
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("Index", "FacturaAll")" class="nav-link"> Facturas Digitales</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Contabilidad") || @Roles.IsUserInRole("Logistica"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("Index", "FacturasCanceladas")" class="nav-link"> Facturas Canceladas</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("Penalizacionfactura", "Comisiones")" class="nav-link"> Penalización Facturas</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("ListaPenalizacionFacturas", "Comisiones")" class="nav-link"> Facturas Penalizadas</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("PenalizacionCliente", "Comisiones")" class="nav-link"> Penalización Clientes</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("ListaPenalizacionClientes", "Comisiones")" class="nav-link"> Clientes Penalizados</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("Index", "FacturaComplemento")" class="nav-link"> Notas de credito</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("CrearAnticipo", "FacturaComplemento")" class="nav-link"> Factura Anticipo</a></li>
-                            }
-
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("Index", "PagoFactura")" class="nav-link">Pagos</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("Index", "Prefactura")" class="nav-link">Prefactura Ventas</a></li>
-                            }
-                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Facturacion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                            {
-                                <li class="nav-item"><a href="@Url.Action("Index", "ClienteSaldoFacturas")" class="nav-link">Saldo de Clientes</a></li>
-                            }
-
-                        </ul>
-
-                        <!-- /ul-second-level Comercial-->
-                    </li>
-                        }
-                        <!-- /menu Comercial-->
-                        <!-- menu CartaPorte-->
-                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial"))
-                        {
-
-                            <li class="nav-item">
-                                <a href="#" class="nav-link "><i class="fa fa-file-invoice fa-fw"></i>Carta Porte<i class="right fas fa-angle-left"></i></a>
-                                <!--ul-second-level Administración-->
-                               <ul class="nav nav-treeview">
-
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link "><i class="fa fa-archive fa-fw"></i>Catálogos<i class="right fas fa-angle-left"></i></a>
-                                        <!--ul-second-level Administración-->
-                                       <ul class="nav nav-treeview">
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_TipoPermiso")" class="nav-link">Tipo de Permiso</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_ClaveProdSTCC")" class="nav-link">Productos y Servicios STCC</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_ConfigMaritima")" class="nav-link">Configuración Marítima</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_Municipio")" class="nav-link">Municipios</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_Colonia")" class="nav-link">Colonias</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_NumAutorizacionNaviero")" class="nav-link">Agente Naviero Consignatario</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_TipoCarro")" class="nav-link">Tipo Carro</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_CveTransporte")" class="nav-link">Clave de Transporte</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_CodigoTransporteAereo")" class="nav-link">Código de transporte aéreo</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_ContenedorMaritimo")" class="nav-link">Contenedores Marítimos</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_Contenedor")" class="nav-link">Contenedores</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_Localidad")" class="nav-link">Localidades</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_SubTipoRem")" class="nav-link">Tipo de Remolque</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_TipoEmbalaje")" class="nav-link">Tipo de Embalaje</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_TipoEstacion")" class="nav-link">Tipo de Estación</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_MaterialPeligroso")" class="nav-link">Materiales Peligrosos</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_ConfigAutotransporte")" class="nav-link">Configuración Autotransporte Federal</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_ClaveTipoCarga")" class="nav-link">Tipo de Carga</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_TipoDeServicio")" class="nav-link">Tipo de Servicio</a></li>
-                                            }
-                                            @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
-
-                                            {
-                                                <li class="nav-item"><a href="@Url.Action("Index", "c_DerechosDePaso")" class="nav-link">Derechos de Paso</a></li>
-                                            }
-
-
-
-
-                                        </ul>
-                                        <!-- /ul-second-level Administración -->
-                                    </li>
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial"))
-
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("FacturasCartaPorte", "FacturaAll")" class="nav-link">Facturas Carta Porte</a></li>
-                                        <li class="nav-item"><a href="@Url.Action("Index", "ParqueVehicular")" class="nav-link">Parque Vehicular</a></li>
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Propietario")" class="nav-link">Propietario</a></li>
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Arrendatario")" class="nav-link">Arrendatario</a></li>
-                                        <li class="nav-item"><a href="@Url.Action("Index", "DomicilioOrigen")" class="nav-link">Domicilios Origen</a></li>
-                                    }
-
-                                </ul>
-                                <!-- /ul-second-level Administración -->
-                            </li>
-                        }
-
-                        <!-- /menu CartaPorte-->
 
                         @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Diseno") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Comercial"))
                         {
@@ -958,59 +583,7 @@
                                 <!-- /ul-second-level Administración -->
                             </li>
                         }
-                        <!-- menu Producción-->
-                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("BitacoraProduccion") || @Roles.IsUserInRole("GestionCalidad") || @Roles.IsUserInRole("Compras"))
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link "><i class="fa fa-pallet fa-fw"></i> Producción<i class="right fas fa-angle-left"></i></a>
-                                <!-- ul-second-level Produccion -->
-                               <ul class="nav nav-treeview">
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Ventas") || @Roles.IsUserInRole("Almacenista") || @Roles.IsUserInRole("GerenteVentas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Comercial") || @Roles.IsUserInRole("Compras"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Prioridad", "OrdenProduccion")" class="nav-link">Órdenes de producción</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "ModelosDeProduccion")" class="nav-link">Modelos de Producción</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Proceso")" class="nav-link">Proceso</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "ModeloProceso")" class="nav-link">Asignar Procesos al Modelo</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Trabajador")" class="nav-link">Trabajador</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "TrabajadorProceso")" class="nav-link">Asignar Procesos al Trabajador</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Formulas")" class="nav-link">Formulas predeterminadas</a></li>
-                                    }
-                                    @* <li class="nav-item"><a href="@Url.Action("Index", "PlanPlaneacionProduccion")" class="nav-link">Planeacion</a></li>*@
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "PlanPlaneacionProduccionE")" class="nav-link">Planeacion Específica</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Gerencia") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("BitacoraProduccion") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Bitacora")" class="nav-link">Bitacora</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Sistemas"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Cambio_Estados")" class="nav-link">Cambios Estado</a></li>
-                                    }
-
-                                </ul>
-                                <!-- /ul-second-level Produccion -->
-                            </li>
-                        }
+                        
                         <!-- /menu Producción-->
                         <!-- menu Calidad-->
                         <!-- menu Calidad-->
@@ -1033,150 +606,12 @@
 
                                         <li class="nav-item"><a href="@Url.Action("OrdenesLiberadas", "OrdenProduccion")" class="nav-link">Órdenes Liberadas</a></li>
                                     }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "CertificadosCalidad")" class="nav-link">Certificados</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "NormaCalidad")" class="nav-link">Norma de Calidad</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "AQLCalidads")" class="nav-link">AQL</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Inspeccions")" class="nav-link">Inspección</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Muestreos")" class="nav-link">Nivel de Muestreo</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "Metodo")" class="nav-link">Método</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "CalidadLetra")" class="nav-link">Selección de Letra</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("Calidad") || @Roles.IsUserInRole("GestionCalidad"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "CalidadLimiteAceptacion")" class="nav-link">Limites de aceptación</a></li>
-                                    }
-
-
+                                    
 
                                 </ul>
                                 <!-- /ul-second-level Calidad-->
                             </li>
                         }
-
-                        <!-- menu Suajes-->
-                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("ConsultaSuaje"))
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link "><i class="fa fa-toilet-paper fa-fw"></i> Suajes<i class="right fas fa-angle-left"></i></a>
-
-                               <ul class="nav nav-treeview">
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("Index", "OrdenProduccion")" class="nav-link">Órdenes de Producción</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("ConsultaSuaje"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("BitacoraSuajes", "Suaje")" class="nav-link">Bitácora Suajes</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion") || @Roles.IsUserInRole("ConsultaSuaje"))
-                                    {
-
-                                        <li class="nav-item"><a href="@Url.Action("ConsultaSuaje", "Articulos")" class="nav-link">Consulta de Suajes</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("ValeSuaje", "Suaje")" class="nav-link">Crear Vale de Suajes</a></li>
-                                    }
-                                    @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("AdminProduccion") || @Roles.IsUserInRole("Produccion"))
-                                    {
-                                        <li class="nav-item"><a href="@Url.Action("ValesSuajes", "Suaje")" class="nav-link">Vales de Suajes</a></li>
-                                    }
-
-
-                                </ul>
-
-                            </li>
-                        }
-
-                        <!-- menu Proveedor ok -->
-                        @if (@Roles.IsUserInRole("Proveedor"))
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link "><i class="fa fa-user-plus"></i>Proveedor<i class="right fas fa-angle-left"></i></a>
-                                <!--ul-second-level Proveedor -->
-                               <ul class="nav nav-treeview">
-                                    <li class="nav-item"><a href="@Url.Action("IndexP", "FacturaProv")" class="nav-link">Facturas</a></li>
-                                    <li class="nav-item"><a href="@Url.Action("IndexP", "EncOrdenCompra")" class="nav-link">Ordenes de compra</a></li>
-                                    <li class="nav-item"><a href="@Url.Action("IndexP", "PagoFacturaProveedor")" class="nav-link">Pagos de Facturas</a></li>
-                                    <li class="nav-item"><a href="@Url.Action("ContactoP", "Contacto")" class="nav-link">Contáctanos</a></li>
-                                </ul>
-                                <!-- /ul-second-level Calidad-->
-                            </li>
-                        }
-
-                        <!-- menu Cliente ok -->
-                        @if (@Roles.IsUserInRole("Cliente"))
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link "><i class="fa fa-user-plus"></i>Cliente<i class="right fas fa-angle-left"></i></a>
-                                <!--ul-second-level Cliente -->
-                               <ul class="nav nav-treeview">
-
-                                    <li class="nav-item"><a href="@Url.Action("Index", "FacturaC")" class="nav-link">Facturas</a></li>
-                                    <li class="nav-item"><a href="@Url.Action("IndexPedido", "FacturaC")" class="nav-link">Pedidos</a></li>
-                                    <li class="nav-item"><a href="@Url.Action("IndexPago", "FacturaC")" class="nav-link">Pagos de Facturas</a></li>
-                                    <li class="nav-item"><a href="@Url.Action("ContactoC", "Contacto")" class="nav-link">Contáctanos</a></li>
-                                </ul>
-                                <!-- /ul-second-level Cliente-->
-                            </li>
-                        }
-
-                        @if (@Roles.IsUserInRole("Administrador") || @Roles.IsUserInRole("Sistemas") || @Roles.IsUserInRole("MesaControl"))
-                        {
-                    <li class="nav-item">
-                        <a href="#" class="nav-link "><i class="fa fa-solar-panel fa-fw"></i> Mesa de Control<i class="right fas fa-angle-left"></i></a>
-                        <!--ul-second-level Calidad -->
-                        <ul class="nav nav-treeview">
-
-                            <li class="nav-item"><a href="@Url.Action("Index", "MesaControl")" class="nav-link">Listado de Ordenes</a></li>
-
-                            <li class="nav-item"><a href="@Url.Action("Prioridad", "OrdenProduccion")" class="nav-link">Órdenes de Producción</a></li>
-
-                            <li class="nav-item"><a href="@Url.Action("Index", "Cotizador")" class="nav-link">Listado de Cotizaciones  </a></li>
-
-
-                        </ul>
-                        <!-- /ul-second-level Calidad-->
-                    </li>
-                        }
-
-
-
-                        @if (@Roles.IsUserInRole("ClienteSuaje"))
-                        {
-                            <li class="nav-item">
-                                <a href="#" class="nav-link "><i class="fa fa-user-plus"></i>Cliente<i class="right fas fa-angle-left"></i></a>
-                                <!--ul-second-level Cliente -->
-                               <ul class="nav nav-treeview">
-
-                                    <li class="nav-item"><a href="@Url.Action("ConsultaSuaje", "Articulos")">Consulta Suajes</a></li>
-
-
-                                </ul>
-                                <!-- /ul-second-level Cliente-->
-                            </li>
-                        }
-
 
                         <li class="nav-header">PAGINAS</li>
                         <li class="nav-item">

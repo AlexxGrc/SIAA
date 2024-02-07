@@ -1,6 +1,9 @@
 ﻿@model SIAAPI.Models.Comercial.Almacen
 
-@using (Html.BeginForm())
+@if (ViewBag.Validacion == "")
+{ 
+
+using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
@@ -92,5 +95,10 @@
             </div>
         </div>
     </div>
+}     
 }
-
+else
+{
+<div>@ViewBag.Validacion</div>
+<div></div>
+}

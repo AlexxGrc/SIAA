@@ -281,53 +281,17 @@ namespace SIAAPI.Controllers.Comercial
         }
         public ActionResult AgregaArticulo()
         {
-            //FamiliaContext dbfam = new FamiliaContext();
-            //ViewBag.IDFamilia = new SelectList(dbfam.Familias, "IDFamilia", "Descripcion");
-            ViewBag.IDFamilia = new FamiliaRepository().GetFamilias();
-            ArticuloContext dbta = new ArticuloContext();
-            ViewBag.IDTipoArticulo = new SelectList(dbta.TipoArticulo, "IDTipoArticulo", "Descripcion");
-            c_MonedaContext dbmo = new c_MonedaContext();
-            ViewBag.IDMoneda = new SelectList(dbmo.c_Monedas, "IDMoneda", "Descripcion");
-            c_ClaveUnidadContext dbcu = new c_ClaveUnidadContext();
-            ViewBag.IDClaveUnidad = new SelectList(dbcu.c_ClaveUnidades, "IDClaveUnidad", "Nombre");
-            ViewBag.IDAQL = new SelectList(dbta.AQLCalidad, "IDAQL", "Descripcion");
-            ViewBag.IDInspeccion = new SelectList(dbta.Inspeccion, "IDInspeccion", "Descripcion");
-            ViewBag.IDMuestreo = new SelectList(dbta.Muestreo, "IDMuestreo", "Descripcion");
-            return PartialView();
-        }
-
-        public ActionResult AgregaArticuloIsrael()
-        {
-
-            //List<User> userid = db.Database.SqlQuery<User>("select * from [dbo].[User] where Username='" + User.Identity.Name + "'").ToList();
-            //int usuario = userid.Select(s => s.UserID).FirstOrDefault();
-
-            //ClsDatoEntero entero = new ArticuloContext().Database.SqlQuery<ClsDatoEntero>("select count(UserRolesID) as dato from UserRole where (roleid=8 or roleid=9 or roleid=13 or roleid=1 or roleid=5) and userid="+ usuario).FirstOrDefault();
-            /////permitir crar suajes
-            /////
-            //if (entero.Dato>0)
-            //{
-            //    ViewBag.IDFamilia = new FamiliaRepository().GetFamilias();
-            //}
-            //else
-            //{
-            //    FamiliaContext dbfam = new FamiliaContext();
-            //    ViewBag.IDFamilia = new SelectList(dbfam.Familias.Where(s=> s.IDFamilia!= 11 && s.IDFamilia!= 69 && s.IDFamilia != 71 && s.IDFamilia != 72 && s.IDFamilia != 75 && s.IDFamilia != 76 && s.IDFamilia != 77 && s.IDFamilia != 80 && s.IDFamilia != 81 && s.IDFamilia != 91 && s.IDFamilia != 93 && s.IDFamilia != 70 && s.IDFamilia != 95).OrderBy(s => s.Descripcion), "IDFamilia", "Descripcion");
-            //}
             List<User> userid = db.Database.SqlQuery<User>("select * from [dbo].[User] where Username='" + User.Identity.Name + "'").ToList();
             int usuario = userid.Select(s => s.UserID).FirstOrDefault();
 
-            //FamiliaContext dbfam = new FamiliaContext();
-            //ViewBag.IDFamilia = new SelectList(dbfam.Familias, "IDFamilia", "Descripcion");
-            if (usuario != 329)
-            {
-                ViewBag.IDFamilia = new FamiliaRepository().GetFamiliasSinSuajes();
+            ViewBag.Validacion = "";
 
-            }
-            else
-            {
-                ViewBag.IDFamilia = new FamiliaRepository().GetFamilias();
-            }
+            //Validar el numero de articulos
+            int nodearticulos = new ArticuloContext().Articulo.Count();
+            int limite = new EmpresaContext().empresas.FirstOrDefault().NoArticulos;
+            if (nodearticulos >= limite)
+            { ViewBag.Validacion = "Has excedido el numero de articulos permitidos, contacta a tu administrador"; }
+
 
             ArticuloContext dbta = new ArticuloContext();
             ViewBag.IDTipoArticulo = new SelectList(dbta.TipoArticulo, "IDTipoArticulo", "Descripcion");
