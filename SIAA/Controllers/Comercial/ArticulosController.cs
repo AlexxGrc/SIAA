@@ -293,6 +293,8 @@ namespace SIAAPI.Controllers.Comercial
             { ViewBag.Validacion = "Has excedido el numero de articulos permitidos, contacta a tu administrador"; }
 
 
+            FamiliaContext familia = new FamiliaContext();
+            ViewBag.IDFamilia = new SelectList(familia.Familias, "IDFamilia", "Descripcion");
             ArticuloContext dbta = new ArticuloContext();
             ViewBag.IDTipoArticulo = new SelectList(dbta.TipoArticulo, "IDTipoArticulo", "Descripcion");
             c_MonedaContext dbmo = new c_MonedaContext();
@@ -415,6 +417,9 @@ namespace SIAAPI.Controllers.Comercial
                 newArt.MinimoCompra = Art.MinimoCompra;
                 newArt.StockMin = Art.StockMin;
                 newArt.StockMax = Art.StockMax;
+                newArt.UsaRFID = Art.UsaRFID;
+                newArt.UsaLote = Art.UsaLote;
+                newArt.UsaNumSerie = Art.UsaNumSerie;
 
                 ArticuloContext dba = new ArticuloContext();
                 //string cadena = "INSERT INTO [dbo].[Articulo] ([Cref],[Descripcion],[Preciounico],[CtrlStock],[ManejoCar],[Obscalidad],[ExistenDev],[IDAQL],[bCodigodebarra],[Codigodebarras],[esKit],[nameFoto],[GeneraOrden],[IDClaveUnidad],[IDMoneda],[IDFamilia],[IDMuestreo],[IDTipoArticulo],[IDInspeccion],[obsoleto],[MinimoVenta],[MinimoCompra],[StockMin],[StockMax])VALUES('"+ newArt.Cref+"','"+ newArt.Descripcion+ "','"+ newArt.Preciounico+ "','"+ newArt.CtrlStock+ "','"+ newArt.ManejoCar+"','"+ newArt.Obscalidad+"','"+ newArt.ExistenDev+"','"+ newArt.IDAQL+"','"+ newArt.bCodigodebarra+"','"+ newArt.Codigodebarras+"','"+ newArt.esKit+"','"+ newArt.nameFoto+"','"+ newArt.GeneraOrden+"','"+ newArt.IDClaveUnidad+"','"+ newArt.IDMoneda+"','"+ newArt.IDFamilia+"','"+ newArt.IDMuestreo+"','"+ newArt.IDTipoArticulo+"','"+ newArt.IDInspeccion+"','"+ newArt.obsoleto+"','"+ newArt.MinimoVenta+"','"+ newArt.MinimoCompra+"','"+ newArt.StockMin+"','"+ newArt.StockMax+"')" ;

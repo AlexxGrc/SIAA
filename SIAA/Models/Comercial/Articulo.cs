@@ -112,6 +112,9 @@ namespace SIAAPI.Models.Comercial
         public decimal MinimoCompra { get; set; }
 
         public int IDCotizacion { get; set; }
+        public bool UsaRFID { get; set; }
+        public bool UsaLote { get; set; }
+        public bool UsaNumSerie { get; set; }
         public virtual ICollection<MatrizPrecio> MatrizPrecio { get; set; }
 
         public virtual ICollection<Caracteristica> Caracteristica { get; set; }
@@ -264,6 +267,9 @@ namespace SIAAPI.Models.Comercial
         public bool obsoleto { get; set; }
         public decimal MinimoVenta { get; set; }
         public decimal MinimoCompra { get; set; }
+        public bool UsaRFID { get; set; }
+        public bool UsaLote { get; set; }
+        public bool UsaNumSerie { get; set; }
     }
 
 [Table("ArticulosGOPPlotter")]
