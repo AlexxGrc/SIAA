@@ -119,8 +119,13 @@ namespace SIAAPI.Controllers.Inventarios
                 db.Database.ExecuteSqlCommand(cadena);
                 return RedirectToAction("Index");
             }
-            catch
+            catch(Exception ERR)
             {
+                FamiliaContext dbf = new FamiliaContext();
+                AlmacenContext dba = new AlmacenContext();
+                ViewBag.IDFamilia = new SelectList(dbf.Familias, "IDFamilia", "Descripcion");
+                ViewBag.IDAlmacen = new SelectList(dba.Almacenes, "IDAlmacen", "Descripcion");
+
                 return View(famAlm);
             }
 
